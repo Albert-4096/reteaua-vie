@@ -403,9 +403,10 @@ def modules_stamp() -> str:
     return "".join("1" if f is not None else "0" for f in found)
 
 
+# v2: results cached before the access model took the frequency (bd18b9f) said it was not modelled
 def impact_job_key(scenario_id: str) -> str:
-    return f"scenario-impact:v1:{modules_stamp()}:{scenario_id}:{fingerprint(get(scenario_id))}"
+    return f"scenario-impact:v2:{modules_stamp()}:{scenario_id}:{fingerprint(get(scenario_id))}"
 
 
 def compare_job_key(a: str, b: str) -> str:
-    return f"scenario-compare:v1:{modules_stamp()}:{a}:{fingerprint(get(a))}:{b}:{fingerprint(get(b))}"
+    return f"scenario-compare:v2:{modules_stamp()}:{a}:{fingerprint(get(a))}:{b}:{fingerprint(get(b))}"
