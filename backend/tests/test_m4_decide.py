@@ -206,6 +206,8 @@ def test_prepared_hero_scenarios_and_compare(prepared, client):
                                                                     keys=keys)
     assert b["summary"]["departuresLost"] < a["summary"]["departuresLost"]
     assert b["impact"]["window"] == {"start": best.start, "end": best.end}
+    # the window ranking and the scenario agree on the residents of that window (same GHSL method)
+    assert b["summary"]["residentsLosingStop"] == win.suggest(HERO).candidates[0].residentsLosingStop
     assert any(n["kind"] == "bike_lane" and n["unit"] == "m" for n in b["notes"])
     # never invented: access is either the access module's estimate or null with a note
     for side in (a, b):

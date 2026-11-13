@@ -220,7 +220,7 @@ def residents_in(tt: imp.Timetable, keys: list[Key], start: datetime, end: datet
     res = imp.residents_losing(svc.suspended_stops(), svc)
     if res is None:
         return None
-    return int(round(sum(v[0] for v in res.values())))
+    return sum(int(round(v[0])) for v in res.values())   # per zone, then summed: as the Impact total
 
 
 # --- conflicts -------------------------------------------------------------------------------
