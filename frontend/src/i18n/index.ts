@@ -112,7 +112,10 @@ const ro = {
     notPublished: "Apasă „Publică” ca să apară ieșirile.",
   },
   qr: {
-    title: "Stația {{stop}}",
+    kicker: "Alertă de transport public, Timișoara",
+    from: "Din",
+    stillServed: "Stația rămâne deservită de liniile {{lines}}",
+    walk: "{{dist}} pe jos",
     noAlert: "Nu există o alertă publicată pentru această stație.",
     inactive: "Alerta nu mai e activă",
     window: "Perioada",
@@ -123,7 +126,7 @@ const ro = {
     aiVoice: "Voce generată automat (AI)",
     speechFallback: "Voce generată automat (sinteza vocală a telefonului; fișierul audio lipsește)",
     noSpeech: "Telefonul nu poate citi textul cu voce.",
-    source: "Sursa: alerta publicată de STPT prin platforma Rețeaua Vie",
+    source: "Sursa: alerta publicată prin platforma Rețeaua Vie, din anunțul STPT",
   },
 };
 
@@ -166,6 +169,10 @@ const en: Partial2<Dict> = {
     led: "simulation: no integration with STPT displays exists",
   },
   qr: {
+    kicker: "Public transport alert, Timișoara",
+    from: "From",
+    stillServed: "The stop is still served by lines {{lines}}",
+    walk: "{{dist}} on foot",
     noAlert: "There is no published alert for this stop.",
     inactive: "This alert is no longer active",
     window: "When",
