@@ -21,6 +21,10 @@ from app.models.v2 import Conflict
 
 router = APIRouter(tags=["M1 closures"])
 
+# load the GTFS index, walking graph and population grid now, so the first
+# live draw is as fast as the next ones (SPEC §10: < 3 s)
+imp.warm_in_background()
+
 
 def _load(closure_id: str) -> dict:
     try:

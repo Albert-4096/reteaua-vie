@@ -23,6 +23,7 @@ import heapq
 import json
 import logging
 import math
+import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from functools import lru_cache
@@ -186,9 +187,17 @@ def _build_walk_arrays(pbf: Path) -> dict[str, np.ndarray]:
     return {"u": remap[u], "v": remap[v], "length": length, "xy": xy}
 
 
+_build_lock = threading.Lock()
+
+
 @lru_cache(maxsize=1)
 def walk_graph() -> WalkGraph | None:
     """The OSM pedestrian graph (largest component), cached as .npz in $DATA_DIR/cache."""
+    with _build_lock:
+        return _load_walk_graph()
+
+
+def _load_walk_graph() -> WalkGraph | None:
     pbf = get_settings().data_dir / OSM_FILE
     if not pbf.is_file():
         return None
@@ -404,6 +413,11 @@ class PopGrid:
 
 @lru_cache(maxsize=1)
 def pop_grid() -> PopGrid | None:
+    with _build_lock:
+        return _load_pop_grid()
+
+
+def _load_pop_grid() -> PopGrid | None:
     path = get_settings().data_dir / POP_FILE
     if not path.is_file():
         return None
@@ -595,8 +609,17 @@ def compute_impact(closure_id: str) -> Impact:
 
 def warm() -> None:
     """Load the caches a live request needs (GTFS index, walking graph, GHSL grid)."""
-    gtfs.departure_index()
-    gtfs.stop_patterns()
-    walk_graph()
-    _stop_snaps()
-    pop_grid()
+    try:
+        gtfs.departure_index()
+        gtfs.stop_patterns()
+        walk_graph()
+        _stop_snaps()
+        pop_grid()
+    except Exception:  # a missing source shows up in the request, not here
+        log.exception("warm-up failed")
+
+
+def warm_in_background() -> threading.Thread:
+    t = threading.Thread(target=warm, name="m1-warm", daemon=True)
+    t.start()
+    return t
