@@ -62,11 +62,11 @@ def ghost_departures(closures: list[dict], day_start: datetime, day_end: datetim
 
 def _compliance() -> dict | None:
     """Counts from M7's ComplianceReport, if the module serves one."""
-    for name, fn in (("app.m7_compliance.compliance", "compliance_report"),
-                     ("app.m7_compliance.report", "compliance_report")):
+    for name, fn in (("app.m7_compliance.compliance", "report"),):
         try:
             mod = importlib.import_module(name)
-            report = getattr(mod, fn)()
+            from app.m7_compliance.exports import mounted_paths
+            report = getattr(mod, fn)(mounted_paths())
         except (ImportError, AttributeError):
             continue
         except Exception:  # noqa: BLE001 - the overview must not fail because of M7
