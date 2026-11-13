@@ -340,7 +340,12 @@ def action_stops(action: dict, tt: Timetable | None = None) -> tuple[dict[int, l
     out: dict[int, list[str]] = {}
     ambiguous: set[Key] = set()
     unresolved: list[str] = []
-    names = action.get("stopNames") or []
+    # stopNames are the raw notice names; resolve them only when the action has no ids
+    ids_given = {"suspended": action.get("fromStopId") or action.get("toStopId"),
+                 "shortened": action.get("keepStopIds"),
+                 "rerouted": action.get("suspendedStopIds")}.get(kind)
+    names = [] if ids_given else (action.get("stopNames") or [])
+    one_dir = action.get("directionId") is not None
 
     def by_names(d: int) -> list[str]:
         ids = []
@@ -380,14 +385,14 @@ def action_stops(action: dict, tt: Timetable | None = None) -> tuple[dict[int, l
         elif kind == "shortened":
             keep_ids = set(action.get("keepStopIds") or []) | (set(name_hits.get(d, [])) if names else set())
             keep_ids = {k for k in keep_ids if k in n.stop_by_id}
-            keep_names = {norm(n.stop_by_id[k]["name"]) for k in keep_ids}
-            keep_pts = [stop_metric(k) for k in keep_ids]
-            kept = set()
-            for s in order:
-                pt = stop_metric(s)
-                if (s in keep_ids or norm(n.stop_by_id[s]["name"]) in keep_names
-                        or any(pt.distance(k) <= KEEP_NEAR_METERS for k in keep_pts)):
-                    kept.add(s)
+            if one_dir and action.get("keepStopIds"):
+                kept = keep_ids  # ids for this direction: take them as given
+            else:
+                # ids may belong to the other direction: keep the same stop across the street too
+                keep_names = {norm(n.stop_by_id[k]["name"]) for k in keep_ids}
+                keep_pts = [stop_metric(k) for k in keep_ids]
+                kept = {s for s in order if s in keep_ids or norm(n.stop_by_id[s]["name"]) in keep_names
+                        or any(stop_metric(s).distance(k) <= KEEP_NEAR_METERS for k in keep_pts)}
             if not keep_ids:
                 continue  # nothing to keep known: do not guess the whole line away
             out[d] = [s for s in order if s not in kept]
@@ -397,7 +402,7 @@ def action_stops(action: dict, tt: Timetable | None = None) -> tuple[dict[int, l
             if names:
                 hits += [s for s in name_hits.get(d, []) if s not in hits]
             # ids given for the other direction only: map them to this side of the street
-            if action.get("directionId") is None and ids and not names and not hits:
+            if not one_dir and ids and not names and not hits:
                 for sid in ids:
                     if sid not in order:
                         m = _nearest_in(order, sid)
