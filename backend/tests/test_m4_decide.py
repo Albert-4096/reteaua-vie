@@ -43,6 +43,11 @@ def prepared(tmp_path_factory):
     mp.setattr(state_mod, "get_settings", lambda: fake)
     mp.setattr(jobs_mod, "get_settings", lambda: fake)
     config.ensure_dirs(fake)
+    # access (r5py, a JVM) is the access agent's module and has its own tests; here it is
+    # left out so these tests stay fast and run without Java: access is null with a note
+    from app.m4_access import scenarios as sc_mod
+
+    mp.setattr(sc_mod, "_access", lambda closure, lost, frequencies: (None, "acces neinclus în test / not run"))
     from app import precompute
 
     precompute.prepare_cases()

@@ -294,10 +294,10 @@ def frequency_note(closure: dict, m) -> tuple[ScenarioNote, dict]:
     note = ScenarioNote(kind="frequency", value=float(added), unit="plecări", text=I18n(
         ro=f"Linia {name} la {num_ro(m.headwayMinutes)} minute: +{num_ro(added)} plecări în fereastră "
            f"({SIM_LABEL}: curse adăugate în orar; acum {exist_ro} pe sens). Plecările pierdute nu se schimbă: "
-           f"sunt numărate pe orarul planificat. Frecvența se vede în accesibilitate (estimare).",
+           f"sunt numărate pe orarul planificat.",
         en=f"Line {name} every {num_en(m.headwayMinutes)} minutes: +{num_en(added)} departures in the window "
            f"(simulation: trips added to the timetable; now {exist_ro} per direction). Departures lost do not "
-           f"change: they are counted on the planned timetable. Frequency shows in the access figures (estimate)."))
+           f"change: they are counted on the planned timetable."))
     return note, {"routeId": m.routeId, "headwayMinutes": float(m.headwayMinutes)}
 
 
@@ -349,6 +349,13 @@ def compute_impact(scenario_id: str) -> ScenarioImpact:
     if why:
         notes.append(ScenarioNote(kind="frequency" if frequencies and access is not None else "none",
                                   text=I18n(ro=why.split(" / ")[0], en=why.split(" / ")[-1])))
+    elif frequencies and access is not None:
+        unmodelled = any("nu e modelat" in (p.note or "") for p in access.provenance)
+        notes.append(ScenarioNote(kind="frequency", text=I18n(
+            ro="Frecvența nu e încă modelată în accesibilitate." if unmodelled else
+            "Frecvența intră în calculul accesibilității (estimare).",
+            en="Frequency is not modelled in the access figures yet." if unmodelled else
+            "Frequency is part of the access estimate.")))
     bike = None
     if lanes:
         bike, why = _bike(c, lanes)
