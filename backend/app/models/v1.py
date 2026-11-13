@@ -56,6 +56,7 @@ class Health(Model):
     dataFetchedAt: IsoTime | None
     dataFrozenAt: IsoTime | None = None
     demoNow: IsoTime | None = None
+    modulesFailed: list[str] | None = None  # v2.3: api modules that failed to import (skipped)
 
 
 class NetworkRoute(Model):

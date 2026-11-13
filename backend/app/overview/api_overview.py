@@ -48,7 +48,16 @@ def health() -> Health:
         # With DATA_FREEZE=1 no source is refreshed: the data is frozen as of its newest file.
         dataFrozenAt=iso(newest) if (s.data_freeze and newest) else None,
         demoNow=iso(s.demo_now) if s.demo_now else None,
+        modulesFailed=_modules_failed(),
     )
+
+
+def _modules_failed() -> list[str]:
+    """api modules that main.py skipped because they failed to import."""
+    import sys
+
+    main = sys.modules.get("app.main")
+    return list(getattr(main, "MODULES_FAILED", []))
 
 
 @router.get("/network", response_model=Network)

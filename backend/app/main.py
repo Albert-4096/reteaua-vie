@@ -41,19 +41,29 @@ def error_body(code: str, message: str) -> dict:
     return {"error": {"code": code, "message": message}}
 
 
-def discover_routers() -> list[tuple[str, APIRouter]]:
-    """Import app/<package>/api*.py modules that define `router`."""
+def discover_routers() -> tuple[list[tuple[str, APIRouter]], list[str]]:
+    """Import app/<package>/api*.py modules that define `router`.
+
+    A module that fails to import is logged and skipped, so one broken module never
+    takes the rest of the API down. Returns (routers, names of the failed modules).
+    """
     found: list[tuple[str, APIRouter]] = []
+    failed: list[str] = []
     for pkg in sorted(p for p in APP_DIR.iterdir() if (p / "__init__.py").is_file()):
         for mod in pkgutil.iter_modules([str(pkg)]):
             if mod.ispkg or not mod.name.startswith("api"):
                 continue
             name = f"app.{pkg.name}.{mod.name}"
-            module = importlib.import_module(name)
+            try:
+                module = importlib.import_module(name)
+            except Exception:
+                log.exception("router module %s failed to import; skipped", name)
+                failed.append(name)
+                continue
             router = getattr(module, "router", None)
             if isinstance(router, APIRouter):
                 found.append((name, router))
-    return found
+    return found, failed
 
 
 @asynccontextmanager
@@ -73,8 +83,16 @@ app = FastAPI(
 )
 
 ROUTER_MODULES: list[str] = []
-for _name, _router in discover_routers():
-    app.include_router(_router, prefix="/api")
+MODULES_FAILED: list[str] = []  # read by GET /api/health (`modulesFailed`)
+_routers, _failed = discover_routers()
+MODULES_FAILED.extend(_failed)
+for _name, _router in _routers:
+    try:
+        app.include_router(_router, prefix="/api")
+    except Exception:
+        log.exception("router module %s failed to mount; skipped", _name)
+        MODULES_FAILED.append(_name)
+        continue
     ROUTER_MODULES.append(_name)
 
 
