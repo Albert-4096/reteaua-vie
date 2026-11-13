@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-13T23:59:09+02:00",
-  "repoCommit": "d0cfa38",
+  "generatedAt": "2026-11-14T00:51:23+02:00",
+  "repoCommit": "76ea5a5",
   "feed": {
     "version": "4.31",
     "file": "smtt_1bd0e3-65f7b81245f0f.zip",
@@ -12,7 +12,69 @@
     "count": 5,
     "labelledBy": [
       "AI-assisted from the notice text; human review pending"
-    ]
+    ],
+    "humanReview": {
+      "notices": {
+        "11058": {
+          "groups": 0,
+          "ok": 0,
+          "wrong": 0,
+          "open": 0,
+          "stale": 0,
+          "wrongGroups": [],
+          "reviewer": null,
+          "date": null
+        },
+        "11060": {
+          "groups": 13,
+          "ok": 0,
+          "wrong": 0,
+          "open": 13,
+          "stale": 0,
+          "wrongGroups": [],
+          "reviewer": null,
+          "date": null
+        },
+        "11062": {
+          "groups": 2,
+          "ok": 0,
+          "wrong": 0,
+          "open": 2,
+          "stale": 0,
+          "wrongGroups": [],
+          "reviewer": null,
+          "date": null
+        },
+        "11065": {
+          "groups": 4,
+          "ok": 0,
+          "wrong": 0,
+          "open": 4,
+          "stale": 0,
+          "wrongGroups": [],
+          "reviewer": null,
+          "date": null
+        },
+        "11067": {
+          "groups": 12,
+          "ok": 0,
+          "wrong": 0,
+          "open": 12,
+          "stale": 0,
+          "wrongGroups": [],
+          "reviewer": null,
+          "date": null
+        }
+      },
+      "groups": 31,
+      "ok": 0,
+      "wrong": 0,
+      "open": 31,
+      "stale": 0,
+      "complete": false,
+      "allOk": false,
+      "note": "Group verdicts of the human review sheet (eval/review.py). labelledBy changes only by hand, once every group is ok."
+    }
   },
   "parser": "app.m1_disruption.parser:parse_notice",
   "analyzer": "app.m1_disruption.analysis:analyze_closure",
@@ -23,7 +85,7 @@
       "title": "Modificări în circulația liniilor M30, M29, M35 M 44 și S7, începând cu 2 noiembrie",
       "goldSuspended": 0,
       "goldUncertain": 0,
-      "parseSeconds": 1.661,
+      "parseSeconds": 1.865,
       "unread": 5,
       "windowMatch": {
         "start": true,
@@ -33,7 +95,7 @@
         "gold": [],
         "predicted": []
       },
-      "analysisSeconds": 4.662,
+      "analysisSeconds": 4.199,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -203,7 +265,7 @@
       "title": "Modificări temporare ale traseelor liniilor metropolitane S8, M32, M36, M37, M38, M46 și M51, începând cu 2 noiembrie",
       "goldSuspended": 0,
       "goldUncertain": 1,
-      "parseSeconds": 14.506,
+      "parseSeconds": 9.267,
       "unread": 2,
       "windowMatch": {
         "start": true,
@@ -227,7 +289,7 @@
           "R_AB_M51"
         ]
       },
-      "analysisSeconds": 0.082,
+      "analysisSeconds": 0.051,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -724,7 +786,7 @@
       "title": "Informare călători privind linia E3",
       "goldSuspended": 0,
       "goldUncertain": 0,
-      "parseSeconds": 0.022,
+      "parseSeconds": 0.029,
       "unread": 2,
       "windowMatch": {
         "start": true,
@@ -738,7 +800,7 @@
           "R_AB_E3"
         ]
       },
-      "analysisSeconds": 5.251,
+      "analysisSeconds": 4.664,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -936,7 +998,7 @@
       "title": "Închiderea temporară a circulației pe Strada Ardealului și modificarea traseului liniei E3",
       "goldSuspended": 11,
       "goldUncertain": 0,
-      "parseSeconds": 0.034,
+      "parseSeconds": 0.032,
       "unread": 0,
       "windowMatch": {
         "start": true,
@@ -950,7 +1012,7 @@
           "R_AB_E3"
         ]
       },
-      "analysisSeconds": 0.067,
+      "analysisSeconds": 0.061,
       "rows": {
         "affected": 11,
         "unsure": 0
@@ -975,7 +1037,7 @@
         "missed": []
       },
       "pasteToAlert": {
-        "seconds": 0.209,
+        "seconds": 0.179,
         "status": "valid",
         "alerts": 11,
         "steps": [
@@ -1025,7 +1087,7 @@
       "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989",
       "goldSuspended": 88,
       "goldUncertain": 29,
-      "parseSeconds": 0.457,
+      "parseSeconds": 0.903,
       "unread": 3,
       "windowMatch": {
         "start": true,
@@ -1043,7 +1105,7 @@
           "R_TV_7"
         ]
       },
-      "analysisSeconds": 0.279,
+      "analysisSeconds": 0.577,
       "rows": {
         "affected": 67,
         "unsure": 50
@@ -1174,7 +1236,7 @@
         "missed": []
       },
       "pasteToAlert": {
-        "seconds": 1.129,
+        "seconds": 1.285,
         "status": "valid",
         "alerts": 82,
         "steps": [
@@ -1237,8 +1299,8 @@
     },
     "neclarShare": 0.3906,
     "pasteToAlertSeconds": {
-      "median": 0.669,
-      "max": 1.129,
+      "median": 0.732,
+      "max": 1.285,
       "n": 2
     },
     "gtfsRtValidatorPass": true,
@@ -1435,14 +1497,14 @@
       "undecided": [],
       "rule": "gold label 11067: tick the unsure rows labelled suspended (line 7, certain), untick the unsure rows labelled uncertain (ring Banatul -> Piața Maria)"
     },
-    "stopsSuspended": 17,
+    "stopsSuspended": 16,
     "departuresLost": 2262,
     "residentsLosingStop": 1845,
     "stopRoutePairsLost": 88,
     "routesAffected": 3,
     "method": {
-      "ro": "Plecări pierdute: orarul GTFS al fiecărei linii și direcții, la fiecare stație afectată, în fereastra lucrării. Stație suspendată: nicio altă plecare a vreunei linii în fereastră. Locuitori fără stație: celule GHSL 2020 de 100 m (model, nu recensământ) aflate la cel mult 400 m (linie dreaptă) de o stație suspendată și fără nicio stație deservită la 400 m. Stațiile neclare contează doar după o decizie.",
-      "en": "Departures lost: the GTFS timetable of each line and direction at each affected stop inside the closure window. Suspended stop: no other departure of any line in the window. Residents losing their stop: GHSL 2020 100 m cells (a model, not a census) within 400 m (straight line) of a suspended stop with no served stop within 400 m. Unsure stops count only after a decision."
+      "ro": "Plecări pierdute: orarul GTFS al fiecărei linii și direcții, la fiecare stație afectată, în fereastra lucrării. Stație suspendată: nicio altă plecare a vreunei linii în fereastră, iar anunțul nu spune că o linie o deservește. Locuitori fără stație: celule GHSL 2020 de 100 m (model, nu recensământ) aflate la cel mult 400 m (linie dreaptă) de o stație suspendată și fără nicio stație deservită la 400 m. Stațiile neclare contează doar după o decizie.",
+      "en": "Departures lost: the GTFS timetable of each line and direction at each affected stop inside the closure window. Suspended stop: no other departure of any line in the window, and the notice does not say a line serves it. Residents losing their stop: GHSL 2020 100 m cells (a model, not a census) within 400 m (straight line) of a suspended stop with no served stop within 400 m. Unsure stops count only after a decision."
     },
     "provenance": [
       {
@@ -1472,6 +1534,13 @@
         "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
         "fetchedAt": "2026-11-13T18:31:11+02:00",
         "note": "model GHSL 2020, 100 m (nu recensământ)"
+      },
+      {
+        "source": "Anunțul STPT: trasee anunțate, fără orar GTFS / STPT notice: announced routes, no GTFS timetable",
+        "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+        "version": null,
+        "fetchedAt": "2026-11-08T12:00:00+02:00",
+        "note": "Traseu din anunț (linia 2: „Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM”; linia 7: „Depou Dâmbovița – Gara de Nord”): se numără ca deservite doar stațiile lui din GTFS; plecările de pe restul traseului au frecvență necunoscută și nu sunt scăzute din pierderi. AEM (Dräxlmaier) (945): deservită conform anunțului; cursele nu sunt în orarul GTFS (nu e numărată printre stațiile fără niciun mijloc de transport) / only the announced route's GTFS stops count as served; its trips elsewhere have no timetable and are not subtracted from the losses; AEM (Dräxlmaier) (945): served according to the notice, trips not in the GTFS (not counted as suspended)"
       }
     ],
     "labels": {
