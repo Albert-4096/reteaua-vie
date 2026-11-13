@@ -1,6 +1,78 @@
 {
-  "closureId": "cl_20261108_16dec",
+  "closureId": "cl_20261102_mocioni",
   "streetsAffected": [
+    {
+      "id": "s239",
+      "name": "Bulevardul 16 Decembrie 1989",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.212958,
+            45.743299
+          ],
+          [
+            21.214224,
+            45.744647
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s240",
+      "name": "Bulevardul 16 Decembrie 1989",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.214321,
+            45.744332
+          ],
+          [
+            21.213816,
+            45.743778
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s241",
+      "name": "Bulevardul 16 Decembrie 1989",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.214546,
+            45.744969
+          ],
+          [
+            21.215394,
+            45.745807
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s242",
+      "name": "Bulevardul 16 Decembrie 1989",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.214911,
+            45.744939
+          ],
+          [
+            21.215168,
+            45.745193
+          ]
+        ]
+      }
+    },
     {
       "id": "s243",
       "name": "Bulevardul 16 Decembrie 1989",
@@ -60,55 +132,41 @@
       }
     },
     {
-      "id": "s596",
-      "name": "Strada Emanoil Gojdu",
+      "id": "s542",
+      "name": "Strada Alexandru Odobescu",
       "tariff": "yellow",
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            21.21607,
-            45.746724
+            21.216247,
+            45.744055
           ],
           [
-            21.215034,
-            45.748293
+            21.214846,
+            45.744239
+          ],
+          [
+            21.214519,
+            45.744284
           ]
         ]
       }
     },
     {
-      "id": "s645",
-      "name": "Strada Miron Costin",
+      "id": "s632",
+      "name": "Strada Ion Ghica",
       "tariff": "yellow",
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            21.217032,
-            45.749236
+            21.214224,
+            45.744647
           ],
           [
-            21.21817,
-            45.748342
-          ]
-        ]
-      }
-    },
-    {
-      "id": "s646",
-      "name": "Strada Miron Costin",
-      "tariff": "yellow",
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            21.21711,
-            45.749268
-          ],
-          [
-            21.218247,
-            45.748398
+            21.213548,
+            45.74565
           ]
         ]
       }

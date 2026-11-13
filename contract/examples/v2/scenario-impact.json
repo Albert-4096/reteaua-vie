@@ -8,7 +8,7 @@
       "end": "2026-11-08T18:00:00+02:00"
     },
     "totals": {
-      "stopsSuspended": 2,
+      "stopsSuspended": 1,
       "departuresLost": 1766,
       "routesAffected": 2,
       "residentsLosingStop": 0,
@@ -34,7 +34,7 @@
       {
         "slug": "buziasului",
         "name": "Buziașului",
-        "stopsSuspended": 1,
+        "stopsSuspended": 0,
         "departuresLost": 297,
         "residentsLosingStop": 0,
         "maxExtraWalkMeters": null
@@ -97,8 +97,8 @@
       }
     ],
     "method": {
-      "ro": "Plecări pierdute: orarul GTFS al fiecărei linii și direcții, la fiecare stație afectată, în fereastra lucrării. Stație suspendată: nicio altă plecare a vreunei linii în fereastră. Locuitori fără stație: celule GHSL 2020 de 100 m (model, nu recensământ) aflate la cel mult 400 m (linie dreaptă) de o stație suspendată și fără nicio stație deservită la 400 m. Stațiile neclare contează doar după o decizie.",
-      "en": "Departures lost: the GTFS timetable of each line and direction at each affected stop inside the closure window. Suspended stop: no other departure of any line in the window. Residents losing their stop: GHSL 2020 100 m cells (a model, not a census) within 400 m (straight line) of a suspended stop with no served stop within 400 m. Unsure stops count only after a decision."
+      "ro": "Plecări pierdute: orarul GTFS al fiecărei linii și direcții, la fiecare stație afectată, în fereastra lucrării. Stație suspendată: nicio altă plecare a vreunei linii în fereastră, iar anunțul nu spune că o linie o deservește. Locuitori fără stație: celule GHSL 2020 de 100 m (model, nu recensământ) aflate la cel mult 400 m (linie dreaptă) de o stație suspendată și fără nicio stație deservită la 400 m. Stațiile neclare contează doar după o decizie.",
+      "en": "Departures lost: the GTFS timetable of each line and direction at each affected stop inside the closure window. Suspended stop: no other departure of any line in the window, and the notice does not say a line serves it. Residents losing their stop: GHSL 2020 100 m cells (a model, not a census) within 400 m (straight line) of a suspended stop with no served stop within 400 m. Unsure stops count only after a decision."
     },
     "provenance": [
       {
@@ -128,6 +128,13 @@
         "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
         "fetchedAt": "2026-11-13T18:31:11+02:00",
         "note": "model GHSL 2020, 100 m (nu recensământ)"
+      },
+      {
+        "source": "Anunțul STPT: trasee anunțate, fără orar GTFS / STPT notice: announced routes, no GTFS timetable",
+        "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+        "version": null,
+        "fetchedAt": "2026-11-08T12:00:00+02:00",
+        "note": "Traseu din anunț (linia 2: „Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM”; linia 7: „Depou Dâmbovița – Gara de Nord”): se numără ca deservite doar stațiile lui din GTFS; plecările de pe restul traseului au frecvență necunoscută și nu sunt scăzute din pierderi. AEM (Dräxlmaier) (945): deservită conform anunțului; cursele nu sunt în orarul GTFS (nu e numărată printre stațiile fără niciun mijloc de transport) / only the announced route's GTFS stops count as served; its trips elsewhere have no timetable and are not subtracted from the losses; AEM (Dräxlmaier) (945): served according to the notice, trips not in the GTFS (not counted as suspended)"
       }
     ]
   },
@@ -496,252 +503,9 @@
             ]
           ]
         },
-        "centralityBefore": 0.056824,
-        "centralityAfter": 0.066228,
-        "changePct": 16.5,
-        "routeIdsOnEdge": [
-          "R_AB_5B",
-          "R_AB_E1",
-          "R_AB_E3",
-          "R_TV_1",
-          "R_TV_8",
-          "R_TV_9"
-        ]
-      },
-      {
-        "name": "Bulevardul Mihai Viteazu",
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [
-            [
-              21.2260568,
-              45.7422494
-            ],
-            [
-              21.2260555,
-              45.7422648
-            ],
-            [
-              21.2260388,
-              45.742392
-            ],
-            [
-              21.2257996,
-              45.7440206
-            ],
-            [
-              21.2257495,
-              45.7444563
-            ],
-            [
-              21.2257296,
-              45.7446133
-            ],
-            [
-              21.2257053,
-              45.7447553
-            ],
-            [
-              21.2256643,
-              45.7450028
-            ],
-            [
-              21.2256503,
-              45.7450951
-            ],
-            [
-              21.2256383,
-              45.7451762
-            ],
-            [
-              21.2256106,
-              45.7453444
-            ],
-            [
-              21.2254693,
-              45.74632
-            ],
-            [
-              21.2254207,
-              45.7467954
-            ],
-            [
-              21.2254189,
-              45.7469556
-            ],
-            [
-              21.2254459,
-              45.747279
-            ],
-            [
-              21.2254941,
-              45.747694
-            ],
-            [
-              21.2255066,
-              45.7477576
-            ],
-            [
-              21.2255286,
-              45.7478828
-            ]
-          ]
-        },
-        "centralityBefore": 0.075603,
-        "centralityAfter": 0.083936,
-        "changePct": 11.0,
-        "routeIdsOnEdge": [
-          "R_AB_E8"
-        ]
-      },
-      {
-        "name": "Splaiul Tudor Vladimirescu",
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [
-            [
-              21.2202705,
-              45.7492884
-            ],
-            [
-              21.220345,
-              45.7492627
-            ],
-            [
-              21.2205456,
-              45.7491774
-            ],
-            [
-              21.2209955,
-              45.7490472
-            ],
-            [
-              21.223301,
-              45.748367
-            ],
-            [
-              21.2237121,
-              45.748272
-            ],
-            [
-              21.2242931,
-              45.7481441
-            ],
-            [
-              21.2247981,
-              45.7480567
-            ],
-            [
-              21.225061,
-              45.7480475
-            ],
-            [
-              21.2253311,
-              45.7480161
-            ],
-            [
-              21.2254488,
-              45.7480012
-            ]
-          ]
-        },
-        "centralityBefore": 0.040239,
-        "centralityAfter": 0.04846,
-        "changePct": 20.4,
-        "routeIdsOnEdge": [
-          "R_AB_32",
-          "R_AB_33",
-          "R_AB_33B",
-          "R_AB_E3",
-          "R_AB_E7"
-        ]
-      },
-      {
-        "name": "Bulevardul General Ion Dragalina",
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [
-            [
-              21.2128846,
-              45.7431076
-            ],
-            [
-              21.2128198,
-              45.7431806
-            ],
-            [
-              21.2126953,
-              45.7433178
-            ],
-            [
-              21.2125362,
-              45.7434964
-            ],
-            [
-              21.2124445,
-              45.7435995
-            ],
-            [
-              21.2120924,
-              45.7440857
-            ],
-            [
-              21.211822,
-              45.7444635
-            ],
-            [
-              21.2114928,
-              45.7448907
-            ],
-            [
-              21.2114575,
-              45.744956
-            ],
-            [
-              21.2114408,
-              45.7449865
-            ],
-            [
-              21.2114268,
-              45.7450172
-            ],
-            [
-              21.2113994,
-              45.7450652
-            ],
-            [
-              21.2113891,
-              45.7450831
-            ],
-            [
-              21.2113226,
-              45.7452047
-            ],
-            [
-              21.2112907,
-              45.7452472
-            ],
-            [
-              21.2111677,
-              45.7453758
-            ],
-            [
-              21.2107828,
-              45.7459477
-            ],
-            [
-              21.2100212,
-              45.747056
-            ],
-            [
-              21.2099602,
-              45.7471538
-            ]
-          ]
-        },
-        "centralityBefore": 0.039829,
-        "centralityAfter": 0.04782,
-        "changePct": 20.1,
+        "centralityBefore": 0.055015,
+        "centralityAfter": 0.065277,
+        "changePct": 18.7,
         "routeIdsOnEdge": [
           "R_AB_5B",
           "R_AB_E1",
@@ -871,103 +635,220 @@
             [
               21.2181421,
               45.7506569
-            ],
-            [
-              21.2181875,
-              45.750663
-            ],
-            [
-              21.2182334,
-              45.7506664
-            ],
-            [
-              21.2182962,
-              45.7506677
-            ],
-            [
-              21.2183568,
-              45.750665
-            ],
-            [
-              21.2184276,
-              45.7506603
-            ],
-            [
-              21.2184843,
-              45.7506543
-            ],
-            [
-              21.2185561,
-              45.7506446
-            ],
-            [
-              21.2194533,
-              45.7505015
-            ],
-            [
-              21.2196851,
-              45.7504347
-            ],
-            [
-              21.2196968,
-              45.7504313
-            ],
-            [
-              21.220013,
-              45.7503789
-            ],
-            [
-              21.2202695,
-              45.7503222
-            ],
-            [
-              21.2203996,
-              45.7502878
-            ],
-            [
-              21.2205135,
-              45.7502517
-            ],
-            [
-              21.2210925,
-              45.7500792
-            ],
-            [
-              21.2211392,
-              45.7500518
-            ],
-            [
-              21.2211714,
-              45.7500264
-            ],
-            [
-              21.2211941,
-              45.7500014
-            ],
-            [
-              21.221223,
-              45.7499573
-            ],
-            [
-              21.221238,
-              45.7499321
             ]
           ]
         },
-        "centralityBefore": 0.044271,
-        "centralityAfter": 0.050501,
-        "changePct": 14.1,
+        "centralityBefore": 0.041108,
+        "centralityAfter": 0.049909,
+        "changePct": 21.4,
+        "routeIdsOnEdge": []
+      },
+      {
+        "name": "Bulevardul General Ion Dragalina",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              21.2128846,
+              45.7431076
+            ],
+            [
+              21.2128198,
+              45.7431806
+            ],
+            [
+              21.2126953,
+              45.7433178
+            ],
+            [
+              21.2125362,
+              45.7434964
+            ],
+            [
+              21.2124445,
+              45.7435995
+            ],
+            [
+              21.2120924,
+              45.7440857
+            ],
+            [
+              21.211822,
+              45.7444635
+            ],
+            [
+              21.2114928,
+              45.7448907
+            ],
+            [
+              21.2114575,
+              45.744956
+            ],
+            [
+              21.2114408,
+              45.7449865
+            ],
+            [
+              21.2114268,
+              45.7450172
+            ],
+            [
+              21.2113994,
+              45.7450652
+            ],
+            [
+              21.2113891,
+              45.7450831
+            ],
+            [
+              21.2113226,
+              45.7452047
+            ],
+            [
+              21.2112907,
+              45.7452472
+            ],
+            [
+              21.2111677,
+              45.7453758
+            ],
+            [
+              21.2107828,
+              45.7459477
+            ],
+            [
+              21.2100212,
+              45.747056
+            ],
+            [
+              21.2099602,
+              45.7471538
+            ]
+          ]
+        },
+        "centralityBefore": 0.034126,
+        "centralityAfter": 0.04213,
+        "changePct": 23.5,
+        "routeIdsOnEdge": [
+          "R_AB_5B",
+          "R_AB_E1",
+          "R_AB_E3",
+          "R_TV_1",
+          "R_TV_8",
+          "R_TV_9"
+        ]
+      },
+      {
+        "name": "Bulevardul Mihai Viteazu",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              21.2260568,
+              45.7422494
+            ],
+            [
+              21.2260555,
+              45.7422648
+            ],
+            [
+              21.2260388,
+              45.742392
+            ],
+            [
+              21.2257996,
+              45.7440206
+            ],
+            [
+              21.2257495,
+              45.7444563
+            ],
+            [
+              21.2257296,
+              45.7446133
+            ],
+            [
+              21.2257053,
+              45.7447553
+            ],
+            [
+              21.2256643,
+              45.7450028
+            ],
+            [
+              21.2256503,
+              45.7450951
+            ],
+            [
+              21.2256383,
+              45.7451762
+            ],
+            [
+              21.2256106,
+              45.7453444
+            ],
+            [
+              21.2254693,
+              45.74632
+            ],
+            [
+              21.2254207,
+              45.7467954
+            ],
+            [
+              21.2254189,
+              45.7469556
+            ],
+            [
+              21.2254459,
+              45.747279
+            ],
+            [
+              21.2254941,
+              45.747694
+            ],
+            [
+              21.2255066,
+              45.7477576
+            ],
+            [
+              21.2255286,
+              45.7478828
+            ]
+          ]
+        },
+        "centralityBefore": 0.063334,
+        "centralityAfter": 0.070958,
+        "changePct": 12.0,
+        "routeIdsOnEdge": [
+          "R_AB_E8"
+        ]
+      },
+      {
+        "name": "Strada Filaret Barbu",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              21.2227916,
+              45.7479715
+            ],
+            [
+              21.2236462,
+              45.7467939
+            ]
+          ]
+        },
+        "centralityBefore": 0.007669,
+        "centralityAfter": 0.015049,
+        "changePct": 96.2,
         "routeIdsOnEdge": []
       }
     ],
     "routesSlowedRisk": [
-      "R_AB_32",
-      "R_AB_33",
-      "R_AB_33B",
       "R_AB_5B",
       "R_AB_E1",
       "R_AB_E3",
-      "R_AB_E7",
       "R_AB_E8",
       "R_TV_1",
       "R_TV_8",
@@ -984,7 +865,7 @@
         "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
         "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
         "fetchedAt": "2026-11-13T18:30:52+02:00",
-        "note": "centralitate de intermediere pe muchii, k=200 noduri eșantionate (seed fix), graf auto OSM pe 2 km în jurul lucrării / edge betweenness, k=200 sampled nodes, OSM drive graph within 2 km; 6423 noduri, 7008 segmente, 34 închise / nodes, segments, closed. osmium extract -b 21.10,45.68,21.35,45.83"
+        "note": "centralitate de intermediere pe muchii, k=200 noduri eșantionate (seed fix), graf auto OSM pe 2 km în jurul lucrării / edge betweenness, k=200 sampled nodes, OSM drive graph within 2 km; 5909 noduri, 6447 segmente, 8 închise / nodes, segments, closed. osmium extract -b 21.10,45.68,21.35,45.83"
       },
       {
         "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
@@ -1030,6 +911,13 @@
       "note": "model GHSL 2020, 100 m (nu recensământ)"
     },
     {
+      "source": "Anunțul STPT: trasee anunțate, fără orar GTFS / STPT notice: announced routes, no GTFS timetable",
+      "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+      "version": null,
+      "fetchedAt": "2026-11-08T12:00:00+02:00",
+      "note": "Traseu din anunț (linia 2: „Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM”; linia 7: „Depou Dâmbovița – Gara de Nord”): se numără ca deservite doar stațiile lui din GTFS; plecările de pe restul traseului au frecvență necunoscută și nu sunt scăzute din pierderi. AEM (Dräxlmaier) (945): deservită conform anunțului; cursele nu sunt în orarul GTFS (nu e numărată printre stațiile fără niciun mijloc de transport) / only the announced route's GTFS stops count as served; its trips elsewhere have no timetable and are not subtracted from the losses; AEM (Dräxlmaier) (945): served according to the notice, trips not in the GTFS (not counted as suspended)"
+    },
+    {
       "source": "Rețeaua Vie, scenariu / scenario",
       "url": null,
       "version": null,
@@ -1055,7 +943,7 @@
       "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
       "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
       "fetchedAt": "2026-11-13T18:30:52+02:00",
-      "note": "centralitate de intermediere pe muchii, k=200 noduri eșantionate (seed fix), graf auto OSM pe 2 km în jurul lucrării / edge betweenness, k=200 sampled nodes, OSM drive graph within 2 km; 6423 noduri, 7008 segmente, 34 închise / nodes, segments, closed. osmium extract -b 21.10,45.68,21.35,45.83"
+      "note": "centralitate de intermediere pe muchii, k=200 noduri eșantionate (seed fix), graf auto OSM pe 2 km în jurul lucrării / edge betweenness, k=200 sampled nodes, OSM drive graph within 2 km; 5909 noduri, 6447 segmente, 8 închise / nodes, segments, closed. osmium extract -b 21.10,45.68,21.35,45.83"
     }
   ],
   "notes": [

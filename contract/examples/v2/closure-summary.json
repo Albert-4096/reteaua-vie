@@ -24,7 +24,9 @@
     ],
     "stopsSuspended": 0,
     "departuresLost": 10237,
-    "publishedAt": "2026-10-30T20:57:28+02:00"
+    "publishedAt": "2026-10-30T20:57:28+02:00",
+    "reconstructed": null,
+    "reconstructedNote": null
   },
   {
     "id": "cl_20261107_e3",
@@ -50,7 +52,9 @@
     ],
     "stopsSuspended": 11,
     "departuresLost": 1386,
-    "publishedAt": "2026-11-05T18:11:39+02:00"
+    "publishedAt": "2026-11-05T18:11:39+02:00",
+    "reconstructed": null,
+    "reconstructedNote": null
   },
   {
     "id": "cl_20261108_16dec",
@@ -80,8 +84,10 @@
       "mircea-cel-batran",
       "_outside"
     ],
-    "stopsSuspended": 2,
+    "stopsSuspended": 1,
     "departuresLost": 1766,
-    "publishedAt": null
+    "publishedAt": null,
+    "reconstructed": null,
+    "reconstructedNote": null
   }
 ]
