@@ -812,6 +812,8 @@ def warm() -> None:
         walk_graph()
         _stop_snaps()
         pop_grid()
+        for c in state.list_all("closures"):  # older timetables the stored closures need (Mocioni: 4.29)
+            timetable_for((c.get("window") or {}).get("start"))
     except Exception:  # a missing source shows up in the request, not here
         log.exception("warm-up failed")
 
