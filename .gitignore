@@ -1,0 +1,13 @@
+node_modules/
+.pnpm-store/
+dist/
+build/
+.next/
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.*
+!.env.example
+.cursor/mcp.json
+.DS_Store
