@@ -1457,6 +1457,10 @@
       }
     }
   ],
+  "locationNote": {
+    "ro": "locație aproximativă: anunțul nu dă punctul exact",
+    "en": "approximate location: the notice does not give the exact point"
+  },
   "id": "cl_20261108_16dec",
   "status": "analyzed",
   "createdAt": "2026-11-08T12:00:00+02:00"

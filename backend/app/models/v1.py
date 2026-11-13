@@ -131,6 +131,7 @@ class ClosureInput(Model):
     sourceUrl: str | None = None
     routeActions: list[RouteAction] | None = None
     temporaryRoutes: list[TemporaryRoute] | None = None
+    locationNote: I18n | None = None  # v2.3: e.g. „locație aproximativă: anunțul nu dă punctul exact”
 
 
 class Closure(ClosureInput):
@@ -202,7 +203,7 @@ class StopDecisions(Model):
 
 class ImpactTotals(Model):
     stopsSuspended: int
-    departuresLost: int
+    departuresLost: int | None  # v2.3: null when the window is outside every timetable we hold
     routesAffected: int
     residentsLosingStop: int | None
     stopRoutePairsLost: int | None = None  # v2.1
@@ -212,7 +213,7 @@ class ZoneImpact(Model):
     slug: str
     name: str
     stopsSuspended: int
-    departuresLost: int
+    departuresLost: int | None  # v2.3: null with the totals
     residentsLosingStop: int | None
     maxExtraWalkMeters: float | None
 

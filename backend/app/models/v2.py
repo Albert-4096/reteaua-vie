@@ -254,6 +254,7 @@ class WindowCandidate(Model):
     residentsLosingStop: int | None
     conflicts: int
     rank: int
+    note: I18n | None = None  # v2.3: plain-words explanation of this window
 
 
 class WindowPhase(Model):
@@ -326,7 +327,16 @@ class Scenario(ScenarioInput):
 class ScenarioSummary(Model):
     residentsLosingStop: int | None
     residentsLosingAccess: int | None
-    departuresLost: int
+    departuresLost: int | None  # v2.3: null outside every timetable we hold
+
+
+class ScenarioNote(Model):
+    """v2.3: one plain-words note on a scenario (e.g. „+N plecări (simulare)”)."""
+
+    kind: Literal["frequency", "window", "bike_lane", "park_and_ride", "segment", "none"]
+    text: I18n
+    value: float | None = None
+    unit: str | None = None
 
 
 class ScenarioImpact(Model):
@@ -337,6 +347,8 @@ class ScenarioImpact(Model):
     detourLoad: DetourLoad | None
     summary: ScenarioSummary
     provenance: list[Provenance]
+    notes: list[ScenarioNote] | None = None  # v2.3
+    bike: BikeImpact | None = None  # v2.3: bike numbers for a bike_lane mitigation
 
 
 class ScenarioCompare(Model):
@@ -439,6 +451,45 @@ class ExportFile(Model):
     standard: str
     url: str
     updatedAt: IsoTime | None
+
+
+# --- feed validation (v2.3) --------------------------------------------------------
+
+
+class ValidationRule(Model):
+    id: str
+    severity: Literal["ERROR", "WARNING", "INFO"]
+    title: str
+    description: str | None
+    occurrences: int
+    examples: list[str]
+    note: I18n | None = None
+
+
+class ValidatorTool(Model):
+    name: str
+    version: str | None
+    source: str | None
+
+
+class FeedValidation(Model):
+    """CONTRACT 2.3: what the „validator pe ecran” panel shows (GET /api/closures/{id}/validation)."""
+
+    closureId: str | None
+    method: Literal["validator", "internal"]
+    label: I18n
+    tool: ValidatorTool | None
+    ranAt: str
+    durationSec: float
+    passed: bool
+    errorCount: int
+    warningCount: int
+    rules: list[ValidationRule]
+    feed: dict
+    gtfs: dict
+    fallbackReason: str | None
+    provenance: list[Provenance]
+
 
 
 # --- jobs --------------------------------------------------------------------------

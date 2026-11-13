@@ -43,6 +43,7 @@ MODELS: dict[str, object] = {
     "v2/indicators.json": m.IndicatorSet,
     "v2/exports.json": list[m.ExportFile],
     "v2/job.json": m.Job,
+    "v2/feed-validation.json": m.FeedValidation,  # v2.3
 }
 
 

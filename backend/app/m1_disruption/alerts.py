@@ -41,6 +41,7 @@ from app.config import TZ, real_now
 from app.m1_disruption.impact import counts_as_lost
 from app.models.base import I18n, Model, Provenance
 from app.models.v1 import Alert, InformedEntity
+from app.models.v2 import FeedValidation, ValidationRule, ValidatorTool  # noqa: F401 (CONTRACT 2.3)
 
 TEMPLATES = Path(__file__).resolve().parent / "templates"
 
@@ -665,41 +666,6 @@ def alert_dicts_from_feed(data: bytes) -> list[dict]:
 VALIDATOR_MAIN = "edu.usf.cutr.gtfsrtvalidator.lib.Main"
 VALIDATOR_REPO = "https://github.com/MobilityData/gtfs-realtime-validator"
 VALIDATOR_TIMEOUT_S = 180
-
-
-class ValidationRule(Model):
-    id: str
-    severity: Literal["ERROR", "WARNING", "INFO"]
-    title: str
-    description: str | None
-    occurrences: int
-    examples: list[str]
-    note: I18n | None = None
-
-
-class ValidatorTool(Model):
-    name: str
-    version: str | None
-    source: str | None
-
-
-class FeedValidation(Model):
-    """What the „validator pe ecran” panel shows (additive type, not in CONTRACT v2.2 yet)."""
-
-    closureId: str | None
-    method: Literal["validator", "internal"]
-    label: I18n
-    tool: ValidatorTool | None
-    ranAt: str
-    durationSec: float
-    passed: bool
-    errorCount: int
-    warningCount: int
-    rules: list[ValidationRule]
-    feed: dict
-    gtfs: dict
-    fallbackReason: str | None
-    provenance: list[Provenance]
 
 
 class ValidatorUnavailable(RuntimeError):
