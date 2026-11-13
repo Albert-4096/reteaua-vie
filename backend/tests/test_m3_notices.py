@@ -207,3 +207,26 @@ def test_warm_runs_on_the_prepared_cases():
     from app.m3_notices.warm import warm
 
     warm([HERO, E3, MOCIONI])
+
+
+@needs_data
+def test_drawn_closure_gets_notices_and_parking(published_state):
+    """A closure drawn on the map (no notice, no routeActions): analyze, then notices and parking."""
+    from app.m1_disruption.analysis import analyze_closure
+    from app.m3_notices import notices
+    from app.m6_parking import parking
+
+    e3 = state.read("closures", E3)
+    drawn = {**e3, "id": "cl_test_drawn", "kind": "drawn", "status": "draft", "routeIds": None,
+             "routeActions": None, "temporaryRoutes": None, "sourceText": None, "sourceUrl": None}
+    state.write("closures", drawn["id"], drawn)
+    analysis = analyze_closure(drawn).model_dump(mode="json")
+    out = notices.notices_for(drawn["id"])
+    assert out and all(n.publishedAt is None for n in out)
+    lost = _lost_stops(analysis)
+    assert {s for n in out for s in n.stopIds} == lost
+    for n in out:
+        if n.routeIds:
+            assert "ocolește zona lucrărilor" in n.body.ro or "ocolesc zona lucrărilor" in n.body.ro
+    p = parking.parking_impact(drawn["id"])
+    assert p.closureId == drawn["id"] and p.provenance
