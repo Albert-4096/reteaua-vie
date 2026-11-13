@@ -108,6 +108,12 @@ export function OverviewStep({ caseKey }: StepProps) {
                 >
                   {tr(c.title)}
                 </a>
+                {/* published by make precompute from the STPT notice, not live (RoseLark, D-010 rule) */}
+                {c.reconstructed && (
+                  <span className="small muted" title={c.reconstructedNote ? tr(c.reconstructedNote) : undefined}>
+                    {" "}· reconstituit
+                  </span>
+                )}
                 <p className="muted small">{fmtWindow(c.window)}</p>
               </li>
             ))}

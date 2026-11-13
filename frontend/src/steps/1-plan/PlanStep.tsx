@@ -91,7 +91,16 @@ function Plan({ closureId, caseKey }: StepProps & { closureId: string }) {
   const tot = impact.data?.totals;
   return (
     <Panel
-      title={tr(c.title)}
+      title={
+        <>
+          {tr(c.title)}
+          {c.reconstructed && (
+            <span className="small muted" title={c.reconstructedNote ? tr(c.reconstructedNote) : undefined}>
+              {" "}· reconstituit
+            </span>
+          )}
+        </>
+      }
       sentence={t(left > 0 ? "plan.sentence" : "plan.sentenceDone", { window: fmtWindow(c.window) })}
       foot={
         <>

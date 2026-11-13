@@ -1012,6 +1012,9 @@ export interface components {
             status: "draft" | "analyzed" | "published";
             /** Createdat */
             createdAt: string;
+            /** Reconstructed */
+            reconstructed?: boolean | null;
+            reconstructedNote?: components["schemas"]["I18n"] | null;
         };
         /** ClosureInput */
         ClosureInput: {
@@ -1068,6 +1071,9 @@ export interface components {
             departuresLost: number | null;
             /** Publishedat */
             publishedAt: string | null;
+            /** Reconstructed */
+            reconstructed?: boolean | null;
+            reconstructedNote?: components["schemas"]["I18n"] | null;
         };
         /** Compare */
         Compare: {
@@ -1823,6 +1829,9 @@ export interface components {
             posters: components["schemas"]["Poster"][];
             /** Publishedat */
             publishedAt: string;
+            /** Reconstructed */
+            reconstructed?: boolean | null;
+            reconstructedNote?: components["schemas"]["I18n"] | null;
         };
         /** ReportCategory */
         ReportCategory: {

@@ -82,9 +82,16 @@ export function MonitorStep({ caseKey, closureId }: StepProps) {
     <Panel
       title={tr(S.title)}
       sentence={
-        recorded
-          ? tr(S.sentence(tr(c.title), fmtDateTime(l.from), fmtDateTime(l.to)))
-          : `${tr(c.title)}. ${tr(S.noRecording)}`
+        <>
+          {recorded
+            ? tr(S.sentence(tr(c.title), fmtDateTime(l.from), fmtDateTime(l.to)))
+            : `${tr(c.title)}. ${tr(S.noRecording)}`}
+          {c.reconstructed && (
+            <span className="small muted" title={c.reconstructedNote ? tr(c.reconstructedNote) : undefined}>
+              {" "}· reconstituit
+            </span>
+          )}
+        </>
       }
       foot={
         <button type="button" className="btn btn-primary" onClick={() => navigate(stepHref(5, caseKey))}>
