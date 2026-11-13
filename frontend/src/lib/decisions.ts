@@ -1,6 +1,6 @@
 // One human question per group of unsure rows. Uses analysis.decisionGroups (ticket T2) when the
 // backend sends it; otherwise groups the unsure rows by line and reasons on the client.
-import type { AffectedStop, Analysis, Decision } from "../api/client";
+import type { AffectedStop, Analysis, Decision, StopRowKey } from "../api/client";
 
 type Text = { ro: string; en?: string | null };
 
@@ -16,15 +16,7 @@ export type Group = {
 
 export type GroupState = "open" | "lost" | "served" | "mixed";
 
-const rowKey = (r: { stopId: string; routeId: string; directionId: number }) => `${r.stopId}|${r.routeId}|${r.directionId}`;
-
-function matchKey(key: string | { stopId: string; routeId: string; directionId: number }, rows: AffectedStop[]) {
-  if (typeof key !== "string") return rows.find((r) => rowKey(r) === rowKey(key));
-  const parts = key.split(/[|:/,]/);
-  return rows.find(
-    (r) => parts.includes(r.stopId) && parts.includes(r.routeId) && parts.includes(String(r.directionId)),
-  );
-}
+const rowKey = (r: StopRowKey | AffectedStop) => `${r.stopId}|${r.routeId}|${r.directionId}`;
 
 export function decisionGroups(a: Analysis): Group[] {
   if (a.decisionGroups && a.decisionGroups.length > 0) {
@@ -34,7 +26,9 @@ export function decisionGroups(a: Analysis): Group[] {
       question: g.question,
       reason: g.reason ?? null,
       suggestedLost: g.suggested === "affected",
-      rows: (g.rows ?? g.rowKeys ?? []).map((k) => matchKey(k, a.stops)).filter((r): r is AffectedStop => !!r),
+      rows: g.rows
+        .map((k) => a.stops.find((r) => rowKey(r) === rowKey(k)))
+        .filter((r): r is AffectedStop => !!r),
     }));
   }
   const byKey = new Map<string, Group>();

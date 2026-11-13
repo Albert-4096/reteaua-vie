@@ -2,7 +2,7 @@
 import type { components } from "./schema";
 
 type S = components["schemas"];
-export type Analysis = S["Analysis"] & { decisionGroups?: DecisionGroup[] | null };
+export type Analysis = S["Analysis"];
 export type AffectedStop = S["AffectedStop"];
 export type Impact = S["Impact"];
 export type Closure = S["Closure"] & { id: string; status: string; locationNote?: S["I18n"] | null };
@@ -18,19 +18,9 @@ export type Health = S["Health"];
 export type Job = S["Job"];
 export type ClosureSummary = S["ClosureSummary"];
 
-type RowRef = { stopId: string; routeId: string; directionId: number };
-
-/** Optional, added by ticket T2: one human question for many unsure rows. */
-export type DecisionGroup = {
-  id: string;
-  routeId: string;
-  question: I18n;
-  reason?: I18n | null;
-  /** "affected" = the platform suggests „nu oprește”; null = no suggestion. */
-  suggested?: "affected" | "served" | null;
-  rows?: RowRef[];
-  rowKeys?: (string | RowRef)[];
-};
+/** T2: one human question for many unsure rows (generated from the backend schema). */
+export type DecisionGroup = S["DecisionGroup"];
+export type StopRowKey = S["StopRowKey"];
 
 export type Decision = { stopId: string; routeId: string; directionId: number; confirmed: boolean };
 

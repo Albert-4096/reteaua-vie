@@ -563,6 +563,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/feed/alerts.ngsi.json": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Alerts Ngsi */
+        get: operations["alerts_ngsi_api_feed_alerts_ngsi_json_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/compliance": {
         parameters: {
             query?: never;
@@ -898,6 +915,8 @@ export interface components {
             unsureCount: number;
             /** Provenance */
             provenance: components["schemas"]["Provenance"][];
+            /** Decisiongroups */
+            decisionGroups?: components["schemas"]["DecisionGroup"][] | null;
         };
         /** AnalysisRoute */
         AnalysisRoute: {
@@ -1075,6 +1094,16 @@ export interface components {
             reconstructed?: boolean | null;
             reconstructedNote?: components["schemas"]["I18n"] | null;
         };
+        /**
+         * CommonConflict
+         * @description v2.5: another closure that overlaps every candidate window (it cannot change the ranking).
+         */
+        CommonConflict: {
+            /** Closureid */
+            closureId: string;
+            title: components["schemas"]["I18n"] | null;
+            window: components["schemas"]["Window"];
+        };
         /** Compare */
         Compare: {
             a: components["schemas"]["Impact"];
@@ -1116,6 +1145,22 @@ export interface components {
             /** Routeids */
             routeIds: string[];
         };
+        /**
+         * DecisionGroup
+         * @description v2.5: one human question for `unsure` rows of one line that share a cause.
+         */
+        DecisionGroup: {
+            /** Id */
+            id: string;
+            /** Routeid */
+            routeId: string;
+            question: components["schemas"]["I18n"];
+            reason: components["schemas"]["I18n"];
+            /** Suggested */
+            suggested?: ("affected" | "served") | null;
+            /** Rows */
+            rows: components["schemas"]["StopRowKey"][];
+        };
         /** DetourEdge */
         DetourEdge: {
             /** Name */
@@ -1151,7 +1196,7 @@ export interface components {
              * Format
              * @enum {string}
              */
-            format: "GTFS-RT" | "DATEX II" | "JSON" | "mobilityDCAT-AP";
+            format: "GTFS-RT" | "DATEX II" | "JSON" | "mobilityDCAT-AP" | "NGSI-LD";
             /** Standard */
             standard: string;
             /** Url */
@@ -2021,6 +2066,18 @@ export interface components {
             /** Decisions */
             decisions: components["schemas"]["StopDecision"][];
         };
+        /** StopRowKey */
+        StopRowKey: {
+            /** Stopid */
+            stopId: string;
+            /** Routeid */
+            routeId: string;
+            /**
+             * Directionid
+             * @enum {integer}
+             */
+            directionId: 0 | 1;
+        };
         /** TemporaryRoute */
         TemporaryRoute: {
             /** Shortname */
@@ -2124,6 +2181,10 @@ export interface components {
             method: components["schemas"]["I18n"];
             /** Provenance */
             provenance: components["schemas"]["Provenance"][];
+            /** Baselinedepartureslost */
+            baselineDeparturesLost?: number | null;
+            /** Commonconflicts */
+            commonConflicts?: components["schemas"]["CommonConflict"][] | null;
         };
         /** ZoneCollection */
         ZoneCollection: {
@@ -3334,6 +3395,27 @@ export interface operations {
                 };
                 content: {
                     "application/xml": unknown;
+                };
+            };
+        };
+    };
+    alerts_ngsi_api_feed_alerts_ngsi_json_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description NGSI-LD entities (normalized): FIWARE Smart Data Models Alert and GtfsStop; GeoJSON coordinates [lon, lat]; times UTC */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "application/ld+json": unknown;
                 };
             };
         };
