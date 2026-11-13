@@ -465,7 +465,7 @@ class IndicatorSet(Model):
 
 class ExportFile(Model):
     name: str
-    format: Literal["GTFS-RT", "DATEX II", "JSON", "mobilityDCAT-AP"]
+    format: Literal["GTFS-RT", "DATEX II", "JSON", "mobilityDCAT-AP", "NGSI-LD"]  # v2.5: NGSI-LD
     standard: str
     url: str
     updatedAt: IsoTime | None

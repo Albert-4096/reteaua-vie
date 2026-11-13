@@ -1,6 +1,7 @@
 """M7: EU compliance, disruption history, indicators, exports, NAP metadata, DATEX II.
 
     GET /api/feed/datex.xml                 DATEX II v3 SituationPublication of every published closure
+    GET /api/feed/alerts.ngsi.json          NGSI-LD: FIWARE Alert + GtfsStop entities of the published alerts
     GET /api/compliance                     ComplianceReport (statuses describe our exports only)
     GET /api/history?from=&to=              HistoryEntry[] (platform + back-filled from STPT notices)
     GET /api/indicators                     IndicatorSet (PMUD / TEN-T, each with its method)
@@ -18,6 +19,7 @@ from app.m7_compliance import datex as datex_mod
 from app.m7_compliance import exports as exports_mod
 from app.m7_compliance import history as history_mod
 from app.m7_compliance import indicators as indicators_mod
+from app.m7_compliance import ngsi as ngsi_mod
 from app.models.v2 import ComplianceReport, ExportFile, IndicatorSet
 
 router = APIRouter(tags=["M7 compliance and exports"])
@@ -29,6 +31,15 @@ router = APIRouter(tags=["M7 compliance and exports"])
 def datex_xml() -> Response:
     return Response(content=datex_mod.feed_xml(), media_type="application/xml",
                     headers={"Cache-Control": "no-cache", "Content-Disposition": 'inline; filename="datex.xml"'})
+
+
+@router.get("/feed/alerts.ngsi.json", response_class=JSONResponse,
+            responses={200: {"content": {"application/ld+json": {}},
+                             "description": "NGSI-LD entities (normalized): FIWARE Smart Data Models Alert and "
+                                            "GtfsStop; GeoJSON coordinates [lon, lat]; times UTC"}})
+def alerts_ngsi() -> JSONResponse:
+    return JSONResponse(content=ngsi_mod.entities(), media_type=ngsi_mod.MEDIA_TYPE,
+                        headers={"Cache-Control": "no-cache"})
 
 
 @router.get("/compliance", response_model=ComplianceReport)

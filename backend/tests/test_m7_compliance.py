@@ -50,7 +50,7 @@ def test_counts_add_up():
 def test_export_files_have_the_contract_shape(isolated_state):
     files = [ExportFile.model_validate(f.model_dump(mode="json")) for f in exports.export_files(ALL)]
     assert [f.name for f in files] == [e.name for e in exports.EXPORTS]
-    assert {f.format for f in files} == {"GTFS-RT", "DATEX II", "JSON", "mobilityDCAT-AP"}
+    assert {f.format for f in files} == {"GTFS-RT", "DATEX II", "JSON", "mobilityDCAT-AP", "NGSI-LD"}
     assert all(f.updatedAt is None for f in files), "nothing published in an empty state: unknown, not a date"
     base = exports.base_url()
     assert all(f.url.startswith(f"{base}/api/") for f in files)
