@@ -86,6 +86,11 @@ def test_window_rules():
     assert (w.start.isoformat(), w.end.isoformat()) == ("2026-11-08T10:00:00+02:00", "2026-11-08T18:00:00+02:00")
     w = window_from("în perioada 07 noiembrie 2026, ora 04:00 – 12 noiembrie 2026, ora 24:00", ref)
     assert w.end.isoformat() == "2026-11-13T00:00:00+02:00"   # 24:00 rolls to the next day
+    # text copied from the web page: the superscript minutes stick to the hour
+    w = window_from("în data de 8 noiembrie 2026, în intervalul orar 1000 – 1800, vor fi executate lucrări", ref)
+    assert (w.start.isoformat(), w.end.isoformat()) == ("2026-11-08T10:00:00+02:00", "2026-11-08T18:00:00+02:00")
+    w = window_from("în perioada 07 noiembrie 2026, ora 0400 – 12 noiembrie 2026, ora 2400.", ref)
+    assert (w.start.isoformat(), w.end.isoformat()) == ("2026-11-07T04:00:00+02:00", "2026-11-13T00:00:00+02:00")
     w = window_from("Începând de mâine, linia Expres 3 își reia circulația", ref)
     assert w.start.isoformat() == "2026-11-04T00:00:00+02:00" and w.open_end
     assert window_from("pe Bulevardul 16 Decembrie 1989 și Str. 1 Decembrie 1918", ref) is None

@@ -130,6 +130,9 @@ _DATE_RE = re.compile(r"\b(\d{1,2})\s+(" + "|".join(sorted(MONTHS, key=len, reve
 _DATE_NUM_RE = re.compile(r"\b(\d{1,2})[./](\d{1,2})[./](\d{4})\b")
 _TIME_RE = re.compile(r"\b([01]?\d|2[0-4])\s?[:.]\s?([0-5]\d)\b")
 _TIME_SPACED_RE = re.compile(r"\b(?:ora|orele|intre|între)?\s*\b([01]?\d|2[0-4]) ([0-5]\d)\b")
+# HHMM only right after "ora/orele/orar", so a year (2026) is never read as a time.
+_TIME_COMPACT_RE = re.compile(r"\b(?:ora|orele|orar)\s+([01]\d|2[0-4])([0-5]\d)\b"
+                              r"(?:\s*[-–—]\s*([01]\d|2[0-4])([0-5]\d)\b)?")
 
 
 @dataclass
@@ -172,6 +175,11 @@ def _times_in(sentence: str) -> list[tuple[int, tuple[int, int]]]:
             if re.match(r"\s*(" + "|".join(MONTHS) + r")\b", tail):
                 continue
             found.append((m.start(1), (int(m.group(1)), int(m.group(2)))))
+    if not found:  # copied from the web page, the superscript minutes lose their gap: "ora 0400", "orar 1000 – 1800"
+        for m in _TIME_COMPACT_RE.finditer(f):
+            found.append((m.start(1), (int(m.group(1)), int(m.group(2)))))
+            if m.group(3):
+                found.append((m.start(3), (int(m.group(3)), int(m.group(4)))))
     return found
 
 
