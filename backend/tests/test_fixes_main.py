@@ -32,3 +32,33 @@ def test_health_lists_failed_modules(monkeypatch):
     assert body["modulesFailed"] == []
     monkeypatch.setattr(main, "MODULES_FAILED", ["app.mx.api_x"])
     assert client.get("/api/health").json()["modulesFailed"] == ["app.mx.api_x"]
+
+
+def test_frontend_served_with_spa_fallback(tmp_path):
+    from fastapi import FastAPI
+
+    dist = tmp_path / "dist"
+    (dist / "assets").mkdir(parents=True)
+    (dist / "index.html").write_text("<html>app</html>")
+    (dist / "assets" / "a.js").write_text("console.log(1)")
+    (tmp_path / "secret.txt").write_text("no")
+    app = FastAPI()
+
+    @app.get("/api/ping")
+    def ping():
+        return {"ok": True}
+
+    assert main.mount_frontend(app, dist)
+    c = TestClient(app)
+    assert c.get("/api/ping").json() == {"ok": True}
+    assert c.get("/").text == "<html>app</html>"
+    assert c.get("/assets/a.js").text == "console.log(1)"
+    assert c.get("/a/cl_x", params={"stop": "85"}).text == "<html>app</html>"
+    assert c.get("/api/nope").status_code == 404
+    assert "no" != c.get("/../secret.txt").text
+
+
+def test_no_dist_no_mount(tmp_path):
+    from fastapi import FastAPI
+
+    assert main.mount_frontend(FastAPI(), tmp_path / "missing") is False

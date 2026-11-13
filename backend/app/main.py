@@ -9,13 +9,14 @@ from __future__ import annotations
 
 import importlib
 import logging
+import os
 import pkgutil
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import ensure_dirs, get_settings
@@ -128,3 +129,35 @@ async def _internal_error(_req: Request, exc: Exception):
 @app.api_route("/api/{rest:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)
 async def _unknown_api_path(rest: str):
     return JSONResponse(status_code=404, content=error_body("NOT_FOUND", f"Unknown API path: /api/{rest}"))
+
+
+# --- the built frontend at / (SPEC §12: `make demo` and the Docker image serve one port) ---
+
+FRONTEND_DIST = Path(os.environ.get("FRONTEND_DIST") or APP_DIR.parents[1] / "frontend" / "dist")
+
+
+def mount_frontend(target: FastAPI, dist: Path) -> bool:
+    """Serve `dist` at / with an SPA fallback (e.g. the QR page /a/{closureId}?stop=).
+
+    Does nothing when dist/index.html is missing (dev: Vite serves the frontend). Never
+    answers under /api: those paths are matched by the API routes registered before it.
+    """
+    index = dist / "index.html"
+    if not index.is_file():
+        return False
+    root = dist.resolve()
+
+    @target.get("/{path:path}", include_in_schema=False)
+    async def _frontend(path: str):
+        if path == "api" or path.startswith("api/"):
+            return JSONResponse(status_code=404, content=error_body("NOT_FOUND", f"Unknown API path: /{path}"))
+        if path:
+            candidate = (root / path).resolve()
+            if candidate.is_relative_to(root) and candidate.is_file():
+                return FileResponse(candidate)
+        return FileResponse(index)
+
+    return True
+
+
+FRONTEND_MOUNTED = mount_frontend(app, FRONTEND_DIST)
