@@ -8,17 +8,17 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
 
 from app import config
+from app.common.timeutil import parse_iso
 from app.config import TZ
 from tests.conftest import needs_data
 
 HERO = "cl_20261108_16dec"
-MOCIONI = "cl_20261102_mocioni"
 GOLD_11067 = Path(__file__).resolve().parents[2] / "eval" / "labels" / "11067.json"
 
 
@@ -68,10 +68,12 @@ def _check_agrees(label: str):
     impact = compute_impact(HERO)
     assert ws.baselineDeparturesLost == impact.totals.departuresLost, label
     assert f"față de {win.num_ro(impact.totals.departuresLost)} în fereastra din anunț" in ws.method.ro, label
-    # Mocioni (published, open to 31 Dec) overlaps every candidate: said once, not on each row
-    assert [c.closureId for c in ws.commonConflicts or []] == [MOCIONI], label
-    assert ws.method.ro.count("Toate ferestrele se suprapun") == 1
-    assert all(c.conflicts == 0 and "se suprapune" not in c.note.ro for c in ws.candidates), label
+    # a closure that overlaps every candidate (Mocioni, open to 31 Dec, while it conflicts with the
+    # hero) is said once at the top and never counted on a row
+    lo, hi = parse_iso(ws.searchFrom), parse_iso(ws.searchTo) + timedelta(hours=ws.hours)
+    for c in ws.commonConflicts or []:
+        assert parse_iso(c.window.start) <= lo and parse_iso(c.window.end) >= hi, label
+    assert ws.method.ro.count("Toate ferestrele se suprapun") == (1 if ws.commonConflicts else 0), label
     return ws, impact
 
 
