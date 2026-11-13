@@ -9,7 +9,7 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from app.common.timeutil import file_mtime, iso
+from app.common.timeutil import file_mtime, iso, parse_iso
 from app.models.base import Provenance
 
 CITY_TRANSIT_URL = "https://cont.primariatm.ro/api/mobile/transit/network"
@@ -64,3 +64,26 @@ def vehicles_provenance(recorded_at: datetime, note: str | None = None) -> Prove
 
 def state_provenance(fetched_at: datetime) -> Provenance:
     return provenance("Rețeaua Vie, registrul lucrărilor / closure register", fetched_at, None, None, None)
+
+
+def from_sources(source_id: str) -> Provenance | None:
+    """Provenance of a downloaded source from $DATA_DIR/provenance/sources.json.
+
+    `source_id` is the record id written by backend/scripts/data/fetch_all.sh
+    ("osm", "ghsl", ...) or a local file id ("gtfs:<file>", "city-api:<file>").
+    Returns None when the file or the record is missing.
+    """
+    import json
+
+    from app.config import get_settings
+
+    path = get_settings().data_dir / "provenance" / "sources.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        return None
+    for rec in (data.get("fetched") or []) + (data.get("local") or []):
+        if rec.get("id") == source_id:
+            return provenance(rec.get("source") or source_id, parse_iso(rec["fetchedAt"]), url=rec.get("url"),
+                              version=rec.get("version"), note=rec.get("note"))
+    return None
