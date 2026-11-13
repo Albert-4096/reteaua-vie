@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-13T18:35:56+02:00",
-  "repoCommit": "65e30a2",
+  "generatedAt": "2026-11-13T19:14:42+02:00",
+  "repoCommit": "5f5fc87",
   "feed": {
     "version": "4.31",
     "file": "smtt_1bd0e3-65f7b81245f0f.zip",
@@ -14,46 +14,483 @@
       "AI-assisted from the notice text; human review pending"
     ]
   },
-  "parser": null,
-  "analyzer": null,
-  "scoredFrom": null,
+  "parser": "app.m1_disruption.parser:parse_notice",
+  "analyzer": "app.m1_disruption.analysis:analyze_closure",
+  "scoredFrom": "analysis",
   "notices": [
     {
       "postId": 11058,
       "title": "Modificări în circulația liniilor M30, M29, M35 M 44 și S7, începând cu 2 noiembrie",
       "goldSuspended": 0,
-      "goldUncertain": 0
+      "goldUncertain": 0,
+      "parseSeconds": 1.786,
+      "unread": 5,
+      "windowMatch": {
+        "start": true,
+        "end": false
+      },
+      "routes": {
+        "gold": [],
+        "predicted": []
+      },
+      "analysisSeconds": 4.446,
+      "rows": {
+        "affected": 0,
+        "unsure": 0
+      },
+      "neclarShare": null,
+      "strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositives": [],
+        "missed": []
+      },
+      "lenient": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositives": [],
+        "missed": []
+      },
+      "pasteToAlert": {
+        "seconds": null,
+        "status": "not-available",
+        "reason": "publish -> HTTP 409",
+        "steps": [
+          {
+            "step": "parse",
+            "status": 201
+          },
+          {
+            "step": "analyze",
+            "status": 200
+          },
+          {
+            "step": "publish",
+            "status": 409
+          }
+        ]
+      }
     },
     {
       "postId": 11060,
       "title": "Modificări temporare ale traseelor liniilor metropolitane S8, M32, M36, M37, M38, M46 și M51, începând cu 2 noiembrie",
       "goldSuspended": 0,
-      "goldUncertain": 1
+      "goldUncertain": 1,
+      "parseSeconds": 7.677,
+      "unread": 2,
+      "windowMatch": {
+        "start": true,
+        "end": false
+      },
+      "routes": {
+        "gold": [
+          "R_AB_M32",
+          "R_AB_M36",
+          "R_AB_M37",
+          "R_AB_M38",
+          "R_AB_M46",
+          "R_AB_M51"
+        ],
+        "predicted": [
+          "R_AB_M32",
+          "R_AB_M36",
+          "R_AB_M37",
+          "R_AB_M38",
+          "R_AB_M46",
+          "R_AB_M51"
+        ]
+      },
+      "analysisSeconds": 0.013,
+      "rows": {
+        "affected": 0,
+        "unsure": 0
+      },
+      "neclarShare": null,
+      "strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositives": [],
+        "missed": []
+      },
+      "lenient": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositives": [],
+        "missed": []
+      },
+      "pasteToAlert": {
+        "seconds": null,
+        "status": "not-available",
+        "reason": "publish -> HTTP 409",
+        "steps": [
+          {
+            "step": "parse",
+            "status": 201
+          },
+          {
+            "step": "analyze",
+            "status": 200
+          },
+          {
+            "step": "publish",
+            "status": 409
+          }
+        ]
+      }
     },
     {
       "postId": 11062,
       "title": "Informare călători privind linia E3",
       "goldSuspended": 0,
-      "goldUncertain": 0
+      "goldUncertain": 0,
+      "parseSeconds": 0.013,
+      "unread": 2,
+      "windowMatch": {
+        "start": false,
+        "end": false
+      },
+      "routes": {
+        "gold": [
+          "R_AB_E3"
+        ],
+        "predicted": [
+          "R_AB_E3"
+        ]
+      },
+      "analysisSeconds": 0.471,
+      "rows": {
+        "affected": 0,
+        "unsure": 0
+      },
+      "neclarShare": null,
+      "strict": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositives": [],
+        "missed": []
+      },
+      "lenient": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "falsePositives": [],
+        "missed": []
+      },
+      "pasteToAlert": {
+        "seconds": null,
+        "status": "not-available",
+        "reason": "publish -> HTTP 409",
+        "steps": [
+          {
+            "step": "parse",
+            "status": 201
+          },
+          {
+            "step": "analyze",
+            "status": 200
+          },
+          {
+            "step": "publish",
+            "status": 409
+          }
+        ]
+      }
     },
     {
       "postId": 11065,
       "title": "Închiderea temporară a circulației pe Strada Ardealului și modificarea traseului liniei E3",
       "goldSuspended": 11,
-      "goldUncertain": 0
+      "goldUncertain": 0,
+      "parseSeconds": 0.056,
+      "unread": 0,
+      "windowMatch": {
+        "start": true,
+        "end": true
+      },
+      "routes": {
+        "gold": [
+          "R_AB_E3"
+        ],
+        "predicted": [
+          "R_AB_E3"
+        ]
+      },
+      "analysisSeconds": 0.103,
+      "rows": {
+        "affected": 11,
+        "unsure": 0
+      },
+      "neclarShare": 0.0,
+      "strict": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositives": [],
+        "missed": []
+      },
+      "lenient": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositives": [],
+        "missed": []
+      },
+      "pasteToAlert": {
+        "seconds": 0.246,
+        "status": "valid",
+        "alerts": 11,
+        "steps": [
+          {
+            "step": "parse",
+            "status": 201
+          },
+          {
+            "step": "analyze",
+            "status": 200
+          },
+          {
+            "step": "confirm",
+            "status": 200
+          },
+          {
+            "step": "publish",
+            "status": 200
+          },
+          {
+            "step": "feed",
+            "status": 200
+          }
+        ],
+        "validity": "protobuf parses, header 2.x, every alert has informed_entity and header_text (internal check, not the MobilityData validator)",
+        "humanStep": "every analysis row confirmed as proposed (no human think time)"
+      }
     },
     {
       "postId": 11067,
       "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989",
       "goldSuspended": 88,
-      "goldUncertain": 29
+      "goldUncertain": 29,
+      "parseSeconds": 0.934,
+      "unread": 3,
+      "windowMatch": {
+        "start": true,
+        "end": true
+      },
+      "routes": {
+        "gold": [
+          "R_TV_2",
+          "R_TV_4",
+          "R_TV_7"
+        ],
+        "predicted": [
+          "R_TV_2",
+          "R_TV_4",
+          "R_TV_7"
+        ]
+      },
+      "analysisSeconds": 0.309,
+      "rows": {
+        "affected": 67,
+        "unsure": 50
+      },
+      "neclarShare": 0.4274,
+      "strict": {
+        "tp": 67,
+        "fp": 0,
+        "fn": 21,
+        "precision": 1.0,
+        "recall": 0.7614,
+        "falsePositives": [],
+        "missed": [
+          [
+            "434",
+            "R_TV_7",
+            0
+          ],
+          [
+            "435",
+            "R_TV_7",
+            0
+          ],
+          [
+            "458",
+            "R_TV_7",
+            1
+          ],
+          [
+            "459",
+            "R_TV_7",
+            1
+          ],
+          [
+            "61",
+            "R_TV_7",
+            1
+          ],
+          [
+            "85",
+            "R_TV_7",
+            0
+          ],
+          [
+            "86",
+            "R_TV_7",
+            1
+          ],
+          [
+            "87",
+            "R_TV_7",
+            0
+          ],
+          [
+            "88",
+            "R_TV_7",
+            1
+          ],
+          [
+            "896",
+            "R_TV_7",
+            1
+          ],
+          [
+            "897",
+            "R_TV_7",
+            1
+          ],
+          [
+            "898",
+            "R_TV_7",
+            1
+          ],
+          [
+            "899",
+            "R_TV_7",
+            1
+          ],
+          [
+            "900",
+            "R_TV_7",
+            1
+          ],
+          [
+            "901",
+            "R_TV_7",
+            1
+          ],
+          [
+            "902",
+            "R_TV_7",
+            0
+          ],
+          [
+            "903",
+            "R_TV_7",
+            0
+          ],
+          [
+            "904",
+            "R_TV_7",
+            0
+          ],
+          [
+            "905",
+            "R_TV_7",
+            0
+          ],
+          [
+            "906",
+            "R_TV_7",
+            0
+          ],
+          [
+            "907",
+            "R_TV_7",
+            0
+          ]
+        ]
+      },
+      "lenient": {
+        "tp": 88,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "falsePositives": [],
+        "missed": []
+      },
+      "pasteToAlert": {
+        "seconds": 1.311,
+        "status": "valid",
+        "alerts": 82,
+        "steps": [
+          {
+            "step": "parse",
+            "status": 201
+          },
+          {
+            "step": "analyze",
+            "status": 200
+          },
+          {
+            "step": "confirm",
+            "status": 200
+          },
+          {
+            "step": "publish",
+            "status": 200
+          },
+          {
+            "step": "feed",
+            "status": 200
+          }
+        ],
+        "validity": "protobuf parses, header 2.x, every alert has informed_entity and header_text (internal check, not the MobilityData validator)",
+        "humanStep": "every analysis row confirmed as proposed (no human think time)"
+      }
     }
   ],
   "overall": {
-    "strict": null,
-    "lenient": null,
-    "neclarShare": null,
-    "pasteToAlertSeconds": null,
+    "strict": {
+      "tp": 78,
+      "fp": 0,
+      "fn": 21,
+      "precision": 1.0,
+      "recall": 0.7879
+    },
+    "lenient": {
+      "tp": 99,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "neclarShare": 0.3906,
+    "pasteToAlertSeconds": {
+      "median": 1.311,
+      "max": 1.311,
+      "n": 2
+    },
     "gtfsRtValidatorPass": null,
     "notes": [
       "Rows are (stopId, routeId, directionId). Gold rows labelled uncertain are not scored.",
@@ -85,8 +522,5 @@
       }
     ]
   },
-  "errors": [
-    "M1 parser not found. Tried: app.m1_disruption.parser (module not found: app.m1_disruption.parser)",
-    "M1 analysis not found. Tried: app.m1_disruption.analysis (module not found: app.m1_disruption.analysis) -> scoring the parser's routeActions instead"
-  ]
+  "errors": []
 }
