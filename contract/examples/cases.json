@@ -12,5 +12,33 @@
       "ro": "Anunț STPT real din 6 nov 2026.",
       "en": "Real STPT notice of 6 Nov 2026."
     }
+  },
+  {
+    "id": "case_e3",
+    "title": {
+      "ro": "Str. Ardealului închisă, linia E3 deviată",
+      "en": "Ardealului St closed, line E3 diverted"
+    },
+    "kind": "notice",
+    "date": "2026-11-07",
+    "closureId": "cl_20261107_e3",
+    "note": {
+      "ro": "Anunț STPT real din 5 nov 2026, 7 nov 04:00 – 12 nov 24:00.",
+      "en": "Real STPT notice of 5 Nov 2026, 7 Nov 04:00 – 12 Nov 24:00."
+    }
+  },
+  {
+    "id": "case_mocioni",
+    "title": {
+      "ro": "Lucrări Bd. 16 Decembrie – Piața Mocioni, linii metropolitane deviate",
+      "en": "Works at 16 Decembrie Blvd – Mocioni Sq, metropolitan lines diverted"
+    },
+    "kind": "notice",
+    "date": "2026-11-02",
+    "closureId": "cl_20261102_mocioni",
+    "note": {
+      "ro": "Anunț STPT real din 30 oct 2026, în vigoare până la finalul lucrărilor. Vehicule înregistrate 13–15 nov.",
+      "en": "Real STPT notice of 30 Oct 2026, until the works end. Vehicles recorded 13–15 Nov."
+    }
   }
 ]

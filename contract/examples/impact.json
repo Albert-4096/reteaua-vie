@@ -8,7 +8,8 @@
     "stopsSuspended": 1,
     "departuresLost": 51,
     "routesAffected": 2,
-    "residentsLosingStop": null
+    "residentsLosingStop": null,
+    "stopRoutePairsLost": 2
   },
   "byZone": [
     {
@@ -30,7 +31,7 @@
       "url": "https://cont.primariatm.ro/api/mobile/transit/network",
       "version": "4.31-4",
       "fetchedAt": "2026-11-13T13:29:00+02:00",
-      "note": null
+      "note": "PLACEHOLDER: these totals are wrong for the hero case (line 4 is suspended on its whole length). Recompute, docs/SPEC.md 5.1."
     },
     {
       "source": "Stop timetables, cont.primariatm.ro",

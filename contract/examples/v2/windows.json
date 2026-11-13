@@ -41,5 +41,6 @@
       "fetchedAt": "2026-11-13T16:00:00+02:00",
       "note": "PLACEHOLDER example values. Never show as a fact."
     }
-  ]
+  ],
+  "phases": null
 }
