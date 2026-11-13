@@ -27,9 +27,13 @@ export function QrPage({ closureId, stopId }: Props) {
     (stopId && alerts.data?.find((a) => a.informedEntity.some((e) => e.stopId === stopId))) ||
     (!stopId ? alerts.data?.find((a) => a.informedEntity.every((e) => !e.stopId)) : undefined);
   const loading = closure.loading || alerts.loading || health.loading;
-  const demoNow = health.data?.demoNow ?? null;
-  const now = demoNow ? new Date(demoNow) : new Date();
   const period = alert?.activePeriod[0] ?? c?.window;
+  // Real residents scan real posters: inside the closure window the page uses the real clock and
+  // shows no simulation text. Only outside it does it fall back to the demo clock (labelled „Simulare”).
+  const realNow = new Date();
+  const realInside = !!period && new Date(period.start) <= realNow && realNow <= new Date(period.end);
+  const demoNow = realInside ? null : (health.data?.demoNow ?? null);
+  const now = demoNow ? new Date(demoNow) : realNow;
   const ended = !!period && new Date(period.end) < now;
   const openEnd = !!alert && /finalizarea lucrărilor/.test(alert.descriptionText.ro);
   const near = stopId ? nearestFor(analysis.data, stopId) : null;
