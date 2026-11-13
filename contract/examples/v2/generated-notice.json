@@ -1,0 +1,2258 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "status": "final",
+  "unsureCount": 0,
+  "window": {
+    "start": "2026-11-08T10:00:00+02:00",
+    "end": "2026-11-08T18:00:00+02:00"
+  },
+  "text": {
+    "ro": "Duminică, 8 noiembrie 2026, între orele 10:00 și 18:00. Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria.\n\nLinia 4 (tramvai) nu circulă.\n\nLinia 2 (tramvai) circulă pe un traseu scurtat.\nÎn sensul spre Calea Torontalului (Ciocanul), nu oprește în:\n– Catedrala Mitropolitană. Cea mai apropiată stație deservită: Catedrala Mitropolitană, altă stație cu același nume, 130 m pe jos.\n– Spitalul de Copii (Nemoianu). Cea mai apropiată stație deservită: Piața Regina Maria (Spitalul de copii), 290 m pe jos.\n– Nemoianu (Brediceanu). Cea mai apropiată stație deservită: Piața Timișoara 700, 190 m pe jos.\n– Circumvalațiunii (Brediceanu). Stația rămâne deservită de linia 5c.\n– Mendeleev. Stația rămâne deservită de linia 5c.\n– Balta Verde (Cetății). Stația rămâne deservită de linia 5c.\n– Gheorghe Lazăr (Cetății). Cea mai apropiată stație deservită: Bulevardul Cetății (Gheorghe Lazăr), 100 m pe jos.\n– Amforei (Cetății). Cea mai apropiată stație deservită: Bd. Cetății (Cloșca), 440 m pe jos.\n– Matei Basarab (Cetății). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 380 m pe jos.\n– Calea Torontalului (Ciocanul). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 120 m pe jos.\nÎn sensul spre Shopping City, nu oprește în:\n– Calea Torontalului (Ciocanul). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 150 m pe jos.\n– Matei Basarab (Cetății). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 400 m pe jos.\n– Amforei (Cetății). Cea mai apropiată stație deservită: Bulevardul Cetății (Gheorghe Lazăr), 430 m pe jos.\n– Gheorghe Lazăr (Cetății). Cea mai apropiată stație deservită: Bulevardul Cetății (Gheorghe Lazăr), 120 m pe jos.\n– Balta Verde (Cetății). Cea mai apropiată stație deservită: Balta Verde, 80 m pe jos.\n– Mendeleev. Stația rămâne deservită de linia 5c.\n– Circumvalațiunii (Brediceanu). Stația rămâne deservită de linia 5c.\n– Nemoianu (Brediceanu). Cea mai apropiată stație deservită: Piața Timișoara 700, 190 m pe jos.\n– Spitalul de Copii (Nemoianu). Cea mai apropiată stație deservită: Piața Regina Maria (Spitalul de copii), 290 m pe jos.\n– Catedrala Mitropolitană. Cea mai apropiată stație deservită: Catedrala Mitropolitană, altă stație cu același nume, 170 m pe jos.\n– Piața Sfânta Maria (16 Decembrie 1989). Cea mai apropiată stație deservită: Piața A. Mocioni (Sinaia), 480 m pe jos.\n\nLinia 7 (tramvai) circulă pe un traseu scurtat.\nÎn sensul spre Calea Torontalului (Ciocanul), nu oprește în:\n– Catedrala Mitropolitană. Cea mai apropiată stație deservită: Catedrala Mitropolitană, altă stație cu același nume, 130 m pe jos.\n– Spitalul de Copii (Nemoianu). Cea mai apropiată stație deservită: Piața Regina Maria (Spitalul de copii), 290 m pe jos.\n– Nemoianu (Brediceanu). Cea mai apropiată stație deservită: Piața Timișoara 700, 190 m pe jos.\n– Circumvalațiunii (Brediceanu). Stația rămâne deservită de linia 5c.\n– Mendeleev. Stația rămâne deservită de linia 5c.\n– Balta Verde (Cetății). Stația rămâne deservită de linia 5c.\n– Gheorghe Lazăr (Cetății). Cea mai apropiată stație deservită: Bulevardul Cetății (Gheorghe Lazăr), 100 m pe jos.\n– Amforei (Cetății). Cea mai apropiată stație deservită: Bd. Cetății (Cloșca), 440 m pe jos.\n– Matei Basarab (Cetății). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 380 m pe jos.\n– Calea Torontalului (Ciocanul). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 120 m pe jos.\nÎn sensul spre Bulevardul Dâmbovița, nu oprește în:\n– Calea Torontalului (Ciocanul). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 150 m pe jos.\n– Matei Basarab (Cetății). Cea mai apropiată stație deservită: Miresei (Calea Torontalului), 400 m pe jos.\n– Amforei (Cetății). Cea mai apropiată stație deservită: Bulevardul Cetății (Gheorghe Lazăr), 430 m pe jos.\n– Gheorghe Lazăr (Cetății). Cea mai apropiată stație deservită: Bulevardul Cetății (Gheorghe Lazăr), 120 m pe jos.\n– Balta Verde (Cetății). Cea mai apropiată stație deservită: Balta Verde, 80 m pe jos.\n– Mendeleev. Stația rămâne deservită de linia 5c.\n– Circumvalațiunii (Brediceanu). Stația rămâne deservită de linia 5c.\n– Nemoianu (Brediceanu). Cea mai apropiată stație deservită: Piața Timișoara 700, 190 m pe jos.\n– Spitalul de Copii (Nemoianu). Cea mai apropiată stație deservită: Piața Regina Maria (Spitalul de copii), 290 m pe jos.\n– Catedrala Mitropolitană. Cea mai apropiată stație deservită: Catedrala Mitropolitană, altă stație cu același nume, 170 m pe jos.\n– Piața Sfânta Maria (16 Decembrie 1989). Cea mai apropiată stație deservită: Piața Sfânta Maria (16 Decembrie 1989), altă stație cu același nume, 100 m pe jos.\n\nStații în care nu oprește niciun mijloc de transport în comun în acest interval: Catedrala Mitropolitană, Spitalul de Copii (Nemoianu), Nemoianu (Brediceanu), Gheorghe Lazăr (Cetății), Amforei (Cetății), Matei Basarab (Cetății), Calea Torontalului (Ciocanul), Balta Verde (Cetății), Piața Sfânta Maria (16 Decembrie 1989), AEM (Dräxlmaier).\n\nLinie temporară: autobuzul 4b, pe traseul Piața Iuliu Maniu – Bulevardul 16 Decembrie 1989 – Bulevardul Regele Ferdinand I – Strada Doctor Iosif Nemoianu – Strada Coriolan Brediceanu – Calea Bogdăneștilor – Bulevardul Cetății – Calea Torontalului.\n\nHarta cu toate stațiile: https://unihack.alberyt.xyz/a/cl_20261108_16dec",
+    "en": "Sunday, 8 November 2026, 10:00–18:00. Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria.\n\nLine 4 (tram) is not running.\n\nLine 2 (tram) runs on a shortened route.\nTowards Calea Torontalului (Ciocanul), it does not stop at:\n– Catedrala Mitropolitană. Nearest served stop: Catedrala Mitropolitană, another stop with the same name, 130 m on foot.\n– Spitalul de Copii (Nemoianu). Nearest served stop: Piața Regina Maria (Spitalul de copii), 290 m on foot.\n– Nemoianu (Brediceanu). Nearest served stop: Piața Timișoara 700, 190 m on foot.\n– Circumvalațiunii (Brediceanu). The stop is still served by line 5c.\n– Mendeleev. The stop is still served by line 5c.\n– Balta Verde (Cetății). The stop is still served by line 5c.\n– Gheorghe Lazăr (Cetății). Nearest served stop: Bulevardul Cetății (Gheorghe Lazăr), 100 m on foot.\n– Amforei (Cetății). Nearest served stop: Bd. Cetății (Cloșca), 440 m on foot.\n– Matei Basarab (Cetății). Nearest served stop: Miresei (Calea Torontalului), 380 m on foot.\n– Calea Torontalului (Ciocanul). Nearest served stop: Miresei (Calea Torontalului), 120 m on foot.\nTowards Shopping City, it does not stop at:\n– Calea Torontalului (Ciocanul). Nearest served stop: Miresei (Calea Torontalului), 150 m on foot.\n– Matei Basarab (Cetății). Nearest served stop: Miresei (Calea Torontalului), 400 m on foot.\n– Amforei (Cetății). Nearest served stop: Bulevardul Cetății (Gheorghe Lazăr), 430 m on foot.\n– Gheorghe Lazăr (Cetății). Nearest served stop: Bulevardul Cetății (Gheorghe Lazăr), 120 m on foot.\n– Balta Verde (Cetății). Nearest served stop: Balta Verde, 80 m on foot.\n– Mendeleev. The stop is still served by line 5c.\n– Circumvalațiunii (Brediceanu). The stop is still served by line 5c.\n– Nemoianu (Brediceanu). Nearest served stop: Piața Timișoara 700, 190 m on foot.\n– Spitalul de Copii (Nemoianu). Nearest served stop: Piața Regina Maria (Spitalul de copii), 290 m on foot.\n– Catedrala Mitropolitană. Nearest served stop: Catedrala Mitropolitană, another stop with the same name, 170 m on foot.\n– Piața Sfânta Maria (16 Decembrie 1989). Nearest served stop: Piața A. Mocioni (Sinaia), 480 m on foot.\n\nLine 7 (tram) runs on a shortened route.\nTowards Calea Torontalului (Ciocanul), it does not stop at:\n– Catedrala Mitropolitană. Nearest served stop: Catedrala Mitropolitană, another stop with the same name, 130 m on foot.\n– Spitalul de Copii (Nemoianu). Nearest served stop: Piața Regina Maria (Spitalul de copii), 290 m on foot.\n– Nemoianu (Brediceanu). Nearest served stop: Piața Timișoara 700, 190 m on foot.\n– Circumvalațiunii (Brediceanu). The stop is still served by line 5c.\n– Mendeleev. The stop is still served by line 5c.\n– Balta Verde (Cetății). The stop is still served by line 5c.\n– Gheorghe Lazăr (Cetății). Nearest served stop: Bulevardul Cetății (Gheorghe Lazăr), 100 m on foot.\n– Amforei (Cetății). Nearest served stop: Bd. Cetății (Cloșca), 440 m on foot.\n– Matei Basarab (Cetății). Nearest served stop: Miresei (Calea Torontalului), 380 m on foot.\n– Calea Torontalului (Ciocanul). Nearest served stop: Miresei (Calea Torontalului), 120 m on foot.\nTowards Bulevardul Dâmbovița, it does not stop at:\n– Calea Torontalului (Ciocanul). Nearest served stop: Miresei (Calea Torontalului), 150 m on foot.\n– Matei Basarab (Cetății). Nearest served stop: Miresei (Calea Torontalului), 400 m on foot.\n– Amforei (Cetății). Nearest served stop: Bulevardul Cetății (Gheorghe Lazăr), 430 m on foot.\n– Gheorghe Lazăr (Cetății). Nearest served stop: Bulevardul Cetății (Gheorghe Lazăr), 120 m on foot.\n– Balta Verde (Cetății). Nearest served stop: Balta Verde, 80 m on foot.\n– Mendeleev. The stop is still served by line 5c.\n– Circumvalațiunii (Brediceanu). The stop is still served by line 5c.\n– Nemoianu (Brediceanu). Nearest served stop: Piața Timișoara 700, 190 m on foot.\n– Spitalul de Copii (Nemoianu). Nearest served stop: Piața Regina Maria (Spitalul de copii), 290 m on foot.\n– Catedrala Mitropolitană. Nearest served stop: Catedrala Mitropolitană, another stop with the same name, 170 m on foot.\n– Piața Sfânta Maria (16 Decembrie 1989). Nearest served stop: Piața Sfânta Maria (16 Decembrie 1989), another stop with the same name, 100 m on foot.\n\nStops where no public transport stops during this time: Catedrala Mitropolitană, Spitalul de Copii (Nemoianu), Nemoianu (Brediceanu), Gheorghe Lazăr (Cetății), Amforei (Cetății), Matei Basarab (Cetății), Calea Torontalului (Ciocanul), Balta Verde (Cetății), Piața Sfânta Maria (16 Decembrie 1989), AEM (Dräxlmaier).\n\nTemporary line: bus 4b, via Piața Iuliu Maniu – Bulevardul 16 Decembrie 1989 – Bulevardul Regele Ferdinand I – Strada Doctor Iosif Nemoianu – Strada Coriolan Brediceanu – Calea Bogdăneștilor – Bulevardul Cetății – Calea Torontalului.\n\nMap with every stop: https://unihack.alberyt.xyz/a/cl_20261108_16dec"
+  },
+  "sections": [
+    {
+      "routeId": "R_TV_4",
+      "shortName": "4",
+      "mode": "tram",
+      "directionId": null,
+      "headsign": null,
+      "action": "suspended",
+      "stopsNotServed": [
+        {
+          "stopId": "896",
+          "name": "Calea Torontalului (Ciocanul)",
+          "nearestServed": {
+            "stopId": "276",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 146.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "897",
+          "name": "Matei Basarab (Cetății)",
+          "nearestServed": {
+            "stopId": "222",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 402.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "898",
+          "name": "Amforei (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 431.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "899",
+          "name": "Gheorghe Lazăr (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 125.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "900",
+          "name": "Balta Verde (Cetății)",
+          "nearestServed": {
+            "stopId": "933",
+            "name": "Balta Verde",
+            "distanceMeters": 75.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "458",
+          "name": "Mendeleev",
+          "nearestServed": {
+            "stopId": "458",
+            "name": "Mendeleev",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "459",
+          "name": "Circumvalațiunii (Brediceanu)",
+          "nearestServed": {
+            "stopId": "459",
+            "name": "Circumvalațiunii (Brediceanu)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "901",
+          "name": "Nemoianu (Brediceanu)",
+          "nearestServed": {
+            "stopId": "89",
+            "name": "Piața Timișoara 700",
+            "distanceMeters": 187.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "88",
+          "name": "Spitalul de Copii (Nemoianu)",
+          "nearestServed": {
+            "stopId": "131",
+            "name": "Piața Regina Maria (Spitalul de copii)",
+            "distanceMeters": 287.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "86",
+          "name": "Catedrala Mitropolitană",
+          "nearestServed": {
+            "stopId": "326",
+            "name": "Catedrala Mitropolitană",
+            "distanceMeters": 171.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "61",
+          "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+          "nearestServed": {
+            "stopId": "59",
+            "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+            "distanceMeters": 95.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "57",
+          "name": "Parcul C. Sylva (Parc Doina)",
+          "nearestServed": {
+            "stopId": "57",
+            "name": "Parcul C. Sylva (Parc Doina)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "55",
+          "name": "Piața N. Bălcescu (Gheorghe Doja)",
+          "nearestServed": {
+            "stopId": "55",
+            "name": "Piața N. Bălcescu (Gheorghe Doja)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "75",
+          "name": "Piața Crucii",
+          "nearestServed": {
+            "stopId": "75",
+            "name": "Piața Crucii",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "77",
+          "name": "Strada Cluj (1 Decembrie 1918)",
+          "nearestServed": {
+            "stopId": "77",
+            "name": "Strada Cluj (1 Decembrie 1918)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "79",
+          "name": "Sala C. Jude (Olimpia)",
+          "nearestServed": {
+            "stopId": "79",
+            "name": "Sala C. Jude (Olimpia)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "81",
+          "name": "Deliblata",
+          "nearestServed": {
+            "stopId": "81",
+            "name": "Deliblata",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "84",
+          "name": "Banatim",
+          "nearestServed": {
+            "stopId": "84",
+            "name": "Banatim",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "941",
+          "name": "Banatim (Cimitir Buziașului)",
+          "nearestServed": {
+            "stopId": "941",
+            "name": "Banatim (Cimitir Buziașului)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "942",
+          "name": "Bătania",
+          "nearestServed": {
+            "stopId": "942",
+            "name": "Bătania",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "943",
+          "name": "Fabrica de Detergenți",
+          "nearestServed": {
+            "stopId": "943",
+            "name": "Fabrica de Detergenți",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "944",
+          "name": "Mecatim",
+          "nearestServed": {
+            "stopId": "944",
+            "name": "Mecatim",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "945",
+          "name": "AEM (Dräxlmaier)",
+          "nearestServed": {
+            "stopId": "946",
+            "name": "AEM (Dräxlmaier)",
+            "distanceMeters": 65.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "946",
+          "name": "AEM (Dräxlmaier)",
+          "nearestServed": {
+            "stopId": "946",
+            "name": "AEM (Dräxlmaier)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "947",
+          "name": "Mecatim",
+          "nearestServed": {
+            "stopId": "947",
+            "name": "Mecatim",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "948",
+          "name": "Fabrica de Detergenți",
+          "nearestServed": {
+            "stopId": "948",
+            "name": "Fabrica de Detergenți",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "949",
+          "name": "Bătania",
+          "nearestServed": {
+            "stopId": "949",
+            "name": "Bătania",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "950",
+          "name": "Banatim (Cimitir Buziașului)",
+          "nearestServed": {
+            "stopId": "950",
+            "name": "Banatim (Cimitir Buziașului)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "83",
+          "name": "Banatim",
+          "nearestServed": {
+            "stopId": "83",
+            "name": "Banatim",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "82",
+          "name": "Deliblata",
+          "nearestServed": {
+            "stopId": "82",
+            "name": "Deliblata",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "80",
+          "name": "Sala C. Jude (Olimpia)",
+          "nearestServed": {
+            "stopId": "80",
+            "name": "Sala C. Jude (Olimpia)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "78",
+          "name": "Strada Cluj (1 Decembrie 1918)",
+          "nearestServed": {
+            "stopId": "78",
+            "name": "Strada Cluj (1 Decembrie 1918)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "76",
+          "name": "Piața Crucii",
+          "nearestServed": {
+            "stopId": "76",
+            "name": "Piața Crucii",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "56",
+          "name": "Piața N. Bălcescu (Gheorghe Doja)",
+          "nearestServed": {
+            "stopId": "56",
+            "name": "Piața N. Bălcescu (Gheorghe Doja)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "58",
+          "name": "Parcul C. Sylva (Parc Doina)",
+          "nearestServed": {
+            "stopId": "58",
+            "name": "Parcul C. Sylva (Parc Doina)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "60",
+          "name": "Piața Sfânta Maria (Gheorghe Doja)",
+          "nearestServed": {
+            "stopId": "60",
+            "name": "Piața Sfânta Maria (Gheorghe Doja)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "85",
+          "name": "Catedrala Mitropolitană",
+          "nearestServed": {
+            "stopId": "326",
+            "name": "Catedrala Mitropolitană",
+            "distanceMeters": 128.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "87",
+          "name": "Spitalul de Copii (Nemoianu)",
+          "nearestServed": {
+            "stopId": "131",
+            "name": "Piața Regina Maria (Spitalul de copii)",
+            "distanceMeters": 293.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "902",
+          "name": "Nemoianu (Brediceanu)",
+          "nearestServed": {
+            "stopId": "89",
+            "name": "Piața Timișoara 700",
+            "distanceMeters": 186.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "434",
+          "name": "Circumvalațiunii (Brediceanu)",
+          "nearestServed": {
+            "stopId": "434",
+            "name": "Circumvalațiunii (Brediceanu)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "435",
+          "name": "Mendeleev",
+          "nearestServed": {
+            "stopId": "435",
+            "name": "Mendeleev",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "903",
+          "name": "Balta Verde (Cetății)",
+          "nearestServed": {
+            "stopId": "903",
+            "name": "Balta Verde (Cetății)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "904",
+          "name": "Gheorghe Lazăr (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 101.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "905",
+          "name": "Amforei (Cetății)",
+          "nearestServed": {
+            "stopId": "197",
+            "name": "Bd. Cetății (Cloșca)",
+            "distanceMeters": 443.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "906",
+          "name": "Matei Basarab (Cetății)",
+          "nearestServed": {
+            "stopId": "222",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 377.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "907",
+          "name": "Calea Torontalului (Ciocanul)",
+          "nearestServed": {
+            "stopId": "276",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 125.0,
+            "approximate": false
+          }
+        }
+      ]
+    },
+    {
+      "routeId": "R_TV_2",
+      "shortName": "2",
+      "mode": "tram",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "action": "shortened",
+      "stopsNotServed": [
+        {
+          "stopId": "85",
+          "name": "Catedrala Mitropolitană",
+          "nearestServed": {
+            "stopId": "326",
+            "name": "Catedrala Mitropolitană",
+            "distanceMeters": 128.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "87",
+          "name": "Spitalul de Copii (Nemoianu)",
+          "nearestServed": {
+            "stopId": "131",
+            "name": "Piața Regina Maria (Spitalul de copii)",
+            "distanceMeters": 293.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "902",
+          "name": "Nemoianu (Brediceanu)",
+          "nearestServed": {
+            "stopId": "89",
+            "name": "Piața Timișoara 700",
+            "distanceMeters": 186.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "434",
+          "name": "Circumvalațiunii (Brediceanu)",
+          "nearestServed": {
+            "stopId": "434",
+            "name": "Circumvalațiunii (Brediceanu)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "435",
+          "name": "Mendeleev",
+          "nearestServed": {
+            "stopId": "435",
+            "name": "Mendeleev",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "903",
+          "name": "Balta Verde (Cetății)",
+          "nearestServed": {
+            "stopId": "903",
+            "name": "Balta Verde (Cetății)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "904",
+          "name": "Gheorghe Lazăr (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 101.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "905",
+          "name": "Amforei (Cetății)",
+          "nearestServed": {
+            "stopId": "197",
+            "name": "Bd. Cetății (Cloșca)",
+            "distanceMeters": 443.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "906",
+          "name": "Matei Basarab (Cetății)",
+          "nearestServed": {
+            "stopId": "222",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 377.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "907",
+          "name": "Calea Torontalului (Ciocanul)",
+          "nearestServed": {
+            "stopId": "276",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 125.0,
+            "approximate": false
+          }
+        }
+      ]
+    },
+    {
+      "routeId": "R_TV_2",
+      "shortName": "2",
+      "mode": "tram",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "action": "shortened",
+      "stopsNotServed": [
+        {
+          "stopId": "896",
+          "name": "Calea Torontalului (Ciocanul)",
+          "nearestServed": {
+            "stopId": "276",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 146.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "897",
+          "name": "Matei Basarab (Cetății)",
+          "nearestServed": {
+            "stopId": "222",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 402.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "898",
+          "name": "Amforei (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 431.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "899",
+          "name": "Gheorghe Lazăr (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 125.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "900",
+          "name": "Balta Verde (Cetății)",
+          "nearestServed": {
+            "stopId": "933",
+            "name": "Balta Verde",
+            "distanceMeters": 75.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "458",
+          "name": "Mendeleev",
+          "nearestServed": {
+            "stopId": "458",
+            "name": "Mendeleev",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "459",
+          "name": "Circumvalațiunii (Brediceanu)",
+          "nearestServed": {
+            "stopId": "459",
+            "name": "Circumvalațiunii (Brediceanu)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "901",
+          "name": "Nemoianu (Brediceanu)",
+          "nearestServed": {
+            "stopId": "89",
+            "name": "Piața Timișoara 700",
+            "distanceMeters": 187.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "88",
+          "name": "Spitalul de Copii (Nemoianu)",
+          "nearestServed": {
+            "stopId": "131",
+            "name": "Piața Regina Maria (Spitalul de copii)",
+            "distanceMeters": 287.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "86",
+          "name": "Catedrala Mitropolitană",
+          "nearestServed": {
+            "stopId": "326",
+            "name": "Catedrala Mitropolitană",
+            "distanceMeters": 171.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "61",
+          "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+          "nearestServed": {
+            "stopId": "62",
+            "name": "Piața A. Mocioni (Sinaia)",
+            "distanceMeters": 479.0,
+            "approximate": false
+          }
+        }
+      ]
+    },
+    {
+      "routeId": "R_TV_7",
+      "shortName": "7",
+      "mode": "tram",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "action": "shortened",
+      "stopsNotServed": [
+        {
+          "stopId": "85",
+          "name": "Catedrala Mitropolitană",
+          "nearestServed": {
+            "stopId": "326",
+            "name": "Catedrala Mitropolitană",
+            "distanceMeters": 128.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "87",
+          "name": "Spitalul de Copii (Nemoianu)",
+          "nearestServed": {
+            "stopId": "131",
+            "name": "Piața Regina Maria (Spitalul de copii)",
+            "distanceMeters": 293.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "902",
+          "name": "Nemoianu (Brediceanu)",
+          "nearestServed": {
+            "stopId": "89",
+            "name": "Piața Timișoara 700",
+            "distanceMeters": 186.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "434",
+          "name": "Circumvalațiunii (Brediceanu)",
+          "nearestServed": {
+            "stopId": "434",
+            "name": "Circumvalațiunii (Brediceanu)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "435",
+          "name": "Mendeleev",
+          "nearestServed": {
+            "stopId": "435",
+            "name": "Mendeleev",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "903",
+          "name": "Balta Verde (Cetății)",
+          "nearestServed": {
+            "stopId": "903",
+            "name": "Balta Verde (Cetății)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "904",
+          "name": "Gheorghe Lazăr (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 101.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "905",
+          "name": "Amforei (Cetății)",
+          "nearestServed": {
+            "stopId": "197",
+            "name": "Bd. Cetății (Cloșca)",
+            "distanceMeters": 443.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "906",
+          "name": "Matei Basarab (Cetății)",
+          "nearestServed": {
+            "stopId": "222",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 377.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "907",
+          "name": "Calea Torontalului (Ciocanul)",
+          "nearestServed": {
+            "stopId": "276",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 125.0,
+            "approximate": false
+          }
+        }
+      ]
+    },
+    {
+      "routeId": "R_TV_7",
+      "shortName": "7",
+      "mode": "tram",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "action": "shortened",
+      "stopsNotServed": [
+        {
+          "stopId": "896",
+          "name": "Calea Torontalului (Ciocanul)",
+          "nearestServed": {
+            "stopId": "276",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 146.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "897",
+          "name": "Matei Basarab (Cetății)",
+          "nearestServed": {
+            "stopId": "222",
+            "name": "Miresei (Calea Torontalului)",
+            "distanceMeters": 402.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "898",
+          "name": "Amforei (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 431.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "899",
+          "name": "Gheorghe Lazăr (Cetății)",
+          "nearestServed": {
+            "stopId": "207",
+            "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+            "distanceMeters": 125.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "900",
+          "name": "Balta Verde (Cetății)",
+          "nearestServed": {
+            "stopId": "933",
+            "name": "Balta Verde",
+            "distanceMeters": 75.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "458",
+          "name": "Mendeleev",
+          "nearestServed": {
+            "stopId": "458",
+            "name": "Mendeleev",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "459",
+          "name": "Circumvalațiunii (Brediceanu)",
+          "nearestServed": {
+            "stopId": "459",
+            "name": "Circumvalațiunii (Brediceanu)",
+            "distanceMeters": 0.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "901",
+          "name": "Nemoianu (Brediceanu)",
+          "nearestServed": {
+            "stopId": "89",
+            "name": "Piața Timișoara 700",
+            "distanceMeters": 187.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "88",
+          "name": "Spitalul de Copii (Nemoianu)",
+          "nearestServed": {
+            "stopId": "131",
+            "name": "Piața Regina Maria (Spitalul de copii)",
+            "distanceMeters": 287.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "86",
+          "name": "Catedrala Mitropolitană",
+          "nearestServed": {
+            "stopId": "326",
+            "name": "Catedrala Mitropolitană",
+            "distanceMeters": 171.0,
+            "approximate": false
+          }
+        },
+        {
+          "stopId": "61",
+          "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+          "nearestServed": {
+            "stopId": "59",
+            "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+            "distanceMeters": 95.0,
+            "approximate": false
+          }
+        }
+      ]
+    }
+  ],
+  "stopsWithNoService": [
+    {
+      "stopId": "85",
+      "name": "Catedrala Mitropolitană",
+      "nearestServed": null
+    },
+    {
+      "stopId": "87",
+      "name": "Spitalul de Copii (Nemoianu)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "902",
+      "name": "Nemoianu (Brediceanu)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "904",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "905",
+      "name": "Amforei (Cetății)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "906",
+      "name": "Matei Basarab (Cetății)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "907",
+      "name": "Calea Torontalului (Ciocanul)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "896",
+      "name": "Calea Torontalului (Ciocanul)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "897",
+      "name": "Matei Basarab (Cetății)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "898",
+      "name": "Amforei (Cetății)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "899",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "900",
+      "name": "Balta Verde (Cetății)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "901",
+      "name": "Nemoianu (Brediceanu)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "88",
+      "name": "Spitalul de Copii (Nemoianu)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "86",
+      "name": "Catedrala Mitropolitană",
+      "nearestServed": null
+    },
+    {
+      "stopId": "61",
+      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "nearestServed": null
+    },
+    {
+      "stopId": "945",
+      "name": "AEM (Dräxlmaier)",
+      "nearestServed": null
+    }
+  ],
+  "temporaryRoutes": [
+    {
+      "shortName": "4b",
+      "mode": "bus",
+      "streets": [
+        "Piața Iuliu Maniu",
+        "Bulevardul 16 Decembrie 1989",
+        "Bulevardul Regele Ferdinand I",
+        "Strada Doctor Iosif Nemoianu",
+        "Strada Coriolan Brediceanu",
+        "Calea Bogdăneștilor",
+        "Bulevardul Cetății",
+        "Calea Torontalului"
+      ],
+      "stopIds": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2099155,
+            45.7389162
+          ],
+          [
+            21.2099341,
+            45.7389316
+          ],
+          [
+            21.2099607,
+            45.738959
+          ],
+          [
+            21.2099852,
+            45.7389949
+          ],
+          [
+            21.2099996,
+            45.7390293
+          ],
+          [
+            21.2100084,
+            45.7390678
+          ],
+          [
+            21.2100125,
+            45.7390953
+          ],
+          [
+            21.2100114,
+            45.7391247
+          ],
+          [
+            21.2100942,
+            45.739251
+          ],
+          [
+            21.2101939,
+            45.7393943
+          ],
+          [
+            21.2102251,
+            45.7394385
+          ],
+          [
+            21.2103559,
+            45.7396146
+          ],
+          [
+            21.2112499,
+            45.7408109
+          ],
+          [
+            21.2112764,
+            45.7408457
+          ],
+          [
+            21.2113351,
+            45.740923
+          ],
+          [
+            21.2113885,
+            45.7409933
+          ],
+          [
+            21.2115921,
+            45.7412613
+          ],
+          [
+            21.2116272,
+            45.7413053
+          ],
+          [
+            21.2120469,
+            45.7418318
+          ],
+          [
+            21.2123229,
+            45.7422119
+          ],
+          [
+            21.212693,
+            45.7426928
+          ],
+          [
+            21.2128284,
+            45.7428536
+          ],
+          [
+            21.2128666,
+            45.7429023
+          ],
+          [
+            21.2129584,
+            45.7430097
+          ],
+          [
+            21.2130728,
+            45.7431285
+          ],
+          [
+            21.2132839,
+            45.7433474
+          ],
+          [
+            21.2142037,
+            45.7443554
+          ],
+          [
+            21.214371,
+            45.7445259
+          ],
+          [
+            21.2144677,
+            45.7446305
+          ],
+          [
+            21.2148744,
+            45.7450434
+          ],
+          [
+            21.2153563,
+            45.7455306
+          ],
+          [
+            21.2155696,
+            45.7457285
+          ],
+          [
+            21.2159936,
+            45.7461613
+          ],
+          [
+            21.2160149,
+            45.7461869
+          ],
+          [
+            21.2160615,
+            45.7462414
+          ],
+          [
+            21.216091,
+            45.7462888
+          ],
+          [
+            21.216142,
+            45.7463197
+          ],
+          [
+            21.2161776,
+            45.7463597
+          ],
+          [
+            21.2161947,
+            45.7464053
+          ],
+          [
+            21.2163387,
+            45.7465094
+          ],
+          [
+            21.2164709,
+            45.7466204
+          ],
+          [
+            21.2166449,
+            45.7467582
+          ],
+          [
+            21.2172903,
+            45.7474061
+          ],
+          [
+            21.2177432,
+            45.7478456
+          ],
+          [
+            21.2179003,
+            45.7479709
+          ],
+          [
+            21.2180476,
+            45.7480636
+          ],
+          [
+            21.218272,
+            45.7481866
+          ],
+          [
+            21.2186483,
+            45.7483952
+          ],
+          [
+            21.2187052,
+            45.7484263
+          ],
+          [
+            21.2188402,
+            45.748506
+          ],
+          [
+            21.2188637,
+            45.7485186
+          ],
+          [
+            21.2188938,
+            45.7485366
+          ],
+          [
+            21.2189095,
+            45.7485458
+          ],
+          [
+            21.2189581,
+            45.7485743
+          ],
+          [
+            21.2189916,
+            45.7485931
+          ],
+          [
+            21.2190514,
+            45.7486266
+          ],
+          [
+            21.2191005,
+            45.7486528
+          ],
+          [
+            21.2192421,
+            45.7487308
+          ],
+          [
+            21.2198648,
+            45.7490589
+          ],
+          [
+            21.2199728,
+            45.7491121
+          ],
+          [
+            21.2201781,
+            45.749234
+          ],
+          [
+            21.2202705,
+            45.7492884
+          ],
+          [
+            21.2203274,
+            45.7493216
+          ],
+          [
+            21.2207575,
+            45.7495644
+          ],
+          [
+            21.2213186,
+            45.7498686
+          ],
+          [
+            21.221389,
+            45.7499043
+          ],
+          [
+            21.2214476,
+            45.7499341
+          ],
+          [
+            21.2214596,
+            45.7499405
+          ],
+          [
+            21.221657,
+            45.7500546
+          ],
+          [
+            21.2218339,
+            45.7501504
+          ],
+          [
+            21.2221809,
+            45.7503391
+          ],
+          [
+            21.2224729,
+            45.7504891
+          ],
+          [
+            21.2226609,
+            45.750588
+          ],
+          [
+            21.2229698,
+            45.7507593
+          ],
+          [
+            21.2233969,
+            45.7509919
+          ],
+          [
+            21.2237847,
+            45.7511782
+          ],
+          [
+            21.2239297,
+            45.7512313
+          ],
+          [
+            21.223941,
+            45.751235
+          ],
+          [
+            21.2239905,
+            45.7512609
+          ],
+          [
+            21.2240052,
+            45.7512693
+          ],
+          [
+            21.2240157,
+            45.751278
+          ],
+          [
+            21.224024,
+            45.7512866
+          ],
+          [
+            21.224031,
+            45.7512972
+          ],
+          [
+            21.2240363,
+            45.7513082
+          ],
+          [
+            21.22404,
+            45.7513189
+          ],
+          [
+            21.2240417,
+            45.7513277
+          ],
+          [
+            21.2240425,
+            45.7513351
+          ],
+          [
+            21.2240425,
+            45.7513435
+          ],
+          [
+            21.2240418,
+            45.7513527
+          ],
+          [
+            21.2240395,
+            45.7513626
+          ],
+          [
+            21.2240372,
+            45.7513694
+          ],
+          [
+            21.224031,
+            45.7513819
+          ],
+          [
+            21.2240267,
+            45.7513887
+          ],
+          [
+            21.2239961,
+            45.7513875
+          ],
+          [
+            21.2239655,
+            45.7513841
+          ],
+          [
+            21.2239349,
+            45.7513787
+          ],
+          [
+            21.2239039,
+            45.7513716
+          ],
+          [
+            21.2238806,
+            45.7513642
+          ],
+          [
+            21.2240417,
+            45.7513277
+          ],
+          [
+            21.2240425,
+            45.7513351
+          ],
+          [
+            21.2240425,
+            45.7513435
+          ],
+          [
+            21.2240418,
+            45.7513527
+          ],
+          [
+            21.2240395,
+            45.7513626
+          ],
+          [
+            21.2240372,
+            45.7513694
+          ],
+          [
+            21.224031,
+            45.7513819
+          ],
+          [
+            21.2240267,
+            45.7513887
+          ],
+          [
+            21.2240258,
+            45.7513907
+          ],
+          [
+            21.2240196,
+            45.7513986
+          ],
+          [
+            21.2240118,
+            45.7514069
+          ],
+          [
+            21.2240037,
+            45.751415
+          ],
+          [
+            21.2239973,
+            45.7514208
+          ],
+          [
+            21.223978,
+            45.7514374
+          ],
+          [
+            21.2239466,
+            45.7514496
+          ],
+          [
+            21.2238911,
+            45.7514731
+          ],
+          [
+            21.2238842,
+            45.751476
+          ],
+          [
+            21.2237548,
+            45.7515375
+          ],
+          [
+            21.2236435,
+            45.7515923
+          ],
+          [
+            21.2235287,
+            45.7516488
+          ],
+          [
+            21.2233574,
+            45.7517331
+          ],
+          [
+            21.2230461,
+            45.7518884
+          ],
+          [
+            21.2230025,
+            45.7519107
+          ],
+          [
+            21.2227831,
+            45.7520231
+          ],
+          [
+            21.2225338,
+            45.7521561
+          ],
+          [
+            21.2222869,
+            45.7522926
+          ],
+          [
+            21.2218785,
+            45.7525332
+          ],
+          [
+            21.2218388,
+            45.7525603
+          ],
+          [
+            21.2218078,
+            45.7525844
+          ],
+          [
+            21.2217802,
+            45.7526116
+          ],
+          [
+            21.2217583,
+            45.7526371
+          ],
+          [
+            21.2217396,
+            45.7526637
+          ],
+          [
+            21.2217225,
+            45.7526954
+          ],
+          [
+            21.2217101,
+            45.7527285
+          ],
+          [
+            21.2217013,
+            45.7527601
+          ],
+          [
+            21.2216974,
+            45.7527907
+          ],
+          [
+            21.2216971,
+            45.7528199
+          ],
+          [
+            21.221701,
+            45.7528525
+          ],
+          [
+            21.2217079,
+            45.752882
+          ],
+          [
+            21.2217182,
+            45.7529138
+          ],
+          [
+            21.2217389,
+            45.7529566
+          ],
+          [
+            21.2217417,
+            45.7529698
+          ],
+          [
+            21.2217475,
+            45.7529977
+          ],
+          [
+            21.221746,
+            45.7530383
+          ],
+          [
+            21.2217359,
+            45.7530737
+          ],
+          [
+            21.2217133,
+            45.7531171
+          ],
+          [
+            21.221683,
+            45.7531524
+          ],
+          [
+            21.2216434,
+            45.7531843
+          ],
+          [
+            21.2215968,
+            45.7532108
+          ],
+          [
+            21.2215457,
+            45.7532308
+          ],
+          [
+            21.2215072,
+            45.7532558
+          ],
+          [
+            21.2214523,
+            45.7532975
+          ],
+          [
+            21.2213902,
+            45.7533462
+          ],
+          [
+            21.221338,
+            45.7533854
+          ],
+          [
+            21.2213119,
+            45.7534056
+          ],
+          [
+            21.2212926,
+            45.7534205
+          ],
+          [
+            21.2212981,
+            45.7534867
+          ],
+          [
+            21.2213437,
+            45.7539416
+          ],
+          [
+            21.2213501,
+            45.7539973
+          ],
+          [
+            21.2213518,
+            45.7541352
+          ],
+          [
+            21.2213492,
+            45.7542171
+          ],
+          [
+            21.2213435,
+            45.7543277
+          ],
+          [
+            21.2213225,
+            45.7544607
+          ],
+          [
+            21.2212954,
+            45.7545863
+          ],
+          [
+            21.2212744,
+            45.75469
+          ],
+          [
+            21.2212306,
+            45.7549068
+          ],
+          [
+            21.2212229,
+            45.7549472
+          ],
+          [
+            21.2212086,
+            45.755023
+          ],
+          [
+            21.2212017,
+            45.7550585
+          ],
+          [
+            21.2211853,
+            45.7551655
+          ],
+          [
+            21.2211725,
+            45.7553051
+          ],
+          [
+            21.2211702,
+            45.7553731
+          ],
+          [
+            21.2211679,
+            45.7554404
+          ],
+          [
+            21.2211682,
+            45.7555694
+          ],
+          [
+            21.2211709,
+            45.7556995
+          ],
+          [
+            21.221178,
+            45.7558224
+          ],
+          [
+            21.2211875,
+            45.7559411
+          ],
+          [
+            21.2211953,
+            45.7560313
+          ],
+          [
+            21.2212156,
+            45.7561987
+          ],
+          [
+            21.2212283,
+            45.7563091
+          ],
+          [
+            21.2212322,
+            45.7563414
+          ],
+          [
+            21.2212346,
+            45.7563643
+          ],
+          [
+            21.2212181,
+            45.7563653
+          ],
+          [
+            21.2211421,
+            45.7563697
+          ],
+          [
+            21.2210264,
+            45.7563764
+          ],
+          [
+            21.2205653,
+            45.7564032
+          ],
+          [
+            21.2200138,
+            45.756422
+          ],
+          [
+            21.2199724,
+            45.7564243
+          ],
+          [
+            21.2198327,
+            45.7564323
+          ],
+          [
+            21.219731,
+            45.7564381
+          ],
+          [
+            21.2196754,
+            45.7564413
+          ],
+          [
+            21.2192895,
+            45.7564633
+          ],
+          [
+            21.2192485,
+            45.7564656
+          ],
+          [
+            21.2189259,
+            45.756484
+          ],
+          [
+            21.2173503,
+            45.7565655
+          ],
+          [
+            21.217166,
+            45.7565737
+          ],
+          [
+            21.2170698,
+            45.7565762
+          ],
+          [
+            21.2169526,
+            45.7565928
+          ],
+          [
+            21.2167676,
+            45.7566071
+          ],
+          [
+            21.2166207,
+            45.7566185
+          ],
+          [
+            21.2164661,
+            45.7565924
+          ],
+          [
+            21.2147977,
+            45.7567361
+          ],
+          [
+            21.2137796,
+            45.7568588
+          ],
+          [
+            21.2136937,
+            45.7568711
+          ],
+          [
+            21.2136224,
+            45.7568814
+          ],
+          [
+            21.2135868,
+            45.7568865
+          ],
+          [
+            21.2135313,
+            45.7568944
+          ],
+          [
+            21.2129323,
+            45.7569851
+          ],
+          [
+            21.2119918,
+            45.7571501
+          ],
+          [
+            21.2115214,
+            45.7572432
+          ],
+          [
+            21.2105843,
+            45.7574442
+          ],
+          [
+            21.2099983,
+            45.7575813
+          ],
+          [
+            21.2097828,
+            45.7576575
+          ],
+          [
+            21.2096913,
+            45.7576898
+          ],
+          [
+            21.2095622,
+            45.7577355
+          ],
+          [
+            21.2094437,
+            45.7578041
+          ],
+          [
+            21.209456,
+            45.7578361
+          ],
+          [
+            21.209464,
+            45.7578569
+          ],
+          [
+            21.2094806,
+            45.7579001
+          ],
+          [
+            21.2095026,
+            45.7579575
+          ],
+          [
+            21.2095223,
+            45.7581767
+          ],
+          [
+            21.2096057,
+            45.7588899
+          ],
+          [
+            21.2096455,
+            45.7594329
+          ],
+          [
+            21.2096727,
+            45.7597835
+          ],
+          [
+            21.209688,
+            45.7599508
+          ],
+          [
+            21.2097085,
+            45.7601374
+          ],
+          [
+            21.2097137,
+            45.7601701
+          ],
+          [
+            21.2097319,
+            45.7602886
+          ],
+          [
+            21.2097382,
+            45.7603258
+          ],
+          [
+            21.2097725,
+            45.7605087
+          ],
+          [
+            21.2098296,
+            45.7607816
+          ],
+          [
+            21.209873,
+            45.7609431
+          ],
+          [
+            21.2099238,
+            45.761126
+          ],
+          [
+            21.2099794,
+            45.7612913
+          ],
+          [
+            21.2100356,
+            45.7614349
+          ],
+          [
+            21.2101078,
+            45.761592
+          ],
+          [
+            21.2103938,
+            45.7621516
+          ],
+          [
+            21.2104997,
+            45.7623552
+          ],
+          [
+            21.2105859,
+            45.7625207
+          ],
+          [
+            21.2106086,
+            45.7625643
+          ],
+          [
+            21.2106718,
+            45.7626859
+          ],
+          [
+            21.210685,
+            45.7627111
+          ],
+          [
+            21.2107065,
+            45.7627525
+          ],
+          [
+            21.2108167,
+            45.7629605
+          ],
+          [
+            21.2108606,
+            45.7630376
+          ],
+          [
+            21.2109193,
+            45.763152
+          ],
+          [
+            21.21108,
+            45.7634703
+          ],
+          [
+            21.2111642,
+            45.7636154
+          ],
+          [
+            21.2112606,
+            45.7637621
+          ],
+          [
+            21.2113579,
+            45.763898
+          ],
+          [
+            21.2114616,
+            45.7640296
+          ],
+          [
+            21.2115714,
+            45.7641548
+          ],
+          [
+            21.2117182,
+            45.7643044
+          ],
+          [
+            21.2118571,
+            45.7644362
+          ],
+          [
+            21.2120162,
+            45.7645676
+          ],
+          [
+            21.2121845,
+            45.7646916
+          ],
+          [
+            21.2127467,
+            45.7650791
+          ],
+          [
+            21.213166,
+            45.7653681
+          ],
+          [
+            21.2132342,
+            45.7654151
+          ],
+          [
+            21.2153212,
+            45.7668534
+          ],
+          [
+            21.2155427,
+            45.7669979
+          ],
+          [
+            21.2157722,
+            45.7671365
+          ],
+          [
+            21.2160148,
+            45.7672794
+          ],
+          [
+            21.2163191,
+            45.7674435
+          ],
+          [
+            21.2168231,
+            45.767694
+          ],
+          [
+            21.2169494,
+            45.7677524
+          ],
+          [
+            21.2170435,
+            45.7677947
+          ],
+          [
+            21.2171786,
+            45.7678554
+          ],
+          [
+            21.2173877,
+            45.7679417
+          ],
+          [
+            21.2175541,
+            45.7680078
+          ],
+          [
+            21.2177483,
+            45.7680817
+          ],
+          [
+            21.217922,
+            45.7681454
+          ],
+          [
+            21.2180957,
+            45.7682062
+          ],
+          [
+            21.218699,
+            45.7684082
+          ],
+          [
+            21.2188142,
+            45.7684435
+          ],
+          [
+            21.218919,
+            45.7684718
+          ],
+          [
+            21.2190355,
+            45.7685
+          ],
+          [
+            21.2191529,
+            45.7685277
+          ],
+          [
+            21.2192568,
+            45.7685497
+          ],
+          [
+            21.2193674,
+            45.7685679
+          ],
+          [
+            21.2197069,
+            45.7686067
+          ],
+          [
+            21.2198014,
+            45.7686203
+          ],
+          [
+            21.2198836,
+            45.7686362
+          ],
+          [
+            21.2199546,
+            45.7686549
+          ],
+          [
+            21.2200127,
+            45.768676
+          ],
+          [
+            21.2200637,
+            45.7686983
+          ],
+          [
+            21.2201112,
+            45.7687255
+          ],
+          [
+            21.2201632,
+            45.7687588
+          ],
+          [
+            21.2202578,
+            45.7688415
+          ],
+          [
+            21.220192,
+            45.7689082
+          ],
+          [
+            21.2200662,
+            45.7690406
+          ],
+          [
+            21.2200194,
+            45.7690884
+          ],
+          [
+            21.2198153,
+            45.7692805
+          ]
+        ]
+      }
+    }
+  ],
+  "sourceText": "Societatea de Transport Public Timișoara informează că, în data de 8 noiembrie 2026, în intervalul orar 10:00 – 18:00, vor fi executate lucrări de mentenanță la infrastructura de tramvai de pe Bulevardul 16 Decembrie 1989, pe sensul de circulație către Podul Maria.\nIntervenția este necesară ca urmare a gradului avansat de uzură al unor componente ale liniei de tramvai și are ca scop creșterea siguranței circulației atât pentru mijloacele de transport public, cât și pentru participanții la trafic.\nPe durata lucrărilor, traficul rutier va fi restricționat și deviat pe o porțiune de aproximativ 10 m – 15 m, iar circulația tramvaielor va fi reorganizată după cum urmează:\nModificări ale transportului cu tramvaiul\nlinia 4 va fi suspendată pe întreaga durată a lucrărilor;\nlinia 2 va circula, tur – retur, pe traseul Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM;\nlinia 7 va circula, tur – retur, pe traseul: Depou Dâmbovița – Gara de Nord.\nPentru asigurarea continuității serviciului de transport public și limitarea disconfortului călătorilor, STPT introduce temporar linia de autobuz 4b, care va relua fluxul de călători afectat de modificările din circulația tramvaielor. Autobuzul 4b va circula pe traseul: Piața Iuliu Maniu – Bulevardul 16 Decembrie 1989 – Bulevardul Regele Ferdinand I – Strada Doctor Iosif Nemoianu – Strada Coriolan Brediceanu – Calea Bogdăneștilor – Bulevardul Cetății – Calea Torontalului, cu retur pe același traseu. Călătorii sunt rugați să consulte informațiile afișate în stații și pe canalele oficiale ale STPT, pentru a planifica deplasările ținând cont de aceste modificări temporare",
+  "sourceUrl": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+  "mapUrl": "https://unihack.alberyt.xyz/a/cl_20261108_16dec",
+  "provenance": [
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    },
+    {
+      "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+      "version": "4.31-4",
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": null
+    },
+    {
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "Distanța până la cea mai apropiată stație deservită: mers pe jos pe rețeaua pietonală OSM / walking distance on OSM footpaths. osmium extract -b 21.10,45.68,21.35,45.83"
+    },
+    {
+      "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+      "url": "https://cont.primariatm.ro/api/zones",
+      "version": null,
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": null
+    },
+    {
+      "source": "GHSL population grid (JRC)",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+      "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+      "fetchedAt": "2026-11-13T18:31:11+02:00",
+      "note": "model GHSL 2020, 100 m (nu recensământ)"
+    }
+  ]
+}
