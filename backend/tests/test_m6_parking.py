@@ -14,6 +14,7 @@ from tests.conftest import DATA_DIR, needs_data
 
 HERO = "cl_20261108_16dec"
 E3 = "cl_20261107_e3"
+MOCIONI = "cl_20261102_mocioni"   # runs along Bd. 16 Decembrie 1989 (the hero is 15 m at a junction since T11)
 
 
 def _raw_parking() -> dict[str, dict]:
@@ -32,11 +33,11 @@ def _stored(closure_id: str) -> dict:
 def test_hero_streets_keep_city_ids_and_tariffs():
     from app.m6_parking import parking
 
-    closure = _stored(HERO)
-    impact = parking.parking_impact(HERO)
+    closure = _stored(MOCIONI)
+    impact = parking.parking_impact(MOCIONI)
     raw = _raw_parking()
     buf = parking.closure_buffer(closure)
-    assert impact.streetsAffected, "the hero closure runs through Timpark streets"
+    assert impact.streetsAffected, "the Mocioni works run through Timpark streets"
     names = {s.name for s in impact.streetsAffected}
     assert "Bulevardul 16 Decembrie 1989" in names
     for ref in impact.streetsAffected + impact.lotsAffected:
@@ -122,13 +123,13 @@ def test_park_and_ride_drops_lines_the_closure_suspends():
 
 @needs_data
 def test_parking_endpoint(client):
-    _stored(HERO)
-    r = client.get(f"/api/closures/{HERO}/parking")
+    _stored(MOCIONI)
+    r = client.get(f"/api/closures/{MOCIONI}/parking")
     assert r.status_code == 200, r.text
     from app.models.v2 import ParkingImpact
 
     body = ParkingImpact.model_validate(r.json())
-    assert body.closureId == HERO and body.streetsAffected and body.provenance
+    assert body.closureId == MOCIONI and body.streetsAffected and body.provenance
     assert any("fără date de ocupare" in (p.note or "") for p in body.provenance)
     assert client.get("/api/closures/no_such_closure/parking").status_code == 404
     # let the routers' background warm-ups finish: a short run must not exit while they are in C code

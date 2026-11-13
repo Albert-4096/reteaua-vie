@@ -63,7 +63,8 @@ def test_published_hero_counts_its_lost_departures_today(cases_copy):
 def test_vehicles_from_newest_recording_on_demo_clock():
     o = summary.overview(parse_iso("2026-11-08T12:00:00+02:00"))
     if any((DATA_DIR / "live" / "vehicles").glob("*.jsonl.gz")):
-        assert o["vehiclesLive"] > 0 and o["vehiclesAt"] is not None
+        # 0 is a real count at night (no service in the newest snapshot); never null on the demo clock
+        assert o["vehiclesLive"] is not None and o["vehiclesLive"] >= 0 and o["vehiclesAt"] is not None
         assert any("instantaneu" in (p["note"] or "") for p in o["provenance"])
     assert o["compliance"] is None or set(o["compliance"]) == {"covered", "partial", "missing"}
 

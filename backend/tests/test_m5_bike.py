@@ -108,10 +108,12 @@ def _cost(r) -> float:
 def test_lanes_inside_buffer(impacts):
     from app.common.geo import to_metric
 
-    hero = impacts["cl_20261108_16dec"]
-    assert hero.lanesAffected, "Bd. 16 Decembrie / Regele Carol I has mapped bike ways"
-    buf = _buffer("cl_20261108_16dec").buffer(0.5)
-    for lane in hero.lanesAffected:
+    # Mocioni: the works run along Bd. 16 Decembrie 1989, which has mapped bike ways (the hero is
+    # drawn as 15 m at the Piața Maria junction since T11 and has none in its buffer)
+    moc = impacts["cl_20261102_mocioni"]
+    assert moc.lanesAffected, "Bd. 16 Decembrie 1989 at Piața Mocioni has mapped bike ways"
+    buf = _buffer("cl_20261102_mocioni").buffer(0.5)
+    for lane in moc.lanesAffected:
         assert lane.osmId.startswith("way/") and lane.lengthMeters > 0
         assert buf.contains(to_metric(LineString(lane.geometry.coordinates)))
 
@@ -122,6 +124,8 @@ def test_detour_avoids_the_closure(impacts):
     from app.common.geo import to_metric
 
     for cid, r in impacts.items():
+        if cid == "cl_20261108_16dec":   # 15 m closure (T11): no bike way to detour from
+            continue
         assert r.detourStress, cid
         assert all(p.lts in (1, 2, 3, 4, None) for p in r.detourStress)
         buf = _buffer(cid)
