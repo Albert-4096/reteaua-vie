@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-13T19:48:14+02:00",
-  "repoCommit": "6a241a9",
+  "generatedAt": "2026-11-13T23:59:09+02:00",
+  "repoCommit": "d0cfa38",
   "feed": {
     "version": "4.31",
     "file": "smtt_1bd0e3-65f7b81245f0f.zip",
@@ -23,7 +23,7 @@
       "title": "Modificări în circulația liniilor M30, M29, M35 M 44 și S7, începând cu 2 noiembrie",
       "goldSuspended": 0,
       "goldUncertain": 0,
-      "parseSeconds": 1.804,
+      "parseSeconds": 1.661,
       "unread": 5,
       "windowMatch": {
         "start": true,
@@ -33,7 +33,7 @@
         "gold": [],
         "predicted": []
       },
-      "analysisSeconds": 4.597,
+      "analysisSeconds": 4.662,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -203,7 +203,7 @@
       "title": "Modificări temporare ale traseelor liniilor metropolitane S8, M32, M36, M37, M38, M46 și M51, începând cu 2 noiembrie",
       "goldSuspended": 0,
       "goldUncertain": 1,
-      "parseSeconds": 6.682,
+      "parseSeconds": 14.506,
       "unread": 2,
       "windowMatch": {
         "start": true,
@@ -227,7 +227,7 @@
           "R_AB_M51"
         ]
       },
-      "analysisSeconds": 0.007,
+      "analysisSeconds": 0.082,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -724,7 +724,7 @@
       "title": "Informare călători privind linia E3",
       "goldSuspended": 0,
       "goldUncertain": 0,
-      "parseSeconds": 0.012,
+      "parseSeconds": 0.022,
       "unread": 2,
       "windowMatch": {
         "start": true,
@@ -738,7 +738,7 @@
           "R_AB_E3"
         ]
       },
-      "analysisSeconds": 4.41,
+      "analysisSeconds": 5.251,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -936,7 +936,7 @@
       "title": "Închiderea temporară a circulației pe Strada Ardealului și modificarea traseului liniei E3",
       "goldSuspended": 11,
       "goldUncertain": 0,
-      "parseSeconds": 0.048,
+      "parseSeconds": 0.034,
       "unread": 0,
       "windowMatch": {
         "start": true,
@@ -950,7 +950,7 @@
           "R_AB_E3"
         ]
       },
-      "analysisSeconds": 0.08,
+      "analysisSeconds": 0.067,
       "rows": {
         "affected": 11,
         "unsure": 0
@@ -975,7 +975,7 @@
         "missed": []
       },
       "pasteToAlert": {
-        "seconds": 0.156,
+        "seconds": 0.209,
         "status": "valid",
         "alerts": 11,
         "steps": [
@@ -1025,7 +1025,7 @@
       "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989",
       "goldSuspended": 88,
       "goldUncertain": 29,
-      "parseSeconds": 0.517,
+      "parseSeconds": 0.457,
       "unread": 3,
       "windowMatch": {
         "start": true,
@@ -1043,7 +1043,7 @@
           "R_TV_7"
         ]
       },
-      "analysisSeconds": 0.184,
+      "analysisSeconds": 0.279,
       "rows": {
         "affected": 67,
         "unsure": 50
@@ -1174,7 +1174,7 @@
         "missed": []
       },
       "pasteToAlert": {
-        "seconds": 0.884,
+        "seconds": 1.129,
         "status": "valid",
         "alerts": 82,
         "steps": [
@@ -1237,8 +1237,8 @@
     },
     "neclarShare": 0.3906,
     "pasteToAlertSeconds": {
-      "median": 0.52,
-      "max": 0.884,
+      "median": 0.669,
+      "max": 1.129,
       "n": 2
     },
     "gtfsRtValidatorPass": true,
