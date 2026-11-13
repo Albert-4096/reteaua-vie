@@ -20,17 +20,21 @@ from __future__ import annotations
 
 import hashlib
 import heapq
+import io
 import json
 import logging
 import math
 import threading
+import zipfile
+from collections import Counter
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
 
 import networkx as nx
 import numpy as np
+import pandas as pd
 import shapely
 from shapely import STRtree
 
@@ -39,8 +43,8 @@ from app.common import provenance as prov
 from app.common.city import load_network, load_zones, zone_for_point
 from app.common.errors import invalid, not_found
 from app.common.geo import project_lonlats
-from app.common.timeutil import iso, local_midnight, parse_iso
-from app.config import get_settings, now
+from app.common.timeutil import from_unix, gtfs_service_start, iso, local_midnight, parse_iso
+from app.config import TZ, get_settings, now
 from app.models.base import I18n, Provenance, Window
 from app.models.v1 import Impact, ImpactTotals, ZoneImpact
 
@@ -75,6 +79,197 @@ def row_key(row: dict) -> Key:
     return (row["stopId"], row["routeId"], int(row["directionId"]))
 
 
+# --- which timetable: the one in force before the works ------------------------------
+#
+# Departures lost are counted on the timetable that would have run without the
+# closure (SPEC §5.3): the newest GTFS feed whose start date is strictly before
+# the closure starts. Usually that is the current feed (foundation's index).
+# When STPT already published the diverted timetable on the first day of the
+# works (Mocioni: 4.30 from 2 Nov), an older feed from $DATA_DIR/gtfs-history/
+# is used (4.29), counted here directly from its stop_times.
+
+HISTORY_DIR = "gtfs-history"
+
+
+def _read_csv(z: zipfile.ZipFile, name: str) -> pd.DataFrame:
+    if name not in z.namelist():
+        return pd.DataFrame()
+    return pd.read_csv(io.StringIO(z.read(name).decode("utf-8-sig")), dtype=str, keep_default_na=False)
+
+
+def _ymd(v: str) -> date:
+    return datetime.strptime(v, "%Y%m%d").date()
+
+
+@lru_cache(maxsize=16)
+def _feed_start(path_str: str, mtime: float) -> tuple[date | None, str | None]:
+    with zipfile.ZipFile(path_str) as z:
+        info = _read_csv(z, "feed_info.txt")
+    if not len(info):
+        return None, None
+    start = info["feed_start_date"].iloc[0] if "feed_start_date" in info else ""
+    return (_ymd(start) if start else None), (info["feed_version"].iloc[0] if "feed_version" in info else None)
+
+
+class Timetable:
+    """The current GTFS feed (foundation's departure index)."""
+
+    history = False
+
+    @property
+    def version(self) -> str | None:
+        return gtfs.feed().version
+
+    def stop_patterns(self) -> dict[tuple[str, int], gtfs.Pattern]:
+        return gtfs.stop_patterns()
+
+    def stop_order(self, route_id: str, direction_id: int) -> list[str]:
+        p = self.stop_patterns().get((route_id, int(direction_id)))
+        return list(p.stop_ids) if p else []
+
+    def coverage(self) -> tuple[date, date]:
+        return gtfs.coverage()
+
+    def counts(self, start: datetime, end: datetime) -> dict[Key, int]:
+        return _counts(int(start.timestamp()), int(end.timestamp()))
+
+    @property
+    def provenance(self) -> Provenance:
+        return gtfs.feed().provenance
+
+
+class HistoryTimetable(Timetable):
+    """An older SMTT GTFS zip from $DATA_DIR/gtfs-history/, counted without an index."""
+
+    history = True
+
+    def __init__(self, path: Path):
+        self.path = path
+        with zipfile.ZipFile(path) as z:
+            t = {n: _read_csv(z, f"{n}.txt") for n in ("trips", "stop_times", "calendar", "calendar_dates")}
+        self._version = _feed_start(str(path), path.stat().st_mtime)[1]
+        st, trips = t["stop_times"], t["trips"]
+        trips["direction_id"] = trips["direction_id"].replace("", "0").astype(int)
+        st["stop_sequence"] = st["stop_sequence"].astype(int)
+        hms = st["departure_time"].str.split(":", expand=True).astype(int)
+        st["dep_sec"] = hms[0] * 3600 + hms[1] * 60 + hms[2]
+        st = st.sort_values(["trip_id", "stop_sequence"])
+        # patterns: the most common stop sequence per (route, direction)
+        seqs = st.groupby("trip_id", sort=False)["stop_id"].agg(tuple)
+        self._patterns: dict[tuple[str, int], gtfs.Pattern] = {}
+        tr = trips.set_index("trip_id")
+        for (route, direction), grp in tr.groupby(["route_id", "direction_id"]):
+            cnt = Counter(seqs[t] for t in grp.index if t in seqs.index)
+            if not cnt:
+                continue
+            stops, n = cnt.most_common(1)[0]
+            heads = grp.loc[[t for t in grp.index if seqs.get(t) == stops], "trip_headsign"]
+            self._patterns[(route, int(direction))] = gtfs.Pattern(
+                route_id=route, direction_id=int(direction), stop_ids=stops,
+                headsign=heads.mode().iloc[0] if len(heads) else "", trips=n, share=n / sum(cnt.values()))
+        # departures only (not the last stop of a trip)
+        last = st.groupby("trip_id")["stop_sequence"].transform("max")
+        dep = st[st["stop_sequence"] < last].merge(trips[["trip_id", "route_id", "direction_id", "service_id"]],
+                                                   on="trip_id")
+        keys = list(zip(dep["stop_id"], dep["route_id"], dep["direction_id"].astype(int)))
+        self._key_code, self._keys = pd.factorize(pd.Series(keys, dtype=object))
+        self._svc_code, svc_names = pd.factorize(dep["service_id"])
+        self._svc_index = {name: i for i, name in enumerate(svc_names)}
+        self._dep_sec = dep["dep_sec"].to_numpy(dtype=np.int64)
+        # service dates: calendar + calendar_dates
+        days: dict[date, set[str]] = {}
+        wd = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+        for row in t["calendar"].itertuples(index=False):
+            d, e = _ymd(row.start_date), _ymd(row.end_date)
+            while d <= e:
+                if getattr(row, wd[d.weekday()]) == "1":
+                    days.setdefault(d, set()).add(row.service_id)
+                d += timedelta(days=1)
+        for row in t["calendar_dates"].itertuples(index=False):
+            d = _ymd(row.date)
+            (days.setdefault(d, set()).add if row.exception_type == "1" else days.setdefault(d, set()).discard)(
+                row.service_id)
+        self._days = {d: s for d, s in days.items() if s}
+        self._memo: dict[tuple[int, int], dict[Key, int]] = {}
+
+    @property
+    def version(self) -> str | None:
+        return self._version
+
+    def stop_patterns(self) -> dict[tuple[str, int], gtfs.Pattern]:
+        return self._patterns
+
+    def coverage(self) -> tuple[date, date]:
+        ds = sorted(self._days)
+        return ds[0], ds[-1]
+
+    def counts(self, start: datetime, end: datetime) -> dict[Key, int]:
+        memo_key = (int(start.timestamp()), int(end.timestamp()))
+        if memo_key in self._memo:
+            return self._memo[memo_key]
+        acc = np.zeros(len(self._keys), dtype=np.int64)
+        d = start.astimezone(TZ).date() - timedelta(days=1)  # trips past 24:00 of the day before
+        while d <= end.astimezone(TZ).date():
+            active = [self._svc_index[s] for s in self._days.get(d, ()) if s in self._svc_index]
+            if active:
+                base = gtfs_service_start(d)
+                lo, hi = (start - base).total_seconds(), (end - base).total_seconds()
+                mask = np.isin(self._svc_code, active) & (self._dep_sec >= lo) & (self._dep_sec < hi)
+                acc += np.bincount(self._key_code[mask], minlength=len(self._keys))
+            d += timedelta(days=1)
+        out = {(str(k[0]), str(k[1]), int(k[2])): int(n) for k, n in zip(self._keys, acc) if n}
+        self._memo[memo_key] = out
+        return out
+
+    @property
+    def provenance(self) -> Provenance:
+        p = prov.from_sources(f"gtfs-history:{self.path.name}")
+        if p is None:
+            p = prov.for_file("SMTT GTFS (orar planificat / planned timetable)", self.path, gtfs_url(), self.version)
+        note = (f"Orarul în vigoare înainte de lucrări (GTFS {self.version}, {self.path.name}); "
+                f"orarul curent rulează deja ocolirea / timetable in force before the works")
+        return p.model_copy(update={"note": note, "version": p.version or self.version})
+
+
+def gtfs_url() -> str:
+    return prov.SMTT_GTFS_URL
+
+
+@lru_cache(maxsize=4)
+def _history(path_str: str, mtime: float) -> HistoryTimetable:
+    return HistoryTimetable(Path(path_str))
+
+
+_CURRENT = Timetable()
+
+
+def current_timetable() -> Timetable:
+    return _CURRENT
+
+
+def timetable_for(window_start: datetime | str | None) -> Timetable:
+    """The timetable in force before the works: newest feed starting strictly before the window."""
+    if window_start is None:
+        return _CURRENT
+    day = (parse_iso(window_start) if isinstance(window_start, str) else window_start).astimezone(TZ).date()
+    cur = gtfs.feed()
+    if cur.start is None or cur.start < day:
+        return _CURRENT
+    best: tuple[date, Path] | None = None
+    hist = get_settings().data_dir / HISTORY_DIR
+    for z in sorted(hist.glob("*.zip")) if hist.is_dir() else []:
+        start, _ = _feed_start(str(z), z.stat().st_mtime)
+        if start is not None and start < day and (best is None or start > best[0]):
+            best = (start, z)
+    if best is None:
+        return _CURRENT  # nothing older: count on the current feed (coverage note says what is missing)
+    return _history(str(best[1]), best[1].stat().st_mtime)
+
+
+def timetable_for_closure(closure: dict) -> Timetable:
+    return timetable_for((closure.get("window") or {}).get("start"))
+
+
 # --- departures in the window ----------------------------------------------------
 
 
@@ -85,9 +280,9 @@ class CountWindow:
     note: str | None
 
 
-def count_window(start: datetime, end: datetime) -> CountWindow:
-    """window ∩ the service days of the feed, with a note when it is cut."""
-    first, last = gtfs.coverage()
+def count_window(start: datetime, end: datetime, tt: Timetable | None = None) -> CountWindow:
+    """window ∩ the service days of the timetable, with a note when it is cut."""
+    first, last = (tt or _CURRENT).coverage()
     lo = local_midnight(first)
     hi = local_midnight(last + timedelta(days=1))
     s, e = max(start, lo), min(end, hi)
@@ -103,8 +298,6 @@ def count_window(start: datetime, end: datetime) -> CountWindow:
 
 @lru_cache(maxsize=32)
 def _counts(start_ts: int, end_ts: int) -> dict[Key, int]:
-    from app.common.timeutil import from_unix
-
     df = gtfs.departures(from_unix(start_ts), from_unix(end_ts))
     if df.empty:
         return {}
@@ -112,11 +305,18 @@ def _counts(start_ts: int, end_ts: int) -> dict[Key, int]:
     return {(str(s), str(r), int(d)): int(n) for (s, r, d), n in g.items() if n}
 
 
-def departure_counts(cw: CountWindow) -> dict[Key, int] | None:
+def departure_counts(cw: CountWindow, tt: Timetable | None = None) -> dict[Key, int] | None:
     """{(stop, route, dir): departures} in the counting window; None when unknown."""
     if cw.start is None:
         return None
-    return _counts(int(cw.start.timestamp()), int(cw.end.timestamp()))
+    return (tt or _CURRENT).counts(cw.start, cw.end)
+
+
+def timetable_provenance(tt: Timetable, cw: CountWindow) -> Provenance:
+    p = tt.provenance
+    if cw.note:
+        p = p.model_copy(update={"note": f"{p.note or ''}; {cw.note}".strip("; ")})
+    return p
 
 
 @dataclass
@@ -515,8 +715,9 @@ def _closure_and_analysis(closure_id: str) -> tuple[dict, dict]:
 def build_impact(closure: dict, rows: list[dict]) -> Impact:
     """Impact from a closure and its analysis rows (decisions applied). Pure apart from caches."""
     start, end = parse_iso(closure["window"]["start"]), parse_iso(closure["window"]["end"])
-    cw = count_window(start, end)
-    counts = departure_counts(cw)
+    tt = timetable_for(start)
+    cw = count_window(start, end, tt)
+    counts = departure_counts(cw, tt)
     if counts is None:
         raise invalid(cw.note or "Window outside the GTFS feed.", code="OUTSIDE_FEED")
     lost_rows = [r for r in rows if counts_as_lost(r)]
@@ -563,11 +764,7 @@ def build_impact(closure: dict, rows: list[dict]) -> Impact:
 
     zones = sorted(by_zone.values(), key=lambda r: (r["slug"] == OUTSIDE_SLUG, -r["departuresLost"],
                                                     -r["stopsSuspended"], r["name"]))
-    feed = gtfs.feed()
-    gtfs_p = feed.provenance
-    if cw.note:
-        gtfs_p = gtfs_p.model_copy(update={"note": f"{gtfs_p.note or ''}; {cw.note}".strip("; ")})
-    provenance = [gtfs_p, load_network().provenance, z.provenance]
+    provenance = [timetable_provenance(tt, cw), load_network().provenance, z.provenance]
     if res is not None:
         provenance.append(pop_provenance())
     else:

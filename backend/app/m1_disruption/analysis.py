@@ -48,13 +48,13 @@ def _stored_decisions(closure_id: str) -> dict[str, bool]:
     return dict((data or {}).get("decisions") or {})
 
 
-def _order_rows(rows: list[dict]) -> list[dict]:
+def _order_rows(rows: list[dict], tt: imp.Timetable) -> list[dict]:
     pos: dict[tuple[str, int], dict[str, int]] = {}
 
     def rank(r: dict) -> tuple:
         k = (r["routeId"], r["directionId"])
         if k not in pos:
-            pos[k] = {s: i for i, s in enumerate(gtfs.stop_order(*k))}
+            pos[k] = {s: i for i, s in enumerate(tt.stop_order(*k))}
         return (r["routeShortName"].zfill(4), r["routeId"], r["directionId"], pos[k].get(r["stopId"], 999))
 
     return sorted(rows, key=rank)
@@ -63,20 +63,25 @@ def _order_rows(rows: list[dict]) -> list[dict]:
 def enrich(closure: dict, rows: list[dict]) -> tuple[list[dict], list[Any]]:
     """Fill departuresLost and nearestServed on every row. Returns (rows, provenance)."""
     start, end = parse_iso(closure["window"]["start"]), parse_iso(closure["window"]["end"])
-    cw = imp.count_window(start, end)
-    counts = imp.departure_counts(cw)
+    tt = imp.timetable_for(start)
+    cw = imp.count_window(start, end, tt)
+    counts = imp.departure_counts(cw, tt)
     lost = {imp.row_key(r) for r in rows if imp.counts_as_lost(r)}
     svc = imp.ServiceState.build(counts, lost)
     stats = imp.NearestStats()
     for r in rows:
         r["departuresLost"] = None if counts is None else int(counts.get(imp.row_key(r), 0))
         r["nearestServed"] = imp.nearest_served(r, svc, stats)
-    feed = gtfs.feed()
-    gtfs_p = feed.provenance
-    if cw.note:
-        gtfs_p = gtfs_p.model_copy(update={"note": f"{gtfs_p.note or ''}; {cw.note}".strip("; ")})
-    provenance = [gtfs_p, load_network().provenance, imp.osm_provenance(imp.walking_note(stats))]
+    provenance = [imp.timetable_provenance(tt, cw), load_network().provenance,
+                  imp.osm_provenance(imp.walking_note(stats))]
     return rows, provenance
+
+
+def _feed_version(closure: dict) -> str:
+    tt = imp.timetable_for_closure(closure)
+    if tt.history:
+        return tt.version or ""
+    return load_network().feed_version or (tt.version or "")
 
 
 def _routes(rows: list[dict]) -> list[AnalysisRoute]:
@@ -97,11 +102,11 @@ def _routes(rows: list[dict]) -> list[AnalysisRoute]:
 
 def _build(closure: dict, rows: list[dict], extra_provenance: Iterable[Any] = ()) -> Analysis:
     rows, provenance = enrich(closure, rows)
-    rows = _order_rows(rows)
+    rows = _order_rows(rows, imp.timetable_for_closure(closure))
     unsure = sum(1 for r in rows if r["state"] == "unsure" and r.get("confirmed") is None)
     return Analysis(
         closureId=closure["id"],
-        feedVersion=load_network().feed_version or (gtfs.feed().version or ""),
+        feedVersion=_feed_version(closure),
         stops=rows,
         routes=_routes(rows),
         unsureCount=unsure,

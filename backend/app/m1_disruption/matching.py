@@ -24,6 +24,7 @@ from shapely.geometry.base import BaseGeometry
 from shapely.ops import substring
 
 from app.common import gtfs
+from app.m1_disruption.impact import Timetable, current_timetable, timetable_for_closure
 from app.common.city import load_network, zone_for_point
 from app.common.geo import from_geojson, to_geojson, to_metric, to_wgs84
 
@@ -88,8 +89,8 @@ def route_short_name(route_id: str) -> str:
     return r["shortName"] if r else route_id
 
 
-def directions_of(route_id: str) -> list[int]:
-    return sorted(d for (r, d) in gtfs.stop_patterns() if r == route_id)
+def directions_of(route_id: str, tt: Timetable | None = None) -> list[int]:
+    return sorted(d for (r, d) in (tt or current_timetable()).stop_patterns() if r == route_id)
 
 
 def _unit(dx: float, dy: float) -> tuple[float, float]:
@@ -141,10 +142,11 @@ _REASON_ORDER = ("IN_BUFFER", "ON_ROUTE_PATH", "DIRECTION_MATCH", "DIRECTION_UNC
                  "DUPLICATE_STOP_NAME", "NAMED_IN_NOTICE", "NOT_NAMED_IN_NOTICE", "ROUTE_NOT_IN_NOTICE")
 
 
-def make_row(stop_id: str, route_id: str, direction_id: int, reasons: Iterable[str], start: float) -> dict:
+def make_row(stop_id: str, route_id: str, direction_id: int, reasons: Iterable[str], start: float,
+             tt: Timetable | None = None) -> dict:
     n = load_network()
     s = n.stop_by_id[stop_id]
-    pat = gtfs.stop_patterns().get((route_id, int(direction_id)))
+    pat = (tt or current_timetable()).stop_patterns().get((route_id, int(direction_id)))
     rs = [r for r in _REASON_ORDER if r in set(reasons)]
     conf = confidence(rs, start)
     return {
@@ -201,8 +203,9 @@ def stop_named(name: str, text_norm: str) -> bool:
 # --- drawn closures ---------------------------------------------------------------
 
 
-def match_drawn(closure: dict) -> list[dict]:
+def match_drawn(closure: dict, tt: Timetable | None = None) -> list[dict]:
     """Rows for a drawn geometry (SPEC §6.1 items 4-6)."""
+    tt = tt or timetable_for_closure(closure)
     geom = closure.get("geometry")
     if not geom:
         return []
@@ -219,7 +222,7 @@ def match_drawn(closure: dict) -> list[dict]:
     termini = notice_termini(text)
 
     rows = []
-    for (route_id, direction_id), pat in gtfs.stop_patterns().items():
+    for (route_id, direction_id), pat in tt.stop_patterns().items():
         if kind == "drawn" and route_filter and route_id not in route_filter:
             continue
         path = path_metric(route_id, direction_id)
@@ -263,14 +266,15 @@ def match_drawn(closure: dict) -> list[dict]:
                     reasons.append("NOT_NAMED_IN_NOTICE")
                 if route_filter and route_id not in route_filter:
                     reasons.append("ROUTE_NOT_IN_NOTICE")
-            rows.append(make_row(stop_id, route_id, direction_id, reasons, 0.5))
+            rows.append(make_row(stop_id, route_id, direction_id, reasons, 0.5, tt))
     return merge_rows(rows)
 
 
 # --- route actions --------------------------------------------------------------------
 
 
-def resolve_name(name: str, route_id: str, direction_id: int) -> tuple[list[str], bool]:
+def resolve_name(name: str, route_id: str, direction_id: int,
+                 tt: Timetable | None = None) -> tuple[list[str], bool]:
     """Stop ids for a notice stop name on one (route, direction).
 
     Exact name on the route's stop order first, then the name without the
@@ -278,7 +282,7 @@ def resolve_name(name: str, route_id: str, direction_id: int) -> tuple[list[str]
     Returns (ids, ambiguous).
     """
     n = load_network()
-    order = gtfs.stop_order(route_id, direction_id)
+    order = (tt or current_timetable()).stop_order(route_id, direction_id)
     full, base = norm(name), base_name(name)
     paren = norm(name.split("(", 1)[1]) if "(" in name else ""
     hits = [s for s in order if norm(n.stop_by_id[s]["name"]) == full]
@@ -291,7 +295,7 @@ def resolve_name(name: str, route_id: str, direction_id: int) -> tuple[list[str]
         cands = [s["id"] for s in n.stops if route_id in s["routeIds"]
                  and (norm(s["name"]) == full or (base and base_name(s["name"]) == base))]
         path = path_metric(route_id, direction_id)
-        other = [d for d in directions_of(route_id) if d != direction_id]
+        other = [d for d in directions_of(route_id, tt) if d != direction_id]
         other_path = path_metric(route_id, other[0]) if other else None
         for sid in cands:
             pt = stop_metric(sid)
@@ -323,14 +327,15 @@ def _nearest_in(order: list[str], stop_id: str) -> str | None:
     return best
 
 
-def action_stops(action: dict) -> tuple[dict[int, list[str]], set[Key], list[str]]:
+def action_stops(action: dict, tt: Timetable | None = None) -> tuple[dict[int, list[str]], set[Key], list[str]]:
     """Suspended stops per direction for one RouteAction.
 
     Returns ({directionId: [stop ids in travel order]}, ambiguous keys, unresolved names).
     """
     n = load_network()
+    tt = tt or current_timetable()
     route_id = action["routeId"]
-    dirs = [action["directionId"]] if action.get("directionId") is not None else directions_of(route_id)
+    dirs = [action["directionId"]] if action.get("directionId") is not None else directions_of(route_id, tt)
     kind = action["action"]
     out: dict[int, list[str]] = {}
     ambiguous: set[Key] = set()
@@ -340,7 +345,7 @@ def action_stops(action: dict) -> tuple[dict[int, list[str]], set[Key], list[str
     def by_names(d: int) -> list[str]:
         ids = []
         for nm in names:
-            hits, amb = resolve_name(nm, route_id, d)
+            hits, amb = resolve_name(nm, route_id, d, tt)
             ids += hits
             if amb:
                 ambiguous.update((h, route_id, d) for h in hits)
@@ -349,11 +354,11 @@ def action_stops(action: dict) -> tuple[dict[int, list[str]], set[Key], list[str
     name_hits: dict[int, list[str]] = {d: by_names(d) for d in dirs} if names else {}
     if names:
         for nm in names:
-            if not any(resolve_name(nm, route_id, d)[0] for d in dirs):
+            if not any(resolve_name(nm, route_id, d, tt)[0] for d in dirs):
                 unresolved.append(nm)
 
     for d in dirs:
-        order = gtfs.stop_order(route_id, d)
+        order = tt.stop_order(route_id, d)
         if not order:
             continue
         if kind == "suspended":
@@ -392,7 +397,7 @@ def action_stops(action: dict) -> tuple[dict[int, list[str]], set[Key], list[str
             if names:
                 hits += [s for s in name_hits.get(d, []) if s not in hits]
             # ids given for the other direction only: map them to this side of the street
-            if action.get("directionId") is None and ids and not names:
+            if action.get("directionId") is None and ids and not names and not hits:
                 for sid in ids:
                     if sid not in order:
                         m = _nearest_in(order, sid)
@@ -403,15 +408,16 @@ def action_stops(action: dict) -> tuple[dict[int, list[str]], set[Key], list[str
     return out, ambiguous, unresolved
 
 
-def rows_from_actions(closure: dict) -> tuple[list[dict], list[str]]:
+def rows_from_actions(closure: dict, tt: Timetable | None = None) -> tuple[list[dict], list[str]]:
     """Rows for `routeActions` (confidence 0.9). Returns (rows, unresolved stop names)."""
+    tt = tt or timetable_for_closure(closure)
     kind = closure.get("kind") or "drawn"
     rows, unresolved = [], []
     for action in closure.get("routeActions") or []:
         if action["routeId"] not in load_network().route_by_id:
             unresolved.append(action["routeId"])
             continue
-        per_dir, ambiguous, unres = action_stops(action)
+        per_dir, ambiguous, unres = action_stops(action, tt)
         unresolved += unres
         for d, stops in per_dir.items():
             for s in stops:
@@ -420,15 +426,19 @@ def rows_from_actions(closure: dict) -> tuple[list[dict], list[str]]:
                     reasons.append("NAMED_IN_NOTICE")
                 if (s, action["routeId"], d) in ambiguous:
                     reasons.append("DUPLICATE_STOP_NAME")
-                rows.append(make_row(s, action["routeId"], d, reasons, ACTION_CONFIDENCE))
+                rows.append(make_row(s, action["routeId"], d, reasons, ACTION_CONFIDENCE, tt))
     return merge_rows(rows), unresolved
 
 
 def match_closure(closure: dict) -> tuple[list[dict], list[str]]:
-    """All rows of a closure: from routeActions when present, else from the geometry."""
+    """All rows of a closure: from routeActions when present, else from the geometry.
+
+    Stop order comes from the timetable in force before the works (impact.timetable_for).
+    """
+    tt = timetable_for_closure(closure)
     if closure.get("routeActions"):
-        return rows_from_actions(closure)
-    return match_drawn(closure), []
+        return rows_from_actions(closure, tt)
+    return match_drawn(closure, tt), []
 
 
 # --- geometry for input by line -----------------------------------------------------
@@ -445,19 +455,20 @@ def _section(path: LineString, stops: list[str]) -> LineString | None:
     return seg if isinstance(seg, LineString) and seg.length > 0 else None
 
 
-def geometry_from_actions(actions: list[dict]) -> dict[str, Any] | None:
+def geometry_from_actions(actions: list[dict], tt: Timetable | None = None) -> dict[str, Any] | None:
     """GeoJSON (LineString or MultiLineString) of the route path along the suspended stops.
 
     One section per run of consecutive suspended stops, per route and direction.
     """
+    tt = tt or current_timetable()
     lines: list[LineString] = []
     for action in actions:
         if action["routeId"] not in load_network().route_by_id:
             continue
-        per_dir, _, _ = action_stops(action)
+        per_dir, _, _ = action_stops(action, tt)
         for d, stops in per_dir.items():
             path = path_metric(action["routeId"], d)
-            order = gtfs.stop_order(action["routeId"], d)
+            order = tt.stop_order(action["routeId"], d)
             if path is None or not stops:
                 continue
             idx = sorted(order.index(s) for s in stops if s in order)

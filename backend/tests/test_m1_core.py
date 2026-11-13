@@ -12,7 +12,7 @@ from shapely.ops import substring
 
 from app.common import gtfs
 from app.common.geo import to_geojson, to_wgs84
-from tests.conftest import needs_data
+from tests.conftest import DATA_DIR, needs_data
 
 pytestmark = needs_data
 
@@ -89,9 +89,9 @@ def test_section_input_by_line_fills_geometry():
     assert per_dir[1] == ["56", "58", "60", "85"]
 
 
-def _csv_count(stop_id: str, route_id: str, direction_id: int, day: date, t0: str, t1: str) -> int:
+def _csv_count(stop_id: str, route_id: str, direction_id: int, day: date, t0: str, t1: str, path=None) -> int:
     """Second method: plain csv over the GTFS zip, no pandas and no index."""
-    path = gtfs.feed_path()
+    path = path or gtfs.feed_path()
     with zipfile.ZipFile(path) as z:
         def rows(name):
             return csv.DictReader(io.StringIO(z.read(name).decode("utf-8-sig")))
@@ -215,3 +215,26 @@ def test_whole_line_impact_counts_departures_once():
     assert imp.totals.stopRoutePairsLost == 46
     # lines 2 and 7 still serve most line 4 stops, so few stops lose all service
     assert 0 < imp.totals.stopsSuspended < 46
+
+
+HISTORY_429 = DATA_DIR / "gtfs-history" / "smtt-4.29_mdb-2868-202610240049.zip"
+
+
+@pytest.mark.skipif(not HISTORY_429.is_file(), reason="no GTFS 4.29 in gtfs-history")
+def test_mocioni_counts_on_the_timetable_before_the_works():
+    """SPEC §5.3: 4.30 (from 2 Nov) already runs the diversion, so a closure from 2 Nov counts on 4.29."""
+    from app.m1_disruption import analysis, impact
+
+    assert impact.timetable_for("2026-11-02T00:00:00+02:00").version == "4.29"
+    assert not impact.timetable_for(WINDOW["start"]).history  # 8 Nov: the current feed (4.31 from 5 Nov)
+    window = {"start": "2026-11-02T00:00:00+02:00", "end": "2026-11-10T00:00:00+02:00"}
+    closure = {"id": "t_moc", "title": {"ro": "t"}, "kind": "notice", "geometry": None, "window": window,
+               "routeActions": [{"routeId": "R_AB_M36", "directionId": None, "action": "rerouted",
+                                 "suspendedStopIds": ["352", "353", "354", "356", "357"]}]}
+    a = analysis.analyze_closure(closure)
+    assert a.feedVersion == "4.29"
+    got = {(s.stopId, s.directionId): s.departuresLost for s in a.stops}
+    assert set(got) == {("356", 0), ("357", 0), ("352", 1), ("353", 1), ("356", 1)}
+    expected = sum(_csv_count("356", "R_AB_M36", 0, date(2026, 11, d), "00:00:00", "99:00:00", HISTORY_429)
+                   for d in range(2, 10))
+    assert expected > 0 and got[("356", 0)] == expected

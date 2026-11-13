@@ -60,7 +60,8 @@ def validate_input(body: ClosureInput) -> dict:
     if data.get("geometry") is None:
         if not data.get("routeActions"):
             raise invalid("geometry is required unless routeActions describe the closure (input by line).")
-        data["geometry"] = matching.geometry_from_actions(data["routeActions"])
+        data["geometry"] = matching.geometry_from_actions(data["routeActions"],
+                                                          imp.timetable_for(data["window"]["start"]))
         if data["geometry"] is None:
             raise invalid("Could not build a geometry from routeActions: no stop of those lines matched.")
     return data
