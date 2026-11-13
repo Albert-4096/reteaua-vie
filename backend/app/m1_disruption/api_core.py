@@ -110,5 +110,6 @@ def get_impact(closure_id: str) -> Impact:
 
 @router.get("/closures/{closure_id}/conflicts", response_model=list[Conflict])
 def get_conflicts(closure_id: str, response: Response) -> list[Conflict]:
-    response.headers["X-Notes"] = "shared_detour not checked yet: detour-load module (M4) missing"
-    return cf.conflicts_for(closure_id)
+    items, notes = cf.conflicts_with_notes(closure_id)
+    response.headers["X-Notes"] = notes
+    return items
