@@ -7,13 +7,12 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Query
 
-from app.common.jobs import closure_fingerprint, respond
-from app.config import now
-from app.common.timeutil import iso
+from app.common.jobs import respond
 from app.m4_access import compare as cmp
+from app.m4_access import scenarios as sc
 from app.m4_access import windows as win
 from app.models.v1 import Compare
-from app.models.v2 import JobAccepted, WindowSuggestion
+from app.models.v2 import JobAccepted, Scenario, ScenarioCompare, ScenarioImpact, ScenarioInput, WindowSuggestion
 
 router = APIRouter(tags=["M4 decide"])
 
@@ -26,9 +25,8 @@ def get_windows(closure_id: str,
                 from_: str | None = Query(None, alias="from", description="Search start (default DEMO_NOW)"),
                 to: str | None = Query(None, description="Search end (default from + 14 days, max 90)"),
                 phases: int = Query(1, ge=1, le=win.MAX_PHASES)):
-    closure, _ = win.load_closure(closure_id)
-    key = (f"windows:v1:{closure_id}:{closure_fingerprint(closure_id)}:{win.others_fingerprint()}:"
-           f"{hours}:{from_ or iso(now())}:{to}:{phases}")
+    win.load_closure(closure_id)
+    key = win.job_key(closure_id, hours, from_ or None, to or None, phases)
     return respond(key, lambda: win.suggest(closure_id, hours=hours, start=from_ or None, end=to or None,
                                             phases=phases))
 
@@ -36,3 +34,23 @@ def get_windows(closure_id: str,
 @router.get("/compare", response_model=Compare)
 def get_compare(a: str = Query(..., description="Closure id A"), b: str = Query(..., description="Closure id B")):
     return cmp.compare_closures(a, b)
+
+
+@router.post("/scenarios", response_model=Scenario)
+def post_scenario(body: ScenarioInput):
+    return sc.create(body)
+
+
+@router.get("/scenarios", response_model=list[Scenario])
+def list_scenarios(closureId: str = Query(..., description="The closure whose scenarios to list")):
+    return sc.list_for(closureId)
+
+
+@router.get("/scenarios/compare", response_model=ScenarioCompare, responses=ACCEPTED)
+def compare_scenarios(a: str = Query(..., description="Scenario id A"), b: str = Query(..., description="Scenario id B")):
+    return respond(sc.compare_job_key(a, b), lambda: sc.compare(a, b))
+
+
+@router.get("/scenarios/{scenario_id}/impact", response_model=ScenarioImpact, responses=ACCEPTED)
+def scenario_impact(scenario_id: str):
+    return respond(sc.impact_job_key(scenario_id), lambda: sc.compute_impact(scenario_id))

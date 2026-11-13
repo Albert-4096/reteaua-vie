@@ -164,3 +164,92 @@ def test_windows_endpoint_and_v1_compare(prepared, client):
 
     assert body["a"]["totals"] == state.read("closures", HERO, "impact")["totals"]
     assert body["b"]["closureId"] == E3
+
+
+# --- scenarios ------------------------------------------------------------------------------------------
+
+
+def test_prepared_hero_scenarios_and_compare(prepared, client):
+    from app.common import gtfs
+    from app.m4_access import scenarios as sc
+    from app.m4_access import warm_decide as wd
+    from app.m4_access import windows as win
+
+    t = time.perf_counter()
+    wd.warm([HERO])
+    print(f"\nwarm_decide hero: {time.perf_counter() - t:.1f} s")
+    r = client.get("/api/scenarios", params={"closureId": HERO})
+    assert r.status_code == 200
+    listed = r.json()
+    assert [s["id"] for s in listed] == [wd.HERO_L7, wd.HERO_BEST, sc.nothing_id(HERO)]   # prepared first
+    assert [s["title"]["ro"] for s in listed] == ["Linia 7 la 6 minute + P&R",
+                                                  "Fereastra cea mai bună + pistă temporară", "Nicio măsură"]
+    best = win.suggest(HERO).best
+    best_mit = next(m for m in listed[1]["mitigations"] if m["kind"] == "window")
+    assert (best_mit["start"], best_mit["end"]) == (best.start, best.end)   # the top-ranked window
+
+    t = time.perf_counter()
+    r = client.get("/api/scenarios/compare", params={"a": wd.HERO_L7, "b": wd.HERO_BEST})
+    took = time.perf_counter() - t
+    assert r.status_code == 200 and took < 1.5, took                         # warmed: served from the cache
+    a, b = r.json()["a"], r.json()["b"]
+    nothing = sc.compute_impact(sc.nothing_id(HERO))
+    # frequency never changes the departures lost (a timetable count); it shows as added departures
+    assert a["summary"]["departuresLost"] == nothing.summary.departuresLost == nothing.impact.totals.departuresLost
+    freq = next(n for n in a["notes"] if n["kind"] == "frequency")
+    assert freq["value"] > 0 and "simulare" in freq["text"]["ro"]
+    pr = next(n for n in a["notes"] if n["kind"] == "park_and_ride")
+    assert "nu modifică cifrele de acces" in pr["text"]["ro"]
+    # the best window recounts the impact on its own window: a plain count of the lost rows there
+    keys = win.lost_keys(prepared_analysis(HERO)["stops"])
+    assert b["summary"]["departuresLost"] == gtfs.count_departures(parse_iso(best.start), parse_iso(best.end),
+                                                                    keys=keys)
+    assert b["summary"]["departuresLost"] < a["summary"]["departuresLost"]
+    assert b["impact"]["window"] == {"start": best.start, "end": best.end}
+    assert any(n["kind"] == "bike_lane" and n["unit"] == "m" for n in b["notes"])
+    # never invented: access is either the access module's estimate or null with a note
+    for side in (a, b):
+        if side["access"] is None:
+            assert side["summary"]["residentsLosingAccess"] is None
+        else:
+            assert side["access"]["estimate"] is True
+        assert side["provenance"]
+
+
+def prepared_analysis(cid):
+    from app.common import state
+
+    return state.read("closures", cid, "analysis")
+
+
+def test_create_scenario_with_segment_and_errors(prepared, client):
+    from app.m4_access import scenarios as sc
+
+    closure = prepared_closure(E3)
+    coords = closure["geometry"]["coordinates"]
+    half = {"type": "LineString", "coordinates": coords[: max(2, len(coords) // 2)]}
+    body = {"closureId": E3, "title": {"ro": "Doar jumătate din Ardealului"},
+            "mitigations": [{"kind": "segment", "geometry": half}]}
+    r = client.post("/api/scenarios", json=body)
+    assert r.status_code == 200
+    sid = r.json()["id"]
+    assert sid.startswith("sc_") and r.json()["createdAt"]
+    ids = [s["id"] for s in client.get("/api/scenarios", params={"closureId": E3}).json()]
+    assert ids == [sc.nothing_id(E3), sid]                                  # „Nicio măsură” made automatically
+    t = time.perf_counter()
+    imp = sc.compute_impact(sid)
+    print(f"\nE3 segment scenario: {time.perf_counter() - t:.1f} s, {imp.summary}")
+    assert any(n.kind == "segment" for n in imp.notes)
+    assert imp.impact.closureId == E3 and imp.summary.departuresLost == imp.impact.totals.departuresLost
+
+    bad = dict(body, mitigations=[{"kind": "frequency", "routeId": "R_NOPE", "headwayMinutes": 6}])
+    assert client.post("/api/scenarios", json=bad).status_code == 422
+    assert client.post("/api/scenarios", json=dict(body, closureId="nope")).status_code == 404
+    assert client.get("/api/scenarios/nope/impact").status_code == 404
+    assert client.get("/api/scenarios", params={"closureId": "nope"}).status_code == 404
+
+
+def prepared_closure(cid):
+    from app.common import state
+
+    return state.read("closures", cid)

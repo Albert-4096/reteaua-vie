@@ -518,3 +518,12 @@ def _provenance(tt: imp.Timetable, rng: SearchRange, top: list[Candidate]) -> li
     out.append(state_provenance(now()).model_copy(update={"note": "Conflicte: lucrările din registru / "
                                                                   "conflicts: closures in the register"}))
     return out
+
+
+def job_key(closure_id: str, hours: float | None = None, start: str | None = None, end: str | None = None,
+            phases: int = 1) -> str:
+    """Job-cache key of a window suggestion (the route and warm_decide use the same one)."""
+    from app.common.jobs import closure_fingerprint
+
+    return (f"windows:v1:{closure_id}:{closure_fingerprint(closure_id)}:{others_fingerprint()}:"
+            f"{hours}:{start or iso(now())}:{end}:{phases}")
