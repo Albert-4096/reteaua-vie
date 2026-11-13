@@ -1125,7 +1125,6 @@
         "distanceMeters": 0.0,
         "routeIds": [
           "R_TV_1",
-          "R_TV_7",
           "R_TV_8"
         ]
       }
@@ -1160,7 +1159,6 @@
         "distanceMeters": 0.0,
         "routeIds": [
           "R_TV_1",
-          "R_TV_7",
           "R_TV_8"
         ]
       }
@@ -1855,7 +1853,6 @@
         "distanceMeters": 0.0,
         "routeIds": [
           "R_TV_1",
-          "R_TV_7",
           "R_TV_8"
         ]
       }
@@ -1890,7 +1887,6 @@
         "distanceMeters": 0.0,
         "routeIds": [
           "R_TV_1",
-          "R_TV_7",
           "R_TV_8"
         ]
       }
@@ -1925,7 +1921,6 @@
         "distanceMeters": 0.0,
         "routeIds": [
           "R_TV_1",
-          "R_TV_7",
           "R_TV_8"
         ]
       }
@@ -2289,7 +2284,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "890",
@@ -2322,7 +2317,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "6",
@@ -2356,7 +2351,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "12",
@@ -2389,18 +2384,24 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "17",
-        "name": "Izlaz (Victor Hugo)",
+        "stopId": "268",
+        "name": "Piața Veteranilor (Calea Șagului)",
         "location": [
-          21.21366,
-          45.72534
+          21.20608,
+          45.7287
         ],
-        "distanceMeters": 393.0,
+        "distanceMeters": 377.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E1",
+          "R_AB_E8",
+          "R_AB_M32",
+          "R_AB_M37",
+          "R_AB_M51"
         ]
       }
     },
@@ -2422,18 +2423,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "19",
-        "name": "Emil Zola (Victor Hugo)",
+        "stopId": "497",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.21734,
-          45.72456
+          21.21774,
+          45.72481
         ],
-        "distanceMeters": 357.0,
+        "distanceMeters": 360.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -2455,18 +2456,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "17",
-        "name": "Izlaz (Victor Hugo)",
+        "stopId": "482",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.21366,
-          45.72534
+          21.21734,
+          45.72431
         ],
-        "distanceMeters": 357.0,
+        "distanceMeters": 52.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -2488,18 +2489,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "19",
-        "name": "Emil Zola (Victor Hugo)",
+        "stopId": "497",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.21734,
-          45.72456
+          21.21774,
+          45.72481
         ],
-        "distanceMeters": 367.0,
+        "distanceMeters": 371.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -2521,18 +2522,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "21",
-        "name": "Progresul (Aluniș)",
+        "stopId": "497",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.22147,
-          45.72384
+          21.21774,
+          45.72481
         ],
-        "distanceMeters": 407.0,
+        "distanceMeters": 738.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -2554,18 +2555,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "27",
-        "name": "Mareșal A. Averescu (Lidia)",
+        "stopId": "30",
+        "name": "Drubeta (Liviu Rebreanu)",
         "location": [
-          21.22786,
-          45.73186
+          21.22642,
+          45.73496
         ],
-        "distanceMeters": 331.0,
+        "distanceMeters": 714.0,
         "routeIds": [
-          "R_TV_7"
+          "R_TV_9"
         ]
       }
     },
@@ -2587,18 +2588,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "25",
-        "name": "Mureș (Drubeta)",
+        "stopId": "30",
+        "name": "Drubeta (Liviu Rebreanu)",
         "location": [
-          21.22729,
-          45.72901
+          21.22642,
+          45.73496
         ],
-        "distanceMeters": 331.0,
+        "distanceMeters": 396.0,
         "routeIds": [
-          "R_TV_7"
+          "R_TV_9"
         ]
       }
     },
@@ -2620,18 +2621,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "27",
-        "name": "Mareșal A. Averescu (Lidia)",
+        "stopId": "30",
+        "name": "Drubeta (Liviu Rebreanu)",
         "location": [
-          21.22786,
-          45.73186
+          21.22642,
+          45.73496
         ],
-        "distanceMeters": 364.0,
+        "distanceMeters": 56.0,
         "routeIds": [
-          "R_TV_7"
+          "R_TV_9"
         ]
       }
     },
@@ -2653,7 +2654,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "53",
@@ -2686,19 +2687,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "58",
-        "name": "Parcul C. Sylva (Parc Doina)",
+        "stopId": "56",
+        "name": "Piața N. Bălcescu (Gheorghe Doja)",
         "location": [
-          21.22243,
-          45.74441
+          21.22504,
+          45.74189
         ],
-        "distanceMeters": 350.0,
+        "distanceMeters": 0.0,
         "routeIds": [
           "R_TV_1",
-          "R_TV_7",
           "R_TV_8"
         ]
       }
@@ -2721,19 +2721,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "56",
-        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "stopId": "58",
+        "name": "Parcul C. Sylva (Parc Doina)",
         "location": [
-          21.22504,
-          45.74189
+          21.22243,
+          45.74441
         ],
-        "distanceMeters": 350.0,
+        "distanceMeters": 0.0,
         "routeIds": [
           "R_TV_1",
-          "R_TV_7",
           "R_TV_8"
         ]
       }
@@ -2756,7 +2755,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "60",
@@ -2790,7 +2789,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "326",
@@ -2826,7 +2825,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "131",
@@ -2864,7 +2863,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "89",
@@ -2897,7 +2896,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "434",
@@ -2930,7 +2929,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "435",
@@ -2963,7 +2962,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "903",
@@ -2996,7 +2995,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "207",
@@ -3029,7 +3028,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "197",
@@ -3062,7 +3061,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "222",
@@ -3097,7 +3096,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 0,
       "nearestServed": {
         "stopId": "276",
@@ -3131,7 +3130,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "276",
@@ -3165,7 +3164,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "222",
@@ -3200,7 +3199,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "207",
@@ -3233,7 +3232,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "207",
@@ -3266,7 +3265,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "933",
@@ -3299,7 +3298,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "458",
@@ -3332,7 +3331,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "459",
@@ -3365,7 +3364,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "89",
@@ -3398,7 +3397,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "131",
@@ -3436,7 +3435,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "326",
@@ -3472,7 +3471,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": true,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "59",
@@ -3507,7 +3506,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "57",
@@ -3541,7 +3540,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "55",
@@ -3575,7 +3574,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "54",
@@ -3608,7 +3607,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "31",
@@ -3641,18 +3640,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "26",
-        "name": "Mureș (Drubeta)",
+        "stopId": "30",
+        "name": "Drubeta (Liviu Rebreanu)",
         "location": [
-          21.22719,
-          45.729
+          21.22642,
+          45.73496
         ],
-        "distanceMeters": 399.0,
+        "distanceMeters": 350.0,
         "routeIds": [
-          "R_TV_7"
+          "R_TV_9"
         ]
       }
     },
@@ -3674,18 +3673,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "28",
-        "name": "Mareșal A. Averescu (Lidia)",
+        "stopId": "30",
+        "name": "Drubeta (Liviu Rebreanu)",
         "location": [
-          21.2277,
-          45.73235
+          21.22642,
+          45.73496
         ],
-        "distanceMeters": 399.0,
+        "distanceMeters": 717.0,
         "routeIds": [
-          "R_TV_7"
+          "R_TV_9"
         ]
       }
     },
@@ -3707,18 +3706,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "22",
-        "name": "Progresul (Aluniș)",
+        "stopId": "497",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.22176,
-          45.72387
+          21.21774,
+          45.72481
         ],
-        "distanceMeters": 417.0,
+        "distanceMeters": 763.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -3740,18 +3739,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "20",
-        "name": "Emil Zola (Victor Hugo)",
+        "stopId": "497",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.21782,
-          45.72453
+          21.21774,
+          45.72481
         ],
-        "distanceMeters": 363.0,
+        "distanceMeters": 366.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -3773,18 +3772,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "18",
-        "name": "Izlaz (Victor Hugo)",
+        "stopId": "497",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.21406,
-          45.72532
+          21.21774,
+          45.72481
         ],
-        "distanceMeters": 316.0,
+        "distanceMeters": 56.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -3806,18 +3805,18 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "20",
-        "name": "Emil Zola (Victor Hugo)",
+        "stopId": "497",
+        "name": "Victor Hugo (Emil Zola)",
         "location": [
-          21.21782,
-          45.72453
+          21.21774,
+          45.72481
         ],
-        "distanceMeters": 316.0,
+        "distanceMeters": 320.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_32"
         ]
       }
     },
@@ -3839,18 +3838,24 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
-        "stopId": "16",
-        "name": "Chișodei (Victor Hugo)",
+        "stopId": "268",
+        "name": "Piața Veteranilor (Calea Șagului)",
         "location": [
-          21.20888,
-          45.72635
+          21.20608,
+          45.7287
         ],
-        "distanceMeters": 10.0,
+        "distanceMeters": 375.0,
         "routeIds": [
-          "R_TV_7"
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E1",
+          "R_AB_E8",
+          "R_AB_M32",
+          "R_AB_M37",
+          "R_AB_M51"
         ]
       }
     },
@@ -3872,7 +3877,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "11",
@@ -3905,7 +3910,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 24,
       "nearestServed": {
         "stopId": "7",
@@ -3938,7 +3943,7 @@
         "ON_ROUTE_PATH",
         "NOT_NAMED_IN_NOTICE"
       ],
-      "confirmed": false,
+      "confirmed": null,
       "departuresLost": 25,
       "nearestServed": {
         "stopId": "5",
@@ -3984,10 +3989,10 @@
         0,
         1
       ],
-      "stopsAffected": 21
+      "stopsAffected": 50
     }
   ],
-  "unsureCount": 0,
+  "unsureCount": 50,
   "provenance": [
     {
       "source": "SMTT GTFS (orar planificat / planned timetable)",
@@ -4009,6 +4014,288 @@
       "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
       "fetchedAt": "2026-11-13T18:30:52+02:00",
       "note": "Distanța până la cea mai apropiată stație deservită: mers pe jos pe rețeaua pietonală OSM / walking distance on OSM footpaths. osmium extract -b 21.10,45.68,21.35,45.83"
+    }
+  ],
+  "decisionGroups": [
+    {
+      "id": "R_TV_7-lost",
+      "routeId": "R_TV_7",
+      "question": {
+        "ro": "Oprește tramvaiul 7 între Calea Torontalului (Ciocanul) și Piața Sfânta Maria (16 Decembrie 1989)?",
+        "en": "Does tram 7 stop between Calea Torontalului (Ciocanul) and Piața Sfânta Maria (16 Decembrie 1989)?"
+      },
+      "reason": {
+        "ro": "Anunțul dă linia 7 doar ca „Depou Dâmbovița – Gara de Nord”, fără stațiile de pe traseu. 21 de stații, ambele sensuri. Tramvaiele 2 și 4 nu mai opresc în aceste stații și niciun alt tramvai nu oprește aici în interval: propunere „nu oprește”.",
+        "en": "The notice gives line 7 only as „Depou Dâmbovița – Gara de Nord”, without the stops on the way. 21 stops, both directions. Trams 2 and 4 lose these stops and no other tram stops here in the window: suggested „does not stop”."
+      },
+      "suggested": "affected",
+      "rows": [
+        {
+          "stopId": "85",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "87",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "902",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "434",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "435",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "903",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "904",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "905",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "906",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "907",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "896",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "897",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "898",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "899",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "900",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "458",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "459",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "901",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "88",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "86",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "61",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        }
+      ]
+    },
+    {
+      "id": "R_TV_7-open",
+      "routeId": "R_TV_7",
+      "question": {
+        "ro": "Oprește tramvaiul 7 între Banatul și Piața Sfânta Maria (Gheorghe Doja)?",
+        "en": "Does tram 7 stop between Banatul and Piața Sfânta Maria (Gheorghe Doja)?"
+      },
+      "reason": {
+        "ro": "Anunțul dă linia 7 doar ca „Depou Dâmbovița – Gara de Nord”, fără stațiile de pe traseu. 29 de stații, ambele sensuri. Tramvaiele 1, 2, 8 și 9 încă opresc în unele dintre ele.",
+        "en": "The notice gives line 7 only as „Depou Dâmbovița – Gara de Nord”, without the stops on the way. 29 stops, both directions. Trams 1, 2, 8 and 9 still stop at some of them."
+      },
+      "suggested": null,
+      "rows": [
+        {
+          "stopId": "4",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "6",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "12",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "16",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "17",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "19",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "21",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "23",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "25",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "27",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "29",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "53",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "56",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "58",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "60",
+          "routeId": "R_TV_7",
+          "directionId": 0
+        },
+        {
+          "stopId": "57",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "55",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "54",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "31",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "28",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "26",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "24",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "22",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "20",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "18",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "15",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "11",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "7",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        },
+        {
+          "stopId": "5",
+          "routeId": "R_TV_7",
+          "directionId": 1
+        }
+      ]
     }
   ]
 }

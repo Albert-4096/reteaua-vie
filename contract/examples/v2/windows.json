@@ -11,11 +11,11 @@
       },
       "departuresLost": 411,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 1,
       "note": {
-        "ro": "sâmbătă 14 nov, 22:30 – duminică 15 nov, 06:30: se pierd 411 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Saturday 14 Nov, 22:30 – Sunday 15 Nov, 06:30: 411 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "sâmbătă 14 nov, 22:30 – duminică 15 nov, 06:30: se pierd 411 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Saturday 14 Nov, 22:30 – Sunday 15 Nov, 06:30: 411 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     },
     {
@@ -25,11 +25,11 @@
       },
       "departuresLost": 411,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 2,
       "note": {
-        "ro": "sâmbătă 21 nov, 22:30 – duminică 22 nov, 06:30: se pierd 411 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Saturday 21 Nov, 22:30 – Sunday 22 Nov, 06:30: 411 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "sâmbătă 21 nov, 22:30 – duminică 22 nov, 06:30: se pierd 411 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Saturday 21 Nov, 22:30 – Sunday 22 Nov, 06:30: 411 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     },
     {
@@ -39,11 +39,11 @@
       },
       "departuresLost": 430,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 3,
       "note": {
-        "ro": "vineri 13 nov, 23:30 – sâmbătă 14 nov, 07:30: se pierd 430 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Friday 13 Nov, 23:30 – Saturday 14 Nov, 07:30: 430 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "vineri 13 nov, 23:30 – sâmbătă 14 nov, 07:30: se pierd 430 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Friday 13 Nov, 23:30 – Saturday 14 Nov, 07:30: 430 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     },
     {
@@ -53,11 +53,25 @@
       },
       "departuresLost": 430,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 4,
       "note": {
-        "ro": "vineri 20 nov, 23:30 – sâmbătă 21 nov, 07:30: se pierd 430 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Friday 20 Nov, 23:30 – Saturday 21 Nov, 07:30: 430 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "vineri 20 nov, 23:30 – sâmbătă 21 nov, 07:30: se pierd 430 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Friday 20 Nov, 23:30 – Saturday 21 Nov, 07:30: 430 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
+      }
+    },
+    {
+      "window": {
+        "start": "2026-11-15T21:30:00+02:00",
+        "end": "2026-11-16T05:30:00+02:00"
+      },
+      "departuresLost": 546,
+      "residentsLosingStop": 0,
+      "conflicts": 0,
+      "rank": 5,
+      "note": {
+        "ro": "duminică 15 nov, 21:30 – luni 16 nov, 05:30: se pierd 546 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Sunday 15 Nov, 21:30 – Monday 16 Nov, 05:30: 546 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     },
     {
@@ -68,7 +82,7 @@
       "departuresLost": 546,
       "residentsLosingStop": 0,
       "conflicts": 1,
-      "rank": 5,
+      "rank": 6,
       "note": {
         "ro": "duminică 8 nov, 21:30 – luni 9 nov, 05:30: se pierd 546 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
         "en": "Sunday 8 Nov, 21:30 – Monday 9 Nov, 05:30: 546 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
@@ -76,72 +90,58 @@
     },
     {
       "window": {
-        "start": "2026-11-15T21:30:00+02:00",
-        "end": "2026-11-16T05:30:00+02:00"
-      },
-      "departuresLost": 546,
-      "residentsLosingStop": 0,
-      "conflicts": 1,
-      "rank": 6,
-      "note": {
-        "ro": "duminică 15 nov, 21:30 – luni 16 nov, 05:30: se pierd 546 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Sunday 15 Nov, 21:30 – Monday 16 Nov, 05:30: 546 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
-      }
-    },
-    {
-      "window": {
-        "start": "2026-11-09T22:30:00+02:00",
-        "end": "2026-11-10T06:30:00+02:00"
+        "start": "2026-11-16T22:30:00+02:00",
+        "end": "2026-11-17T06:30:00+02:00"
       },
       "departuresLost": 620,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 7,
       "note": {
-        "ro": "luni 9 nov, 22:30 – marți 10 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Monday 9 Nov, 22:30 – Tuesday 10 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "luni 16 nov, 22:30 – marți 17 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Monday 16 Nov, 22:30 – Tuesday 17 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     },
     {
       "window": {
-        "start": "2026-11-10T22:30:00+02:00",
-        "end": "2026-11-11T06:30:00+02:00"
+        "start": "2026-11-17T22:30:00+02:00",
+        "end": "2026-11-18T06:30:00+02:00"
       },
       "departuresLost": 620,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 8,
       "note": {
-        "ro": "marți 10 nov, 22:30 – miercuri 11 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Tuesday 10 Nov, 22:30 – Wednesday 11 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "marți 17 nov, 22:30 – miercuri 18 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Tuesday 17 Nov, 22:30 – Wednesday 18 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     },
     {
       "window": {
-        "start": "2026-11-11T22:30:00+02:00",
-        "end": "2026-11-12T06:30:00+02:00"
+        "start": "2026-11-18T22:30:00+02:00",
+        "end": "2026-11-19T06:30:00+02:00"
       },
       "departuresLost": 620,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 9,
       "note": {
-        "ro": "miercuri 11 nov, 22:30 – joi 12 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Wednesday 11 Nov, 22:30 – Thursday 12 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "miercuri 18 nov, 22:30 – joi 19 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Wednesday 18 Nov, 22:30 – Thursday 19 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     },
     {
       "window": {
-        "start": "2026-11-12T22:30:00+02:00",
-        "end": "2026-11-13T06:30:00+02:00"
+        "start": "2026-11-19T22:30:00+02:00",
+        "end": "2026-11-20T06:30:00+02:00"
       },
       "departuresLost": 620,
       "residentsLosingStop": 0,
-      "conflicts": 1,
+      "conflicts": 0,
       "rank": 10,
       "note": {
-        "ro": "joi 12 nov, 22:30 – vineri 13 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare.",
-        "en": "Thursday 12 Nov, 22:30 – Friday 13 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works."
+        "ro": "joi 19 nov, 22:30 – vineri 20 nov, 06:30: se pierd 620 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00).",
+        "en": "Thursday 19 Nov, 22:30 – Friday 20 Nov, 06:30: 620 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00)."
       }
     }
   ],
@@ -151,8 +151,8 @@
   },
   "phases": null,
   "method": {
-    "ro": "Ferestrele încep din 30 în 30 de minute în intervalul căutat și au durata lucrării. Pentru fiecare numărăm, în orarul GTFS, plecările pierdute la stațiile scoase din circulație de lucrare (aceleași rânduri ca în impact: afectate sau confirmate). Ordinea: mai puține plecări pierdute, apoi mai puține conflicte cu alte lucrări, apoi mai puțini locuitori fără stație (model GHSL 2020, nu recensământ). Ferestrele care se suprapun sunt eliminate; rămân primele 10. Estimare pe orarul planificat. Cea mai bună: sâmbătă 14 nov, 22:30 – duminică 15 nov, 06:30: se pierd 411 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00); se suprapune cu 1 altă lucrare. La aceeași oră ca în anunț (10:00–18:00), plecări pierdute pe zile: luni 2.116, marți 2.116, miercuri 2.116, joi 2.116, vineri 2.116, sâmbătă 1.766, duminică 1.766. Conflicte numărate cu: cl_20261102_mocioni.",
-    "en": "Windows start every 30 minutes in the search range and last as long as the works. For each we count, in the GTFS timetable, the departures lost at the stops the closure takes out (the same rows as the impact: affected or confirmed). Order: fewer departures lost, then fewer conflicts with other works, then fewer residents losing their stop (GHSL 2020 model, not a census). Overlapping windows are removed; the top 10 remain. An estimate on the planned timetable. Best: Saturday 14 Nov, 22:30 – Sunday 15 Nov, 06:30: 411 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00); overlaps 1 other works. At the notice's hours (10:00–18:00), departures lost per day: Monday 2,116, Tuesday 2,116, Wednesday 2,116, Thursday 2,116, Friday 2,116, Saturday 1,766, Sunday 1,766. Conflicts counted against: cl_20261102_mocioni."
+    "ro": "Ferestrele încep din 30 în 30 de minute în intervalul căutat și au durata lucrării. Pentru fiecare numărăm, în orarul GTFS, plecările pierdute la stațiile scoase din circulație de lucrare (aceleași rânduri ca în impact: afectate sau confirmate). Ordinea: mai puține plecări pierdute, apoi mai puține conflicte cu alte lucrări, apoi mai puțini locuitori fără stație (model GHSL 2020, nu recensământ). Ferestrele care se suprapun sunt eliminate; rămân primele 10. Estimare pe orarul planificat. Cea mai bună: sâmbătă 14 nov, 22:30 – duminică 15 nov, 06:30: se pierd 411 plecări, față de 1.766 în fereastra din anunț (duminică 8 nov, 10:00–18:00). Toate ferestrele se suprapun cu lucrarea „Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate” (2 nov – 31 dec 2026): nu schimbă ordinea, deci nu apare pe fiecare rând. La aceeași oră ca în anunț (10:00–18:00), plecări pierdute pe zile: luni 2.116, marți 2.116, miercuri 2.116, joi 2.116, vineri 2.116, sâmbătă 1.766, duminică 1.766. Conflicte numărate cu: cl_20261107_e3.",
+    "en": "Windows start every 30 minutes in the search range and last as long as the works. For each we count, in the GTFS timetable, the departures lost at the stops the closure takes out (the same rows as the impact: affected or confirmed). Order: fewer departures lost, then fewer conflicts with other works, then fewer residents losing their stop (GHSL 2020 model, not a census). Overlapping windows are removed; the top 10 remain. An estimate on the planned timetable. Best: Saturday 14 Nov, 22:30 – Sunday 15 Nov, 06:30: 411 departures lost, against 1,766 in the notice's window (Sunday 8 Nov, 10:00–18:00). Every window overlaps the works “Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted” (2 Nov – 31 Dec 2026): it does not change the ranking, so it is not repeated on each row. At the notice's hours (10:00–18:00), departures lost per day: Monday 2,116, Tuesday 2,116, Wednesday 2,116, Thursday 2,116, Friday 2,116, Saturday 1,766, Sunday 1,766. Conflicts counted against: cl_20261107_e3."
   },
   "provenance": [
     {
@@ -175,6 +175,20 @@
       "version": null,
       "fetchedAt": "2026-11-08T12:00:00+02:00",
       "note": "Conflicte: lucrările din registru / conflicts: closures in the register"
+    }
+  ],
+  "baselineDeparturesLost": 1766,
+  "commonConflicts": [
+    {
+      "closureId": "cl_20261102_mocioni",
+      "title": {
+        "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+        "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+      },
+      "window": {
+        "start": "2026-11-02T00:00:00+02:00",
+        "end": "2026-12-31T23:59:59+02:00"
+      }
     }
   ]
 }
