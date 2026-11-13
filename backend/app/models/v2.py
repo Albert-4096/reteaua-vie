@@ -267,6 +267,14 @@ class WindowPhase(Model):
     departuresLost: int
 
 
+class CommonConflict(Model):
+    """v2.5: another closure that overlaps every candidate window (it cannot change the ranking)."""
+
+    closureId: str
+    title: I18n | None
+    window: Window
+
+
 class WindowSuggestion(Model):
     closureId: str
     hours: float
@@ -277,6 +285,10 @@ class WindowSuggestion(Model):
     phases: list[WindowPhase] | None = None  # v2.1
     method: I18n
     provenance: list[Provenance]
+    # v2.5: departures lost in the closure's own window with the same decisions (= Impact.totals.departuresLost)
+    baselineDeparturesLost: int | None = None
+    # v2.5: closures overlapping the whole search range, said once here and not counted in candidates[].conflicts
+    commonConflicts: list[CommonConflict] | None = None
 
 
 # --- scenarios ---------------------------------------------------------------------

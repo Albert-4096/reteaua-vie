@@ -13,7 +13,10 @@ temporary closure (never stored) and gets its own best window, with no two
 phases overlapping in time.
 
 Departures are counted on the timetable in force before the works
-(m1-core's `timetable_for`), the same one the Impact uses.
+(m1-core's `timetable_for`), the same one the Impact uses; `baselineDeparturesLost` (the
+closure's own window, same decisions) therefore equals the Impact's departuresLost.
+A closure whose window covers the whole search range (Mocioni, open to 31 Dec) overlaps every
+candidate: it is listed once in `commonConflicts` and the method text, not counted per row.
 
 Public: suggest(closure_id, hours=, start=, end=, phases=) -> WindowSuggestion
 """
@@ -40,7 +43,7 @@ from app.m1_disruption import impact as imp
 from app.m1_disruption import matching
 from app.m1_disruption.conflicts import find_conflicts
 from app.models.base import I18n, Provenance, Window
-from app.models.v2 import WindowCandidate, WindowPhase, WindowSuggestion
+from app.models.v2 import CommonConflict, WindowCandidate, WindowPhase, WindowSuggestion
 
 GRID_MIN = 30
 DEFAULT_DAYS = 14
@@ -244,6 +247,30 @@ def conflict_windows(closure: dict, rng: SearchRange) -> list[tuple[str, datetim
     return out
 
 
+def split_common(cw: list[tuple[str, datetime, datetime]], rng: SearchRange
+                 ) -> tuple[list[tuple[str, datetime, datetime]], list[tuple[str, datetime, datetime]]]:
+    """(common, varying): a closure whose window covers the whole search range overlaps every
+    candidate, so it cannot change the ranking; it is said once, not counted on each row."""
+    common = [x for x in cw if x[1] <= rng.start and x[2] >= rng.end]
+    return common, [x for x in cw if x not in common]
+
+
+def _common_phrase(common: list[tuple[str, datetime, datetime]]) -> tuple[str, str]:
+    ro, en = [], []
+    for cid, a, b in common:
+        c = state.read("closures", cid) or {}
+        t = c.get("title") or {}
+        ro.append(f"„{t.get('ro') or cid}” ({a.day} {MONTHS_RO[a.month - 1]} – {b.day} {MONTHS_RO[b.month - 1]} "
+                  f"{b.year})")
+        en.append(f"“{t.get('en') or t.get('ro') or cid}” ({a.day} {MONTHS_EN[a.month - 1]} – {b.day} "
+                  f"{MONTHS_EN[b.month - 1]} {b.year})")
+    one = len(common) == 1
+    return ((f"Toate ferestrele se suprapun cu {'lucrarea' if one else 'lucrările'} " + "; ".join(ro)
+             + ": nu schimbă ordinea, deci nu apare pe fiecare rând."),
+            ("Every window overlaps the works " + "; ".join(en)
+             + ": it does not change the ranking, so it is not repeated on each row."))
+
+
 def _count_conflicts(cw: list[tuple[str, datetime, datetime]], s: datetime, e: datetime) -> int:
     return sum(1 for _, a, b in cw if a < e and s < b)
 
@@ -424,7 +451,7 @@ def compute(closure: dict, analysis: dict, hours: float | None = None, start: st
     keys = lost_keys(analysis["stops"])
     rng = search_range(closure, tt, hours, start, end)
     costs = minute_costs(tt, keys, rng.start, rng.end)
-    cw = conflict_windows(closure, rng)
+    common, cw = split_common(conflict_windows(closure, rng), rng)
     top = rank(candidates(costs, rng, cw), tt, keys)
     if not top:
         raise invalid("No candidate window in the search range.", code="NO_WINDOW")
@@ -442,6 +469,10 @@ def compute(closure: dict, analysis: dict, hours: float | None = None, start: st
     best = top[0]
     texts_ro.append(f"Cea mai bună: {notes[0].ro}")
     texts_en.append(f"Best: {notes[0].en}")
+    if common:
+        ro, en = _common_phrase(common)
+        texts_ro.append(ro)
+        texts_en.append(en)
     same = _same_hours_sentence(closure, costs, rng)
     if same:
         texts_ro.append(same[0])
@@ -465,6 +496,9 @@ def compute(closure: dict, analysis: dict, hours: float | None = None, start: st
         candidates=out_c, best=Window(start=iso(best.start), end=iso(best.end)), phases=out_phases,
         method=I18n(ro=" ".join(texts_ro), en=" ".join(texts_en)),
         provenance=_provenance(tt, rng, top),
+        baselineDeparturesLost=own,
+        commonConflicts=[CommonConflict(closureId=cid, title=(state.read("closures", cid) or {}).get("title"),
+                                        window=Window(start=iso(a), end=iso(b))) for cid, a, b in common] or None,
     )
 
 
@@ -525,5 +559,5 @@ def job_key(closure_id: str, hours: float | None = None, start: str | None = Non
     """Job-cache key of a window suggestion (the route and warm_decide use the same one)."""
     from app.common.jobs import closure_fingerprint
 
-    return (f"windows:v1:{closure_id}:{closure_fingerprint(closure_id)}:{others_fingerprint()}:"
+    return (f"windows:v2:{closure_id}:{closure_fingerprint(closure_id)}:{others_fingerprint()}:"
             f"{hours}:{start or iso(now())}:{end}:{phases}")

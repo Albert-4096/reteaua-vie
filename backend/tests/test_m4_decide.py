@@ -91,8 +91,10 @@ def test_hero_windows_rank_by_departures_lost(prepared):
     assert all(a[1] <= b[0] for a, b in zip(spans, spans[1:]))
     lo, hi = parse_iso(ws.searchFrom), parse_iso(ws.searchTo)
     assert all(lo <= s <= hi for s, _ in spans) and hi - lo == timedelta(days=14)
-    # Mocioni overlaps every candidate on the same corridor (the real conflict, SPEC §5.3)
-    assert all(c.conflicts == 1 for c in ws.candidates)
+    # Mocioni overlaps every candidate on the same corridor (the real conflict, SPEC §5.3):
+    # said once at the top (T5), not counted on each row
+    assert [c.closureId for c in ws.commonConflicts] == ["cl_20261102_mocioni"]
+    assert all(c.conflicts == 0 for c in ws.candidates)
     assert "La aceeași oră ca în anunț" in ws.method.ro and "duminică" in ws.method.ro
     assert ws.provenance and ws.phases is None
 

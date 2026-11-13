@@ -48,6 +48,10 @@ def demo_state(tmp_path, monkeypatch):
     fake = config.Settings(env_file=None, data_dir=tmp_path, live_dir=real.live_dir,
                            demo_now=real.demo_now, data_freeze=False,
                            public_base_url=real.public_base_url)
+    # import first, so every `from app.config import get_settings` is patched here and restored after
+    import app.cases.build  # noqa: F401
+    import app.main  # noqa: F401
+
     original = config.get_settings
     for name, mod in list(sys.modules.items()):
         if name.startswith("app") and getattr(mod, "get_settings", None) is original:
