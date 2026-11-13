@@ -9,6 +9,9 @@ notice parser uses, m1-core's walking graph and population grid; then for each c
 app.cases.catalog: build the closure from its real notice (app.cases.build), analyze it with
 app.m1_disruption.analysis and compute its impact. A prepared case is never `published` here
 (D-011): „Publică” is pressed live in the demo.
+Last, every app/<package>/warm*.py that defines `warm(closure_ids: list[str]) -> None` is called
+with the prepared closure ids (module caches: access, detour, windows, …); a failing one is
+reported and the rest go on.
 """
 
 from __future__ import annotations
@@ -144,12 +147,50 @@ def warm_posters(rows: list[dict]) -> None:
               f"({time.perf_counter() - t:.1f} s)", flush=True)
 
 
+def warm_modules() -> list[str]:
+    """Names of every app/<package>/warm*.py module, sorted."""
+    import pkgutil
+    from pathlib import Path
+
+    app_dir = Path(__file__).resolve().parent
+    names = []
+    for pkg in sorted(p for p in app_dir.iterdir() if (p / "__init__.py").is_file()):
+        for mod in pkgutil.iter_modules([str(pkg)]):
+            if not mod.ispkg and mod.name.startswith("warm"):
+                names.append(f"app.{pkg.name}.{mod.name}")
+    return names
+
+
+def run_warms(closure_ids: list[str]) -> dict[str, str]:
+    """Call `warm(closure_ids)` of every module warm; a failing one is logged, never fatal."""
+    print("module warm-ups:", flush=True)
+    out: dict[str, str] = {}
+    for name in warm_modules():
+        t = time.perf_counter()
+        try:
+            fn = getattr(importlib.import_module(name), "warm", None)
+            if fn is None:
+                print(f"  skip {name}: no warm(closure_ids)", flush=True)
+                out[name] = "skip"
+                continue
+            fn(list(closure_ids))
+        except Exception as e:  # one module must not stop the others
+            log.exception("warm %s failed", name)
+            print(f"  FAIL {name}: {type(e).__name__}: {e}", flush=True)
+            out[name] = "fail"
+            continue
+        print(f"  ok   {name} ({time.perf_counter() - t:.1f} s)", flush=True)
+        out[name] = "ok"
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Warm the caches and store the prepared closures as analyzed.")
     ap.add_argument("--reset", action="store_true",
                     help="drop the prepared closures' decisions and publish records first (demo restart)")
     ap.add_argument("--cases-only", action="store_true", help="skip the cache warm-up")
     ap.add_argument("--no-posters", action="store_true", help="skip rendering the posters")
+    ap.add_argument("--no-warm", action="store_true", help="skip the module warm-ups (app/<pkg>/warm*.py)")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.WARNING)
     s = get_settings()
@@ -161,6 +202,15 @@ def main(argv: list[str] | None = None) -> int:
     rows = prepare_cases(reset=args.reset)
     if not args.no_posters:
         warm_posters(rows)
+    if not args.no_warm:
+        run_warms([r["id"] for r in rows])
+    from app.common import state
+
+    for r in rows:  # a warm-up must never publish a prepared case (D-011)
+        status = (state.read("closures", r["id"]) or {}).get("status")
+        if r["status"] == "analyzed" and status != "analyzed":
+            print(f"  FAIL {r['id']} is {status} after the warm-ups; run --reset", flush=True)
+            r["status"] = status
     bad = [r["id"] for r in rows if r["status"] not in ("analyzed", "published")]
     print(f"done in {time.perf_counter() - t0:.1f} s" + (f"; not analyzed: {', '.join(bad)}" if bad else ""))
     return 1 if bad else 0
