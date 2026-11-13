@@ -1,0 +1,97 @@
+{
+  "_comment": "The public notice generated from a closure (D-013, GET /api/closures/{id}/notice). Placeholders in {braces} are filled by app/m1_disruption/notice_text.py. Line names, stop names, times and distances come only from the closure, its analysis and impact, the network and the GTFS; a clause whose data is missing is left out. The temporary-line sentence is reused from alert_texts.json.",
+  "ro": {
+    "days": [
+      "luni",
+      "marți",
+      "miercuri",
+      "joi",
+      "vineri",
+      "sâmbătă",
+      "duminică"
+    ],
+    "draft": "Ciornă: {count} de confirmat. Textul devine final după ce fiecare stație neclară primește o decizie.",
+    "stop_unit": [
+      "stație",
+      "stații"
+    ],
+    "window_same_day": "{day}, între orele {start} și {end}",
+    "window_days": "de {day}, ora {start}, până {end_day}, ora {end}",
+    "window_open": "începând de {day}{start}, până la finalizarea lucrărilor",
+    "window_open_start": ", ora {start}",
+    "date": "{weekday}, {day} {month} {year}",
+    "intro": "{window}. {reason}.",
+    "modes": {
+      "tram": "tramvai",
+      "bus": "autobuz",
+      "trolleybus": "troleibuz"
+    },
+    "line": "Linia {line} ({mode})",
+    "whole_line": "{line} nu circulă.",
+    "whole_line_direction": "{line} nu circulă în sensul spre {headsign}.",
+    "action_shortened": "{line} circulă pe un traseu scurtat.",
+    "action_rerouted": "{line} circulă pe un traseu deviat.",
+    "action_suspended_section": "{line} nu circulă între stațiile {from_stop} și {to_stop}.",
+    "action_suspended": "{line} nu circulă pe o porțiune a traseului.",
+    "action_none": "{line} nu oprește în stațiile de mai jos.",
+    "direction": "În sensul spre {headsign}, nu oprește în:",
+    "both_directions": "În ambele sensuri, nu oprește în:",
+    "stop": "– {stop}.",
+    "stop_nearest": "– {stop}. Cea mai apropiată stație deservită: {name}, {distance} pe jos.",
+    "stop_still_served": "– {stop}. Stația rămâne deservită de {lines}.",
+    "distance": "{meters} m",
+    "distance_approx": "aproximativ {meters} m",
+    "same_name": ", altă stație cu același nume",
+    "no_service": "Stații în care nu oprește niciun mijloc de transport în comun în acest interval: {stops}.",
+    "to_confirm": "De confirmat (nu sunt incluse în listele de mai sus):",
+    "to_confirm_line": "– {line}, în sensul spre {headsign}: {stops}.",
+    "map": "Harta cu toate stațiile: {url}"
+  },
+  "en": {
+    "days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "draft": "Draft: {count} to confirm. The text becomes final once every unsure stop has a decision.",
+    "stop_unit": [
+      "stop",
+      "stops"
+    ],
+    "window_same_day": "{day}, {start}–{end}",
+    "window_days": "from {day}, {start}, until {end_day}, {end}",
+    "window_open": "from {day}{start} until the works end",
+    "window_open_start": ", {start},",
+    "date": "{weekday}, {day} {month} {year}",
+    "intro": "{window}. {reason}.",
+    "modes": {
+      "tram": "tram",
+      "bus": "bus",
+      "trolleybus": "trolleybus"
+    },
+    "line": "Line {line} ({mode})",
+    "whole_line": "{line} is not running.",
+    "whole_line_direction": "{line} is not running towards {headsign}.",
+    "action_shortened": "{line} runs on a shortened route.",
+    "action_rerouted": "{line} runs on a diverted route.",
+    "action_suspended_section": "{line} is not running between the stops {from_stop} and {to_stop}.",
+    "action_suspended": "{line} is not running on part of its route.",
+    "action_none": "{line} does not stop at the stops below.",
+    "direction": "Towards {headsign}, it does not stop at:",
+    "both_directions": "In both directions, it does not stop at:",
+    "stop": "– {stop}.",
+    "stop_nearest": "– {stop}. Nearest served stop: {name}, {distance} on foot.",
+    "stop_still_served": "– {stop}. The stop is still served by {lines}.",
+    "distance": "{meters} m",
+    "distance_approx": "about {meters} m",
+    "same_name": ", another stop with the same name",
+    "no_service": "Stops where no public transport stops during this time: {stops}.",
+    "to_confirm": "To confirm (not included in the lists above):",
+    "to_confirm_line": "– {line}, towards {headsign}: {stops}.",
+    "map": "Map with every stop: {url}"
+  }
+}
