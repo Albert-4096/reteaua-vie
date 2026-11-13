@@ -447,6 +447,35 @@ button {
   font-size: var(--fs-s);
 }
 
+/* T14: rows of one group answer, closed by default */
+.group-rows {
+  margin-top: var(--sp-2);
+}
+
+.rows {
+  list-style: none;
+  margin: var(--sp-2) 0 0 0;
+  padding: 0;
+}
+
+.rows li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-1) var(--sp-2);
+  padding: var(--sp-1) 0;
+  border-bottom: var(--rule-w) solid var(--c-rule);
+}
+
+.rows-name {
+  flex: 1 1 160px;
+}
+
+.rows .choice .btn {
+  padding: 0 var(--sp-2);
+  font-size: var(--fs-xs);
+}
+
 /* line schema: stops of the affected section in order, lost stops struck */
 .schema {
   list-style: none;

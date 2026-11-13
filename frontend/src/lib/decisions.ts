@@ -48,6 +48,22 @@ export function decisionGroups(a: Analysis): Group[] {
   return [...byKey.values()];
 }
 
+export type GroupCounts = { lost: number; served: number; open: number; total: number };
+
+export function groupCounts(g: Group): GroupCounts {
+  const c = { lost: 0, served: 0, open: 0, total: g.rows.length };
+  for (const r of g.rows) {
+    if (r.confirmed === true) c.lost++;
+    else if (r.confirmed === false) c.served++;
+    else c.open++;
+  }
+  return c;
+}
+
+export function rowDecision(r: AffectedStop, lost: boolean): Decision {
+  return { stopId: r.stopId, routeId: r.routeId, directionId: r.directionId, confirmed: lost };
+}
+
 export function groupState(g: Group): GroupState {
   const c = g.rows.map((r) => r.confirmed);
   if (c.every((x) => x === null || x === undefined)) return "open";

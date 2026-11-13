@@ -1,4 +1,4 @@
-// Step 3 Publici: one button, then what people receive: the notice (D-013), in apps (mock-up), at the stop.
+// Step 3 Publici: one button, then what people would receive: the notice (D-013), in apps (mock-up), at the stop.
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -18,6 +18,7 @@ import { Figure } from "../../components/Figure";
 import { useMapOverlay } from "../../components/MapView";
 import { LoadState, Panel } from "../../components/Panel";
 import { undecidedCount } from "../../lib/decisions";
+import { errorText } from "../../lib/errors";
 import { fmtDateTime, tr } from "../../lib/format";
 import { navigate, stepHref } from "../../lib/router";
 import { invalidate, setData, useResource } from "../../lib/store";
@@ -81,7 +82,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
       setData(`alerts:${closureId}`, res.alerts);
       invalidate(`closure:${closureId}`, `notice:${closureId}`, `validation:${closureId}`, "closures");
     } catch (e) {
-      setError(e instanceof ApiError && e.code === "UNCONFIRMED" ? t("publish.blocked", { count: left }) : String(e));
+      setError(e instanceof ApiError && e.code === "UNCONFIRMED" ? t("publish.blocked", { count: left }) : errorText(e, t));
     } finally {
       setBusy(false);
     }

@@ -1,13 +1,14 @@
 // Step 1 Planifici: what closes, which lines lose which stops, one question per unsure group, three figures.
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { api, type AffectedStop, type Analysis, type Closure, type Impact, type Network } from "../../api/client";
+import { api, type AffectedStop, type Analysis, type Closure, type Decision, type Impact, type Network } from "../../api/client";
 import { CasePicker } from "../../components/CasePicker";
 import { Figure } from "../../components/Figure";
 import { LineSchema } from "../../components/LineSchema";
 import { useMapOverlay, type MapStop } from "../../components/MapView";
 import { LoadState, Panel } from "../../components/Panel";
-import { decisionGroups, groupDecisions, groupState, undecidedCount, type Group } from "../../lib/decisions";
+import { decisionGroups, groupCounts, groupDecisions, groupState, rowDecision, undecidedCount, type Group } from "../../lib/decisions";
+import { errorText } from "../../lib/errors";
 import { fmtWindow, tr } from "../../lib/format";
 import { lineSchema, rowStatus } from "../../lib/geo";
 import { navigate, stepHref } from "../../lib/router";
@@ -63,15 +64,25 @@ function Plan({ closureId, caseKey }: StepProps & { closureId: string }) {
 
   const left = undecidedCount(a);
 
-  async function choose(g: Group, lost: boolean) {
-    setSaving(g.id);
+  // T15: measured on a private DATA_DIR (13 Nov) — after a PATCH, /impact, /notice, /windows, /access,
+  // /scenarios/compare and /scenarios/{id}/impact change; bike, parking, detour-load, conflicts, reports,
+  // the closure and the scenario list do not. A PATCH after publish is refused (409), so alerts and
+  // validation never change with a decision.
+  async function send(groupId: string, decisions: Decision[]) {
+    setSaving(groupId);
     setSaveError(null);
     try {
-      const next = await api.decide(closureId, groupDecisions(g, lost));
+      const next = await api.decide(closureId, decisions);
       setData(`analysis:${closureId}`, next);
-      invalidate(`impact:${closureId}`, `notice:${closureId}`, `closure:${closureId}`);
+      invalidate(
+        `impact:${closureId}`,
+        `notice:${closureId}`,
+        `windows:${closureId}`,
+        `access:${closureId}`,
+        `compare:${closureId}`,
+      );
     } catch (e) {
-      setSaveError(e instanceof Error ? e.message : String(e));
+      setSaveError(errorText(e, t));
     } finally {
       setSaving(null);
     }
@@ -146,7 +157,8 @@ function Plan({ closureId, caseKey }: StepProps & { closureId: string }) {
                     g={g}
                     line={r.shortName}
                     busy={saving === g.id}
-                    onChoose={(lost) => void choose(g, lost)}
+                    onChoose={(lost) => void send(g.id, groupDecisions(g, lost))}
+                    onRow={(row, lost) => void send(g.id, [rowDecision(row, lost)])}
                   />
                 ))}
                 {isOpen && network.data && (
@@ -171,42 +183,109 @@ function Plan({ closureId, caseKey }: StepProps & { closureId: string }) {
   );
 }
 
-function Question({ g, line, busy, onChoose }: { g: Group; line: string; busy: boolean; onChoose: (lost: boolean) => void }) {
+function Question({
+  g,
+  line,
+  busy,
+  onChoose,
+  onRow,
+}: {
+  g: Group;
+  line: string;
+  busy: boolean;
+  onChoose: (lost: boolean) => void;
+  onRow: (row: AffectedStop, lost: boolean) => void;
+}) {
   const { t } = useTranslation();
   const st = groupState(g);
+  const n = groupCounts(g);
   const [editing, setEditing] = useState(false);
   const text = g.question ? tr(g.question) : t("plan.questionDefault", { line, count: g.rows.length });
-  if ((st === "lost" || st === "served") && !editing) {
-    return (
-      <p className="small" style={{ marginTop: "var(--sp-1)" }}>
-        <span className={st === "lost" ? "st-lost" : "st-ok"}>{t(st === "lost" ? "plan.decidedLost" : "plan.decidedServed")}</span>{" "}
-        ({g.rows.length}) ·{" "}
-        <button type="button" className="linklike" onClick={() => setEditing(true)}>
-          {t("plan.change")}
-        </button>
-      </p>
-    );
-  }
+  const decided = n.open === 0 && !editing;
+  const majorityLost = n.lost >= n.served;
+  const exceptions = majorityLost ? n.served : n.lost;
+  // One root element in both states, so the row list keeps its open/closed state.
   return (
-    <div className="question">
-      <p>{text}</p>
-      {g.reason && (
-        <details className="small">
-          <summary>{t("plan.why")}</summary>
-          <p className="muted">{tr(g.reason)}</p>
-        </details>
+    <div className={decided ? "decided" : "question"}>
+      {decided ? (
+        <p className="small" style={{ marginTop: "var(--sp-1)" }}>
+          <span className={majorityLost ? "st-lost" : "st-ok"}>{t(majorityLost ? "plan.decidedLost" : "plan.decidedServed")}</span>{" "}
+          ({majorityLost ? n.lost : n.served}
+          {exceptions > 0 && ` + ${t("plan.exceptions", { count: exceptions })}`}) ·{" "}
+          <button type="button" className="linklike" onClick={() => setEditing(true)}>
+            {t("plan.change")}
+          </button>
+        </p>
+      ) : (
+        <>
+          <p>{text}</p>
+          {g.reason && (
+            <details className="small">
+              <summary>{t("plan.why")}</summary>
+              <p className="muted">{tr(g.reason)}</p>
+            </details>
+          )}
+          <div className="choice">
+            <button type="button" className="btn" disabled={busy} aria-pressed={st === "lost"} onClick={() => { setEditing(false); onChoose(true); }}>
+              {t("plan.yesLost")}
+              {g.suggestedLost && <span className="small"> ({t("plan.suggested")})</span>}
+            </button>
+            <button type="button" className="btn" disabled={busy} aria-pressed={st === "served"} onClick={() => { setEditing(false); onChoose(false); }}>
+              {t("plan.noServed")}
+            </button>
+          </div>
+          {n.open > 0 && n.open < n.total && <p className="small muted">{t("plan.partly", { count: n.total - n.open })}</p>}
+        </>
       )}
-      <div className="choice">
-        <button type="button" className="btn" disabled={busy} aria-pressed={st === "lost"} onClick={() => { setEditing(false); onChoose(true); }}>
-          {t("plan.yesLost")}
-          {g.suggestedLost && <span className="small"> ({t("plan.suggested")})</span>}
-        </button>
-        <button type="button" className="btn" disabled={busy} aria-pressed={st === "served"} onClick={() => { setEditing(false); onChoose(false); }}>
-          {t("plan.noServed")}
-        </button>
-      </div>
       {busy && <p className="state-msg small" role="status">{t("plan.saving")}</p>}
+      <GroupRows g={g} busy={busy} onRow={onRow} />
     </div>
+  );
+}
+
+/** T14: the scope of a group answer, one row per (stop, direction), each with its own answer. Closed by default. */
+function GroupRows({ g, busy, onRow }: { g: Group; busy: boolean; onRow: (row: AffectedStop, lost: boolean) => void }) {
+  const { t } = useTranslation();
+  return (
+    <details className="small group-rows">
+      <summary>{t("plan.rowsTitle", { count: g.rows.length })}</summary>
+      <ul className="rows">
+        {g.rows.map((r) => {
+          const s = rowStatus(r);
+          const dir = r.headsign ? t("plan.towards", { headsign: r.headsign }) : t("plan.direction", { dir: r.directionId });
+          return (
+            <li key={`${r.stopId}|${r.routeId}|${r.directionId}`}>
+              <span className="rows-name">
+                {r.name} <span className="muted">· {dir}</span>
+                {s === "unsure" && <span className="st-unsure"> · {t("plan.srUnsure")}</span>}
+              </span>
+              <span className="choice">
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={busy}
+                  aria-pressed={s === "lost"}
+                  aria-label={`${r.name}, ${dir}: ${t("plan.yesLost")}`}
+                  onClick={() => onRow(r, true)}
+                >
+                  {t("plan.rowLost")}
+                </button>
+                <button
+                  type="button"
+                  className="btn"
+                  disabled={busy}
+                  aria-pressed={s === "served"}
+                  aria-label={`${r.name}, ${dir}: ${t("plan.noServed")}`}
+                  onClick={() => onRow(r, false)}
+                >
+                  {t("plan.rowServed")}
+                </button>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </details>
   );
 }
 
