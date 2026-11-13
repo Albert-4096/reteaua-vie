@@ -1,46 +1,449 @@
 {
-  "closureId": "cl_20261108_16dec",
+  "closureId": "cl_20261107_e3",
   "alerts": [
     {
-      "id": "al_20261108_16dec_1",
-      "closureId": "cl_20261108_16dec",
+      "id": "al_20261107_e3_stop_335",
+      "closureId": "cl_20261107_e3",
       "activePeriod": [
         {
-          "start": "2026-11-08T10:00:00+02:00",
-          "end": "2026-11-08T18:00:00+02:00"
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
         }
       ],
-      "cause": "MAINTENANCE",
+      "cause": "CONSTRUCTION",
       "effect": "NO_SERVICE",
       "informedEntity": [
         {
-          "routeId": "R_TV_4",
-          "stopId": "61",
+          "routeId": "R_AB_E3",
+          "stopId": "335",
           "directionId": 0
-        },
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Dâmbovița (Bucla) nu este deservită de linia E3",
+        "en": "Dâmbovița (Bucla) stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Banatul (Bd. Dâmbovița), 330 m pe jos (linia E3).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Banatul (Bd. Dâmbovița), 330 m on foot (line E3)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=335",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Dâmbovița, Bucla nu este deservită de linia E trei.",
+        "en": "Attention. Dâmbovița, Bucla stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Banatul, Bulevardul Dâmbovița, la trei sute treizeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Banatul, Bulevardul Dâmbovița, three hundred and thirty metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_336",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
         {
-          "routeId": "R_TV_7",
-          "stopId": "61",
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "336",
+          "directionId": 0
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Baba Novac nu este deservită de linia E3",
+        "en": "Baba Novac stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Banatul (Bd. Dâmbovița), 780 m pe jos (linia E3).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Banatul (Bd. Dâmbovița), 780 m on foot (line E3)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=336",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Baba Novac nu este deservită de linia E trei.",
+        "en": "Attention. Baba Novac stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Banatul, Bulevardul Dâmbovița, la șapte sute optzeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Banatul, Bulevardul Dâmbovița, seven hundred and eighty metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_337",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "337",
+          "directionId": 0
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Opre Gogu (Ardealului) nu este deservită de linia E3",
+        "en": "Opre Gogu (Ardealului) stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Opre Gogu (N. Andreescu), 480 m pe jos (liniile E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Opre Gogu (N. Andreescu), 480 m on foot (lines E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=337",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Opre Gogu, Ardealului nu este deservită de linia E trei.",
+        "en": "Attention. Opre Gogu, Ardealului stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Opre Gogu, N. Andreescu, la patru sute optzeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Opre Gogu, N. Andreescu, four hundred and eighty metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_338",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "338",
+          "directionId": 0
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Păcii (Ardealului) nu este deservită de linia E3",
+        "en": "Păcii (Ardealului) stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Păcii (N. Andreescu), 440 m pe jos (liniile E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Păcii (N. Andreescu), 440 m on foot (lines E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=338",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Păcii, Ardealului nu este deservită de linia E trei.",
+        "en": "Attention. Păcii, Ardealului stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Păcii, N. Andreescu, la patru sute patruzeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Păcii, N. Andreescu, four hundred and forty metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_339",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "339",
+          "directionId": 0
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Canton C.F.R. nu este deservită de linia E3",
+        "en": "Canton C.F.R. stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Podgoriei, 780 m pe jos (liniile E3, E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Podgoriei, 780 m on foot (lines E3, E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=339",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Canton C.F.R. nu este deservită de linia E trei.",
+        "en": "Attention. Canton C.F.R. stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Podgoriei, la șapte sute optzeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Podgoriei, seven hundred and eighty metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_340",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "340",
+          "directionId": 0
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Liceul Auto (Ardealului) nu este deservită de linia E3",
+        "en": "Liceul Auto (Ardealului) stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Podgoriei, 340 m pe jos (liniile E3, E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Podgoriei, 340 m on foot (lines E3, E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=340",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Liceul Auto, Ardealului nu este deservită de linia E trei.",
+        "en": "Attention. Liceul Auto, Ardealului stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Podgoriei, la trei sute patruzeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Podgoriei, three hundred and forty metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_318",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "318",
           "directionId": 1
         }
       ],
       "headerText": {
-        "ro": "Stația Piața Sfânta Maria nu este deservită de liniile 4 și 7",
-        "en": "Piața Sfânta Maria stop not served by lines 4 and 7"
+        "ro": "Stația Liceul Auto (Ardealului) nu este deservită de linia E3",
+        "en": "Liceul Auto (Ardealului) stop not served by line E3"
       },
       "descriptionText": {
-        "ro": "8 noiembrie, 10:00–18:00: lucrări la linia de tramvai pe Bd. 16 Decembrie 1989. Cea mai apropiată stație deservită: Piața N. Bălcescu (Gheorghe Doja).",
-        "en": "8 November, 10:00–18:00: tram track works on 16 Decembrie 1989 Blvd. Nearest served stop: Piața N. Bălcescu (Gheorghe Doja)."
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Podgoriei, 370 m pe jos (liniile E3, E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Podgoriei, 370 m on foot (lines E3, E7 and M36)."
       },
-      "url": "http://127.0.0.1:3010/a/cl_20261108_16dec"
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=318",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Liceul Auto, Ardealului nu este deservită de linia E trei.",
+        "en": "Attention. Liceul Auto, Ardealului stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Podgoriei, la trei sute șaptezeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Podgoriei, three hundred and seventy metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_319",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "319",
+          "directionId": 1
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Canton C.F.R. nu este deservită de linia E3",
+        "en": "Canton C.F.R. stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Podgoriei, 770 m pe jos (liniile E3, E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Podgoriei, 770 m on foot (lines E3, E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=319",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Canton C.F.R. nu este deservită de linia E trei.",
+        "en": "Attention. Canton C.F.R. stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Podgoriei, la șapte sute șaptezeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Podgoriei, seven hundred and seventy metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_320",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "320",
+          "directionId": 1
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Păcii (Ardealului) nu este deservită de linia E3",
+        "en": "Păcii (Ardealului) stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Păcii (N. Andreescu), 440 m pe jos (liniile E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Păcii (N. Andreescu), 440 m on foot (lines E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=320",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Păcii, Ardealului nu este deservită de linia E trei.",
+        "en": "Attention. Păcii, Ardealului stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Păcii, N. Andreescu, la patru sute patruzeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Păcii, N. Andreescu, four hundred and forty metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_321",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "321",
+          "directionId": 1
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Opre Gogu (Ardealului) nu este deservită de linia E3",
+        "en": "Opre Gogu (Ardealului) stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Opre Gogu (N. Andreescu), 470 m pe jos (liniile E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Opre Gogu (N. Andreescu), 470 m on foot (lines E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=321",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Opre Gogu, Ardealului nu este deservită de linia E trei.",
+        "en": "Attention. Opre Gogu, Ardealului stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Opre Gogu, N. Andreescu, la patru sute șaptezeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Opre Gogu, N. Andreescu, four hundred and seventy metres away on foot."
+      }
+    },
+    {
+      "id": "al_20261107_e3_stop_322",
+      "closureId": "cl_20261107_e3",
+      "activePeriod": [
+        {
+          "start": "2026-11-07T04:00:00+02:00",
+          "end": "2026-11-13T00:00:00+02:00"
+        }
+      ],
+      "cause": "CONSTRUCTION",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_AB_E3",
+          "stopId": "322",
+          "directionId": 1
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Dâmbovița (Bucla) nu este deservită de linia E3",
+        "en": "Dâmbovița (Bucla) stop not served by line E3"
+      },
+      "descriptionText": {
+        "ro": "7 noiembrie 2026, 04:00 – 12 noiembrie 2026, 24:00: Str. Ardealului închisă, linia E3 deviată. Cea mai apropiată stație deservită: Dâmbovița (Banatul), 390 m pe jos (liniile E3, E7 și M36).",
+        "en": "7 November 2026, 04:00 – 12 November 2026, 24:00: Ardealului St closed, line E3 diverted. Nearest served stop: Dâmbovița (Banatul), 390 m on foot (lines E3, E7 and M36)."
+      },
+      "url": "https://unihack.alberyt.xyz/a/cl_20261107_e3?stop=322",
+      "ttsHeaderText": {
+        "ro": "Atenție. Stația Dâmbovița, Bucla nu este deservită de linia E trei.",
+        "en": "Attention. Dâmbovița, Bucla stop is not served by line E three."
+      },
+      "ttsDescriptionText": {
+        "ro": "Din șapte noiembrie, ora patru, până pe doisprezece noiembrie, la miezul nopții, strada Ardealului închisă, linia E trei deviată. Cea mai apropiată stație deservită este Dâmbovița, Banatul, la trei sute nouăzeci de metri de mers pe jos.",
+        "en": "From four in the morning on the seventh of November until midnight on the twelfth of November, ardealului Street closed, line E three diverted. The nearest served stop is Dâmbovița, Banatul, three hundred and ninety metres away on foot."
+      }
     }
   ],
-  "feedUrl": "http://127.0.0.1:3000/api/feed/alerts.pb",
+  "feedUrl": "https://unihack.alberyt.xyz/api/feed/alerts.pb",
   "posters": [
     {
-      "stopId": "61",
-      "url": "http://127.0.0.1:3000/api/closures/cl_20261108_16dec/poster.pdf?stopId=61"
+      "stopId": "335",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=335"
+    },
+    {
+      "stopId": "336",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=336"
+    },
+    {
+      "stopId": "337",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=337"
+    },
+    {
+      "stopId": "338",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=338"
+    },
+    {
+      "stopId": "339",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=339"
+    },
+    {
+      "stopId": "340",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=340"
+    },
+    {
+      "stopId": "318",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=318"
+    },
+    {
+      "stopId": "319",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=319"
+    },
+    {
+      "stopId": "320",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=320"
+    },
+    {
+      "stopId": "321",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=321"
+    },
+    {
+      "stopId": "322",
+      "url": "https://unihack.alberyt.xyz/api/closures/cl_20261107_e3/poster.pdf?stopId=322"
     }
   ],
-  "publishedAt": "2026-11-13T14:05:00+02:00"
+  "publishedAt": "2026-11-08T12:00:00+02:00"
 }

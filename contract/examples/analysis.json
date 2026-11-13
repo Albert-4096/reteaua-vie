@@ -3,73 +3,684 @@
   "feedVersion": "4.31-4",
   "stops": [
     {
-      "stopId": "61",
-      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "stopId": "85",
+      "name": "Catedrala Mitropolitană",
       "location": [
-        21.21924,
-        45.74881
+        21.22364,
+        45.75113
       ],
-      "zoneSlug": "iosefin",
-      "routeId": "R_TV_4",
-      "routeShortName": "4",
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
       "directionId": 0,
-      "headsign": "Piața Gh. Domășneanu",
+      "headsign": "Calea Torontalului (Ciocanul)",
       "state": "affected",
-      "confidence": 0.93,
+      "confidence": 0.9,
       "reasons": [
-        "IN_BUFFER",
         "ON_ROUTE_PATH",
-        "DIRECTION_MATCH",
         "NAMED_IN_NOTICE"
       ],
       "confirmed": null,
-      "departuresLost": 27,
+      "departuresLost": 29,
       "nearestServed": {
-        "stopId": "55",
-        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "stopId": "326",
+        "name": "Catedrala Mitropolitană",
         "location": [
-          21.22496,
-          45.74184
+          21.22493,
+          45.75085
         ],
-        "distanceMeters": null,
+        "distanceMeters": 128.0,
         "routeIds": [
-          "R_TV_1",
-          "R_TV_8"
+          "R_AB_32",
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E3"
         ]
       }
     },
     {
-      "stopId": "61",
-      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "stopId": "87",
+      "name": "Spitalul de Copii (Nemoianu)",
       "location": [
-        21.21924,
-        45.74881
+        21.2212,
+        45.75519
       ],
-      "zoneSlug": "iosefin",
-      "routeId": "R_TV_7",
-      "routeShortName": "7",
-      "directionId": 1,
-      "headsign": "Bulevardul Dâmbovița",
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
       "state": "affected",
-      "confidence": 0.81,
+      "confidence": 0.9,
       "reasons": [
-        "IN_BUFFER",
         "ON_ROUTE_PATH",
-        "DIRECTION_MATCH"
+        "NAMED_IN_NOTICE"
       ],
       "confirmed": null,
-      "departuresLost": 24,
+      "departuresLost": 29,
       "nearestServed": {
-        "stopId": "55",
-        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "stopId": "131",
+        "name": "Piața Regina Maria (Spitalul de copii)",
         "location": [
-          21.22496,
-          45.74184
+          21.22073,
+          45.75288
         ],
-        "distanceMeters": null,
+        "distanceMeters": 293.0,
         "routeIds": [
-          "R_TV_1",
-          "R_TV_8"
+          "R_AB_E3",
+          "R_TB_11",
+          "R_TB_14",
+          "R_TB_18",
+          "R_TB_M11",
+          "R_TB_M14"
+        ]
+      }
+    },
+    {
+      "stopId": "902",
+      "name": "Nemoianu (Brediceanu)",
+      "location": [
+        21.22126,
+        45.75614
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "89",
+        "name": "Piața Timișoara 700",
+        "location": [
+          21.22294,
+          45.75628
+        ],
+        "distanceMeters": 186.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "434",
+      "name": "Circumvalațiunii (Brediceanu)",
+      "location": [
+        21.21742,
+        45.75667
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "434",
+        "name": "Circumvalațiunii (Brediceanu)",
+        "location": [
+          21.21742,
+          45.75667
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "435",
+      "name": "Mendeleev",
+      "location": [
+        21.21399,
+        45.75697
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "435",
+        "name": "Mendeleev",
+        "location": [
+          21.21399,
+          45.75697
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "903",
+      "name": "Balta Verde (Cetății)",
+      "location": [
+        21.21006,
+        45.75772
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "903",
+        "name": "Balta Verde (Cetății)",
+        "location": [
+          21.21006,
+          45.75772
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "904",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "location": [
+        21.21048,
+        45.76255
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 101.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "905",
+      "name": "Amforei (Cetății)",
+      "location": [
+        21.2129,
+        45.76524
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "197",
+        "name": "Bd. Cetății (Cloșca)",
+        "location": [
+          21.20986,
+          45.76333
+        ],
+        "distanceMeters": 443.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "906",
+      "name": "Matei Basarab (Cetății)",
+      "location": [
+        21.21653,
+        45.76761
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "222",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.22057,
+          45.76846
+        ],
+        "distanceMeters": 377.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6",
+          "R_TB_18"
+        ]
+      }
+    },
+    {
+      "stopId": "907",
+      "name": "Calea Torontalului (Ciocanul)",
+      "location": [
+        21.21973,
+        45.76925
+      ],
+      "zoneSlug": "bucovina",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 0,
+      "nearestServed": {
+        "stopId": "276",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.21998,
+          45.76937
+        ],
+        "distanceMeters": 125.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6"
+        ]
+      }
+    },
+    {
+      "stopId": "896",
+      "name": "Calea Torontalului (Ciocanul)",
+      "location": [
+        21.21962,
+        45.7692
+      ],
+      "zoneSlug": "bucovina",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "276",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.21998,
+          45.76937
+        ],
+        "distanceMeters": 146.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6"
+        ]
+      }
+    },
+    {
+      "stopId": "897",
+      "name": "Matei Basarab (Cetății)",
+      "location": [
+        21.21701,
+        45.76796
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "222",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.22057,
+          45.76846
+        ],
+        "distanceMeters": 402.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6",
+          "R_TB_18"
+        ]
+      }
+    },
+    {
+      "stopId": "898",
+      "name": "Amforei (Cetății)",
+      "location": [
+        21.21314,
+        45.76554
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 431.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "899",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "location": [
+        21.2108,
+        45.76328
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 125.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "900",
+      "name": "Balta Verde (Cetății)",
+      "location": [
+        21.20939,
+        45.75829
+      ],
+      "zoneSlug": "mircea-cel-batran",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "933",
+        "name": "Balta Verde",
+        "location": [
+          21.20871,
+          45.75811
+        ],
+        "distanceMeters": 75.0,
+        "routeIds": [
+          "R_AB_5B"
+        ]
+      }
+    },
+    {
+      "stopId": "458",
+      "name": "Mendeleev",
+      "location": [
+        21.21341,
+        45.75701
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 28,
+      "nearestServed": {
+        "stopId": "458",
+        "name": "Mendeleev",
+        "location": [
+          21.21341,
+          45.75701
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "459",
+      "name": "Circumvalațiunii (Brediceanu)",
+      "location": [
+        21.21655,
+        45.75668
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "459",
+        "name": "Circumvalațiunii (Brediceanu)",
+        "location": [
+          21.21655,
+          45.75668
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "901",
+      "name": "Nemoianu (Brediceanu)",
+      "location": [
+        21.22114,
+        45.75614
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "89",
+        "name": "Piața Timișoara 700",
+        "location": [
+          21.22294,
+          45.75628
+        ],
+        "distanceMeters": 187.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "88",
+      "name": "Spitalul de Copii (Nemoianu)",
+      "location": [
+        21.22109,
+        45.75508
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "131",
+        "name": "Piața Regina Maria (Spitalul de copii)",
+        "location": [
+          21.22073,
+          45.75288
+        ],
+        "distanceMeters": 287.0,
+        "routeIds": [
+          "R_AB_E3",
+          "R_TB_11",
+          "R_TB_14",
+          "R_TB_18",
+          "R_TB_M11",
+          "R_TB_M14"
+        ]
+      }
+    },
+    {
+      "stopId": "86",
+      "name": "Catedrala Mitropolitană",
+      "location": [
+        21.22345,
+        45.75157
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": {
+        "stopId": "326",
+        "name": "Catedrala Mitropolitană",
+        "location": [
+          21.22493,
+          45.75085
+        ],
+        "distanceMeters": 171.0,
+        "routeIds": [
+          "R_AB_32",
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E3"
         ]
       }
     },
@@ -85,16 +696,404 @@
       "routeShortName": "2",
       "directionId": 1,
       "headsign": "Shopping City",
-      "state": "unsure",
-      "confidence": 0.48,
+      "state": "affected",
+      "confidence": 0.9,
       "reasons": [
-        "IN_BUFFER",
         "ON_ROUTE_PATH",
-        "DIRECTION_UNCLEAR"
+        "NAMED_IN_NOTICE"
       ],
       "confirmed": null,
       "departuresLost": 29,
-      "nearestServed": null
+      "nearestServed": {
+        "stopId": "62",
+        "name": "Piața A. Mocioni (Sinaia)",
+        "location": [
+          21.21526,
+          45.74631
+        ],
+        "distanceMeters": 479.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_2",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "896",
+      "name": "Calea Torontalului (Ciocanul)",
+      "location": [
+        21.21962,
+        45.7692
+      ],
+      "zoneSlug": "bucovina",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "276",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.21998,
+          45.76937
+        ],
+        "distanceMeters": 146.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6"
+        ]
+      }
+    },
+    {
+      "stopId": "897",
+      "name": "Matei Basarab (Cetății)",
+      "location": [
+        21.21701,
+        45.76796
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "222",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.22057,
+          45.76846
+        ],
+        "distanceMeters": 402.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6",
+          "R_TB_18"
+        ]
+      }
+    },
+    {
+      "stopId": "898",
+      "name": "Amforei (Cetății)",
+      "location": [
+        21.21314,
+        45.76554
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 431.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "899",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "location": [
+        21.2108,
+        45.76328
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 125.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "900",
+      "name": "Balta Verde (Cetății)",
+      "location": [
+        21.20939,
+        45.75829
+      ],
+      "zoneSlug": "mircea-cel-batran",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "933",
+        "name": "Balta Verde",
+        "location": [
+          21.20871,
+          45.75811
+        ],
+        "distanceMeters": 75.0,
+        "routeIds": [
+          "R_AB_5B"
+        ]
+      }
+    },
+    {
+      "stopId": "458",
+      "name": "Mendeleev",
+      "location": [
+        21.21341,
+        45.75701
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "458",
+        "name": "Mendeleev",
+        "location": [
+          21.21341,
+          45.75701
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "459",
+      "name": "Circumvalațiunii (Brediceanu)",
+      "location": [
+        21.21655,
+        45.75668
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "459",
+        "name": "Circumvalațiunii (Brediceanu)",
+        "location": [
+          21.21655,
+          45.75668
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "901",
+      "name": "Nemoianu (Brediceanu)",
+      "location": [
+        21.22114,
+        45.75614
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 26,
+      "nearestServed": {
+        "stopId": "89",
+        "name": "Piața Timișoara 700",
+        "location": [
+          21.22294,
+          45.75628
+        ],
+        "distanceMeters": 187.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "88",
+      "name": "Spitalul de Copii (Nemoianu)",
+      "location": [
+        21.22109,
+        45.75508
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "131",
+        "name": "Piața Regina Maria (Spitalul de copii)",
+        "location": [
+          21.22073,
+          45.75288
+        ],
+        "distanceMeters": 287.0,
+        "routeIds": [
+          "R_AB_E3",
+          "R_TB_11",
+          "R_TB_14",
+          "R_TB_18",
+          "R_TB_M11",
+          "R_TB_M14"
+        ]
+      }
+    },
+    {
+      "stopId": "86",
+      "name": "Catedrala Mitropolitană",
+      "location": [
+        21.22345,
+        45.75157
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "326",
+        "name": "Catedrala Mitropolitană",
+        "location": [
+          21.22493,
+          45.75085
+        ],
+        "distanceMeters": 171.0,
+        "routeIds": [
+          "R_AB_32",
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E3"
+        ]
+      }
+    },
+    {
+      "stopId": "61",
+      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "location": [
+        21.21924,
+        45.74881
+      ],
+      "zoneSlug": "iosefin",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "59",
+        "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+        "location": [
+          21.21859,
+          45.74839
+        ],
+        "distanceMeters": 95.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_2",
+          "R_TV_8"
+        ]
+      }
     },
     {
       "stopId": "57",
@@ -108,69 +1107,2908 @@
       "routeShortName": "4",
       "directionId": 0,
       "headsign": "Piața Gh. Domășneanu",
-      "state": "unsure",
-      "confidence": 0.55,
+      "state": "affected",
+      "confidence": 0.9,
       "reasons": [
-        "EDGE_OF_BUFFER",
         "ON_ROUTE_PATH",
         "NAMED_IN_NOTICE"
       ],
       "confirmed": null,
       "departuresLost": 27,
-      "nearestServed": null
+      "nearestServed": {
+        "stopId": "57",
+        "name": "Parcul C. Sylva (Parc Doina)",
+        "location": [
+          21.22204,
+          45.74464
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_7",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "55",
+      "name": "Piața N. Bălcescu (Gheorghe Doja)",
+      "location": [
+        21.22496,
+        45.74184
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "55",
+        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "location": [
+          21.22496,
+          45.74184
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_7",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "75",
+      "name": "Piața Crucii",
+      "location": [
+        21.23219,
+        45.74177
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "75",
+        "name": "Piața Crucii",
+        "location": [
+          21.23219,
+          45.74177
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "77",
+      "name": "Strada Cluj (1 Decembrie 1918)",
+      "location": [
+        21.23673,
+        45.74359
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "77",
+        "name": "Strada Cluj (1 Decembrie 1918)",
+        "location": [
+          21.23673,
+          45.74359
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "79",
+      "name": "Sala C. Jude (Olimpia)",
+      "location": [
+        21.24118,
+        45.74515
+      ],
+      "zoneSlug": "stadion",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "79",
+        "name": "Sala C. Jude (Olimpia)",
+        "location": [
+          21.24118,
+          45.74515
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "81",
+      "name": "Deliblata",
+      "location": [
+        21.24633,
+        45.74694
+      ],
+      "zoneSlug": "stadion",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "81",
+        "name": "Deliblata",
+        "location": [
+          21.24633,
+          45.74694
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "84",
+      "name": "Banatim",
+      "location": [
+        21.25274,
+        45.74879
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "84",
+        "name": "Banatim",
+        "location": [
+          21.25274,
+          45.74879
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "941",
+      "name": "Banatim (Cimitir Buziașului)",
+      "location": [
+        21.25338,
+        45.74839
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "941",
+        "name": "Banatim (Cimitir Buziașului)",
+        "location": [
+          21.25338,
+          45.74839
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "942",
+      "name": "Bătania",
+      "location": [
+        21.25454,
+        45.74532
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "942",
+        "name": "Bătania",
+        "location": [
+          21.25454,
+          45.74532
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "943",
+      "name": "Fabrica de Detergenți",
+      "location": [
+        21.2561,
+        45.74131
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "943",
+        "name": "Fabrica de Detergenți",
+        "location": [
+          21.2561,
+          45.74131
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "944",
+      "name": "Mecatim",
+      "location": [
+        21.25709,
+        45.73872
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "944",
+        "name": "Mecatim",
+        "location": [
+          21.25709,
+          45.73872
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "945",
+      "name": "AEM (Dräxlmaier)",
+      "location": [
+        21.25889,
+        45.73404
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 0,
+      "nearestServed": {
+        "stopId": "946",
+        "name": "AEM (Dräxlmaier)",
+        "location": [
+          21.25894,
+          45.73405
+        ],
+        "distanceMeters": 65.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "946",
+      "name": "AEM (Dräxlmaier)",
+      "location": [
+        21.25894,
+        45.73405
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "946",
+        "name": "AEM (Dräxlmaier)",
+        "location": [
+          21.25894,
+          45.73405
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "947",
+      "name": "Mecatim",
+      "location": [
+        21.25687,
+        45.73943
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "947",
+        "name": "Mecatim",
+        "location": [
+          21.25687,
+          45.73943
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "948",
+      "name": "Fabrica de Detergenți",
+      "location": [
+        21.25599,
+        45.74175
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "948",
+        "name": "Fabrica de Detergenți",
+        "location": [
+          21.25599,
+          45.74175
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "949",
+      "name": "Bătania",
+      "location": [
+        21.25441,
+        45.74588
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "949",
+        "name": "Bătania",
+        "location": [
+          21.25441,
+          45.74588
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "950",
+      "name": "Banatim (Cimitir Buziașului)",
+      "location": [
+        21.25345,
+        45.7484
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "950",
+        "name": "Banatim (Cimitir Buziașului)",
+        "location": [
+          21.25345,
+          45.7484
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "83",
+      "name": "Banatim",
+      "location": [
+        21.25244,
+        45.7488
+      ],
+      "zoneSlug": "buziasului",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "83",
+        "name": "Banatim",
+        "location": [
+          21.25244,
+          45.7488
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "82",
+      "name": "Deliblata",
+      "location": [
+        21.24669,
+        45.74717
+      ],
+      "zoneSlug": "stadion",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "82",
+        "name": "Deliblata",
+        "location": [
+          21.24669,
+          45.74717
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "80",
+      "name": "Sala C. Jude (Olimpia)",
+      "location": [
+        21.24164,
+        45.7454
+      ],
+      "zoneSlug": "stadion",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "80",
+        "name": "Sala C. Jude (Olimpia)",
+        "location": [
+          21.24164,
+          45.7454
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "78",
+      "name": "Strada Cluj (1 Decembrie 1918)",
+      "location": [
+        21.23715,
+        45.74382
+      ],
+      "zoneSlug": "stadion",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "78",
+        "name": "Strada Cluj (1 Decembrie 1918)",
+        "location": [
+          21.23715,
+          45.74382
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "76",
+      "name": "Piața Crucii",
+      "location": [
+        21.23254,
+        45.742
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "76",
+        "name": "Piața Crucii",
+        "location": [
+          21.23254,
+          45.742
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "56",
+      "name": "Piața N. Bălcescu (Gheorghe Doja)",
+      "location": [
+        21.22504,
+        45.74189
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "56",
+        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "location": [
+          21.22504,
+          45.74189
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_7",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "58",
+      "name": "Parcul C. Sylva (Parc Doina)",
+      "location": [
+        21.22243,
+        45.74441
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "58",
+        "name": "Parcul C. Sylva (Parc Doina)",
+        "location": [
+          21.22243,
+          45.74441
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_7",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "60",
+      "name": "Piața Sfânta Maria (Gheorghe Doja)",
+      "location": [
+        21.21914,
+        45.74835
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "60",
+        "name": "Piața Sfânta Maria (Gheorghe Doja)",
+        "location": [
+          21.21914,
+          45.74835
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_7",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "85",
+      "name": "Catedrala Mitropolitană",
+      "location": [
+        21.22364,
+        45.75113
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "326",
+        "name": "Catedrala Mitropolitană",
+        "location": [
+          21.22493,
+          45.75085
+        ],
+        "distanceMeters": 128.0,
+        "routeIds": [
+          "R_AB_32",
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E3"
+        ]
+      }
+    },
+    {
+      "stopId": "87",
+      "name": "Spitalul de Copii (Nemoianu)",
+      "location": [
+        21.2212,
+        45.75519
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "131",
+        "name": "Piața Regina Maria (Spitalul de copii)",
+        "location": [
+          21.22073,
+          45.75288
+        ],
+        "distanceMeters": 293.0,
+        "routeIds": [
+          "R_AB_E3",
+          "R_TB_11",
+          "R_TB_14",
+          "R_TB_18",
+          "R_TB_M11",
+          "R_TB_M14"
+        ]
+      }
+    },
+    {
+      "stopId": "902",
+      "name": "Nemoianu (Brediceanu)",
+      "location": [
+        21.22126,
+        45.75614
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "89",
+        "name": "Piața Timișoara 700",
+        "location": [
+          21.22294,
+          45.75628
+        ],
+        "distanceMeters": 186.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "434",
+      "name": "Circumvalațiunii (Brediceanu)",
+      "location": [
+        21.21742,
+        45.75667
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "434",
+        "name": "Circumvalațiunii (Brediceanu)",
+        "location": [
+          21.21742,
+          45.75667
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "435",
+      "name": "Mendeleev",
+      "location": [
+        21.21399,
+        45.75697
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "435",
+        "name": "Mendeleev",
+        "location": [
+          21.21399,
+          45.75697
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "903",
+      "name": "Balta Verde (Cetății)",
+      "location": [
+        21.21006,
+        45.75772
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "903",
+        "name": "Balta Verde (Cetății)",
+        "location": [
+          21.21006,
+          45.75772
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "904",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "location": [
+        21.21048,
+        45.76255
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 101.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "905",
+      "name": "Amforei (Cetății)",
+      "location": [
+        21.2129,
+        45.76524
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "197",
+        "name": "Bd. Cetății (Cloșca)",
+        "location": [
+          21.20986,
+          45.76333
+        ],
+        "distanceMeters": 443.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "906",
+      "name": "Matei Basarab (Cetății)",
+      "location": [
+        21.21653,
+        45.76761
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "222",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.22057,
+          45.76846
+        ],
+        "distanceMeters": 377.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6",
+          "R_TB_18"
+        ]
+      }
+    },
+    {
+      "stopId": "907",
+      "name": "Calea Torontalului (Ciocanul)",
+      "location": [
+        21.21973,
+        45.76925
+      ],
+      "zoneSlug": "bucovina",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 1,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "affected",
+      "confidence": 0.9,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 0,
+      "nearestServed": {
+        "stopId": "276",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.21998,
+          45.76937
+        ],
+        "distanceMeters": 125.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6"
+        ]
+      }
+    },
+    {
+      "stopId": "4",
+      "name": "Banatul",
+      "location": [
+        21.19784,
+        45.73662
+      ],
+      "zoneSlug": "dambovita",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "890",
+        "name": "Dâmbovița",
+        "location": [
+          21.19599,
+          45.7397
+        ],
+        "distanceMeters": 391.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "6",
+      "name": "Transilvania (Aurora)",
+      "location": [
+        21.20151,
+        45.73393
+      ],
+      "zoneSlug": "calea-sagului",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "6",
+        "name": "Transilvania (Aurora)",
+        "location": [
+          21.20151,
+          45.73393
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_2",
+          "R_TV_9"
+        ]
+      }
+    },
+    {
+      "stopId": "12",
+      "name": "Piața Veteranilor (Turist)",
+      "location": [
+        21.20484,
+        45.72851
+      ],
+      "zoneSlug": "calea-sagului",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "12",
+        "name": "Piața Veteranilor (Turist)",
+        "location": [
+          21.20484,
+          45.72851
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_2"
+        ]
+      }
+    },
+    {
+      "stopId": "16",
+      "name": "Chișodei (Victor Hugo)",
+      "location": [
+        21.20888,
+        45.72635
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "17",
+        "name": "Izlaz (Victor Hugo)",
+        "location": [
+          21.21366,
+          45.72534
+        ],
+        "distanceMeters": 393.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "17",
+      "name": "Izlaz (Victor Hugo)",
+      "location": [
+        21.21366,
+        45.72534
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "19",
+        "name": "Emil Zola (Victor Hugo)",
+        "location": [
+          21.21734,
+          45.72456
+        ],
+        "distanceMeters": 357.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "19",
+      "name": "Emil Zola (Victor Hugo)",
+      "location": [
+        21.21734,
+        45.72456
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "17",
+        "name": "Izlaz (Victor Hugo)",
+        "location": [
+          21.21366,
+          45.72534
+        ],
+        "distanceMeters": 357.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "21",
+      "name": "Progresul (Aluniș)",
+      "location": [
+        21.22147,
+        45.72384
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "19",
+        "name": "Emil Zola (Victor Hugo)",
+        "location": [
+          21.21734,
+          45.72456
+        ],
+        "distanceMeters": 367.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "23",
+      "name": "Ivan Pavlov (Aluniș)",
+      "location": [
+        21.22599,
+        45.72325
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "21",
+        "name": "Progresul (Aluniș)",
+        "location": [
+          21.22147,
+          45.72384
+        ],
+        "distanceMeters": 407.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "25",
+      "name": "Mureș (Drubeta)",
+      "location": [
+        21.22729,
+        45.72901
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "27",
+        "name": "Mareșal A. Averescu (Lidia)",
+        "location": [
+          21.22786,
+          45.73186
+        ],
+        "distanceMeters": 331.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "27",
+      "name": "Mareșal A. Averescu (Lidia)",
+      "location": [
+        21.22786,
+        45.73186
+      ],
+      "zoneSlug": "calea-martirilor",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "25",
+        "name": "Mureș (Drubeta)",
+        "location": [
+          21.22729,
+          45.72901
+        ],
+        "distanceMeters": 331.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "29",
+      "name": "Liviu Rebreanu (Drubeta)",
+      "location": [
+        21.2268,
+        45.73477
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "27",
+        "name": "Mareșal A. Averescu (Lidia)",
+        "location": [
+          21.22786,
+          45.73186
+        ],
+        "distanceMeters": 364.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "53",
+      "name": "Memorandumului",
+      "location": [
+        21.22509,
+        45.73865
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "53",
+        "name": "Memorandumului",
+        "location": [
+          21.22509,
+          45.73865
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1"
+        ]
+      }
+    },
+    {
+      "stopId": "56",
+      "name": "Piața N. Bălcescu (Gheorghe Doja)",
+      "location": [
+        21.22504,
+        45.74189
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "58",
+        "name": "Parcul C. Sylva (Parc Doina)",
+        "location": [
+          21.22243,
+          45.74441
+        ],
+        "distanceMeters": 350.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_7",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "58",
+      "name": "Parcul C. Sylva (Parc Doina)",
+      "location": [
+        21.22243,
+        45.74441
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "56",
+        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "location": [
+          21.22504,
+          45.74189
+        ],
+        "distanceMeters": 350.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_7",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "60",
+      "name": "Piața Sfânta Maria (Gheorghe Doja)",
+      "location": [
+        21.21914,
+        45.74835
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "60",
+        "name": "Piața Sfânta Maria (Gheorghe Doja)",
+        "location": [
+          21.21914,
+          45.74835
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "85",
+      "name": "Catedrala Mitropolitană",
+      "location": [
+        21.22364,
+        45.75113
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "326",
+        "name": "Catedrala Mitropolitană",
+        "location": [
+          21.22493,
+          45.75085
+        ],
+        "distanceMeters": 128.0,
+        "routeIds": [
+          "R_AB_32",
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E3"
+        ]
+      }
+    },
+    {
+      "stopId": "87",
+      "name": "Spitalul de Copii (Nemoianu)",
+      "location": [
+        21.2212,
+        45.75519
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "131",
+        "name": "Piața Regina Maria (Spitalul de copii)",
+        "location": [
+          21.22073,
+          45.75288
+        ],
+        "distanceMeters": 293.0,
+        "routeIds": [
+          "R_AB_E3",
+          "R_TB_11",
+          "R_TB_14",
+          "R_TB_18",
+          "R_TB_M11",
+          "R_TB_M14"
+        ]
+      }
+    },
+    {
+      "stopId": "902",
+      "name": "Nemoianu (Brediceanu)",
+      "location": [
+        21.22126,
+        45.75614
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "89",
+        "name": "Piața Timișoara 700",
+        "location": [
+          21.22294,
+          45.75628
+        ],
+        "distanceMeters": 186.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "434",
+      "name": "Circumvalațiunii (Brediceanu)",
+      "location": [
+        21.21742,
+        45.75667
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "434",
+        "name": "Circumvalațiunii (Brediceanu)",
+        "location": [
+          21.21742,
+          45.75667
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "435",
+      "name": "Mendeleev",
+      "location": [
+        21.21399,
+        45.75697
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "435",
+        "name": "Mendeleev",
+        "location": [
+          21.21399,
+          45.75697
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "903",
+      "name": "Balta Verde (Cetății)",
+      "location": [
+        21.21006,
+        45.75772
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "903",
+        "name": "Balta Verde (Cetății)",
+        "location": [
+          21.21006,
+          45.75772
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "904",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "location": [
+        21.21048,
+        45.76255
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 101.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "905",
+      "name": "Amforei (Cetății)",
+      "location": [
+        21.2129,
+        45.76524
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "197",
+        "name": "Bd. Cetății (Cloșca)",
+        "location": [
+          21.20986,
+          45.76333
+        ],
+        "distanceMeters": 443.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "906",
+      "name": "Matei Basarab (Cetății)",
+      "location": [
+        21.21653,
+        45.76761
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "222",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.22057,
+          45.76846
+        ],
+        "distanceMeters": 377.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6",
+          "R_TB_18"
+        ]
+      }
+    },
+    {
+      "stopId": "907",
+      "name": "Calea Torontalului (Ciocanul)",
+      "location": [
+        21.21973,
+        45.76925
+      ],
+      "zoneSlug": "bucovina",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 0,
+      "headsign": "Calea Torontalului (Ciocanul)",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 0,
+      "nearestServed": {
+        "stopId": "276",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.21998,
+          45.76937
+        ],
+        "distanceMeters": 125.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6"
+        ]
+      }
+    },
+    {
+      "stopId": "896",
+      "name": "Calea Torontalului (Ciocanul)",
+      "location": [
+        21.21962,
+        45.7692
+      ],
+      "zoneSlug": "bucovina",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "276",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.21998,
+          45.76937
+        ],
+        "distanceMeters": 146.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6"
+        ]
+      }
+    },
+    {
+      "stopId": "897",
+      "name": "Matei Basarab (Cetății)",
+      "location": [
+        21.21701,
+        45.76796
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "222",
+        "name": "Miresei (Calea Torontalului)",
+        "location": [
+          21.22057,
+          45.76846
+        ],
+        "distanceMeters": 402.0,
+        "routeIds": [
+          "R_AB_E1",
+          "R_AB_E6",
+          "R_TB_18"
+        ]
+      }
+    },
+    {
+      "stopId": "898",
+      "name": "Amforei (Cetății)",
+      "location": [
+        21.21314,
+        45.76554
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 431.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "899",
+      "name": "Gheorghe Lazăr (Cetății)",
+      "location": [
+        21.2108,
+        45.76328
+      ],
+      "zoneSlug": null,
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "207",
+        "name": "Bulevardul Cetății (Gheorghe Lazăr)",
+        "location": [
+          21.21134,
+          45.76274
+        ],
+        "distanceMeters": 125.0,
+        "routeIds": [
+          "R_AB_13"
+        ]
+      }
+    },
+    {
+      "stopId": "900",
+      "name": "Balta Verde (Cetății)",
+      "location": [
+        21.20939,
+        45.75829
+      ],
+      "zoneSlug": "mircea-cel-batran",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "933",
+        "name": "Balta Verde",
+        "location": [
+          21.20871,
+          45.75811
+        ],
+        "distanceMeters": 75.0,
+        "routeIds": [
+          "R_AB_5B"
+        ]
+      }
+    },
+    {
+      "stopId": "458",
+      "name": "Mendeleev",
+      "location": [
+        21.21341,
+        45.75701
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "458",
+        "name": "Mendeleev",
+        "location": [
+          21.21341,
+          45.75701
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "459",
+      "name": "Circumvalațiunii (Brediceanu)",
+      "location": [
+        21.21655,
+        45.75668
+      ],
+      "zoneSlug": "circumvalatiunii-dacia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "459",
+        "name": "Circumvalațiunii (Brediceanu)",
+        "location": [
+          21.21655,
+          45.75668
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "901",
+      "name": "Nemoianu (Brediceanu)",
+      "location": [
+        21.22114,
+        45.75614
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "89",
+        "name": "Piața Timișoara 700",
+        "location": [
+          21.22294,
+          45.75628
+        ],
+        "distanceMeters": 187.0,
+        "routeIds": [
+          "R_AB_5C"
+        ]
+      }
+    },
+    {
+      "stopId": "88",
+      "name": "Spitalul de Copii (Nemoianu)",
+      "location": [
+        21.22109,
+        45.75508
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "131",
+        "name": "Piața Regina Maria (Spitalul de copii)",
+        "location": [
+          21.22073,
+          45.75288
+        ],
+        "distanceMeters": 287.0,
+        "routeIds": [
+          "R_AB_E3",
+          "R_TB_11",
+          "R_TB_14",
+          "R_TB_18",
+          "R_TB_M11",
+          "R_TB_M14"
+        ]
+      }
+    },
+    {
+      "stopId": "86",
+      "name": "Catedrala Mitropolitană",
+      "location": [
+        21.22345,
+        45.75157
+      ],
+      "zoneSlug": "cetate",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "326",
+        "name": "Catedrala Mitropolitană",
+        "location": [
+          21.22493,
+          45.75085
+        ],
+        "distanceMeters": 171.0,
+        "routeIds": [
+          "R_AB_32",
+          "R_AB_33",
+          "R_AB_33B",
+          "R_AB_E3"
+        ]
+      }
+    },
+    {
+      "stopId": "61",
+      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "location": [
+        21.21924,
+        45.74881
+      ],
+      "zoneSlug": "iosefin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": true,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "59",
+        "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+        "location": [
+          21.21859,
+          45.74839
+        ],
+        "distanceMeters": 95.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_2",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "57",
+      "name": "Parcul C. Sylva (Parc Doina)",
+      "location": [
+        21.22204,
+        45.74464
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "57",
+        "name": "Parcul C. Sylva (Parc Doina)",
+        "location": [
+          21.22204,
+          45.74464
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "55",
+      "name": "Piața N. Bălcescu (Gheorghe Doja)",
+      "location": [
+        21.22496,
+        45.74184
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "55",
+        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "location": [
+          21.22496,
+          45.74184
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "54",
+      "name": "Memorandumului",
+      "location": [
+        21.22495,
+        45.7387
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "54",
+        "name": "Memorandumului",
+        "location": [
+          21.22495,
+          45.7387
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1"
+        ]
+      }
+    },
+    {
+      "stopId": "31",
+      "name": "Liviu Rebreanu (Drubeta)",
+      "location": [
+        21.22649,
+        45.73532
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "31",
+        "name": "Liviu Rebreanu (Drubeta)",
+        "location": [
+          21.22649,
+          45.73532
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_1"
+        ]
+      }
+    },
+    {
+      "stopId": "28",
+      "name": "Mareșal A. Averescu (Lidia)",
+      "location": [
+        21.2277,
+        45.73235
+      ],
+      "zoneSlug": "elisabetin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "26",
+        "name": "Mureș (Drubeta)",
+        "location": [
+          21.22719,
+          45.729
+        ],
+        "distanceMeters": 399.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "26",
+      "name": "Mureș (Drubeta)",
+      "location": [
+        21.22719,
+        45.729
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "28",
+        "name": "Mareșal A. Averescu (Lidia)",
+        "location": [
+          21.2277,
+          45.73235
+        ],
+        "distanceMeters": 399.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "24",
+      "name": "Aluniș (Ivan Pavlov)",
+      "location": [
+        21.22634,
+        45.72352
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "22",
+        "name": "Progresul (Aluniș)",
+        "location": [
+          21.22176,
+          45.72387
+        ],
+        "distanceMeters": 417.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "22",
+      "name": "Progresul (Aluniș)",
+      "location": [
+        21.22176,
+        45.72387
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "20",
+        "name": "Emil Zola (Victor Hugo)",
+        "location": [
+          21.21782,
+          45.72453
+        ],
+        "distanceMeters": 363.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "20",
+      "name": "Emil Zola (Victor Hugo)",
+      "location": [
+        21.21782,
+        45.72453
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "18",
+        "name": "Izlaz (Victor Hugo)",
+        "location": [
+          21.21406,
+          45.72532
+        ],
+        "distanceMeters": 316.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "18",
+      "name": "Izlaz (Victor Hugo)",
+      "location": [
+        21.21406,
+        45.72532
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "20",
+        "name": "Emil Zola (Victor Hugo)",
+        "location": [
+          21.21782,
+          45.72453
+        ],
+        "distanceMeters": 316.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "15",
+      "name": "Chișodei (Victor Hugo)",
+      "location": [
+        21.20892,
+        45.72642
+      ],
+      "zoneSlug": "fratelia",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "16",
+        "name": "Chișodei (Victor Hugo)",
+        "location": [
+          21.20888,
+          45.72635
+        ],
+        "distanceMeters": 10.0,
+        "routeIds": [
+          "R_TV_7"
+        ]
+      }
+    },
+    {
+      "stopId": "11",
+      "name": "Piața Veteranilor (Turist)",
+      "location": [
+        21.20492,
+        45.72858
+      ],
+      "zoneSlug": "calea-sagului",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "11",
+        "name": "Piața Veteranilor (Turist)",
+        "location": [
+          21.20492,
+          45.72858
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_2"
+        ]
+      }
+    },
+    {
+      "stopId": "7",
+      "name": "Transilvania (Ana Ipătescu)",
+      "location": [
+        21.2019,
+        45.73361
+      ],
+      "zoneSlug": "calea-sagului",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "7",
+        "name": "Transilvania (Ana Ipătescu)",
+        "location": [
+          21.2019,
+          45.73361
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_2"
+        ]
+      }
+    },
+    {
+      "stopId": "5",
+      "name": "Banatul",
+      "location": [
+        21.19787,
+        45.73674
+      ],
+      "zoneSlug": "dambovita",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "unsure",
+      "confidence": 0.6,
+      "reasons": [
+        "ON_ROUTE_PATH",
+        "NOT_NAMED_IN_NOTICE"
+      ],
+      "confirmed": false,
+      "departuresLost": 25,
+      "nearestServed": {
+        "stopId": "5",
+        "name": "Banatul",
+        "location": [
+          21.19787,
+          45.73674
+        ],
+        "distanceMeters": 0.0,
+        "routeIds": [
+          "R_TV_2",
+          "R_TV_9"
+        ]
+      }
     }
   ],
   "routes": [
+    {
+      "routeId": "R_TV_2",
+      "shortName": "2",
+      "type": 0,
+      "directionIds": [
+        0,
+        1
+      ],
+      "stopsAffected": 21
+    },
     {
       "routeId": "R_TV_4",
       "shortName": "4",
       "type": 0,
       "directionIds": [
-        0
+        0,
+        1
       ],
-      "stopsAffected": 2
+      "stopsAffected": 46
     },
     {
       "routeId": "R_TV_7",
       "shortName": "7",
       "type": 0,
       "directionIds": [
+        0,
         1
       ],
-      "stopsAffected": 1
-    },
-    {
-      "routeId": "R_TV_2",
-      "shortName": "2",
-      "type": 0,
-      "directionIds": [
-        1
-      ],
-      "stopsAffected": 1
+      "stopsAffected": 21
     }
   ],
-  "unsureCount": 2,
+  "unsureCount": 0,
   "provenance": [
     {
-      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    },
+    {
+      "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
       "url": "https://cont.primariatm.ro/api/mobile/transit/network",
       "version": "4.31-4",
-      "fetchedAt": "2026-11-13T13:29:00+02:00",
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
       "note": null
     },
     {
-      "source": "Stop timetables, cont.primariatm.ro",
-      "url": "https://cont.primariatm.ro/api/mobile/transit/stops/61/timetable?date=2026-11-08",
-      "version": "4.31-4",
-      "fetchedAt": "2026-11-13T13:55:00+02:00",
-      "note": "Departures counted 10:00-18:00 on 8 Nov 2026"
-    },
-    {
-      "source": "Primăria Timișoara neighbourhoods",
-      "url": "https://cont.primariatm.ro/api/zones",
-      "version": null,
-      "fetchedAt": "2026-11-13T13:29:00+02:00",
-      "note": null
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "Distanța până la cea mai apropiată stație deservită: mers pe jos pe rețeaua pietonală OSM / walking distance on OSM footpaths. osmium extract -b 21.10,45.68,21.35,45.83"
     }
   ]
 }

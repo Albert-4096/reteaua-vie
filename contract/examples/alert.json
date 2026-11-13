@@ -1,5 +1,5 @@
 {
-  "id": "al_20261108_16dec_1",
+  "id": "al_20261108_16dec_stop_61",
   "closureId": "cl_20261108_16dec",
   "activePeriod": [
     {
@@ -10,6 +10,11 @@
   "cause": "MAINTENANCE",
   "effect": "NO_SERVICE",
   "informedEntity": [
+    {
+      "routeId": "R_TV_2",
+      "stopId": "61",
+      "directionId": 1
+    },
     {
       "routeId": "R_TV_4",
       "stopId": "61",
@@ -22,12 +27,20 @@
     }
   ],
   "headerText": {
-    "ro": "Stația Piața Sfânta Maria nu este deservită de liniile 4 și 7",
-    "en": "Piața Sfânta Maria stop not served by lines 4 and 7"
+    "ro": "Stația Piața Sfânta Maria (16 Decembrie 1989) nu este deservită de liniile 2, 4 și 7",
+    "en": "Piața Sfânta Maria (16 Decembrie 1989) stop not served by lines 2, 4 and 7"
   },
   "descriptionText": {
-    "ro": "8 noiembrie, 10:00–18:00: lucrări la linia de tramvai pe Bd. 16 Decembrie 1989. Cea mai apropiată stație deservită: Piața N. Bălcescu (Gheorghe Doja).",
-    "en": "8 November, 10:00–18:00: tram track works on 16 Decembrie 1989 Blvd. Nearest served stop: Piața N. Bălcescu (Gheorghe Doja)."
+    "ro": "8 noiembrie 2026, 10:00–18:00: Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria. Linie temporară: autobuzul 4b, pe traseul Piața Iuliu Maniu – Bulevardul 16 Decembrie 1989 – Bulevardul Regele Ferdinand I – Strada Doctor Iosif Nemoianu – Strada Coriolan Brediceanu – Calea Bogdăneștilor – Bulevardul Cetății – Calea Torontalului. Cea mai apropiată stație deservită: Piața Sfânta Maria (16 Decembrie 1989) (altă stație cu același nume), 100 m pe jos (liniile 1, 2 și 8).",
+    "en": "8 November 2026, 10:00–18:00: Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria. Temporary line: bus 4b, via Piața Iuliu Maniu – Bulevardul 16 Decembrie 1989 – Bulevardul Regele Ferdinand I – Strada Doctor Iosif Nemoianu – Strada Coriolan Brediceanu – Calea Bogdăneștilor – Bulevardul Cetății – Calea Torontalului. Nearest served stop: Piața Sfânta Maria (16 Decembrie 1989) (another stop with the same name), 100 m on foot (lines 1, 2 and 8)."
   },
-  "url": "http://127.0.0.1:3010/a/cl_20261108_16dec"
+  "url": "https://unihack.alberyt.xyz/a/cl_20261108_16dec?stop=61",
+  "ttsHeaderText": {
+    "ro": "Atenție. Stația Piața Sfânta Maria, șaisprezece Decembrie o mie nouă sute optzeci și nouă nu este deservită de liniile doi, patru și șapte.",
+    "en": "Attention. Piața Sfânta Maria, sixteen Decembrie nineteen eighty-nine stop is not served by lines two, four and seven."
+  },
+  "ttsDescriptionText": {
+    "ro": "Pe opt noiembrie, între ora zece și ora optsprezece, lucrări la linia de tramvai, Bulevardul șaisprezece Decembrie o mie nouă sute optzeci și nouă, sens Podul Maria. Circulă temporar autobuzul patru b, pe traseul Piața Iuliu Maniu, Bulevardul șaisprezece Decembrie o mie nouă sute optzeci și nouă, Bulevardul Regele Ferdinand I, Strada Doctor Iosif Nemoianu, Strada Coriolan Brediceanu, Calea Bogdăneștilor, Bulevardul Cetății, Calea Torontalului. Cea mai apropiată stație deservită este Piața Sfânta Maria, șaisprezece Decembrie o mie nouă sute optzeci și nouă, la o sută de metri de mers pe jos.",
+    "en": "On the eighth of November, from ten in the morning until six in the evening, tram track works, sixteen Decembrie nineteen eighty-nine Boulevard, towards Podul Maria. A temporary bus four b runs via Piața Iuliu Maniu, Bulevardul sixteen Decembrie nineteen eighty-nine, Bulevardul Regele Ferdinand I, Strada Doctor Iosif Nemoianu, Strada Coriolan Brediceanu, Calea Bogdăneștilor, Bulevardul Cetății, Calea Torontalului. The nearest served stop is Piața Sfânta Maria, sixteen Decembrie nineteen eighty-nine, one hundred metres away on foot."
+  }
 }

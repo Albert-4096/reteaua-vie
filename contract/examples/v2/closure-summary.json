@@ -1,11 +1,64 @@
 [
   {
+    "id": "cl_20261102_mocioni",
+    "title": {
+      "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+      "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+    },
+    "status": "analyzed",
+    "window": {
+      "start": "2026-11-02T00:00:00+02:00",
+      "end": "2026-12-31T23:59:59+02:00"
+    },
+    "routeIds": [
+      "R_AB_M32",
+      "R_AB_M36",
+      "R_AB_M37",
+      "R_AB_M51",
+      "R_AB_M38",
+      "R_AB_M46"
+    ],
+    "zoneSlugs": [
+      "iosefin",
+      "calea-sagului"
+    ],
+    "stopsSuspended": 0,
+    "departuresLost": 10237,
+    "publishedAt": null
+  },
+  {
+    "id": "cl_20261107_e3",
+    "title": {
+      "ro": "Str. Ardealului închisă, linia E3 deviată",
+      "en": "Ardealului St closed, line E3 diverted"
+    },
+    "status": "analyzed",
+    "window": {
+      "start": "2026-11-07T04:00:00+02:00",
+      "end": "2026-11-13T00:00:00+02:00"
+    },
+    "routeIds": [
+      "R_AB_E3"
+    ],
+    "zoneSlugs": [
+      "freidorf",
+      "dambovita",
+      "iosefin",
+      "gara-de-nord",
+      "polona-parc-industrial",
+      "_outside"
+    ],
+    "stopsSuspended": 11,
+    "departuresLost": 1386,
+    "publishedAt": null
+  },
+  {
     "id": "cl_20261108_16dec",
     "title": {
       "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
       "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
     },
-    "status": "published",
+    "status": "analyzed",
     "window": {
       "start": "2026-11-08T10:00:00+02:00",
       "end": "2026-11-08T18:00:00+02:00"
@@ -16,10 +69,19 @@
       "R_TV_7"
     ],
     "zoneSlugs": [
-      "iosefin"
+      "circumvalatiunii-dacia",
+      "cetate",
+      "buziasului",
+      "stadion",
+      "elisabetin",
+      "odobescu",
+      "bucovina",
+      "iosefin",
+      "mircea-cel-batran",
+      "_outside"
     ],
-    "stopsSuspended": 1,
-    "departuresLost": 51,
-    "publishedAt": "2026-11-13T14:05:00+02:00"
+    "stopsSuspended": 2,
+    "departuresLost": 1766,
+    "publishedAt": null
   }
 ]

@@ -5,54 +5,126 @@
     "end": "2026-11-08T18:00:00+02:00"
   },
   "totals": {
-    "stopsSuspended": 1,
-    "departuresLost": 51,
-    "routesAffected": 2,
-    "residentsLosingStop": null,
-    "stopRoutePairsLost": 2
+    "stopsSuspended": 17,
+    "departuresLost": 2262,
+    "routesAffected": 3,
+    "residentsLosingStop": 1846,
+    "stopRoutePairsLost": 88
   },
   "byZone": [
+    {
+      "slug": "circumvalatiunii-dacia",
+      "name": "Circumvalațiunii, Dacia",
+      "stopsSuspended": 3,
+      "departuresLost": 647,
+      "residentsLosingStop": 526,
+      "maxExtraWalkMeters": 322.0
+    },
+    {
+      "slug": "cetate",
+      "name": "Cetate",
+      "stopsSuspended": 6,
+      "departuresLost": 482,
+      "residentsLosingStop": 0,
+      "maxExtraWalkMeters": null
+    },
+    {
+      "slug": "buziasului",
+      "name": "Buziașului",
+      "stopsSuspended": 1,
+      "departuresLost": 297,
+      "residentsLosingStop": 0,
+      "maxExtraWalkMeters": null
+    },
+    {
+      "slug": "stadion",
+      "name": "Stadion",
+      "stopsSuspended": 0,
+      "departuresLost": 135,
+      "residentsLosingStop": 0,
+      "maxExtraWalkMeters": null
+    },
+    {
+      "slug": "elisabetin",
+      "name": "Elisabetin",
+      "stopsSuspended": 0,
+      "departuresLost": 108,
+      "residentsLosingStop": 0,
+      "maxExtraWalkMeters": null
+    },
+    {
+      "slug": "odobescu",
+      "name": "Odobescu",
+      "stopsSuspended": 0,
+      "departuresLost": 108,
+      "residentsLosingStop": 0,
+      "maxExtraWalkMeters": null
+    },
+    {
+      "slug": "bucovina",
+      "name": "Bucovina",
+      "stopsSuspended": 2,
+      "departuresLost": 81,
+      "residentsLosingStop": 1319,
+      "maxExtraWalkMeters": 340.0
+    },
+    {
+      "slug": "mircea-cel-batran",
+      "name": "Mircea cel Bătrân",
+      "stopsSuspended": 1,
+      "departuresLost": 81,
+      "residentsLosingStop": 0,
+      "maxExtraWalkMeters": null
+    },
     {
       "slug": "iosefin",
       "name": "Iosefin",
       "stopsSuspended": 1,
-      "departuresLost": 51,
-      "residentsLosingStop": null,
+      "departuresLost": 80,
+      "residentsLosingStop": 0,
+      "maxExtraWalkMeters": null
+    },
+    {
+      "slug": "_outside",
+      "name": "În afara celor 40 de cartiere / outside the 40 neighbourhoods",
+      "stopsSuspended": 3,
+      "departuresLost": 243,
+      "residentsLosingStop": 0,
       "maxExtraWalkMeters": null
     }
   ],
   "method": {
-    "ro": "Locuitori la cel mult 400 m de o stație suspendată și fără altă stație deservită la 400 m.",
-    "en": "Residents within 400 m of a suspended stop with no served stop within 400 m."
+    "ro": "Plecări pierdute: orarul GTFS al fiecărei linii și direcții, la fiecare stație afectată, în fereastra lucrării. Stație suspendată: nicio altă plecare a vreunei linii în fereastră. Locuitori fără stație: celule GHSL 2020 de 100 m (model, nu recensământ) aflate la cel mult 400 m (linie dreaptă) de o stație suspendată și fără nicio stație deservită la 400 m. Stațiile neclare contează doar după o decizie.",
+    "en": "Departures lost: the GTFS timetable of each line and direction at each affected stop inside the closure window. Suspended stop: no other departure of any line in the window. Residents losing their stop: GHSL 2020 100 m cells (a model, not a census) within 400 m (straight line) of a suspended stop with no served stop within 400 m. Unsure stops count only after a decision."
   },
   "provenance": [
     {
-      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    },
+    {
+      "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
       "url": "https://cont.primariatm.ro/api/mobile/transit/network",
       "version": "4.31-4",
-      "fetchedAt": "2026-11-13T13:29:00+02:00",
-      "note": "PLACEHOLDER: these totals are wrong for the hero case (line 4 is suspended on its whole length). Recompute, docs/SPEC.md 5.1."
-    },
-    {
-      "source": "Stop timetables, cont.primariatm.ro",
-      "url": "https://cont.primariatm.ro/api/mobile/transit/stops/61/timetable?date=2026-11-08",
-      "version": "4.31-4",
-      "fetchedAt": "2026-11-13T13:55:00+02:00",
-      "note": "Departures counted 10:00-18:00 on 8 Nov 2026"
-    },
-    {
-      "source": "Primăria Timișoara neighbourhoods",
-      "url": "https://cont.primariatm.ro/api/zones",
-      "version": null,
-      "fetchedAt": "2026-11-13T13:29:00+02:00",
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
       "note": null
     },
     {
-      "source": "PLACEHOLDER population grid",
-      "url": null,
+      "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+      "url": "https://cont.primariatm.ro/api/zones",
       "version": null,
-      "fetchedAt": "2026-11-13T13:29:00+02:00",
-      "note": "Placeholder until the population source is loaded. Never show as a fact."
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": null
+    },
+    {
+      "source": "GHSL population grid (JRC)",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+      "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+      "fetchedAt": "2026-11-13T18:31:11+02:00",
+      "note": "model GHSL 2020, 100 m (nu recensământ)"
     }
   ]
 }

@@ -1,19 +1,27 @@
 [
   {
     "closureId": "cl_20261108_16dec",
-    "otherClosureId": "cl_PLACEHOLDER",
+    "otherClosureId": "cl_20261102_mocioni",
     "otherTitle": {
-      "ro": "PLACEHOLDER: altă lucrare",
-      "en": "PLACEHOLDER: other works"
+      "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+      "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
     },
     "overlap": {
       "start": "2026-11-08T10:00:00+02:00",
       "end": "2026-11-08T18:00:00+02:00"
     },
-    "kind": "shared_detour",
+    "kind": "same_corridor",
     "stopIds": [],
     "routeIds": [
-      "R_TV_2"
+      "R_AB_M32",
+      "R_AB_M36",
+      "R_AB_M37",
+      "R_AB_M38",
+      "R_AB_M46",
+      "R_AB_M51",
+      "R_TV_2",
+      "R_TV_4",
+      "R_TV_7"
     ]
   }
 ]
