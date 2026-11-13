@@ -102,15 +102,21 @@ def _register_match(osm_name: str) -> tuple[str, str | None]:
     return st.name, st.cod_gis
 
 
-def streets_in(buffer: BaseGeometry, buffer_meters: float, area: BaseGeometry | None = None) -> list[NoticeStreet]:
-    """Register-matched names of the OSM streets that run inside the buffer (∩ area), longest first."""
+def streets_in(buffer: BaseGeometry, buffer_meters: float, area: BaseGeometry | None = None,
+               closure_meters: float | None = None) -> list[NoticeStreet]:
+    """Register-matched names of the OSM streets that run inside the buffer (∩ area), longest first.
+
+    `closure_meters`: length of the closure line. The street it lies on has about that length plus
+    2 × buffer inside the buffer, so for a short closure the margin over a crossing is at most half of it.
+    """
     w = osm_ways.named_ways()
     region = buffer if area is None else buffer.intersection(area)
     if region.is_empty:
         return []
     region_m = to_metric(region)
     buffer_m_ = to_metric(buffer)
-    crossing = 2 * float(buffer_meters) + MIN_EXTRA_METERS
+    extra = MIN_EXTRA_METERS if closure_meters is None else min(MIN_EXTRA_METERS, closure_meters / 2)
+    crossing = 2 * float(buffer_meters) + extra
     lengths: dict[tuple[str, str | None], float] = {}
     for i in osm_ways.ways_in(region):
         # a street that only crosses the closure has about 2 × buffer of its length inside it
@@ -261,7 +267,8 @@ def build_notices(closure: dict, analysis: dict, published: dict | None) -> list
     if buffer is not None:
         hit |= {zones.slugs[int(i)] for i in zones.tree.query(buffer, predicate="intersects")}
 
-    all_streets = streets_in(buffer, buffer_meters) if buffer is not None else []
+    line_m = to_metric(from_geojson(closure["geometry"])).length if buffer is not None else None
+    all_streets = streets_in(buffer, buffer_meters, closure_meters=line_m) if buffer is not None else []
     what = {lang: window_phrase(start, end, lang, open_end) for lang in ("ro", "en")}
     title = closure.get("title") or {}
     alerts = (published or {}).get("alerts") or []
@@ -269,7 +276,7 @@ def build_notices(closure: dict, analysis: dict, published: dict | None) -> list
     for slug in hit:
         shape_ = zones.shapes[zones.slugs.index(slug)]
         rows = rows_by_zone.get(slug, [])
-        streets = streets_in(buffer, buffer_meters, shape_) if buffer is not None else []
+        streets = streets_in(buffer, buffer_meters, shape_, line_m) if buffer is not None else []
         route_ids = sorted({r["routeId"] for r in rows},
                            key=lambda rid: (net.route_by_id.get(rid, {}).get("shortName", rid).zfill(4), rid))
         by_name: dict[str, list[dict]] = {}
