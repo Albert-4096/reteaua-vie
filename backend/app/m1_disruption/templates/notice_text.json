@@ -1,5 +1,5 @@
 {
-  "_comment": "The public notice generated from a closure (D-013, GET /api/closures/{id}/notice). Placeholders in {braces} are filled by app/m1_disruption/notice_text.py. Line names, stop names, times and distances come only from the closure, its analysis and impact, the network and the GTFS; a clause whose data is missing is left out. The temporary-line sentence is reused from alert_texts.json.",
+  "_comment": "The public notice generated from a closure (D-013, GET /api/closures/{id}/notice). Placeholders in {braces} are filled by app/m1_disruption/notice_text.py. Line names, stop names, times and distances come only from the closure, its analysis and impact, the network and the GTFS; a clause whose data is missing is left out. The temporary-line sentence is reused from alert_texts.json. Lists ([one, many]) pick the singular or plural form. Lines that lose the same stops share one block; a stop name shared by several GTFS stops is qualified with the mode and the lines that serve it when the text would otherwise name a served and a not-served stop the same way.",
   "ro": {
     "days": [
       "luni",
@@ -27,25 +27,95 @@
       "trolleybus": "troleibuz"
     },
     "line": "Linia {line} ({mode})",
-    "whole_line": "{line} nu circulă.",
-    "whole_line_direction": "{line} nu circulă în sensul spre {headsign}.",
-    "action_shortened": "{line} circulă pe un traseu scurtat.",
-    "action_rerouted": "{line} circulă pe un traseu deviat.",
-    "action_suspended_section": "{line} nu circulă între stațiile {from_stop} și {to_stop}.",
-    "action_suspended": "{line} nu circulă pe o porțiune a traseului.",
-    "action_none": "{line} nu oprește în stațiile de mai jos.",
-    "direction": "În sensul spre {headsign}, nu oprește în:",
-    "both_directions": "În ambele sensuri, nu oprește în:",
-    "stop": "– {stop}.",
-    "stop_nearest": "– {stop}. Cea mai apropiată stație deservită: {name}, {distance} pe jos.",
-    "stop_still_served": "– {stop}. Stația rămâne deservită de {lines}.",
     "distance": "{meters} m",
     "distance_approx": "aproximativ {meters} m",
-    "same_name": ", altă stație cu același nume",
     "no_service": "Stații în care nu oprește niciun mijloc de transport în comun în acest interval: {stops}.",
     "to_confirm": "De confirmat (nu sunt incluse în listele de mai sus):",
     "to_confirm_line": "– {line}, în sensul spre {headsign}: {stops}.",
-    "map": "Harta cu toate stațiile: {url}"
+    "map": "Harta cu toate stațiile: {url}",
+    "lines": "Liniile {lines} ({mode})",
+    "and": "și",
+    "whole_line": [
+      "{line} nu circulă.",
+      "{line} nu circulă."
+    ],
+    "whole_line_direction": "{line} nu circulă în sensul spre {headsign}.",
+    "action_shortened": [
+      "{line} circulă pe un traseu scurtat.",
+      "{line} circulă pe trasee scurtate."
+    ],
+    "action_rerouted": [
+      "{line} circulă pe un traseu deviat.",
+      "{line} circulă pe trasee deviate."
+    ],
+    "action_suspended_section": [
+      "{line} nu circulă între stațiile {from_stop} și {to_stop}.",
+      "{line} nu circulă între stațiile {from_stop} și {to_stop}."
+    ],
+    "action_suspended": [
+      "{line} nu circulă pe o porțiune a traseului.",
+      "{line} nu circulă pe o porțiune a traseelor."
+    ],
+    "action_none": [
+      "{line} nu oprește în stațiile de mai jos.",
+      "{line} nu opresc în stațiile de mai jos."
+    ],
+    "verb": [
+      "nu oprește",
+      "nu opresc"
+    ],
+    "both_directions": "În ambele sensuri, {verb} în:",
+    "direction": "În sensul spre {headsign}, {verb} în:",
+    "direction_extra": "În sensul spre {headsign}, {verb} nici în:",
+    "stop": "– {stop}.",
+    "stop_info": "– {stop}. {info}.",
+    "near": "cea mai apropiată stație deservită: {name}, {distance} pe jos",
+    "near_split": "cea mai apropiată stație deservită: {parts} pe jos",
+    "near_part": "spre {headsign}, {name}, {distance}",
+    "still": "stația rămâne deservită de {lines}",
+    "split_part": "spre {headsign}, {info}",
+    "vehicle": {
+      "tram": [
+        "tramvaiul",
+        "tramvaiele"
+      ],
+      "bus": [
+        "autobuzul",
+        "autobuzele"
+      ],
+      "trolleybus": [
+        "troleibuzul",
+        "troleibuzele"
+      ]
+    },
+    "mixed_lines": [
+      "linia",
+      "liniile"
+    ],
+    "stop_of": {
+      "tram": [
+        "stația tramvaiului",
+        "stația tramvaielor"
+      ],
+      "bus": [
+        "stația autobuzului",
+        "stația autobuzelor"
+      ],
+      "trolleybus": [
+        "stația troleibuzului",
+        "stația troleibuzelor"
+      ]
+    },
+    "stop_of_mixed": [
+      "stația liniei",
+      "stația liniilor"
+    ],
+    "stop_of_mode": {
+      "tram": "stația de tramvai",
+      "bus": "stația de autobuz",
+      "trolleybus": "stația de troleibuz"
+    },
+    "towards": "spre {headsign}"
   },
   "en": {
     "days": [
@@ -74,24 +144,94 @@
       "trolleybus": "trolleybus"
     },
     "line": "Line {line} ({mode})",
-    "whole_line": "{line} is not running.",
-    "whole_line_direction": "{line} is not running towards {headsign}.",
-    "action_shortened": "{line} runs on a shortened route.",
-    "action_rerouted": "{line} runs on a diverted route.",
-    "action_suspended_section": "{line} is not running between the stops {from_stop} and {to_stop}.",
-    "action_suspended": "{line} is not running on part of its route.",
-    "action_none": "{line} does not stop at the stops below.",
-    "direction": "Towards {headsign}, it does not stop at:",
-    "both_directions": "In both directions, it does not stop at:",
-    "stop": "– {stop}.",
-    "stop_nearest": "– {stop}. Nearest served stop: {name}, {distance} on foot.",
-    "stop_still_served": "– {stop}. The stop is still served by {lines}.",
     "distance": "{meters} m",
     "distance_approx": "about {meters} m",
-    "same_name": ", another stop with the same name",
     "no_service": "Stops where no public transport stops during this time: {stops}.",
     "to_confirm": "To confirm (not included in the lists above):",
     "to_confirm_line": "– {line}, towards {headsign}: {stops}.",
-    "map": "Map with every stop: {url}"
+    "map": "Map with every stop: {url}",
+    "lines": "Lines {lines} ({mode})",
+    "and": "and",
+    "whole_line": [
+      "{line} is not running.",
+      "{line} are not running."
+    ],
+    "whole_line_direction": "{line} is not running towards {headsign}.",
+    "action_shortened": [
+      "{line} runs on a shortened route.",
+      "{line} run on shortened routes."
+    ],
+    "action_rerouted": [
+      "{line} runs on a diverted route.",
+      "{line} run on diverted routes."
+    ],
+    "action_suspended_section": [
+      "{line} is not running between the stops {from_stop} and {to_stop}.",
+      "{line} are not running between the stops {from_stop} and {to_stop}."
+    ],
+    "action_suspended": [
+      "{line} is not running on part of its route.",
+      "{line} are not running on part of their routes."
+    ],
+    "action_none": [
+      "{line} does not stop at the stops below.",
+      "{line} do not stop at the stops below."
+    ],
+    "verb": [
+      "it does not stop",
+      "they do not stop"
+    ],
+    "both_directions": "In both directions, {verb} at:",
+    "direction": "Towards {headsign}, {verb} at:",
+    "direction_extra": "Towards {headsign} only, {verb} at:",
+    "stop": "– {stop}.",
+    "stop_info": "– {stop}. {info}.",
+    "near": "nearest served stop: {name}, {distance} on foot",
+    "near_split": "nearest served stop: {parts} on foot",
+    "near_part": "towards {headsign}, {name}, {distance}",
+    "still": "the stop is still served by {lines}",
+    "split_part": "towards {headsign}, {info}",
+    "vehicle": {
+      "tram": [
+        "tram",
+        "trams"
+      ],
+      "bus": [
+        "bus",
+        "buses"
+      ],
+      "trolleybus": [
+        "trolleybus",
+        "trolleybuses"
+      ]
+    },
+    "mixed_lines": [
+      "line",
+      "lines"
+    ],
+    "stop_of": {
+      "tram": [
+        "stop of tram",
+        "stop of trams"
+      ],
+      "bus": [
+        "stop of bus",
+        "stop of buses"
+      ],
+      "trolleybus": [
+        "stop of trolleybus",
+        "stop of trolleybuses"
+      ]
+    },
+    "stop_of_mixed": [
+      "stop of line",
+      "stop of lines"
+    ],
+    "stop_of_mode": {
+      "tram": "tram stop",
+      "bus": "bus stop",
+      "trolleybus": "trolleybus stop"
+    },
+    "towards": "towards {headsign}"
   }
 }

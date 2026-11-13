@@ -224,76 +224,315 @@ def _sections(closure: dict, rows: list[dict]) -> list[NoticeSection]:
     return out
 
 
-def _no_service_stops(closure: dict, rows: list[dict]) -> list[NoticeStop]:
-    """The impact's suspended stops: no departure of any line left in the window."""
+def _service(closure: dict, rows: list[dict]) -> imp.ServiceState | None:
+    """Who still serves which stop in the window (impact's rule), or None outside every timetable."""
     start, end = parse_iso(closure["window"]["start"]), parse_iso(closure["window"]["end"])
     tt = imp.timetable_for(start)
     counts = imp.departure_counts(imp.count_window(start, end, tt), tt)
     if counts is None:
+        return None
+    return imp.ServiceState.build(counts, {imp.row_key(r) for r in rows if imp.counts_as_lost(r)})
+
+
+def _no_service_stops(rows: list[dict], svc: imp.ServiceState | None) -> list[NoticeStop]:
+    """The impact's suspended stops: no departure of any line left in the window."""
+    if svc is None:
         return []
-    lost_rows = [r for r in rows if imp.counts_as_lost(r)]
-    svc = imp.ServiceState.build(counts, {imp.row_key(r) for r in lost_rows})
     suspended = svc.suspended_stops()
     out: dict[str, NoticeStop] = {}
-    for r in lost_rows:  # analysis order: by line, direction and stop sequence
+    for r in rows:  # analysis order: by line, direction and stop sequence
         sid = str(r["stopId"])
-        if sid in suspended and sid not in out:
+        if imp.counts_as_lost(r) and sid in suspended and sid not in out:
             out[sid] = NoticeStop(stopId=sid, name=r["name"])
     return list(out.values())
 
 
 # --- the text -------------------------------------------------------------------------------
+#
+# The text is shorter than `sections`: lines that lose the same stops share one block, and
+# the stops both directions lose are listed once („în ambele sensuri”), then the few extra
+# stops of one direction. A stop name the GTFS gives to several stops is qualified with the
+# mode and the lines that serve it, when the text would otherwise give one name to a stop
+# that is served and to one that is not (Catedrala Mitropolitană: tram stop vs bus stop).
 
 
-def _line_label(sec: NoticeSection, lang: str) -> str:
+def _join(items: list[str], lang: str) -> str:
+    conj = texts()[lang]["and"]
+    return items[0] if len(items) == 1 else f"{', '.join(items[:-1])} {conj} {items[-1]}"
+
+
+def _many(value: list, n: int):
+    return value[0] if n == 1 else value[1]
+
+
+class _Text:
+    """Everything one language's text needs: rows, service state, network, qualifiers."""
+
+    def __init__(self, closure: dict, rows: list[dict], sections: list[NoticeSection],
+                 no_service: list[NoticeStop], svc: imp.ServiceState | None):
+        self.closure, self.rows, self.sections, self.no_service, self.svc = closure, rows, sections, no_service, svc
+        self.net = load_network()
+        self.short_of = {r["id"]: r["shortName"] for r in self.net.routes}
+        self.whole = _whole_lines(closure, rows)
+        self.lost_rows: dict[str, list[dict]] = {}
+        for r in rows:
+            if imp.counts_as_lost(r):
+                self.lost_rows.setdefault(str(r["stopId"]), []).append(r)
+        self.headsign = {(r["routeId"], int(r["directionId"])): r.get("headsign") for r in rows if r.get("headsign")}
+        self.groups = self._groups()
+        self.ambiguous = self._ambiguous()
+
+    # -- service -------------------------------------------------------------------------
+
+    def remaining(self, sid: str) -> list[str]:
+        """Route ids that still depart from a stop in the window."""
+        if self.svc is None:
+            return []
+        return sorted({r for r, _ in self.svc.served(sid)}, key=lambda r: al._line_key(self.short_of.get(r, r)))
+
+    def name(self, sid: str) -> str:
+        rows = self.lost_rows.get(sid)
+        return rows[0]["name"] if rows else (self.net.stop_by_id.get(sid) or {}).get("name") or sid
+
+    # -- grouping ------------------------------------------------------------------------
+
+    def _groups(self) -> list[dict]:
+        """Text blocks: whole lines by mode, then lines with identical losses per direction."""
+        whole_both: dict[str, list[NoticeSection]] = {}
+        per_route: dict[str, dict] = {}
+        order: list[tuple[str, str]] = []
+        for sec in self.sections:
+            did = self.whole.get(sec.routeId, "none")
+            if did is None:
+                if sec.mode not in whole_both:
+                    order.append(("whole", sec.mode))
+                whole_both.setdefault(sec.mode, []).append(sec)
+                continue
+            if sec.routeId not in per_route:
+                per_route[sec.routeId] = {"sec": sec, "dirs": {}, "whole_dir": None}
+                order.append(("route", sec.routeId))
+            e = per_route[sec.routeId]
+            if did != "none" and sec.directionId == did:
+                e["whole_dir"] = sec
+                continue
+            for d in ((0, 1) if sec.directionId is None else (sec.directionId,)):
+                e["dirs"][d] = sec.stopsNotServed
+        blocks: list[dict] = []
+        by_key: dict[tuple, dict] = {}
+        for kind, key in order:
+            if kind == "whole":
+                blocks.append({"kind": "whole", "secs": whole_both[key]})
+                continue
+            e = per_route[key]
+            if e["whole_dir"] is not None:
+                blocks.append({"kind": "whole_dir", "secs": [e["whole_dir"]]})
+            if not e["dirs"]:
+                continue
+            sec = e["sec"]
+            a = _action_of(self.closure, sec.routeId, sec.directionId) or {}
+            sig = (sec.mode, sec.action, a.get("fromStopId"), a.get("toStopId"),
+                   tuple(sorted((d, tuple(s.stopId for s in stops)) for d, stops in e["dirs"].items())))
+            if sig in by_key:
+                by_key[sig]["secs"].append(sec)
+                for d, stops in e["dirs"].items():
+                    by_key[sig]["dirs"][d].append(stops)
+                continue
+            block = {"kind": "lines", "secs": [sec], "dirs": {d: [stops] for d, stops in e["dirs"].items()}}
+            by_key[sig] = block
+            blocks.append(block)
+        return blocks
+
+    def _entries(self, block: dict, d: int) -> list[dict]:
+        """One entry per stop name in direction d: the stop ids and the info shown for them."""
+        out: dict[str, dict] = {}
+        lists = block["dirs"][d]
+        for i, stop in enumerate(lists[0]):
+            # the same stop as lost by every line of the block: the nearest served one of them all
+            candidates = [lst[i].nearestServed for lst in lists if lst[i].nearestServed]
+            own = [n for n in candidates if n.stopId == stop.stopId]
+            known = [n for n in candidates if n.distanceMeters is not None]
+            near = own[0] if own else (min(known, key=lambda n: n.distanceMeters) if known else None)
+            e = out.setdefault(stop.name, {"name": stop.name, "ids": [], "info": None})
+            e["ids"].append(stop.stopId)
+            if e["info"] is None and near is not None:
+                if near.stopId == stop.stopId:
+                    lines = self.remaining(stop.stopId)
+                    e["info"] = ("still", tuple(lines)) if lines else None
+                else:
+                    e["info"] = ("near", near.stopId, near.distanceMeters, near.approximate)
+        return list(out.values())
+
+    def direction_label(self, block: dict, d: int) -> str:
+        heads = [self.headsign.get((sec.routeId, d)) for sec in block["secs"]]
+        return " / ".join(dict.fromkeys(h for h in heads if h))
+
+    def layout(self, block: dict) -> list[tuple[str, int | None, list[tuple[dict, dict[int, dict]]]]]:
+        """[(header kind, direction, [(entry, {direction: entry})])]: the merged lists of a block."""
+        dirs = sorted(block["dirs"])
+        per_dir = {d: self._entries(block, d) for d in dirs}
+        if len(dirs) == 2:
+            names = {d: [e["name"] for e in per_dir[d]] for d in dirs}
+            common = [n for n in names[dirs[0]] if n in names[dirs[1]]]
+            extra = {d: [e for e in per_dir[d] if e["name"] not in common] for d in dirs}
+            if common and all(len(x) <= 2 for x in extra.values()):
+                by_name = {d: {e["name"]: e for e in per_dir[d]} for d in dirs}
+                both = [(by_name[dirs[0]][n], {d: by_name[d][n] for d in dirs}) for n in common]
+                out = [("both", None, both)]
+                out += [("extra", d, [(e, {d: e}) for e in extra[d]]) for d in dirs if extra[d]]
+                return out
+        return [("direction", d, [(e, {d: e}) for e in per_dir[d]]) for d in dirs]
+
+    # -- same-name stops ------------------------------------------------------------------
+
+    def _ambiguous(self) -> set[str]:
+        """Names the text gives to a served stop and to a not-served one."""
+        if self.svc is None:
+            return set()
+        mentioned: dict[str, set[str]] = {}
+
+        def add(sid: str, name: str | None = None) -> None:
+            mentioned.setdefault(name or self.name(sid), set()).add(sid)
+
+        for block in self.groups:
+            if block["kind"] != "lines":
+                continue
+            for _, _, items in self.layout(block):
+                for _, by_dir in items:
+                    for e in by_dir.values():
+                        for sid in e["ids"]:
+                            add(sid, e["name"])
+                        if e["info"] and e["info"][0] == "near":
+                            add(e["info"][1])
+        same_name: dict[str, list[str]] = {}
+        for s in self.net.stops:
+            same_name.setdefault(s["name"], []).append(str(s["id"]))
+        for s in self.no_service:  # „no service at X” must not be read as the X across the street
+            add(s.stopId, s.name)
+            for sid in same_name.get(s.name, []):
+                add(sid, s.name)
+        return {name for name, ids in mentioned.items()
+                if len({bool(self.remaining(sid)) for sid in ids}) > 1}
+
+    def _mode_of_lost(self, sid: str) -> str:
+        rows = self.lost_rows.get(sid) or []
+        return route_mode(rows[0]["routeId"]) if rows else "bus"
+
+    def served_label(self, sid: str, lang: str) -> str:
+        name = self.name(sid)
+        lines = self.remaining(sid)
+        if name not in self.ambiguous or not lines:
+            return name
+        t = texts()[lang]
+        modes = {route_mode(r) for r in lines}
+        shorts = _join([self.short_of.get(r, r) for r in lines], lang)
+        prefix = _many(t["stop_of"][modes.pop()], len(lines)) if len(modes) == 1 else _many(t["stop_of_mixed"], len(lines))
+        return f"{name} ({prefix} {shorts})"
+
+    def lost_label(self, name: str, mode: str, lang: str) -> str:
+        return f"{name} ({texts()[lang]['stop_of_mode'][mode]})" if name in self.ambiguous else name
+
+    def no_service_label(self, sid: str, lang: str) -> str:
+        name = self.name(sid)
+        if name not in self.ambiguous:
+            return name
+        t = texts()[lang]
+        mode = self._mode_of_lost(sid)
+        q = t["stop_of_mode"][mode]
+        # another stop of this name and mode is still served: say which side of the street this one is
+        others = [s["id"] for s in self.net.stops if s["name"] == name and s["id"] != sid and self.remaining(s["id"])]
+        if any(route_mode(r) == mode for o in others for r in (self.net.stop_by_id[o].get("routeIds") or [])):
+            rows = self.lost_rows.get(sid) or []
+            head = next((r.get("headsign") for r in rows if r["routeId"] not in self.whole and r.get("headsign")),
+                        next((r.get("headsign") for r in rows if r.get("headsign")), None))
+            if head and head != name:
+                q += " " + t["towards"].format(headsign=head)
+        return f"{name} ({q})"
+
+    # -- rendering -----------------------------------------------------------------------
+
+    def vehicles(self, route_ids: tuple[str, ...], lang: str) -> str:
+        t = texts()[lang]
+        modes = {route_mode(r) for r in route_ids}
+        names = _join([self.short_of.get(r, r) for r in route_ids], lang)
+        word = _many(t["vehicle"][modes.pop()], len(route_ids)) if len(modes) == 1 else _many(t["mixed_lines"], len(route_ids))
+        return f"{word} {names}"
+
+    def info(self, entries: list[tuple[int, dict]], lang: str, block: dict) -> str | None:
+        """What a citizen does instead, for one stop name in one or both directions."""
+        t = texts()[lang]
+        infos = [(d, e["info"]) for d, e in entries if e["info"]]
+        if not infos:
+            return None
+
+        def distance(meters: list[int], approx: bool) -> str:
+            m = "–".join(str(x) for x in sorted(set(meters)))
+            return t["distance_approx" if approx else "distance"].format(meters=m)
+
+        def one(info: tuple) -> str:
+            if info[0] == "still":
+                return t["still"].format(lines=self.vehicles(info[1], lang))
+            return t["near"].format(name=self.served_label(info[1], lang),
+                                    distance=distance([al._round10(info[2])], info[3]))
+
+        complete = len(infos) == len(entries)
+        if complete and all(i[0] == "still" for _, i in infos) and len({i[1] for _, i in infos}) == 1:
+            return one(infos[0][1])
+        if complete and all(i[0] == "near" for _, i in infos):
+            labels = [self.served_label(i[1], lang) for _, i in infos]
+            if len(set(labels)) == 1:  # the same stop name on both sides: one name, the two distances
+                return t["near"].format(name=labels[0], distance=distance(
+                    [al._round10(i[2]) for _, i in infos], any(i[3] for _, i in infos)))
+            parts = [t["near_part"].format(headsign=self.direction_label(block, d), name=label,
+                                           distance=distance([al._round10(i[2])], i[3]))
+                     for (d, i), label in zip(infos, labels)]
+            return t["near_split"].format(parts="; ".join(parts))
+        if len(infos) == 1 and complete:
+            return one(infos[0][1])
+        parts = [t["split_part"].format(headsign=self.direction_label(block, d), info=one(i)) for d, i in infos]
+        return "; ".join(parts)
+
+    def block_text(self, block: dict, lang: str) -> str:
+        t = texts()[lang]
+        secs = block["secs"]
+        mode = secs[0].mode
+        n = len(secs)
+        shorts = [s.shortName for s in secs]
+        label = (t["line"].format(line=shorts[0], mode=t["modes"][mode]) if n == 1
+                 else t["lines"].format(lines=_join(shorts, lang), mode=t["modes"][mode]))
+        if block["kind"] == "whole":
+            return _many(t["whole_line"], n).format(line=label)
+        if block["kind"] == "whole_dir":
+            return t["whole_line_direction"].format(line=label, headsign=secs[0].headsign or "")
+        lines = [self.action_sentence(secs[0], label, n, lang)]
+        verb = _many(t["verb"], n)
+        for kind, d, items in self.layout(block):
+            if kind == "both":
+                lines.append(t["both_directions"].format(verb=verb))
+            else:
+                key = "direction_extra" if kind == "extra" else "direction"
+                lines.append(t[key].format(headsign=self.direction_label(block, d), verb=verb))
+            for entry, by_dir in items:
+                stop = self.lost_label(entry["name"], mode, lang)
+                info = self.info(sorted(by_dir.items()), lang, block)
+                lines.append(t["stop_info"].format(stop=stop, info=al._cap(info)) if info else t["stop"].format(stop=stop))
+        return "\n".join(lines)
+
+    def action_sentence(self, sec: NoticeSection, label: str, n: int, lang: str) -> str:
+        t = texts()[lang]
+        if sec.action == "suspended":
+            a = _action_of(self.closure, sec.routeId, sec.directionId) or {}
+            names = [(self.net.stop_by_id.get(a.get(k) or "") or {}).get("name") for k in ("fromStopId", "toStopId")]
+            if all(names):
+                return _many(t["action_suspended_section"], n).format(line=label, from_stop=names[0], to_stop=names[1])
+            return _many(t["action_suspended"], n).format(line=label)
+        if sec.action in ("shortened", "rerouted"):
+            return _many(t[f"action_{sec.action}"], n).format(line=label)
+        return _many(t["action_none"], n).format(line=label)
+
+
+def _text(ctx: _Text, unsure_count: int, map_url: str, lang: str) -> str:
     t = texts()[lang]
-    return t["line"].format(line=sec.shortName, mode=t["modes"][sec.mode])
-
-
-def _action_sentence(sec: NoticeSection, closure: dict, lang: str) -> str:
-    t = texts()[lang]
-    line = _line_label(sec, lang)
-    if sec.action == "suspended":
-        a = _action_of(closure, sec.routeId, sec.directionId) or {}
-        net = load_network()
-        names = [(net.stop_by_id.get(a.get(k) or "") or {}).get("name") for k in ("fromStopId", "toStopId")]
-        if all(names):
-            return t["action_suspended_section"].format(line=line, from_stop=names[0], to_stop=names[1])
-        return t["action_suspended"].format(line=line)
-    if sec.action in ("shortened", "rerouted"):
-        return t[f"action_{sec.action}"].format(line=line)
-    return t["action_none"].format(line=line)
-
-
-def _stop_line(stop: NoticeStop, short_of: dict[str, str], nearest_lines: dict[str, list[str]], lang: str) -> str:
-    t = texts()[lang]
-    n = stop.nearestServed
-    if n is None or n.distanceMeters is None:
-        return t["stop"].format(stop=stop.name)
-    if n.stopId == stop.stopId:
-        shorts = [short_of.get(r, r) for r in nearest_lines.get(stop.stopId) or []]
-        if not shorts:
-            return t["stop"].format(stop=stop.name)
-        return t["stop_still_served"].format(stop=stop.name, lines=al.lines_phrase(shorts, lang))
-    meters = al._round10(n.distanceMeters)
-    distance = t["distance_approx" if n.approximate else "distance"].format(meters=meters)
-    name = n.name + (t["same_name"] if n.name == stop.name else "")
-    return t["stop_nearest"].format(stop=stop.name, name=name, distance=distance)
-
-
-def _text(closure: dict, rows: list[dict], sections: list[NoticeSection], no_service: list[NoticeStop],
-          unsure_count: int, map_url: str, lang: str) -> str:
-    t = texts()[lang]
-    net = load_network()
-    short_of = {r["id"]: r["shortName"] for r in net.routes}
-    whole = _whole_lines(closure, rows)
-    # the lines that still serve a stop (the row's nearestServed is the stop itself)
-    nearest_lines: dict[str, list[str]] = {}
-    for r in rows:
-        n = r.get("nearestServed")
-        if n and str(n["stopId"]) == str(r["stopId"]) and imp.counts_as_lost(r):
-            nearest_lines.setdefault(str(r["stopId"]), n.get("routeIds") or [])
-
+    closure, rows, net = ctx.closure, ctx.rows, ctx.net
     blocks: list[str] = []
     if unsure_count:
         blocks.append(t["draft"].format(count=_count_stops(unsure_count, lang)))
@@ -304,31 +543,10 @@ def _text(closure: dict, rows: list[dict], sections: list[NoticeSection], no_ser
     reason = (title.get(lang) or (title.get("ro") if lang == "en" else None) or "").strip().rstrip(".")
     blocks.append(t["intro"].format(window=window, reason=reason) if reason else window + ".")
 
-    by_route: dict[str, list[NoticeSection]] = {}
-    for sec in sections:
-        by_route.setdefault(sec.routeId, []).append(sec)
-    for rid, secs in by_route.items():
-        first = secs[0]
-        line = _line_label(first, lang)
-        rest = secs
-        if rid in whole:
-            if whole[rid] is None:
-                blocks.append(t["whole_line"].format(line=line))
-                continue
-            blocks.append(t["whole_line_direction"].format(line=line, headsign=first.headsign or ""))
-            rest = secs[1:]
-            if not rest:
-                continue
-        lines = [_action_sentence(rest[0], closure, lang)]
-        for sec in rest:
-            head = t["both_directions"] if sec.directionId is None else \
-                t["direction"].format(headsign=sec.headsign or "")
-            lines.append(head)
-            lines.extend(_stop_line(s, short_of, nearest_lines, lang) for s in sec.stopsNotServed)
-        blocks.append("\n".join(lines))
+    blocks.extend(ctx.block_text(b, lang) for b in ctx.groups)
 
-    if no_service:  # two stops of one name (one per side of the street) are named once
-        names = list(dict.fromkeys(s.name for s in no_service))
+    if ctx.no_service:  # two stops of one name (one per side of the street) are named once
+        names = list(dict.fromkeys(ctx.no_service_label(s.stopId, lang) for s in ctx.no_service))
         blocks.append(t["no_service"].format(stops=", ".join(names)))
 
     temporary = al._Ctx(closure).temporary[lang].strip()
@@ -374,9 +592,11 @@ def build_notice(closure: Closure | dict, analysis: Analysis | dict, impact: Imp
     rows = a.get("stops") or []
     unsure_count = sum(1 for r in rows if _undecided(r))
     sections = _sections(c, rows)
-    no_service = _no_service_stops(c, rows)
+    svc = _service(c, rows)
+    no_service = _no_service_stops(rows, svc)
     map_url = al.alert_url(c["id"], None, base_url)
-    text = I18n(**{lang: _text(c, rows, sections, no_service, unsure_count, map_url, lang) for lang in LANGS})
+    ctx = _Text(c, rows, sections, no_service, svc)
+    text = I18n(**{lang: _text(ctx, unsure_count, map_url, lang) for lang in LANGS})
 
     provenance: list[Provenance] = []
     seen = set()

@@ -119,13 +119,25 @@ def test_hero_final_with_d012_decisions(hero_final):
     assert "Linia 4 (tramvai) nu circulă." in n.text.ro
     assert "Line 4 (tram) is not running." in n.text.en
     # every stop of lines 2 and 7 is named with its nearest served stop or the lines that still serve it
+    nearest: dict[str, object] = {}  # per stop: the closest served stop over the lines that lose it
     for sec in n.sections:
         if sec.routeId == "R_TV_4":
             continue
         for s in sec.stopsNotServed:
-            assert f"– {s.name}." in n.text.ro
-            if s.nearestServed and s.nearestServed.stopId != s.stopId:
-                assert s.nearestServed.name in n.text.ro and s.nearestServed.distanceMeters <= 1500 * 1.3
+            assert f"– {s.name}" in n.text.ro
+            ns = s.nearestServed
+            if ns and ns.stopId != s.stopId and (s.stopId not in nearest
+                                                 or ns.distanceMeters < nearest[s.stopId].distanceMeters):
+                nearest[s.stopId] = ns
+    for ns in nearest.values():
+        assert ns.name in n.text.ro and ns.distanceMeters <= 1500 * 1.3
+    # lines 2 and 7 lose the same stops: one block, the common stops once for both directions
+    assert "Liniile 2 și 7 (tramvai) circulă pe trasee scurtate.\nÎn ambele sensuri, nu opresc în:" in n.text.ro
+    assert n.text.ro.count("– Mendeleev.") == 1
+    assert "În sensul spre Shopping City / Bulevardul Dâmbovița, nu opresc nici în:" in n.text.ro
+    # sections keep the full per-line, per-direction detail
+    assert {(sec.routeId, sec.directionId) for sec in n.sections} == {
+        ("R_TV_4", None), ("R_TV_2", 0), ("R_TV_2", 1), ("R_TV_7", 0), ("R_TV_7", 1)}
     _, _, impact = _case(HERO, d012_decisions(_read(HERO, "analysis")))
     assert len(n.stopsWithNoService) == impact.totals.stopsSuspended
     assert "Stații în care nu oprește niciun mijloc de transport" in n.text.ro
@@ -136,6 +148,33 @@ def test_hero_final_with_d012_decisions(hero_final):
     assert n.sourceText and n.sourceUrl and "stpt.ro" in n.sourceUrl
 
 
+def test_hero_same_name_stops_do_not_contradict(hero_final):
+    """A name shared by a served and a not-served stop is qualified with the mode and the lines."""
+    from app.m1_disruption.notice_text import _service, _Text
+
+    closure, analysis, impact = _case(HERO, d012_decisions(_read(HERO, "analysis")))
+    n = hero_final
+    ro = n.text.ro
+    assert "– Catedrala Mitropolitană (stația de tramvai). Cea mai apropiată stație deservită: " \
+           "Catedrala Mitropolitană (stația autobuzelor 32, 33, 33b și E3)" in ro
+    no_service = ro.split("Stații în care nu oprește niciun mijloc de transport în comun în acest interval: ")[1]
+    assert no_service.startswith("Catedrala Mitropolitană (stația de tramvai), ")
+    assert "Piața Sfânta Maria (16 Decembrie 1989) (stația de tramvai" in no_service
+    assert "Piața Sfânta Maria (16 Decembrie 1989) (stația tramvaielor " in ro
+    # generic: no stop label is used both for a served stop and for a stop with no service
+    rows = [r.model_dump(mode="json") for r in analysis.stops]
+    svc = _service(closure, rows)
+    ctx = _Text(closure, rows, n.sections, n.stopsWithNoService, svc)
+    unserved = {ctx.no_service_label(s.stopId, "ro") for s in n.stopsWithNoService}
+    named = [s for sec in n.sections if sec.routeId != "R_TV_4" for s in sec.stopsNotServed]  # line 4: no list
+    same_name = {str(s["id"]) for s in ctx.net.stops if s["name"] in {x.name for x in n.stopsWithNoService}}
+    served = {ctx.served_label(sid, "ro") for sid in {s.stopId for s in named} | same_name
+              | {s.nearestServed.stopId for s in named if s.nearestServed} if ctx.remaining(sid)}
+    assert not unserved & served
+    # E3 has no such clash: no qualifier is added
+    assert "(stația" not in _notice(E3).text.ro
+
+
 def test_e3_names_the_11_suspended_stops_of_notice_11065():
     n = _notice(E3)
     sure, _ = _gold(11065)
@@ -144,8 +183,10 @@ def test_e3_names_the_11_suspended_stops_of_notice_11065():
     heads = {sec.directionId: (sec.headsign, len(sec.stopsNotServed)) for sec in n.sections}
     assert heads == {0: ("ELBA", 6), 1: ("Apicultorilor", 5)}
     assert n.status == "final"
-    assert "În sensul spre ELBA, nu oprește în:" in n.text.ro
-    assert "În sensul spre Apicultorilor, nu oprește în:" in n.text.ro
+    # the 5 stops both directions lose are listed once, then the one extra stop towards ELBA
+    assert "Linia E3 (autobuz) circulă pe un traseu deviat.\nÎn ambele sensuri, nu oprește în:" in n.text.ro
+    assert "În sensul spre ELBA, nu oprește nici în:\n– Baba Novac." in n.text.ro
+    assert n.text.ro.count("– ") == 6
     for sec in n.sections:
         for s in sec.stopsNotServed:
             assert s.nearestServed is not None
@@ -163,7 +204,7 @@ def test_mocioni_names_the_lost_stops():
     assert {"353", "354", "356", "357", "291"} <= named
     for sid in named:
         assert net.stop_by_id[sid]["name"] in n.text.ro
-    assert "Stația rămâne deservită de liniile" in n.text.ro   # other lines still stop there
+    assert "Stația rămâne deservită de autobuzele" in n.text.ro   # other lines still stop there
     assert n.text.ro.startswith("Începând de luni, 2 noiembrie 2026, până la finalizarea lucrărilor.")
 
 
