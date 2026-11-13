@@ -123,7 +123,18 @@ def publish(closure_id: str) -> PublishResult:
 
     state.update("closures", closure_id, _set_status)
     start_validation(closure_id)
+    start_audio(closure_id)
     return result
+
+
+def start_audio(closure_id: str) -> None:
+    """The hero case's MP3s (SPEC §6.1 item 15), in the background; never fails a publish."""
+    try:
+        from app.m1_disruption import audio
+
+        audio.start_after_publish(closure_id)
+    except Exception:  # noqa: BLE001 - without audio the QR page uses Web Speech
+        log.exception("could not start audio generation for %s", closure_id)
 
 
 # --- the feed -------------------------------------------------------------------------
