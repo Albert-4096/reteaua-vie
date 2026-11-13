@@ -938,6 +938,7 @@ class ParseDetail:
     tram: bool
     lines_unknown: list[str]
     cause: str
+    served_lists: list[dict] = field(default_factory=list)   # {routeId, directionId, names, openSide}
 
 
 def _closure_geometry(sentence: str, streets: list[tuple[int, Street]]) -> tuple[BaseGeometry | None, list[Street], tuple[Street, Street] | None, bool]:
@@ -994,6 +995,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
     route_ids: list[str] = []
     actions: list[_Action] = []
     temp: dict[str, TemporaryRoute] = {}
+    served_lists: list[dict] = []
     unknown_lines: list[str] = []
     geom = None
     closure_streets: list[Street] = []
@@ -1025,6 +1027,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
         if rids or unknown:
             st.lines, st.unknown_lines = rids, unknown
             st.direction = {}
+            st.inbound = None
             used = True
 
         # temporary line: "introduce temporar linia de autobuz 4b"
@@ -1043,6 +1046,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
         elif _INBOUND.search(f) or _OUTBOUND.search(f):
             for r in st.lines:
                 st.direction[r] = _city_dir(r, bool(_INBOUND.search(f)))
+            st.inbound = bool(_INBOUND.search(f))
             used = True
         elif _TUR.search(f) or _RETUR.search(f):
             for r in st.lines:
@@ -1068,6 +1072,9 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
                 if d is None:
                     d = _best_dir_by_names(r, names)
                 actions.append(_Action(r, d, "rerouted", names=names, served=bool(vm)))
+                if vm:
+                    served_lists.append({"routeId": r, "directionId": d, "names": names,
+                                         "openSide": _open_side(names, st.inbound)})
             used = True
 
         # "pe traseul A – B – C": kept stops of a shortened line, or the streets of a temporary line
@@ -1162,7 +1169,21 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
     if "ambele sensuri" in whole:
         closure = closure.model_copy(update={"direction": "both"})
     return ParseDetail(closure=closure, unread=unread, window=window, closure_streets=closure_streets,
-                       section=section, tram=tram, lines_unknown=unknown_lines, cause=cause)
+                       section=section, tram=tram, lines_unknown=unknown_lines, cause=cause,
+                       served_lists=served_lists)
+
+
+def _open_side(names: list[str], inbound: bool | None) -> str | None:
+    """Which end of a served-stop list continues on the usual route (the city limit side).
+
+    „limită UAT Timișoara” first -> "start", last -> "end"; else „ieșire din oraș” -> "end",
+    „intrare în oraș” -> "start"; else None (only the stops between the listed ones count)."""
+    marks = [i for i, n in enumerate(names) if re.search(r"\blimit", fold(n))]
+    if marks:
+        return "start" if marks[0] == 0 else "end" if marks[-1] == len(names) - 1 else None
+    if inbound is None:
+        return None
+    return "start" if inbound else "end"
 
 
 def _end_hint(last: Street | None, actions: list[_Action]) -> tuple[float, float] | None:

@@ -15,22 +15,29 @@ Nothing in this file is a figure: every number about a case is computed later fr
 
 from __future__ import annotations
 
+import io
+import zipfile
+from collections import Counter
 from dataclasses import dataclass
+from functools import lru_cache
+from pathlib import Path
+
+import pandas as pd
 
 from shapely.geometry import LineString, MultiLineString, MultiPoint, Point, shape
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import linemerge, nearest_points
 
 from app.cases.catalog import CASES, CASES_BY_CLOSURE, Case
-from app.common import state
+from app.common import gtfs, state
 from app.common.city import load_network
 from app.common.geo import to_geojson, to_metric, to_wgs84
 from app.common.stpt_posts import get_post
 from app.common.timeutil import iso
-from app.config import now
+from app.config import get_settings, now
 from app.m1_disruption import parser
 from app.models.base import I18n
-from app.models.v1 import Closure
+from app.models.v1 import Closure, RouteAction
 
 APPROXIMATE = I18n(
     ro="locație aproximativă: anunțul nu dă punctul exact",
@@ -106,6 +113,71 @@ def _parsed_geometry(d: parser.ParseDetail) -> BaseGeometry:
     return shape(g.model_dump())
 
 
+# --- Mocioni: the "normal pattern" is GTFS 4.29 (SPEC §5.3) -------------------------------
+
+
+def _history_zip(version: str) -> Path:
+    hits = sorted((get_settings().data_dir / "gtfs-history").glob(f"smtt-{version}_*.zip"))
+    if not hits:
+        raise CaseBuildError(f"GTFS {version} missing in $DATA_DIR/gtfs-history (SPEC §5.3)")
+    return hits[-1]
+
+
+@lru_cache(maxsize=2)
+def normal_patterns(version: str = "4.29") -> dict[tuple[str, int], tuple[str, ...]]:
+    """Most common trip pattern per (route, direction) of an older GTFS version."""
+    path = _history_zip(version)
+    with zipfile.ZipFile(path) as z:
+        def read(name: str) -> pd.DataFrame:
+            return pd.read_csv(io.BytesIO(z.read(name)), dtype=str, keep_default_na=False)
+        trips, st = read("trips.txt"), read("stop_times.txt")
+    st["stop_sequence"] = st["stop_sequence"].astype(int)
+    seqs = st.sort_values(["trip_id", "stop_sequence"]).groupby("trip_id")["stop_id"].agg(tuple)
+    out = {}
+    for (route, d), grp in trips.groupby(["route_id", "direction_id"]):
+        counts = Counter(seqs[t] for t in grp["trip_id"] if t in seqs.index)
+        if counts:
+            out[(route, int(d or 0))] = counts.most_common(1)[0][0]
+    return out
+
+
+def mocioni_actions(d: parser.ParseDetail) -> tuple[list[RouteAction], str]:
+    """Suspended stops of 11060 per line and direction, on the GTFS 4.29 normal pattern.
+
+    The notice lists the stops that are still served. On the 4.29 pattern, a stop counts as
+    suspended when it lies between the listed stops, or beyond them on the side away from the
+    city limit, is not named in the list, and is not on the line's current (4.31) pattern either.
+    """
+    normal = normal_patterns("4.29")
+    current = gtfs.stop_patterns()
+    names = parser._stop_names()
+    out: list[RouteAction] = []
+    for sl in d.served_lists:
+        r, dd = sl["routeId"], sl["directionId"]
+        if dd is None or (r, dd) not in normal:
+            continue
+        pat = list(normal[(r, dd)])
+        scored = [(parser._name_score(n, names.get(s, "")), s) for n in sl["names"] for s in pat]
+        hits = {s for sc, s in scored if sc >= 1}
+        strong = {s for sc, s in scored if sc >= 2}
+        if hits:
+            idx = sorted(pat.index(h) for h in hits)
+            lo, hi = idx[0], idx[-1]
+            region = set(pat[lo:hi + 1])
+            if sl["openSide"] == "end":
+                region |= set(pat[:lo])
+            elif sl["openSide"] == "start":
+                region |= set(pat[hi + 1:])
+        else:
+            region = set(pat)
+        now_served = set(current[(r, dd)].stop_ids) if (r, dd) in current else set()
+        susp = [s for s in pat if s in region and s not in strong and s not in now_served]
+        out.append(RouteAction(routeId=r, directionId=dd, action="rerouted", suspendedStopIds=susp, stopNames=None))
+    note = (f"normal pattern = GTFS 4.29 ({_history_zip('4.29').name}); suspended = listed as not served "
+            "by notice 11060 and absent from the GTFS 4.31 pattern")
+    return out, note
+
+
 def _approximate(case: Case) -> bool:
     return case.id in ("case_16dec", "case_mocioni")
 
@@ -127,6 +199,9 @@ def build_case(case: Case) -> Built:
         elif d.section:
             note += f", within 200 m of {d.section[0].name}"
     actions = [a for a in (d.closure.routeActions or []) if a.routeId in case.route_ids]
+    if case.id == "case_mocioni":
+        actions, pattern_note = mocioni_actions(d)
+        note += "; " + pattern_note
     missing = sorted(set(case.route_ids) - {a.routeId for a in actions})
     if missing:
         raise CaseBuildError(f"{case.id}: the parser found no action for {', '.join(missing)}")
