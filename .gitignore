@@ -11,3 +11,5 @@ __pycache__/
 !.env.example
 .cursor/mcp.json
 .DS_Store
+.pytest_cache/
+.ruff_cache/
