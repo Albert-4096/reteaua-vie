@@ -4,9 +4,11 @@
 SHELL := /bin/bash
 DATA_DIR ?= /srv/unihack/app/data
 ENV_FILE ?= /srv/unihack/app/.env
+# human review sheets of the eval labels (private, outside the repo): `make eval-review` writes them
+EVAL_REVIEW_DIR ?= /srv/unihack/app/docs/eval-review
 API_PORT ?= 3000
 WEB_PORT ?= 3010
-export DATA_DIR ENV_FILE
+export DATA_DIR ENV_FILE EVAL_REVIEW_DIR
 
 ROOT := $(CURDIR)
 BACKEND := $(ROOT)/backend
@@ -14,10 +16,10 @@ FRONTEND := $(ROOT)/frontend
 COMPOSE := docker compose -f $(ROOT)/infra/compose.yml
 FNM := eval "$$(fnm env 2>/dev/null)"
 
-.PHONY: help setup data precompute dev dev-stop test eval web demo up down
+.PHONY: help setup data precompute dev dev-stop test eval eval-review web demo up down
 
 help:
-	@echo "make setup | data | precompute | dev | dev-stop | test | eval | web | demo | up | down"
+	@echo "make setup | data | precompute | dev | dev-stop | test | eval | eval-review | web | demo | up | down"
 	@echo "DATA_DIR=$(DATA_DIR)  ENV_FILE=$(ENV_FILE)"
 
 setup:
@@ -56,6 +58,10 @@ test:
 
 eval:
 	cd $(ROOT) && uv run --project $(BACKEND) python eval/run.py
+
+# (re)write the review sheets; ticks already made are kept (eval/review.py)
+eval-review:
+	cd $(ROOT) && uv run --project $(BACKEND) python eval/review.py write
 
 # Build the frontend to frontend/dist (served at / by the backend and baked into the image).
 web:

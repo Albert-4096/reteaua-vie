@@ -45,6 +45,7 @@ sys.path.insert(0, str(REPO / "backend"))
 
 from gtfs_small import TZ, Feed, load_feed  # noqa: E402
 import gold_gtfs_diff  # noqa: E402
+import review  # noqa: E402
 
 HERO_POST = "11067"
 HERO_CLOSURE = "cl_20261108_16dec"
@@ -463,7 +464,9 @@ def main() -> int:
         "generatedAt": datetime.now(TZ).isoformat(timespec="seconds"),
         "repoCommit": git_head(),
         "feed": e3["feed"],
-        "labels": {"count": len(labels), "labelledBy": sorted({lab["labelledBy"] for lab in labels})},
+        "labels": {"count": len(labels), "labelledBy": sorted({lab["labelledBy"] for lab in labels}),
+                   # the human review sheet ($EVAL_REVIEW_DIR, eval/review.py); null when there is none
+                   "humanReview": review.read(review.default_dir())},
         "parser": None, "analyzer": None, "scoredFrom": None,
         "notices": [],
         "overall": None,
@@ -615,6 +618,8 @@ def main() -> int:
                       "hero": {k: result["hero"].get(k) for k in ("status", "stopsSuspended", "departuresLost",
                                                                   "residentsLosingStop", "stopRoutePairsLost",
                                                                   "decisions", "demoCaseUntouched", "reason")},
+                      "humanReview": {k: (result["labels"]["humanReview"] or {}).get(k)
+                                      for k in ("groups", "ok", "wrong", "open", "stale", "complete")},
                       "scoredFrom": result["scoredFrom"], "errors": result["errors"]}, ensure_ascii=False, indent=2))
     print(f"[eval] wrote {out.relative_to(REPO) if out.is_relative_to(REPO) else out}")
     return status

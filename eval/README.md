@@ -63,6 +63,12 @@ For the paste-to-alert time, `run.py` drives the API in-process with the app clo
 
 The pipeline reads each notice against the current feed (4.31), which already runs the 11060 and 11062 diversions, so on those notices it finds no row. The prepared Mocioni case (built on the 4.29 pattern, SPEC 5.3) is scored too, under `overall.independentGold.preparedCases`. The full diff is written to `results/gold_gtfs_diff.json`.
 
+**Why the notice path scores 0 of 39 here:** the eval reads every notice against today's GTFS 4.31, in which SMTT has already removed those 39 stop–line–direction rows (27 for the Mocioni diversion of 11060, 7 for the Polonă bridge detour of 11062, and 5 on M11, M29 and M30 where the GTFS drops „Moldovei (Ghiroda)” and renumbers „Girație Pod Bega”, which notice 11058 never mentions), so there is nothing left for it to find; the honest independent figure is the prepared Mocioni case, built on the GTFS in force before the works (4.29), which finds 17 of those 27 rows with no false positive. Scoring each notice on the feed in force at its post date needs the M1 matching to run on an older GTFS, which it cannot do yet.
+
+## Human review of the labels
+
+`review.py write` (or `make eval-review`) writes one Markdown sheet per notice into `$EVAL_REVIEW_DIR` (outside the repo): the notice text, then per line and direction one group per gold list (suspended, kept, uncertain) with the stop ids and GTFS names in route order. The reviewer ticks `ok` or `greșit` per group and may add a note. `run.py` reads the sheets back into `labels.humanReview` (counts of ok, wrong, open and stale groups; a group goes stale when its label changed after the tick). Neither script edits `labelledBy`: a person changes it once every group is ok.
+
 ## Hero figures (D-012)
 
 `run.py` copies the stored hero closure (`cl_20261108_16dec`) into its temporary state dir, applies the clerk decisions of the 11067 gold label (tick the unsure line 7 rows the label lists as suspended, untick the ring rows it lists as uncertain) and reads the impact. The result is the `hero` block: `stopsSuspended`, `departuresLost`, `residentsLosingStop` (model GHSL 2020, nu recensământ), `stopRoutePairsLost`, with provenance. `demoCaseUntouched` checks the stored demo case did not change.
