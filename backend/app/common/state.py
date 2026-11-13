@@ -35,6 +35,8 @@ from app.config import STATE_KINDS, TZ, get_settings
 PART_ANALYSIS = "analysis"
 PART_IMPACT = "impact"
 
+FILE_MODE = 0o664  # group `hack` reads and writes: Docker and Erol's user share the files
+
 _ID_RE = re.compile(r"^[A-Za-z0-9_-]{1,120}$")
 _PART_RE = re.compile(r"^[a-z0-9_-]{1,40}$")
 _thread_lock = threading.RLock()
@@ -89,6 +91,7 @@ def _atomic_write(path: Path, data: Any) -> None:
             fh.write(payload)
             fh.flush()
             os.fsync(fh.fileno())
+        os.chmod(tmp, FILE_MODE)  # mkstemp makes 0600
         os.replace(tmp, path)
     except BaseException:
         try:
@@ -146,6 +149,20 @@ def delete(kind: str, obj_id: str, part: str | None = None) -> bool:
             except FileNotFoundError:
                 pass
     return removed
+
+
+def fix_modes() -> int:
+    """chmod every existing state file to FILE_MODE (files written before it existed). Returns the count."""
+    root = get_settings().state_dir
+    changed = 0
+    for p in root.rglob("*"):
+        if p.is_file() and (p.stat().st_mode & 0o777) != FILE_MODE:
+            try:
+                os.chmod(p, FILE_MODE)
+                changed += 1
+            except PermissionError:
+                pass
+    return changed
 
 
 def list_ids(kind: str) -> list[str]:
