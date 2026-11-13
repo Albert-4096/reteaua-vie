@@ -67,7 +67,7 @@ infra/warm.sh     # call every demo endpoint once after a start (first calls bui
 | Simulat | Ceasul demo, 8 nov 2026 12:00 (`DEMO_NOW`); pagina QR folosește ora reală cât timp aceasta e în fereastra lucrării / demo clock | „Simulare: ora este …” |
 | Simulat | Banda de afișaj din stație / station-display strip | „simulare: integrarea cu afișajele STPT nu există” |
 | Simulat | Istoricul lucrărilor dinaintea platformei / back-filled history | „reconstituit din anunț STPT, nu publicat prin platformă” |
-| Simulat | E3 și Mocioni apar publicate la ora anunțului STPT: publicare refăcută de `make precompute` / re-enacted publish | încă fără etichetă în interfață / not yet labelled in the UI |
+| Simulat | E3 și Mocioni apar publicate la ora anunțului STPT: publicare refăcută de `make precompute` / re-enacted publish | „reconstituit: publicat în demo din anunțul STPT din …” (câmpul `reconstructed` în API) / labelled in the UI and the API |
 | Simulat | Vocea MP3 / MP3 voice | „Voce generată automat (AI), ElevenLabs” |
 
 **Nu e al nostru / Not ours:** datele de mai sus și secțiunea 4; motorul de rutare R5 (prin r5py); validatorul MobilityData; schemele DATEX II și modelele FIWARE; MapLibre și harta de fundal OpenFreeMap; fonturile Noto Sans și IBM Plex; WeasyPrint. / *the data above and in section 4, R5 via r5py, the MobilityData validator, the DATEX II schemas and FIWARE models, MapLibre and the OpenFreeMap basemap, the Noto Sans and IBM Plex fonts, WeasyPrint.*
