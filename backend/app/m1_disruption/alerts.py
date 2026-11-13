@@ -445,7 +445,8 @@ def pick_nearest(rows: list[dict], stop_id: str) -> dict | None:
     return found[0] if found else None
 
 
-def _nearest_texts(nearest: dict | None, short_of: dict[str, str], stop_id: str) -> dict[str, str]:
+def _nearest_texts(nearest: dict | None, short_of: dict[str, str], stop_id: str,
+                   stop_name: str | None = None) -> dict[str, str]:
     out = {}
     for lang in ("ro", "en"):
         t = texts()[lang]
@@ -468,11 +469,17 @@ def _nearest_texts(nearest: dict | None, short_of: dict[str, str], stop_id: str)
         meters = _round10(nearest["distanceMeters"])
         shorts = [short_of.get(r, r) for r in nearest.get("routeIds") or []]
         lines = lines_phrase(shorts, lang) if shorts else ""
-        text = t["nearest"].format(name=nearest["name"], distance=f"{meters} m", lines=lines)
+        shown = nearest["name"] + (t["same_name"] if stop_name and nearest["name"] == stop_name else "")
+        text = t["nearest"].format(name=shown, distance=f"{meters} m", lines=lines)
         out[lang] = text.replace(" ()", "")
         spoken = (ro_count(meters, "metru", "metri") if lang == "ro" else f"{en_words(meters)} metres")
         out["tts_" + lang] = t["tts_nearest"].format(name=speak(nearest["name"]), distance=spoken)
     return out
+
+
+def closure_description(closure: dict, lang: str) -> str:
+    """The description shared by every alert of a closure: window, reason, temporary lines."""
+    return _Ctx(closure).description(lang, "")
 
 
 def _remaining_service(ctx: _Ctx, stop_ids: list[str], suspended: set[tuple[str, str, int]]
@@ -555,7 +562,7 @@ def build_alerts(closure: dict, analysis: dict, base_url: str | None = None) -> 
         first = stop_rows[0]
         name = first.get("name") or (net.stop_by_id.get(stop_id) or {}).get("name") or stop_id
         shorts = [r.get("routeShortName") or short_of.get(r["routeId"], r["routeId"]) for r in stop_rows]
-        near = _nearest_texts(pick_nearest(stop_rows, stop_id), short_of, stop_id)
+        near = _nearest_texts(pick_nearest(stop_rows, stop_id), short_of, stop_id, name)
         entities = sorted({(r["routeId"], int(r["directionId"])) for r in stop_rows})
         t_ro, t_en = texts()["ro"], texts()["en"]
         alerts.append(Alert(

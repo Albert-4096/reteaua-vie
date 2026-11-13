@@ -34,6 +34,7 @@ from app.common.geo import lonlat_to_xy, to_metric
 from app.common.timeutil import parse_iso
 from app.m1_disruption.alerts import (
     build_alerts,
+    closure_description,
     is_open_end,
     is_suspended,
     lines_phrase,
@@ -218,8 +219,9 @@ def _source_line(closure: dict, analysis: dict) -> tuple[str, str]:
     case = CASES_BY_CLOSURE.get(closure["id"])
     if case is not None:
         url = closure.get("sourceUrl") or case.source_url() or "stpt.ro"
-        ro = f"anunțul STPT nr. {case.post_id} ({url})"
-        en = f"STPT notice no. {case.post_id} ({url})"
+        host = url.split("//", 1)[-1].split("/", 1)[0] or "stpt.ro"
+        ro = f"anunțul STPT nr. {case.post_id}, {host}"
+        en = f"STPT notice no. {case.post_id}, {host}"
     elif closure.get("sourceUrl"):
         ro = en = closure["sourceUrl"]
     else:
@@ -268,6 +270,9 @@ def poster_html(closure_id: str, stop_id: str) -> str:
         else:
             near_distance = 'distanța: necunoscută <span class="en">/ distance unknown</span>'
         near_name = _e(nearest.get("name"))
+        if nearest.get("name") == name:
+            near_name += ('<div class="value">altă stație cu același nume '
+                          '<span class="en">/ another stop with the same name</span></div>')
         near_badges = _badges(list(nearest.get("routeIds") or []), small=True)
         served = nearest.get("location")
     else:
@@ -315,9 +320,9 @@ def poster_html(closure_id: str, stop_id: str) -> str:
         map_svg=map_svg,
         legend=legend,
         header_ro=_e(alert.headerText.ro),
-        description_ro=_e(alert.descriptionText.ro),
+        description_ro=_e(closure_description(closure, "ro")),
         header_en=_e(alert.headerText.en),
-        description_en=_e(alert.descriptionText.en),
+        description_en=_e(closure_description(closure, "en")),
         qr_src=qr_data_uri(alert.url),
         url=_e(alert.url),
         footer_ro=footer_ro,

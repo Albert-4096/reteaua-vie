@@ -1,7 +1,10 @@
 @font-face { font-family: "RV Noto Sans"; src: url("NotoSans-Regular.ttf"); font-weight: 400; }
 @font-face { font-family: "RV Noto Sans"; src: url("NotoSans-Bold.ttf"); font-weight: 700; }
 
-@page { size: A4 portrait; margin: 12mm 13mm 11mm 13mm; }
+@page {
+  size: A4 portrait; margin: 12mm 13mm 20mm 13mm;
+  @bottom-left { content: element(footer); vertical-align: top; width: 100%; }
+}
 
 html { font-family: "RV Noto Sans", sans-serif; color: #111; font-size: 11pt; line-height: 1.3; }
 body { margin: 0; }
@@ -41,7 +44,7 @@ svg.map { width: 84mm; height: 60mm; border: 0.3mm solid #999; background: #f7f7
 
 .bottom { border-top: 0.4mm solid #111; padding-top: 4mm; }
 .msg h2 { font-size: 13.5pt; margin: 0 0 1mm 0; }
-.msg p { margin: 0 0 3.5mm 0; font-size: 11pt; }
+.msg p { margin: 0 0 3mm 0; font-size: 10.5pt; }
 .msg.en h2 { color: #333; }
 
 img.qr { width: 50mm; height: 50mm; display: block; margin: 0 auto 1.5mm auto; }
@@ -50,6 +53,6 @@ img.qr { width: 50mm; height: 50mm; display: block; margin: 0 auto 1.5mm auto; }
 .url { font-size: 8pt; margin-top: 1.5mm; word-break: break-all; color: #222; }
 
 footer {
-  position: absolute; bottom: 0; left: 0; right: 0;
+  position: running(footer);
   border-top: 0.3mm solid #999; padding-top: 1.5mm; font-size: 7.5pt; color: #333;
 }
