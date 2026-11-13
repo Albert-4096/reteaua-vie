@@ -85,22 +85,19 @@ def gold_analysis() -> dict | None:
 
 def warm_hero_decided() -> None:
     """Access (30 min, 3 destinations) and the demo route as they will be after the clerk decides."""
-    from app.common import jobs, state
+    from app.common import state
     from app.m1_disruption import impact as imp
     from app.m2_routing import plan
     from app.m4_access import access
 
-    fingerprint_of = getattr(jobs, "fingerprint_of", None)
     analysis = gold_analysis()
-    if fingerprint_of is None or analysis is None:
-        print("  skip hero with the D-012 decisions: "
-              + ("jobs.fingerprint_of missing" if fingerprint_of is None else "no gold label or hero case"), flush=True)
+    if analysis is None:
+        print("  skip hero with the D-012 decisions: no gold label or hero case", flush=True)
         return
     closure = state.read("closures", HERO)
     lost = {imp.row_key(r) for r in analysis["stops"] if imp.counts_as_lost(r)}
-    fp = fingerprint_of(closure, analysis)
     for dest in access.DESTS:
-        key = f"access:v{access.ACCESS_VERSION}:{HERO}:{dest}:{WARM_MINUTES}:{fp}"
+        key = access.access_key(closure, lost, dest, WARM_MINUTES)
         t = time.perf_counter()
         a = compute_and_cache(key, lambda dest=dest: access.access_for(closure, lost, dest, WARM_MINUTES))
         print(f"  ok   access {HERO} {dest} {WARM_MINUTES} min, D-012 decisions ({len(lost)} rows): "

@@ -85,16 +85,9 @@ def active_closures(at: datetime, override: Override | None = None) -> list[tupl
 
 
 def closures_fingerprint(at: datetime, override: Override | None = None) -> str:
-    """Hash of what the route at `at` depends on: the active closures and their decisions."""
-    from app.common import jobs
-
-    parts = []
-    for c, _ in active_closures(at, override):
-        if override and c["id"] in override:
-            parts.append([c["id"], jobs.fingerprint_of(c, override[c["id"]])])
-        else:
-            parts.append([c["id"], jobs.closure_fingerprint(c["id"])])
-    return hashlib.sha256(json.dumps(parts).encode()).hexdigest()[:16]
+    """Hash of what the route at `at` depends on: the active closures' windows and lost rows."""
+    parts = [[c["id"], c["window"], sorted(lost)] for c, lost in active_closures(at, override)]
+    return hashlib.sha256(json.dumps(parts, sort_keys=True).encode()).hexdigest()[:16]
 
 
 # --- itineraries ------------------------------------------------------------------------------

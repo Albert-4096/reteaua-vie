@@ -250,6 +250,17 @@ def access_for(closure: dict, lost: set[tuple[str, str, int]], dest: str = "hosp
                         provenance=provenance)
 
 
+def access_key(closure: dict, lost: set[tuple[str, str, int]], dest: str, minutes: int,
+               frequencies: list[dict] | None = None) -> str:
+    """Job-cache key from what the result depends on: the window and the lost rows (not who decided them).
+
+    So decisions taken live (D-012) hit a result pre-computed for the same rows.
+    """
+    blob = json.dumps([closure["window"], sorted(lost), frequencies or []], sort_keys=True)
+    h = hashlib.sha256(blob.encode()).hexdigest()[:16]
+    return f"access:v{ACCESS_VERSION}:{closure.get('id')}:{dest}:{int(minutes)}:{h}"
+
+
 def compute_access(closure_id: str, dest: str = "hospital", minutes: int = 30) -> AccessImpact:
     """AccessImpact of a stored closure with its current decisions."""
     closure, lost = patched_gtfs.lost_rows(closure_id)

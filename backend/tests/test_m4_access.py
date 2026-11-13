@@ -227,3 +227,18 @@ def test_d012_decisions_for_the_pre_warm_match_the_eval_rule():
     assert sum(1 for r in a["stops"] if r.get("confirmed") is True) == 21
     assert sum(1 for r in a["stops"] if r.get("confirmed") is False) == 29
     assert state.read("closures", HERO, state.PART_ANALYSIS) == stored   # nothing written
+
+
+def test_access_key_depends_on_the_lost_rows_not_on_who_decided():
+    from app.m4_access import access, warm
+
+    closure, lost = _hero_or_skip()
+    k = access.access_key(closure, lost, "hospital", 30)
+    assert k == access.access_key(closure, set(sorted(lost)), "hospital", 30)
+    assert k != access.access_key(closure, lost, "school", 30)
+    a = warm.gold_analysis()
+    if a is not None:
+        from app.m1_disruption import impact as imp
+
+        decided = {imp.row_key(r) for r in a["stops"] if imp.counts_as_lost(r)}
+        assert decided != lost and access.access_key(closure, decided, "hospital", 30) != k
