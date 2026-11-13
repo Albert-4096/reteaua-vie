@@ -431,6 +431,9 @@ class HistoryEntry(Model):
     stopsSuspended: int | None
     departuresLost: int | None
     routeIds: list[str]
+    note: I18n | None = None  # v2.3: e.g. „reconstituit din anunț STPT, nu publicat prin platformă”
+    sourceUrl: str | None = None  # v2.3: the STPT post a back-filled row comes from
+    provenance: list[Provenance] | None = None  # v2.3
 
 
 class Indicator(Model):
