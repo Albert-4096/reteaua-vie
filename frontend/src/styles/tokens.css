@@ -1,0 +1,53 @@
+/*
+ * Every colour, font and spacing value of the UI lives here.
+ * The look is not decided yet (D-014): a later decision changes only this file and base.css.
+ * The map reads its colours from these variables at runtime (src/lib/tokens.ts).
+ */
+:root {
+  /* colour */
+  --c-bg: #ffffff;
+  --c-surface: #f6f6f4;
+  --c-text: #16181b;
+  --c-text-muted: #55595f;
+  --c-rule: #d5d6d8;
+  --c-accent: #12355b;
+  --c-accent-text: #ffffff;
+  --c-focus: #12355b;
+  --c-lost: #b3261e;        /* status only, always with a word */
+  --c-unsure: #a35200;      /* status only, always with a word */
+  --c-ok: #1d5c36;          /* status only, always with a word */
+
+  /* map */
+  --map-bg: #f2f2f0;
+  --map-network: #8f949a;
+  --map-zone: #b9bcc0;
+  --map-route-hi: #16181b;
+  --map-closure: #b3261e;
+  --map-closure-casing: #16181b;
+  --map-temp-route: #12355b;
+
+  /* type */
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --fs-xs: 12px;
+  --fs-s: 13px;
+  --fs-m: 15px;
+  --fs-l: 18px;
+  --fs-xl: 22px;
+  --fs-figure: 26px;
+  --lh: 1.4;
+
+  /* space */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+
+  /* layout */
+  --topbar-h: 44px;
+  --panel-w: 380px;
+  --rule-w: 1px;
+  --focus-w: 3px;
+}
