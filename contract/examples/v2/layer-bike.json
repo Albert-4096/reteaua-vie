@@ -8,30 +8,332 @@
         "type": "LineString",
         "coordinates": [
           [
-            21.219,
-            45.7489
+            21.2125946,
+            45.748105
           ],
           [
-            21.2201,
-            45.748
+            21.2128856,
+            45.7481566
+          ],
+          [
+            21.2131906,
+            45.748199
+          ],
+          [
+            21.2134007,
+            45.7482229
+          ],
+          [
+            21.2136217,
+            45.7482637
+          ],
+          [
+            21.2140895,
+            45.7483914
+          ],
+          [
+            21.2147257,
+            45.7486017
+          ],
+          [
+            21.2147964,
+            45.7486372
+          ],
+          [
+            21.2148175,
+            45.7486477
+          ],
+          [
+            21.2149178,
+            45.7486822
+          ],
+          [
+            21.2149604,
+            45.7486964
+          ],
+          [
+            21.2174981,
+            45.7495241
+          ],
+          [
+            21.2181518,
+            45.7497068
           ]
         ]
       },
       "properties": {
         "kind": "lane",
-        "osmId": "way/PLACEHOLDER",
+        "osmId": "way/344739230",
+        "name": "Splaiul Tudor Vladimirescu",
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.215528,
+            45.7461894
+          ],
+          [
+            21.2156368,
+            45.7461923
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/441511690",
         "name": null,
-        "lts": 2
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2136744,
+            45.7456573
+          ],
+          [
+            21.2137896,
+            45.7456941
+          ],
+          [
+            21.2150507,
+            45.7461041
+          ],
+          [
+            21.2152939,
+            45.7461832
+          ],
+          [
+            21.2154976,
+            45.7462553
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1022982844",
+        "name": "Bulevardul Regele Carol I",
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2154976,
+            45.7462553
+          ],
+          [
+            21.215528,
+            45.7461894
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1022982845",
+        "name": null,
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2154039,
+            45.7464507
+          ],
+          [
+            21.2154216,
+            45.7464136
+          ],
+          [
+            21.2154348,
+            45.7463862
+          ],
+          [
+            21.2154576,
+            45.7463387
+          ],
+          [
+            21.2154764,
+            45.7462995
+          ],
+          [
+            21.2154873,
+            45.7462767
+          ],
+          [
+            21.2154976,
+            45.7462553
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1022982848",
+        "name": null,
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2161104,
+            45.7466841
+          ],
+          [
+            21.2154039,
+            45.7464507
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1079784151",
+        "name": null,
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2148403,
+            45.7462754
+          ],
+          [
+            21.2136637,
+            45.7458885
+          ],
+          [
+            21.2135526,
+            45.7458561
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1312317067",
+        "name": "Bulevardul Regele Carol I",
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.215018,
+            45.7463316
+          ],
+          [
+            21.2149085,
+            45.746297
+          ],
+          [
+            21.2148403,
+            45.7462754
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1312317068",
+        "name": null,
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2162562,
+            45.7467323
+          ],
+          [
+            21.2161817,
+            45.7467077
+          ],
+          [
+            21.2161104,
+            45.7466841
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1312317069",
+        "name": null,
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2154039,
+            45.7464507
+          ],
+          [
+            21.215018,
+            45.7463316
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "lane",
+        "osmId": "way/1312319487",
+        "name": "Bulevardul Regele Carol I",
+        "lts": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.2151407,
+          45.7461428
+        ]
+      },
+      "properties": {
+        "kind": "share_station",
+        "osmId": "node/5275324479",
+        "name": "Piața Mocioni",
+        "lts": null
       }
     }
   ],
   "provenance": [
     {
-      "source": "OpenStreetMap contributors (ODbL), Overpass extract",
-      "url": null,
-      "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "10 tronsoane de infrastructură pentru biciclete, nivel de stres LTS din etichetele OSM (tabelul din README); lipsa din OSM = necunoscut / bike ways with LTS from OSM tags; missing in OSM = unknown. osmium extract -b 21.10,45.68,21.35,45.83"
     }
   ]
 }

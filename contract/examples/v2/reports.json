@@ -1,28 +1,59 @@
 {
-  "closureId": "cl_20261108_16dec",
-  "radiusMeters": 500,
-  "from": "2026-11-06T00:00:00+02:00",
-  "to": "2026-11-13T00:00:00+02:00",
-  "total": 4,
+  "closureId": "cl_20261102_mocioni",
+  "radiusMeters": 500.0,
+  "from": "2026-10-26T00:00:00+02:00",
+  "to": "2026-12-31T23:59:59+02:00",
+  "total": 12,
   "byCategory": [
     {
-      "category": "Trafic și indicatoare",
+      "category": "Străzi și trotuare",
       "count": 3,
+      "resolved": 0
+    },
+    {
+      "category": "Altele",
+      "count": 2,
       "resolved": 1
     },
     {
-      "category": "Străzi și trotuare",
+      "category": "Apă, canalizare și termoficare",
+      "count": 2,
+      "resolved": 0
+    },
+    {
+      "category": "Salubrizare, dezinsecție, deratizare și deszăpezire",
+      "count": 2,
+      "resolved": 2
+    },
+    {
+      "category": "Locuri de joacă și spații verzi",
+      "count": 1,
+      "resolved": 0
+    },
+    {
+      "category": "Protecția mediului (Poliția Locală)",
+      "count": 1,
+      "resolved": 0
+    },
+    {
+      "category": "Trafic rutier și semne de circulație",
       "count": 1,
       "resolved": 0
     }
   ],
   "provenance": [
     {
-      "source": "Sesizări Timișoara (public API), our recording",
+      "source": "Primăria Timișoara, sesizări publice (înregistrarea noastră) / public reports, our recording",
       "url": "https://sesizari.primariatm.ro/api/sesizari",
       "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "fetchedAt": "2026-11-13T20:52:00+02:00",
+      "note": "Reports created between 2026-11-11T00:00:00+02:00 and 2026-11-13T20:52:00+02:00, within 500 m of the closure. Resolved = status 'Finalizata'. Counts per category only: no text, photos, names or points. Note: our recording covers only 2026-11-11T00:00:00+02:00 – 2026-11-13T20:52:00+02:00 of 2026-10-26T00:00:00+02:00 – 2026-12-31T23:59:59+02:00."
     }
-  ]
+  ],
+  "coveredFrom": "2026-11-11T00:00:00+02:00",
+  "coveredTo": "2026-11-13T20:52:00+02:00",
+  "note": {
+    "ro": "Sesizări create între 2026-11-11T00:00:00+02:00 și 2026-11-13T20:52:00+02:00, la cel mult 500 m de lucrare. Rezolvate = status „Finalizata”. Doar numărul pe categorii: fără text, fotografii, nume sau puncte. Atenție: înregistrarea noastră acoperă doar 2026-11-11T00:00:00+02:00 – 2026-11-13T20:52:00+02:00 din perioada cerută 2026-10-26T00:00:00+02:00 – 2026-12-31T23:59:59+02:00.",
+    "en": "Reports created between 2026-11-11T00:00:00+02:00 and 2026-11-13T20:52:00+02:00, within 500 m of the closure. Resolved = status 'Finalizata'. Counts per category only: no text, photos, names or points. Note: our recording covers only 2026-11-11T00:00:00+02:00 – 2026-11-13T20:52:00+02:00 of 2026-10-26T00:00:00+02:00 – 2026-12-31T23:59:59+02:00."
+  }
 }

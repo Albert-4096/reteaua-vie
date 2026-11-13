@@ -1,37 +1,115 @@
 [
   {
-    "id": "zn_PLACEHOLDER_iosefin",
-    "closureId": "cl_20261108_16dec",
-    "zoneSlug": "iosefin",
-    "zoneName": "Iosefin",
+    "id": "zn_20261107_e3_freidorf",
+    "closureId": "cl_20261107_e3",
+    "zoneSlug": "freidorf",
+    "zoneName": "Freidorf",
     "streets": [
       {
-        "name": "Bulevardul 16 Decembrie 1989",
-        "codGis": null
+        "name": "Strada Ardealului",
+        "codGis": "38"
       }
     ],
     "window": {
-      "start": "2026-11-08T10:00:00+02:00",
-      "end": "2026-11-08T18:00:00+02:00"
+      "start": "2026-11-07T04:00:00+02:00",
+      "end": "2026-11-13T00:00:00+02:00"
     },
     "title": {
-      "ro": "8 noiembrie, 10:00–18:00: lucrări pe Bd. 16 Decembrie 1989",
-      "en": "8 November, 10:00–18:00: works on 16 Decembrie 1989 Blvd"
+      "ro": "Freidorf: Str. Ardealului închisă, linia E3 deviată",
+      "en": "Freidorf: Ardealului St closed, line E3 diverted"
     },
     "body": {
-      "ro": "Tramvaiul 4 nu circulă. Stația Piața Sfânta Maria nu este deservită de liniile 4 și 7. Cea mai apropiată stație deservită: Piața N. Bălcescu.",
-      "en": "Tram 4 does not run. Piața Sfânta Maria stop is not served by lines 4 and 7. Nearest served stop: Piața N. Bălcescu."
+      "ro": "Sâmbătă 7 noiembrie 2026, 04:00 – joi 12 noiembrie 2026, 24:00: lucrări pe Strada Ardealului. Linia E3 ocolește zona lucrărilor. Stația Baba Novac nu este deservită. Cea mai apropiată stație: Banatul (Bd. Dâmbovița) (780 m). Stația Opre Gogu (Ardealului) nu este deservită. Cea mai apropiată stație: Opre Gogu (N. Andreescu) (470 m). Stația Păcii (Ardealului) nu este deservită. Cea mai apropiată stație: Păcii (N. Andreescu) (440 m). Stația Canton C.F.R. nu este deservită. Cea mai apropiată stație: Podgoriei (770 m). Stația Liceul Auto (Ardealului) nu este deservită. Cea mai apropiată stație: Podgoriei (340 m).",
+      "en": "Saturday 7 November 2026, 04:00 – Thursday 12 November 2026, 24:00: works on Strada Ardealului. Line E3 is diverted around the works. The Baba Novac stop is not served. Nearest stop: Banatul (Bd. Dâmbovița) (780 m). The Opre Gogu (Ardealului) stop is not served. Nearest stop: Opre Gogu (N. Andreescu) (470 m). The Păcii (Ardealului) stop is not served. Nearest stop: Păcii (N. Andreescu) (440 m). The Canton C.F.R. stop is not served. Nearest stop: Podgoriei (770 m). The Liceul Auto (Ardealului) stop is not served. Nearest stop: Podgoriei (340 m)."
     },
     "stopIds": [
-      "61"
+      "336",
+      "337",
+      "338",
+      "339",
+      "340",
+      "318",
+      "319",
+      "320",
+      "321"
     ],
     "routeIds": [
-      "R_TV_4",
-      "R_TV_7"
+      "R_AB_E3"
     ],
     "alertIds": [
-      "al_20261108_16dec_1"
+      "al_20261107_e3_stop_336",
+      "al_20261107_e3_stop_337",
+      "al_20261107_e3_stop_338",
+      "al_20261107_e3_stop_339",
+      "al_20261107_e3_stop_340",
+      "al_20261107_e3_stop_318",
+      "al_20261107_e3_stop_319",
+      "al_20261107_e3_stop_320",
+      "al_20261107_e3_stop_321"
     ],
-    "publishedAt": "2026-11-13T14:05:00+02:00"
+    "publishedAt": "2026-11-05T18:11:39+02:00"
+  },
+  {
+    "id": "zn_20261107_e3_dambovita",
+    "closureId": "cl_20261107_e3",
+    "zoneSlug": "dambovita",
+    "zoneName": "Dâmbovița",
+    "streets": [
+      {
+        "name": "Strada Ardealului",
+        "codGis": "38"
+      }
+    ],
+    "window": {
+      "start": "2026-11-07T04:00:00+02:00",
+      "end": "2026-11-13T00:00:00+02:00"
+    },
+    "title": {
+      "ro": "Dâmbovița: Str. Ardealului închisă, linia E3 deviată",
+      "en": "Dâmbovița: Ardealului St closed, line E3 diverted"
+    },
+    "body": {
+      "ro": "Sâmbătă 7 noiembrie 2026, 04:00 – joi 12 noiembrie 2026, 24:00: lucrări pe Strada Ardealului. Linia E3 ocolește zona lucrărilor. Stația Dâmbovița (Bucla) nu este deservită. Cea mai apropiată stație: Dâmbovița (Banatul) (390 m).",
+      "en": "Saturday 7 November 2026, 04:00 – Thursday 12 November 2026, 24:00: works on Strada Ardealului. Line E3 is diverted around the works. The Dâmbovița (Bucla) stop is not served. Nearest stop: Dâmbovița (Banatul) (390 m)."
+    },
+    "stopIds": [
+      "322"
+    ],
+    "routeIds": [
+      "R_AB_E3"
+    ],
+    "alertIds": [
+      "al_20261107_e3_stop_322"
+    ],
+    "publishedAt": "2026-11-05T18:11:39+02:00"
+  },
+  {
+    "id": "zn_20261107_e3_iosefin",
+    "closureId": "cl_20261107_e3",
+    "zoneSlug": "iosefin",
+    "zoneName": "Iosefin",
+    "streets": [],
+    "window": {
+      "start": "2026-11-07T04:00:00+02:00",
+      "end": "2026-11-13T00:00:00+02:00"
+    },
+    "title": {
+      "ro": "Iosefin: Str. Ardealului închisă, linia E3 deviată",
+      "en": "Iosefin: Ardealului St closed, line E3 diverted"
+    },
+    "body": {
+      "ro": "Sâmbătă 7 noiembrie 2026, 04:00 – joi 12 noiembrie 2026, 24:00: lucrări pe Strada Ardealului. Linia E3 ocolește zona lucrărilor. Stația Dâmbovița (Bucla) nu este deservită. Cea mai apropiată stație: Banatul (Bd. Dâmbovița) (330 m).",
+      "en": "Saturday 7 November 2026, 04:00 – Thursday 12 November 2026, 24:00: works on Strada Ardealului. Line E3 is diverted around the works. The Dâmbovița (Bucla) stop is not served. Nearest stop: Banatul (Bd. Dâmbovița) (330 m)."
+    },
+    "stopIds": [
+      "335"
+    ],
+    "routeIds": [
+      "R_AB_E3"
+    ],
+    "alertIds": [
+      "al_20261107_e3_stop_335"
+    ],
+    "publishedAt": "2026-11-05T18:11:39+02:00"
   }
 ]

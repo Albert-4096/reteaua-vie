@@ -2,47 +2,334 @@
   "closureId": "cl_20261108_16dec",
   "dest": "hospital",
   "minutes": 30,
-  "at": "2026-11-08T10:30:00+02:00",
+  "at": "2026-11-08T10:00:00+02:00",
   "totals": {
-    "residentsBefore": null,
-    "residentsAfter": null,
-    "residentsLosing": null
+    "residentsBefore": 286930,
+    "residentsAfter": 286846,
+    "residentsLosing": 84
   },
   "byZone": [
     {
+      "residentsBefore": 8385,
+      "residentsAfter": 8301,
+      "residentsLosing": 84,
+      "slug": "buziasului",
+      "name": "Buziașului"
+    },
+    {
+      "residentsBefore": 2440,
+      "residentsAfter": 2440,
+      "residentsLosing": 0,
+      "slug": "antene",
+      "name": "Antene"
+    },
+    {
+      "residentsBefore": 12954,
+      "residentsAfter": 12954,
+      "residentsLosing": 0,
+      "slug": "aradului-est",
+      "name": "Aradului Est"
+    },
+    {
+      "residentsBefore": 9045,
+      "residentsAfter": 9045,
+      "residentsLosing": 0,
+      "slug": "aradului-vest",
+      "name": "Aradului Vest"
+    },
+    {
+      "residentsBefore": 6069,
+      "residentsAfter": 6069,
+      "residentsLosing": 0,
+      "slug": "badea-cartan-kogalniceanu",
+      "name": "Badea Cârțan, Kogălniceanu"
+    },
+    {
+      "residentsBefore": 6454,
+      "residentsAfter": 6454,
+      "residentsLosing": 0,
+      "slug": "blascovici",
+      "name": "Blașcovici"
+    },
+    {
+      "residentsBefore": 6626,
+      "residentsAfter": 6626,
+      "residentsLosing": 0,
+      "slug": "braytim",
+      "name": "Braytim"
+    },
+    {
+      "residentsBefore": 4228,
+      "residentsAfter": 4228,
+      "residentsLosing": 0,
+      "slug": "bucovina",
+      "name": "Bucovina"
+    },
+    {
+      "residentsBefore": 10792,
+      "residentsAfter": 10792,
+      "residentsLosing": 0,
+      "slug": "calea-martirilor",
+      "name": "Calea Martirilor"
+    },
+    {
+      "residentsBefore": 13664,
+      "residentsAfter": 13664,
+      "residentsLosing": 0,
+      "slug": "calea-sagului",
+      "name": "Calea Șagului"
+    },
+    {
+      "residentsBefore": 15461,
+      "residentsAfter": 15461,
+      "residentsLosing": 0,
+      "slug": "cetate",
+      "name": "Cetate"
+    },
+    {
+      "residentsBefore": 3357,
+      "residentsAfter": 3357,
+      "residentsLosing": 0,
+      "slug": "ciarda-rosie",
+      "name": "Ciarda Roșie"
+    },
+    {
+      "residentsBefore": 17846,
+      "residentsAfter": 17846,
+      "residentsLosing": 0,
+      "slug": "circumvalatiunii-dacia",
+      "name": "Circumvalațiunii, Dacia"
+    },
+    {
+      "residentsBefore": 5825,
+      "residentsAfter": 5825,
+      "residentsLosing": 0,
+      "slug": "complex-studentesc",
+      "name": "Complex Studențesc"
+    },
+    {
+      "residentsBefore": 5098,
+      "residentsAfter": 5098,
+      "residentsLosing": 0,
+      "slug": "dambovita",
+      "name": "Dâmbovița"
+    },
+    {
+      "residentsBefore": 17395,
+      "residentsAfter": 17395,
+      "residentsLosing": 0,
+      "slug": "elisabetin",
+      "name": "Elisabetin"
+    },
+    {
+      "residentsBefore": 11260,
+      "residentsAfter": 11260,
+      "residentsLosing": 0,
+      "slug": "fabric",
+      "name": "Fabric"
+    },
+    {
+      "residentsBefore": 13672,
+      "residentsAfter": 13672,
+      "residentsLosing": 0,
+      "slug": "fratelia",
+      "name": "Fratelia"
+    },
+    {
+      "residentsBefore": 863,
+      "residentsAfter": 863,
+      "residentsLosing": 0,
+      "slug": "freidorf",
+      "name": "Freidorf"
+    },
+    {
+      "residentsBefore": 8718,
+      "residentsAfter": 8718,
+      "residentsLosing": 0,
+      "slug": "gara-de-nord",
+      "name": "Gara de Nord"
+    },
+    {
+      "residentsBefore": 10713,
+      "residentsAfter": 10713,
+      "residentsLosing": 0,
       "slug": "iosefin",
-      "name": "Iosefin",
-      "residentsBefore": null,
-      "residentsAfter": null,
-      "residentsLosing": null
+      "name": "Iosefin"
+    },
+    {
+      "residentsBefore": 853,
+      "residentsAfter": 853,
+      "residentsLosing": 0,
+      "slug": "kuncz",
+      "name": "Kuncz"
+    },
+    {
+      "residentsBefore": 14159,
+      "residentsAfter": 14159,
+      "residentsLosing": 0,
+      "slug": "lipovei",
+      "name": "Lipovei"
+    },
+    {
+      "residentsBefore": 9663,
+      "residentsAfter": 9663,
+      "residentsLosing": 0,
+      "slug": "lunei-campului-baba-dochia",
+      "name": "Lunei, Câmpului, Baba Dochia"
+    },
+    {
+      "residentsBefore": 10471,
+      "residentsAfter": 10471,
+      "residentsLosing": 0,
+      "slug": "mehala",
+      "name": "Mehala"
+    },
+    {
+      "residentsBefore": 0,
+      "residentsAfter": 0,
+      "residentsLosing": 0,
+      "slug": "metro-2",
+      "name": "Metro 2"
+    },
+    {
+      "residentsBefore": 2861,
+      "residentsAfter": 2861,
+      "residentsLosing": 0,
+      "slug": "mircea-cel-batran",
+      "name": "Mircea cel Bătrân"
+    },
+    {
+      "residentsBefore": 7659,
+      "residentsAfter": 7659,
+      "residentsLosing": 0,
+      "slug": "modern-crisan-ghiroda-noua",
+      "name": "Modern, Crișan, Ghiroda Nouă"
+    },
+    {
+      "residentsBefore": 6427,
+      "residentsAfter": 6427,
+      "residentsLosing": 0,
+      "slug": "odobescu",
+      "name": "Odobescu"
+    },
+    {
+      "residentsBefore": 208,
+      "residentsAfter": 208,
+      "residentsLosing": 0,
+      "slug": "ovidiu-balea",
+      "name": "Ovidiu Bâlea"
+    },
+    {
+      "residentsBefore": 2709,
+      "residentsAfter": 2709,
+      "residentsLosing": 0,
+      "slug": "plopi",
+      "name": "Plopi"
+    },
+    {
+      "residentsBefore": 0,
+      "residentsAfter": 0,
+      "residentsLosing": 0,
+      "slug": "polona-parc-industrial",
+      "name": "Polona, Parc Industrial"
+    },
+    {
+      "residentsBefore": 9593,
+      "residentsAfter": 9593,
+      "residentsLosing": 0,
+      "slug": "ronat",
+      "name": "Ronaț"
+    },
+    {
+      "residentsBefore": 4343,
+      "residentsAfter": 4343,
+      "residentsLosing": 0,
+      "slug": "soarelui",
+      "name": "Soarelui"
+    },
+    {
+      "residentsBefore": 6906,
+      "residentsAfter": 6906,
+      "residentsLosing": 0,
+      "slug": "stadion",
+      "name": "Stadion"
+    },
+    {
+      "residentsBefore": 5508,
+      "residentsAfter": 5508,
+      "residentsLosing": 0,
+      "slug": "steaua",
+      "name": "Steaua"
+    },
+    {
+      "residentsBefore": 6576,
+      "residentsAfter": 6576,
+      "residentsLosing": 0,
+      "slug": "telegrafului-dorobanti",
+      "name": "Telegrafului, Dorobanți"
+    },
+    {
+      "residentsBefore": 4637,
+      "residentsAfter": 4637,
+      "residentsLosing": 0,
+      "slug": "tipografilor",
+      "name": "Tipografilor"
+    },
+    {
+      "residentsBefore": 1822,
+      "residentsAfter": 1822,
+      "residentsLosing": 0,
+      "slug": "torontalului",
+      "name": "Torontalului"
+    },
+    {
+      "residentsBefore": 1670,
+      "residentsAfter": 1670,
+      "residentsLosing": 0,
+      "slug": "umt",
+      "name": "UMT"
     }
   ],
   "estimate": true,
   "method": {
-    "ro": "Timp de călătorie pe orarul planificat, de la fiecare celulă de populație la cel mai apropiat spital, înainte și după închidere.",
-    "en": "Planned-timetable travel time from each population cell to the nearest hospital, before and with the closure."
+    "ro": "Estimare: locuitori care ajung la un spital în cel mult 30 de minute, pe jos și cu transportul public, după orarul planificat (GTFS), înainte de lucrare și cu lucrarea (orarul fără plecările suspendate în fereastră). Rutare R5 (r5py): mers pe jos 4,8 km/h, cel mult 15 minute de mers, mediana pe 10 minute de plecare. Populația: model GHSL 2020, 100 m (nu recensământ), grupat în blocuri de 200 m. Destinații din OpenStreetMap.",
+    "en": "Estimate: residents who reach a hospital within 30 minutes by walking and public transport on the planned timetable (GTFS), before the works and with them (timetable without the suspended departures in the window). R5 routing (r5py): walking 4.8 km/h, at most 15 minutes of walking, median over a 10-minute departure window. Population: GHSL 2020 100 m model (not a census), grouped in 200 m blocks. Destinations from OpenStreetMap."
   },
   "provenance": [
     {
-      "source": "GHSL population grid",
-      "url": null,
-      "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
     },
     {
-      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
-      "url": null,
-      "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "osmium extract -b 21.10,45.68,21.35,45.83"
     },
     {
-      "source": "OpenStreetMap contributors (ODbL), hospitals",
-      "url": null,
+      "source": "GHSL population grid (JRC)",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+      "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+      "fetchedAt": "2026-11-13T18:31:11+02:00",
+      "note": "model GHSL 2020, 100 m (nu recensământ)"
+    },
+    {
+      "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+      "url": "https://cont.primariatm.ro/api/zones",
       "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": null
+    },
+    {
+      "source": "Rețeaua Vie: R5 (Conveyal, r5py) pe GTFS cu plecările suspendate scoase / patched GTFS",
+      "url": "https://r5py.readthedocs.io",
+      "version": null,
+      "fetchedAt": "2026-11-08T12:00:00+02:00",
+      "note": "estimare; plecare 2026-11-08T10:00:00+02:00; 67 perechi stație–linie suspendate, 118 curse modificate, 51 curse anulate în fereastră"
     }
   ]
 }

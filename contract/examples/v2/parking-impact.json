@@ -2,19 +2,185 @@
   "closureId": "cl_20261108_16dec",
   "streetsAffected": [
     {
-      "id": "PLACEHOLDER",
-      "name": "PLACEHOLDER street",
+      "id": "s243",
+      "name": "Bulevardul 16 Decembrie 1989",
       "tariff": "yellow",
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            21.2196,
-            45.7484
+            21.215597,
+            45.746436
           ],
           [
-            21.2184,
-            45.7497
+            21.215426,
+            45.745882
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s402",
+      "name": "Mocioni",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.216622,
+            45.746608
+          ],
+          [
+            21.216729,
+            45.746491
+          ],
+          [
+            21.217086,
+            45.746036
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s541",
+      "name": "Strada Ady Endre",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.216182,
+            45.746754
+          ],
+          [
+            21.214975,
+            45.748585
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s596",
+      "name": "Strada Emanoil Gojdu",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.21607,
+            45.746724
+          ],
+          [
+            21.215034,
+            45.748293
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s645",
+      "name": "Strada Miron Costin",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.217032,
+            45.749236
+          ],
+          [
+            21.21817,
+            45.748342
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s646",
+      "name": "Strada Miron Costin",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.21711,
+            45.749268
+          ],
+          [
+            21.218247,
+            45.748398
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s654",
+      "name": "Strada Moților",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.217263,
+            45.747299
+          ],
+          [
+            21.217883,
+            45.746369
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s708",
+      "name": "Strada Timotei Cipariu",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.218242,
+            45.748095
+          ],
+          [
+            21.219111,
+            45.746796
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s735",
+      "name": "Strada Nedelcu Zugrav",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.216129,
+            45.748933
+          ],
+          [
+            21.217099,
+            45.747499
+          ]
+        ]
+      }
+    },
+    {
+      "id": "s736",
+      "name": "Strada Nedelcu Zugrav",
+      "tariff": "yellow",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.21623,
+            45.748985
+          ],
+          [
+            21.217207,
+            45.747582
           ]
         ]
       }
@@ -23,22 +189,76 @@
   "lotsAffected": [],
   "parkAndRide": [
     {
-      "stopId": "PLACEHOLDER",
-      "name": "PLACEHOLDER line-end stop",
+      "stopId": "295",
+      "name": "Pod Calea Șagului",
       "routeIds": [
-        "R_TV_4"
+        "R_AB_E1",
+        "R_AB_E8"
       ],
-      "lotId": null,
-      "walkMeters": null
+      "lotId": "l76",
+      "walkMeters": 256.0
+    },
+    {
+      "stopId": "266",
+      "name": "Pod Calea Șagului",
+      "routeIds": [
+        "R_AB_33",
+        "R_AB_E1"
+      ],
+      "lotId": "l76",
+      "walkMeters": 214.0
+    },
+    {
+      "stopId": "42",
+      "name": "Piața Gheorghe Domășneanu (Liviu Rebreanu - AEM)",
+      "routeIds": [
+        "R_TV_1",
+        "R_TV_9"
+      ],
+      "lotId": "l73",
+      "walkMeters": 456.0
+    },
+    {
+      "stopId": "41",
+      "name": "Piața Gheorghe Domășneanu (Liviu Rebreanu - AEM)",
+      "routeIds": [
+        "R_TV_1",
+        "R_TV_9"
+      ],
+      "lotId": "l73",
+      "walkMeters": 448.0
+    },
+    {
+      "stopId": "148",
+      "name": "Piața V. Economu (Calea Dorobanților)",
+      "routeIds": [
+        "R_AB_M29"
+      ],
+      "lotId": "l58",
+      "walkMeters": 227.0
     }
   ],
   "provenance": [
     {
-      "source": "Primăria Timișoara /api/mobile/parking (Timpark)",
+      "source": "Primăria Timișoara, Timpark (/api/mobile/parking)",
       "url": "https://cont.primariatm.ro/api/mobile/parking",
-      "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "version": "d014276a755c",
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": "id-urile și culorile tarifelor Timpark, neschimbate / Timpark ids and tariff colours unchanged"
+    },
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "capete de linie: prima / ultima stație a traseului cel mai frecvent / line ends: first / last stop of the most common trip pattern"
+    },
+    {
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "P&R: capăt de linie la peste 3 km de Piața Victoriei (OSM) și o parcare Timpark la cel mult 500 m în linie dreaptă; fără date de ocupare / no occupancy data"
     }
   ]
 }

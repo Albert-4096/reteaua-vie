@@ -1,44 +1,446 @@
 {
-  "closureId": "cl_20261108_16dec",
+  "closureId": "cl_20261102_mocioni",
   "edges": [
     {
-      "name": "PLACEHOLDER street",
+      "name": "Strada Ciprian Porumbescu",
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            21.2196,
-            45.7484
+            21.2099079,
+            45.737121
           ],
           [
-            21.2184,
-            45.7497
+            21.2118749,
+            45.7375576
+          ],
+          [
+            21.2119483,
+            45.7375755
+          ],
+          [
+            21.2120264,
+            45.7375946
+          ],
+          [
+            21.2138972,
+            45.7380514
+          ],
+          [
+            21.2150909,
+            45.7383358
+          ],
+          [
+            21.2157964,
+            45.7385039
+          ],
+          [
+            21.2158375,
+            45.7385137
+          ],
+          [
+            21.2159369,
+            45.7385374
+          ],
+          [
+            21.2160493,
+            45.7385643
+          ],
+          [
+            21.2161427,
+            45.7385861
+          ],
+          [
+            21.2161811,
+            45.7385951
+          ],
+          [
+            21.2169102,
+            45.7387654
+          ],
+          [
+            21.2177631,
+            45.7389694
+          ],
+          [
+            21.2178282,
+            45.738985
+          ],
+          [
+            21.2185062,
+            45.7391532
+          ],
+          [
+            21.2185691,
+            45.7391688
+          ],
+          [
+            21.2195658,
+            45.7394161
+          ],
+          [
+            21.2202743,
+            45.7395815
+          ],
+          [
+            21.2203966,
+            45.7396138
+          ],
+          [
+            21.2207156,
+            45.7397099
+          ],
+          [
+            21.2209498,
+            45.7397968
+          ],
+          [
+            21.2213181,
+            45.739948
+          ],
+          [
+            21.2227502,
+            45.7405161
+          ],
+          [
+            21.2227923,
+            45.7405328
+          ],
+          [
+            21.2228696,
+            45.7405635
+          ],
+          [
+            21.2229139,
+            45.7405785
+          ],
+          [
+            21.2229582,
+            45.7405934
+          ],
+          [
+            21.2230077,
+            45.7406102
+          ],
+          [
+            21.2236641,
+            45.7408321
+          ],
+          [
+            21.2243583,
+            45.7410482
+          ],
+          [
+            21.2250274,
+            45.7412613
           ]
         ]
       },
-      "centralityBefore": 0.012,
-      "centralityAfter": 0.019,
-      "changePct": 58.3,
+      "centralityBefore": 0.043634,
+      "centralityAfter": 0.079091,
+      "changePct": 81.3,
       "routeIdsOnEdge": [
-        "R_AB_33"
+        "R_AB_E8"
+      ]
+    },
+    {
+      "name": "Podul General Ion Dragalina",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2099602,
+            45.7471538
+          ],
+          [
+            21.2099241,
+            45.7472116
+          ],
+          [
+            21.2096515,
+            45.7476048
+          ],
+          [
+            21.2096328,
+            45.7476318
+          ],
+          [
+            21.209594,
+            45.7476897
+          ]
+        ]
+      },
+      "centralityBefore": 0.072059,
+      "centralityAfter": 0.104101,
+      "changePct": 44.5,
+      "routeIdsOnEdge": [
+        "R_AB_5B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_TV_1",
+        "R_TV_8",
+        "R_TV_9"
+      ]
+    },
+    {
+      "name": "Bulevardul Mihai Viteazu",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2260568,
+            45.7422494
+          ],
+          [
+            21.2260555,
+            45.7422648
+          ],
+          [
+            21.2260388,
+            45.742392
+          ],
+          [
+            21.2257996,
+            45.7440206
+          ],
+          [
+            21.2257495,
+            45.7444563
+          ],
+          [
+            21.2257296,
+            45.7446133
+          ],
+          [
+            21.2257053,
+            45.7447553
+          ],
+          [
+            21.2256643,
+            45.7450028
+          ],
+          [
+            21.2256503,
+            45.7450951
+          ],
+          [
+            21.2256383,
+            45.7451762
+          ],
+          [
+            21.2256106,
+            45.7453444
+          ],
+          [
+            21.2254693,
+            45.74632
+          ],
+          [
+            21.2254207,
+            45.7467954
+          ],
+          [
+            21.2254189,
+            45.7469556
+          ],
+          [
+            21.2254459,
+            45.747279
+          ],
+          [
+            21.2254941,
+            45.747694
+          ],
+          [
+            21.2255066,
+            45.7477576
+          ],
+          [
+            21.2255286,
+            45.7478828
+          ]
+        ]
+      },
+      "centralityBefore": 0.0616,
+      "centralityAfter": 0.092942,
+      "changePct": 50.9,
+      "routeIdsOnEdge": [
+        "R_AB_E8"
+      ]
+    },
+    {
+      "name": "Bulevardul General Ion Dragalina",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2128846,
+            45.7431076
+          ],
+          [
+            21.2128198,
+            45.7431806
+          ],
+          [
+            21.2126953,
+            45.7433178
+          ],
+          [
+            21.2125362,
+            45.7434964
+          ],
+          [
+            21.2124445,
+            45.7435995
+          ],
+          [
+            21.2120924,
+            45.7440857
+          ],
+          [
+            21.211822,
+            45.7444635
+          ],
+          [
+            21.2114928,
+            45.7448907
+          ],
+          [
+            21.2114575,
+            45.744956
+          ],
+          [
+            21.2114408,
+            45.7449865
+          ],
+          [
+            21.2114268,
+            45.7450172
+          ],
+          [
+            21.2113994,
+            45.7450652
+          ],
+          [
+            21.2113891,
+            45.7450831
+          ],
+          [
+            21.2113226,
+            45.7452047
+          ],
+          [
+            21.2112907,
+            45.7452472
+          ],
+          [
+            21.2111677,
+            45.7453758
+          ],
+          [
+            21.2107828,
+            45.7459477
+          ],
+          [
+            21.2100212,
+            45.747056
+          ],
+          [
+            21.2099602,
+            45.7471538
+          ]
+        ]
+      },
+      "centralityBefore": 0.054014,
+      "centralityAfter": 0.079743,
+      "changePct": 47.6,
+      "routeIdsOnEdge": [
+        "R_AB_5B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_TV_1",
+        "R_TV_8",
+        "R_TV_9"
+      ]
+    },
+    {
+      "name": "Bulevardul Constantin Brâncoveanu",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2129584,
+            45.7430097
+          ],
+          [
+            21.2128846,
+            45.7431076
+          ]
+        ]
+      },
+      "centralityBefore": 0.045939,
+      "centralityAfter": 0.069741,
+      "changePct": 51.8,
+      "routeIdsOnEdge": [
+        "R_AB_32",
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_AB_E7",
+        "R_AB_E8"
       ]
     }
   ],
   "routesSlowedRisk": [
-    "R_AB_33"
+    "R_AB_32",
+    "R_AB_33",
+    "R_AB_33B",
+    "R_AB_5B",
+    "R_AB_E1",
+    "R_AB_E3",
+    "R_AB_E7",
+    "R_AB_E8",
+    "R_TV_1",
+    "R_TV_8",
+    "R_TV_9"
   ],
   "label": {
-    "ro": "Structura rețelei de străzi, nu volume de trafic. Nu avem numărători.",
-    "en": "Street network structure, not traffic volumes. We have no counts."
+    "ro": "Structura rețelei de străzi, nu volume de trafic. Liniile de pe aceste străzi au risc de încetinire.",
+    "en": "Street network structure, not traffic volumes. Lines on these streets have a risk of slowing down."
+  },
+  "spillover": {
+    "meanDelaySecOnEdges": 500.3,
+    "meanDelaySecNetwork": 495.4,
+    "hours": 7.6,
+    "from": "2026-11-13T13:47:57+02:00",
+    "to": "2026-11-13T21:24:30+02:00",
+    "label": {
+      "ro": "Comparație cu restul rețelei, nu efectul închiderii. Întârzieri înregistrate de vehiculele STPT.",
+      "en": "Comparison with the rest of the network, not the effect of the closure. Delays recorded by STPT vehicles."
+    }
   },
   "provenance": [
     {
-      "source": "OpenStreetMap contributors (ODbL), street graph (OSMnx)",
-      "url": null,
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "centralitate de intermediere pe muchii, k=200 noduri eșantionate (seed fix), graf auto OSM pe 2 km în jurul lucrării / edge betweenness, k=200 sampled nodes, OSM drive graph within 2 km; 6500 noduri, 7088 segmente, 45 închise / nodes, segments, closed. osmium extract -b 21.10,45.68,21.35,45.83"
+    },
+    {
+      "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+      "version": "4.31-4",
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": null
+    },
+    {
+      "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
       "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "fetchedAt": "2026-11-13T21:24:30+02:00",
+      "note": "Înregistrare reală, 2026-11-13T13:47:57+02:00 – 2026-11-13T21:24:30+02:00; 3135 rapoarte pe străzile de ocolire, 167315 în restul rețelei / real recording; reports on the detour streets vs. the rest"
     }
-  ],
-  "spillover": null
+  ]
 }

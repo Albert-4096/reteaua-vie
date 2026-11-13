@@ -1,35 +1,182 @@
 {
-  "generatedAt": "2026-11-13T16:00:00+02:00",
+  "generatedAt": "2026-11-13T19:57:15+02:00",
   "indicators": [
     {
-      "code": "PLACEHOLDER",
+      "code": "STOPS_CITY",
       "name": {
-        "ro": "Locuitori cu stație la cel mult 400 m",
-        "en": "Residents within 400 m of a stop"
+        "ro": "Stații în oraș",
+        "en": "Stops in the city"
       },
-      "value": null,
+      "value": 458.0,
+      "unit": "stații",
+      "method": {
+        "ro": "Stațiile din GTFS SMTT 4.31 (location_type 0) aflate în poligoanele celor 40 de cartiere.",
+        "en": "Stops of GTFS SMTT 4.31 (location_type 0) inside the 40 neighbourhood polygons."
+      },
+      "scope": "Timișoara, cele 40 de cartiere (/api/zones)"
+    },
+    {
+      "code": "STOPS_CITY_SHARE",
+      "name": {
+        "ro": "Ponderea stațiilor din oraș",
+        "en": "Share of stops in the city"
+      },
+      "value": 51.5,
       "unit": "%",
       "method": {
-        "ro": "Celule de populație cu o stație deservită la cel mult 400 m.",
-        "en": "Population cells with a served stop within 400 m."
+        "ro": "Stații în oraș (458) / toate stațiile din GTFS SMTT 4.31 (890) × 100.",
+        "en": "Stops in the city (458) / all stops of GTFS SMTT 4.31 (890) × 100."
       },
-      "scope": "Timișoara"
+      "scope": "rețeaua SMTT: oraș + zona metropolitană (GTFS)"
+    },
+    {
+      "code": "RES_400M",
+      "name": {
+        "ro": "Locuitori la cel mult 400 m de o stație",
+        "en": "Residents within 400 m of a stop"
+      },
+      "value": 297148.0,
+      "unit": "locuitori",
+      "method": {
+        "ro": "Suma celulelor GHSL 2020 de 100 m din cele 40 de cartiere al căror centru e la cel mult 400 m (linie dreaptă) de o stație cu cel puțin o plecare în GTFS 4.31. model GHSL 2020, nu recensământ.",
+        "en": "Sum of the GHSL 2020 100 m cells in the 40 neighbourhoods whose centre lies within 400 m (straight line) of a stop with at least one departure in GTFS 4.31. Model GHSL 2020, not a census."
+      },
+      "scope": "Timișoara, cele 40 de cartiere (/api/zones)"
+    },
+    {
+      "code": "RES_400M_SHARE",
+      "name": {
+        "ro": "Ponderea locuitorilor la cel mult 400 m de o stație",
+        "en": "Share of residents within 400 m of a stop"
+      },
+      "value": 91.7,
+      "unit": "%",
+      "method": {
+        "ro": "Locuitori la cel mult 400 m de o stație / toți locuitorii celor 40 de cartiere (323875) × 100. model GHSL 2020, nu recensământ.",
+        "en": "Residents within 400 m of a stop / all residents of the 40 neighbourhoods × 100. Model GHSL 2020, not a census."
+      },
+      "scope": "Timișoara, cele 40 de cartiere (/api/zones)"
+    },
+    {
+      "code": "AC1_0700",
+      "name": {
+        "ro": "AC.1: stații cu ≥ 4 plecări pe oră ale unei linii (07:00–08:00)",
+        "en": "AC.1: stops with ≥ 4 departures per hour of one route (07:00–08:00)"
+      },
+      "value": 30.2,
+      "unit": "%",
+      "method": {
+        "ro": "Stații la care o linie (ambele sensuri adunate) are cel puțin 4 plecări programate între 07:00–08:00, marți 2026-11-10, GTFS 4.31: 269 din 890 stații. Stil AC.1 (TEN-T 2024/1679), nu metoda oficială.",
+        "en": "Stops where one route (both directions together) has at least 4 scheduled departures between 07:00–08:00 on Tuesday 2026-11-10, GTFS 4.31: 269 of 890 stops. AC.1-style (TEN-T 2024/1679), not the official method."
+      },
+      "scope": "rețeaua SMTT: oraș + zona metropolitană (GTFS)"
+    },
+    {
+      "code": "AC1_1600",
+      "name": {
+        "ro": "AC.1: stații cu ≥ 4 plecări pe oră ale unei linii (16:00–17:00)",
+        "en": "AC.1: stops with ≥ 4 departures per hour of one route (16:00–17:00)"
+      },
+      "value": 29.0,
+      "unit": "%",
+      "method": {
+        "ro": "Stații la care o linie (ambele sensuri adunate) are cel puțin 4 plecări programate între 16:00–17:00, marți 2026-11-10, GTFS 4.31: 258 din 890 stații. Stil AC.1 (TEN-T 2024/1679), nu metoda oficială.",
+        "en": "Stops where one route (both directions together) has at least 4 scheduled departures between 16:00–17:00 on Tuesday 2026-11-10, GTFS 4.31: 258 of 890 stops. AC.1-style (TEN-T 2024/1679), not the official method."
+      },
+      "scope": "rețeaua SMTT: oraș + zona metropolitană (GTFS)"
+    },
+    {
+      "code": "AC1_ANY",
+      "name": {
+        "ro": "AC.1: stații cu ≥ 4 plecări pe oră ale unei linii (07:00–08:00 sau 16:00–17:00)",
+        "en": "AC.1: stops with ≥ 4 departures per hour of one route (07:00–08:00 or 16:00–17:00)"
+      },
+      "value": 31.9,
+      "unit": "%",
+      "method": {
+        "ro": "Stații la care o linie (ambele sensuri adunate) are cel puțin 4 plecări programate între 07:00–08:00 sau 16:00–17:00, marți 2026-11-10, GTFS 4.31: 284 din 890 stații. Stil AC.1 (TEN-T 2024/1679), nu metoda oficială.",
+        "en": "Stops where one route (both directions together) has at least 4 scheduled departures between 07:00–08:00 or 16:00–17:00 on Tuesday 2026-11-10, GTFS 4.31: 284 of 890 stops. AC.1-style (TEN-T 2024/1679), not the official method."
+      },
+      "scope": "rețeaua SMTT: oraș + zona metropolitană (GTFS)"
+    },
+    {
+      "code": "BIKE_KM",
+      "name": {
+        "ro": "Km de piste și benzi de biciclete",
+        "en": "Km of bike ways"
+      },
+      "value": 122.8,
+      "unit": "km",
+      "method": {
+        "ro": "Lungimea segmentelor OSM marcate ca infrastructură pentru biciclete (pistă, bandă, drum dedicat; regula M5) al căror mijloc e în cele 40 de cartiere. Lipsa din OSM = necunoscut.",
+        "en": "Length of the OSM segments tagged as bike infrastructure (track, lane, designated way; M5 rule) whose midpoint lies in the 40 neighbourhoods. Missing in OSM = unknown."
+      },
+      "scope": "Timișoara, cele 40 de cartiere (/api/zones)"
+    },
+    {
+      "code": "BIKE_KM_LTS2",
+      "name": {
+        "ro": "Km de piste cu stres redus (LTS ≤ 2)",
+        "en": "Km of low-stress bike ways (LTS ≤ 2)"
+      },
+      "value": 121.5,
+      "unit": "km",
+      "method": {
+        "ro": "Din km de piste și benzi: cei cu nivel de stres în trafic (LTS) 1 sau 2, după tabelul M5 (viteză maximă OSM, implicit 50 km/h în oraș).",
+        "en": "Of the km of bike ways: those with Level of Traffic Stress 1 or 2, by the M5 table (OSM maxspeed, urban default 50 km/h)."
+      },
+      "scope": "Timișoara, cele 40 de cartiere (/api/zones)"
+    },
+    {
+      "code": "PR_OPTIONS",
+      "name": {
+        "ro": "Opțiuni Park & Ride",
+        "en": "Park & Ride options"
+      },
+      "value": 5.0,
+      "unit": "opțiuni",
+      "method": {
+        "ro": "Capete de linie la peste 3 km de Piața Victoriei cu o parcare Timpark la cel mult 500 m (linie dreaptă). Fără date de ocupare.",
+        "en": "Line ends more than 3 km from Piața Victoriei with a Timpark lot within 500 m (straight line). No occupancy data."
+      },
+      "scope": "Timișoara, cele 40 de cartiere (/api/zones)"
     }
   ],
   "provenance": [
     {
-      "source": "GHSL population grid",
-      "url": null,
-      "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
     },
     {
-      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
-      "url": null,
+      "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+      "url": "https://cont.primariatm.ro/api/zones",
       "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": null
+    },
+    {
+      "source": "GHSL population grid (JRC)",
+      "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+      "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+      "fetchedAt": "2026-11-13T18:31:11+02:00",
+      "note": "model GHSL 2020, 100 m (nu recensământ)"
+    },
+    {
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "osmium extract -b 21.10,45.68,21.35,45.83"
+    },
+    {
+      "source": "Primăria Timișoara, Timpark (/api/mobile/parking)",
+      "url": "https://cont.primariatm.ro/api/mobile/parking",
+      "version": null,
+      "fetchedAt": "2026-11-13T13:29:14+02:00",
+      "note": "fără date de ocupare / no occupancy data"
     }
   ]
 }

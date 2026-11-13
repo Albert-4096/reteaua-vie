@@ -1,21 +1,175 @@
 [
   {
-    "closureId": "cl_20261108_16dec",
+    "closureId": "stpt_11067",
     "title": {
-      "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
-      "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+      "ro": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989",
+      "en": "STPT notice: Bulevardul 16 Decembrie 1989 · lines 4, 2, 7 · from 08.11.2026"
     },
     "window": {
       "start": "2026-11-08T10:00:00+02:00",
       "end": "2026-11-08T18:00:00+02:00"
     },
-    "publishedAt": "2026-11-13T14:05:00+02:00",
-    "alertsCount": 1,
-    "stopsSuspended": 1,
-    "departuresLost": 51,
+    "publishedAt": "2026-11-06T10:26:44+02:00",
+    "alertsCount": null,
+    "stopsSuspended": 2,
+    "departuresLost": 1766,
     "routeIds": [
       "R_TV_4",
+      "R_TV_2",
       "R_TV_7"
+    ],
+    "note": {
+      "ro": "reconstituit din anunț STPT, nu publicat prin platformă",
+      "en": "reconstructed from an STPT notice, not published through the platform"
+    },
+    "sourceUrl": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+    "provenance": [
+      {
+        "source": "STPT, anunț / notice (stpt.ro)",
+        "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+        "version": "11067",
+        "fetchedAt": "2026-11-13T13:49:58+02:00",
+        "note": null
+      },
+      {
+        "source": "SMTT GTFS (orar planificat / planned timetable)",
+        "url": "https://smtt.ro",
+        "version": "4.31",
+        "fetchedAt": "2026-11-13T13:52:51+02:00",
+        "note": "sha256 8905216072b3"
+      },
+      {
+        "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+        "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+        "version": "4.31-4",
+        "fetchedAt": "2026-11-13T13:29:14+02:00",
+        "note": null
+      },
+      {
+        "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+        "url": "https://cont.primariatm.ro/api/zones",
+        "version": null,
+        "fetchedAt": "2026-11-13T13:29:14+02:00",
+        "note": null
+      },
+      {
+        "source": "GHSL population grid (JRC)",
+        "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+        "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+        "fetchedAt": "2026-11-13T18:31:11+02:00",
+        "note": "model GHSL 2020, 100 m (nu recensământ)"
+      }
+    ]
+  },
+  {
+    "closureId": "cl_20261107_e3",
+    "title": {
+      "ro": "Str. Ardealului închisă, linia E3 deviată",
+      "en": "Ardealului St closed, line E3 diverted"
+    },
+    "window": {
+      "start": "2026-11-07T04:00:00+02:00",
+      "end": "2026-11-13T00:00:00+02:00"
+    },
+    "publishedAt": "2026-11-05T18:11:39+02:00",
+    "alertsCount": 11,
+    "stopsSuspended": 11,
+    "departuresLost": 1386,
+    "routeIds": [
+      "R_AB_E3"
+    ],
+    "note": {
+      "ro": "publicat prin platformă",
+      "en": "published through the platform"
+    },
+    "sourceUrl": "https://stpt.ro/inchiderea-temporara-a-circulatiei-pe-strada-ardealului-si-modificarea-traseului-liniei-e3/",
+    "provenance": [
+      {
+        "source": "SMTT GTFS (orar planificat / planned timetable)",
+        "url": "https://smtt.ro",
+        "version": "4.31",
+        "fetchedAt": "2026-11-13T13:52:51+02:00",
+        "note": "sha256 8905216072b3"
+      },
+      {
+        "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+        "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+        "version": "4.31-4",
+        "fetchedAt": "2026-11-13T13:29:14+02:00",
+        "note": null
+      },
+      {
+        "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+        "url": "https://cont.primariatm.ro/api/zones",
+        "version": null,
+        "fetchedAt": "2026-11-13T13:29:14+02:00",
+        "note": null
+      },
+      {
+        "source": "GHSL population grid (JRC)",
+        "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+        "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+        "fetchedAt": "2026-11-13T18:31:11+02:00",
+        "note": "model GHSL 2020, 100 m (nu recensământ)"
+      }
+    ]
+  },
+  {
+    "closureId": "cl_20261102_mocioni",
+    "title": {
+      "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+      "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+    },
+    "window": {
+      "start": "2026-11-02T00:00:00+02:00",
+      "end": "2026-12-31T23:59:59+02:00"
+    },
+    "publishedAt": "2026-10-30T20:57:28+02:00",
+    "alertsCount": 5,
+    "stopsSuspended": 0,
+    "departuresLost": 10237,
+    "routeIds": [
+      "R_AB_M32",
+      "R_AB_M36",
+      "R_AB_M37",
+      "R_AB_M38",
+      "R_AB_M46",
+      "R_AB_M51"
+    ],
+    "note": {
+      "ro": "publicat prin platformă",
+      "en": "published through the platform"
+    },
+    "sourceUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/",
+    "provenance": [
+      {
+        "source": "SMTT GTFS (orar planificat / planned timetable)",
+        "url": "https://smtt.ro",
+        "version": "4.29",
+        "fetchedAt": "2026-11-13T18:51:10+02:00",
+        "note": "Orarul în vigoare înainte de lucrări (GTFS 4.29, smtt-4.29_mdb-2868-202610240049.zip); orarul curent rulează deja ocolirea / timetable in force before the works"
+      },
+      {
+        "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+        "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+        "version": "4.31-4",
+        "fetchedAt": "2026-11-13T13:29:14+02:00",
+        "note": null
+      },
+      {
+        "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+        "url": "https://cont.primariatm.ro/api/zones",
+        "version": null,
+        "fetchedAt": "2026-11-13T13:29:14+02:00",
+        "note": null
+      },
+      {
+        "source": "GHSL population grid (JRC)",
+        "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+        "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+        "fetchedAt": "2026-11-13T18:31:11+02:00",
+        "note": "model GHSL 2020, 100 m (nu recensământ)"
+      }
     ]
   }
 ]

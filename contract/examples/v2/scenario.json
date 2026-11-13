@@ -1,21 +1,21 @@
 {
-  "id": "sc_PLACEHOLDER_a",
   "closureId": "cl_20261108_16dec",
   "title": {
-    "ro": "Linia 4 suspendată, linia 7 la 8 minute",
-    "en": "Line 4 suspended, line 7 every 8 minutes"
+    "ro": "Linia 7 la 6 minute + P&R",
+    "en": "Line 7 every 6 minutes + P&R"
   },
   "mitigations": [
     {
       "kind": "frequency",
       "routeId": "R_TV_7",
-      "headwayMinutes": 8
+      "headwayMinutes": 6.0
     },
     {
       "kind": "park_and_ride",
-      "stopId": "PLACEHOLDER",
-      "lotId": null
+      "stopId": "41",
+      "lotId": "l73"
     }
   ],
-  "createdAt": "2026-11-13T16:00:00+02:00"
+  "id": "sp_16dec_1_l7_pr",
+  "createdAt": "2026-11-08T12:00:00+02:00"
 }

@@ -2,52 +2,96 @@
   "at": "2026-11-08T12:00:00+02:00",
   "activeClosures": [
     {
-      "id": "cl_20261108_16dec",
+      "id": "cl_20261102_mocioni",
       "title": {
-        "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
-        "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+        "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+        "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
       },
       "status": "published",
       "window": {
-        "start": "2026-11-08T10:00:00+02:00",
-        "end": "2026-11-08T18:00:00+02:00"
+        "start": "2026-11-02T00:00:00+02:00",
+        "end": "2026-12-31T23:59:59+02:00"
       },
       "routeIds": [
-        "R_TV_2",
-        "R_TV_4",
-        "R_TV_7"
+        "R_AB_M32",
+        "R_AB_M36",
+        "R_AB_M37",
+        "R_AB_M51",
+        "R_AB_M38",
+        "R_AB_M46"
       ],
       "zoneSlugs": [
-        "iosefin"
+        "iosefin",
+        "calea-sagului"
       ],
-      "stopsSuspended": 1,
-      "departuresLost": 51,
-      "publishedAt": "2026-11-13T14:05:00+02:00"
+      "stopsSuspended": 0,
+      "departuresLost": 10237,
+      "publishedAt": "2026-10-30T20:57:28+02:00"
+    },
+    {
+      "id": "cl_20261107_e3",
+      "title": {
+        "ro": "Str. Ardealului închisă, linia E3 deviată",
+        "en": "Ardealului St closed, line E3 diverted"
+      },
+      "status": "published",
+      "window": {
+        "start": "2026-11-07T04:00:00+02:00",
+        "end": "2026-11-13T00:00:00+02:00"
+      },
+      "routeIds": [
+        "R_AB_E3"
+      ],
+      "zoneSlugs": [
+        "freidorf",
+        "dambovita",
+        "iosefin",
+        "gara-de-nord",
+        "polona-parc-industrial",
+        "_outside"
+      ],
+      "stopsSuspended": 11,
+      "departuresLost": 1386,
+      "publishedAt": "2026-11-05T18:11:39+02:00"
     }
   ],
   "upcomingClosures": [],
-  "ghostDeparturesToday": 51,
-  "vehiclesLive": 128,
-  "vehiclesAt": "2026-11-08T11:59:45+02:00",
+  "ghostDeparturesToday": 277,
+  "vehiclesLive": 111,
+  "vehiclesAt": "2026-11-13T21:24:30+02:00",
   "compliance": {
-    "covered": 2,
+    "covered": 1,
     "partial": 3,
-    "missing": 2
+    "missing": 3
   },
   "provenance": [
     {
-      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "source": "Rețeaua Vie, registrul lucrărilor / closure register",
       "url": null,
       "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "fetchedAt": "2026-11-13T21:24:38+02:00",
+      "note": null
     },
     {
-      "source": "CityApp live vehicles (undocumented)",
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.29",
+      "fetchedAt": "2026-11-13T18:51:10+02:00",
+      "note": "Orarul în vigoare înainte de lucrări (GTFS 4.29, smtt-4.29_mdb-2868-202610240049.zip); orarul curent rulează deja ocolirea / timetable in force before the works"
+    },
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    },
+    {
+      "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
       "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
       "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "PLACEHOLDER example values. Never show as a fact."
+      "fetchedAt": "2026-11-13T21:24:30+02:00",
+      "note": "Cel mai nou instantaneu înregistrat, 2026-11-13T21:24:30+02:00 (ora reală, nu ora simulată) / newest recorded snapshot, real time"
     }
   ]
 }

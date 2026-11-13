@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-11-13T16:00:00+02:00",
+  "generatedAt": "2026-11-13T21:24:39+02:00",
   "obligations": [
     {
       "id": "MMTIS",
-      "act": "Reg. (UE) 2017/1926, mod. 2024/490",
+      "act": "Reg. delegat (UE) 2017/1926, mod. 2024/490",
       "requirement": {
-        "ro": "Perturbări și istoricul lor, publicate digital prin punctul național de acces",
-        "en": "Disruptions and their history, published digitally through the National Access Point"
+        "ro": "Date de călătorie multimodale prin punctul național de acces: perturbări, istoricul întârzierilor, parcări (doar date deja digitale)",
+        "en": "Multimodal travel data through the National Access Point: disruptions, delay history, parking (only data that is already digital)"
       },
       "deadline": "2025-12-01",
       "owner": {
-        "ro": "STPT / Primăria",
-        "en": "STPT / City Hall"
+        "ro": "Autoritățile și operatorii de transport (Primăria, STPT)",
+        "en": "Transport authorities and operators (City Hall, STPT)"
       },
       "status": "partial",
       "coveredBy": [
@@ -20,36 +20,136 @@
         "nap-metadata.json"
       ],
       "note": {
-        "ro": "Acoperim perturbările publicate prin platformă, nu tot istoricul de întârzieri.",
-        "en": "We cover disruptions published through the platform, not the full delay history."
+        "ro": "Acoperit de exporturile Rețeaua Vie: alerts.pb, history.json, nap-metadata.json. Perturbările da, istoricul întârzierilor nu. Termene: parcări 1 dec 2024, istoric întârzieri 1 dec 2025, date dinamice 1 dec 2028.",
+        "en": "Covered by the Rețeaua Vie exports: alerts.pb, history.json, nap-metadata.json. Disruptions yes, delay history no. Deadlines: parking 1 Dec 2024, delay history 1 Dec 2025, dynamic data 1 Dec 2028."
       }
     },
     {
       "id": "RTTI",
       "act": "Reg. delegat (UE) 2022/670",
       "requirement": {
-        "ro": "Închideri, lucrări și măsuri temporare, în format digital",
-        "en": "Closures, roadworks and temporary measures, in digital form"
+        "ro": "Închideri, lucrări și măsuri temporare de circulație, în format digital",
+        "en": "Closures, roadworks and temporary traffic measures, in digital form"
       },
       "deadline": null,
       "owner": {
-        "ro": "Primăria",
-        "en": "City Hall"
+        "ro": "Administratorul drumului (Primăria)",
+        "en": "The road authority (City Hall)"
       },
       "status": "covered",
       "coveredBy": [
         "datex.xml"
       ],
-      "note": null
+      "note": {
+        "ro": "Acoperit de exporturile Rețeaua Vie: datex.xml. Închiderile în DATEX II. Termen: etapizat până în 2028.",
+        "en": "Covered by the Rețeaua Vie exports: datex.xml. Closures in DATEX II. Deadline: phased until 2028."
+      }
+    },
+    {
+      "id": "TEN-T",
+      "act": "Reg. (UE) 2024/1679 + 2026/1554",
+      "requirement": {
+        "ro": "Plan de mobilitate urbană durabilă (PMUD) pentru nodurile urbane și 11 indicatori (HO.3, AC.1 etc.)",
+        "en": "Sustainable urban mobility plan (SUMP) for urban nodes and 11 indicators (HO.3, AC.1 etc.)"
+      },
+      "deadline": "2027-12-31",
+      "owner": {
+        "ro": "Nodul urban (Primăria)",
+        "en": "The urban node (City Hall)"
+      },
+      "status": "partial",
+      "coveredBy": [
+        "indicators.json"
+      ],
+      "note": {
+        "ro": "Acoperit de exporturile Rețeaua Vie: indicators.json. Doar indicatorii pe care îi calculăm (stații, acces la 400 m, AC.1, piste, P&R). Lista LAU: 31 dec 2026.",
+        "en": "Covered by the Rețeaua Vie exports: indicators.json. Only the indicators we compute (stops, 400 m access, AC.1, bike ways, P&R). LAU list: 31 Dec 2026."
+      }
+    },
+    {
+      "id": "AFIR-20",
+      "act": "AFIR (infrastructura pentru combustibili alternativi), art. 20",
+      "requirement": {
+        "ro": "Datele stațiilor de încărcare publice în DATEX II",
+        "en": "Public charging point data in DATEX II"
+      },
+      "deadline": "2026-04-14",
+      "owner": {
+        "ro": "Operatorii stațiilor de încărcare",
+        "en": "Charging point operators"
+      },
+      "status": "missing",
+      "coveredBy": [],
+      "note": {
+        "ro": "Nu exportăm stații de încărcare.",
+        "en": "We export no charging points."
+      }
+    },
+    {
+      "id": "EPBD-BIKE",
+      "act": "Directiva (UE) 2024/1275 (EPBD)",
+      "requirement": {
+        "ro": "Parcări pentru biciclete în clădiri (≥ 15% din capacitatea medie sau 10% din cea totală)",
+        "en": "Bicycle parking in buildings (≥ 15% of average or 10% of total capacity)"
+      },
+      "deadline": "2026-05-29",
+      "owner": {
+        "ro": "Statul și proprietarii clădirilor",
+        "en": "The state and building owners"
+      },
+      "status": "partial",
+      "coveredBy": [],
+      "note": {
+        "ro": "Doar inventarul OSM al rastelelor (stratul de biciclete), nu un export.",
+        "en": "Only the OSM inventory of bike racks (the bike layer), not an export."
+      }
+    },
+    {
+      "id": "ROAD-SAFETY",
+      "act": "Directiva 2008/96/CE, mod. 2019/1936",
+      "requirement": {
+        "ro": "Siguranța infrastructurii rutiere: utilizatori vulnerabili, tronsoane periculoase, marcaje",
+        "en": "Road infrastructure safety: vulnerable users, dangerous sections, markings"
+      },
+      "deadline": null,
+      "owner": {
+        "ro": "Statul și administratorii drumurilor",
+        "en": "The state and road authorities"
+      },
+      "status": "missing",
+      "coveredBy": [],
+      "note": {
+        "ro": "Nu acoperim. Directiva privește mai ales drumurile mari.",
+        "en": "Not covered. The directive is mostly about major roads."
+      }
+    },
+    {
+      "id": "AIR-QUALITY",
+      "act": "Directiva (UE) 2024/2881",
+      "requirement": {
+        "ro": "Valori-limită mai stricte pentru calitatea aerului până în 2030",
+        "en": "Stricter air-quality limit values by 2030"
+      },
+      "deadline": "2026-12-11",
+      "owner": {
+        "ro": "Statul și autoritățile locale",
+        "en": "The state and local authorities"
+      },
+      "status": "missing",
+      "coveredBy": [],
+      "note": {
+        "ro": "Nu acoperim. Termenul este cel de transpunere.",
+        "en": "Not covered. The deadline is transposition."
+      }
     }
   ],
   "provenance": [
     {
-      "source": "docs/facts.md, Normative UE",
+      "source": "Rețeaua Vie: acte UE verificate de echipă; statusurile descriu doar exporturile noastre / EU acts checked by the team; statuses describe our exports only",
       "url": null,
       "version": null,
-      "fetchedAt": "2026-11-13T16:00:00+02:00",
-      "note": "Statuses are placeholders until the exports exist."
+      "fetchedAt": "2026-11-13T21:24:39+02:00",
+      "note": "Nu este o evaluare a conformității Primăriei / not an assessment of City Hall compliance"
     }
   ]
 }
