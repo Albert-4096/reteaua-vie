@@ -564,7 +564,18 @@ def cut_between(geom: BaseGeometry, a: BaseGeometry, b: BaseGeometry, max_gap_m:
             continue
         pieces.append(substring(part, min(pa, pb), max(pa, pb)))
     if not pieces:
-        return None
+        # the street is several ways (dual carriageway, splits at squares): keep what lies in the
+        # corridor between the two points instead (flat-capped band along a-b, 60 m each side)
+        ap, bp = nearest_points(gm, am)[0], nearest_points(gm, bm)[0]
+        if ap.distance(bp) < 1.0:
+            return None
+        band = LineString([ap, bp]).buffer(60.0, cap_style="flat")
+        clipped = gm.intersection(band)
+        pieces = [p for p in _parts(clipped) if p.length >= 5.0]
+        if not pieces:
+            return None
+        merged = linemerge(pieces)
+        return to_wgs84(merged)
     out = to_wgs84(pieces[0] if len(pieces) == 1 else MultiLineString(pieces))
     return out
 
