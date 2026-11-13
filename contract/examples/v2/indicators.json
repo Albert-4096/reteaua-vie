@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-11-13T16:00:00+02:00",
+  "indicators": [
+    {
+      "code": "PLACEHOLDER",
+      "name": {
+        "ro": "Locuitori cu stație la cel mult 400 m",
+        "en": "Residents within 400 m of a stop"
+      },
+      "value": null,
+      "unit": "%",
+      "method": {
+        "ro": "Celule de populație cu o stație deservită la cel mult 400 m.",
+        "en": "Population cells with a served stop within 400 m."
+      },
+      "scope": "Timișoara"
+    }
+  ],
+  "provenance": [
+    {
+      "source": "GHSL population grid",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    },
+    {
+      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

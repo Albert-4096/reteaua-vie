@@ -1,0 +1,28 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "radiusMeters": 500,
+  "from": "2026-11-06T00:00:00+02:00",
+  "to": "2026-11-13T00:00:00+02:00",
+  "total": 4,
+  "byCategory": [
+    {
+      "category": "Trafic și indicatoare",
+      "count": 3,
+      "resolved": 1
+    },
+    {
+      "category": "Străzi și trotuare",
+      "count": 1,
+      "resolved": 0
+    }
+  ],
+  "provenance": [
+    {
+      "source": "Sesizări Timișoara (public API), our recording",
+      "url": "https://sesizari.primariatm.ro/api/sesizari",
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

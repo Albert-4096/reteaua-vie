@@ -1,0 +1,43 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "edges": [
+    {
+      "name": "PLACEHOLDER street",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2196,
+            45.7484
+          ],
+          [
+            21.2184,
+            45.7497
+          ]
+        ]
+      },
+      "centralityBefore": 0.012,
+      "centralityAfter": 0.019,
+      "changePct": 58.3,
+      "routeIdsOnEdge": [
+        "R_AB_33"
+      ]
+    }
+  ],
+  "routesSlowedRisk": [
+    "R_AB_33"
+  ],
+  "label": {
+    "ro": "Structura rețelei de străzi, nu volume de trafic. Nu avem numărători.",
+    "en": "Street network structure, not traffic volumes. We have no counts."
+  },
+  "provenance": [
+    {
+      "source": "OpenStreetMap contributors (ODbL), street graph (OSMnx)",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

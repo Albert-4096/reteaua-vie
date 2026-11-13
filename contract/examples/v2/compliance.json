@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-11-13T16:00:00+02:00",
+  "obligations": [
+    {
+      "id": "MMTIS",
+      "act": "Reg. (UE) 2017/1926, mod. 2024/490",
+      "requirement": {
+        "ro": "Perturbări și istoricul lor, publicate digital prin punctul național de acces",
+        "en": "Disruptions and their history, published digitally through the National Access Point"
+      },
+      "deadline": "2025-12-01",
+      "owner": {
+        "ro": "STPT / Primăria",
+        "en": "STPT / City Hall"
+      },
+      "status": "partial",
+      "coveredBy": [
+        "alerts.pb",
+        "history.json",
+        "nap-metadata.json"
+      ],
+      "note": {
+        "ro": "Acoperim perturbările publicate prin platformă, nu tot istoricul de întârzieri.",
+        "en": "We cover disruptions published through the platform, not the full delay history."
+      }
+    },
+    {
+      "id": "RTTI",
+      "act": "Reg. delegat (UE) 2022/670",
+      "requirement": {
+        "ro": "Închideri, lucrări și măsuri temporare, în format digital",
+        "en": "Closures, roadworks and temporary measures, in digital form"
+      },
+      "deadline": null,
+      "owner": {
+        "ro": "Primăria",
+        "en": "City Hall"
+      },
+      "status": "covered",
+      "coveredBy": [
+        "datex.xml"
+      ],
+      "note": null
+    }
+  ],
+  "provenance": [
+    {
+      "source": "docs/facts.md, Normative UE",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "Statuses are placeholders until the exports exist."
+    }
+  ]
+}

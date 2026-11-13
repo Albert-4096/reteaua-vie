@@ -1,0 +1,30 @@
+[
+  {
+    "name": "alerts.pb",
+    "format": "GTFS-RT",
+    "standard": "GTFS Realtime 2.0, ServiceAlert",
+    "url": "http://127.0.0.1:3000/api/feed/alerts.pb",
+    "updatedAt": "2026-11-13T14:05:00+02:00"
+  },
+  {
+    "name": "datex.xml",
+    "format": "DATEX II",
+    "standard": "DATEX II v3, SituationPublication",
+    "url": "http://127.0.0.1:3000/api/feed/datex.xml",
+    "updatedAt": "2026-11-13T14:05:00+02:00"
+  },
+  {
+    "name": "notices.json",
+    "format": "JSON",
+    "standard": "Rețeaua Vie ZoneNotice",
+    "url": "http://127.0.0.1:3000/api/feed/notices.json",
+    "updatedAt": "2026-11-13T14:05:00+02:00"
+  },
+  {
+    "name": "nap-metadata.json",
+    "format": "mobilityDCAT-AP",
+    "standard": "mobilityDCAT-AP 1.0",
+    "url": "http://127.0.0.1:3000/api/exports/nap-metadata.json",
+    "updatedAt": "2026-11-13T14:05:00+02:00"
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "lanesAffected": [
+    {
+      "osmId": "way/PLACEHOLDER",
+      "name": null,
+      "lengthMeters": 180,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2196,
+            45.7484
+          ],
+          [
+            21.2184,
+            45.7497
+          ]
+        ]
+      }
+    }
+  ],
+  "parkingAffected": [],
+  "detourStress": [
+    {
+      "name": "PLACEHOLDER street",
+      "lts": 3,
+      "lengthMeters": 420,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2196,
+            45.7484
+          ],
+          [
+            21.2184,
+            45.7497
+          ]
+        ]
+      }
+    }
+  ],
+  "provenance": [
+    {
+      "source": "OpenStreetMap contributors (ODbL), Overpass extract",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "scenarioId": "sc_PLACEHOLDER_a",
+  "closureId": "cl_20261108_16dec",
+  "impact": {
+    "closureId": "cl_20261108_16dec",
+    "window": {
+      "start": "2026-11-08T10:00:00+02:00",
+      "end": "2026-11-08T18:00:00+02:00"
+    },
+    "totals": {
+      "stopsSuspended": 1,
+      "departuresLost": 51,
+      "routesAffected": 2,
+      "residentsLosingStop": null
+    },
+    "byZone": [
+      {
+        "slug": "iosefin",
+        "name": "Iosefin",
+        "stopsSuspended": 1,
+        "departuresLost": 51,
+        "residentsLosingStop": null,
+        "maxExtraWalkMeters": null
+      }
+    ],
+    "method": {
+      "ro": "Locuitori la cel mult 400 m de o stație suspendată și fără altă stație deservită la 400 m.",
+      "en": "Residents within 400 m of a suspended stop with no served stop within 400 m."
+    },
+    "provenance": [
+      {
+        "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+        "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+        "version": "4.31-4",
+        "fetchedAt": "2026-11-13T13:29:00+02:00",
+        "note": null
+      },
+      {
+        "source": "Stop timetables, cont.primariatm.ro",
+        "url": "https://cont.primariatm.ro/api/mobile/transit/stops/61/timetable?date=2026-11-08",
+        "version": "4.31-4",
+        "fetchedAt": "2026-11-13T13:55:00+02:00",
+        "note": "Departures counted 10:00-18:00 on 8 Nov 2026"
+      },
+      {
+        "source": "Primăria Timișoara neighbourhoods",
+        "url": "https://cont.primariatm.ro/api/zones",
+        "version": null,
+        "fetchedAt": "2026-11-13T13:29:00+02:00",
+        "note": null
+      },
+      {
+        "source": "PLACEHOLDER population grid",
+        "url": null,
+        "version": null,
+        "fetchedAt": "2026-11-13T13:29:00+02:00",
+        "note": "Placeholder until the population source is loaded. Never show as a fact."
+      }
+    ]
+  },
+  "access": {
+    "closureId": "cl_20261108_16dec",
+    "dest": "hospital",
+    "minutes": 30,
+    "at": "2026-11-08T10:30:00+02:00",
+    "totals": {
+      "residentsBefore": null,
+      "residentsAfter": null,
+      "residentsLosing": null
+    },
+    "byZone": [
+      {
+        "slug": "iosefin",
+        "name": "Iosefin",
+        "residentsBefore": null,
+        "residentsAfter": null,
+        "residentsLosing": null
+      }
+    ],
+    "estimate": true,
+    "method": {
+      "ro": "Timp de călătorie pe orarul planificat, de la fiecare celulă de populație la cel mai apropiat spital, înainte și după închidere.",
+      "en": "Planned-timetable travel time from each population cell to the nearest hospital, before and with the closure."
+    },
+    "provenance": [
+      {
+        "source": "GHSL population grid",
+        "url": null,
+        "version": null,
+        "fetchedAt": "2026-11-13T16:00:00+02:00",
+        "note": "PLACEHOLDER example values. Never show as a fact."
+      },
+      {
+        "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+        "url": null,
+        "version": null,
+        "fetchedAt": "2026-11-13T16:00:00+02:00",
+        "note": "PLACEHOLDER example values. Never show as a fact."
+      },
+      {
+        "source": "OpenStreetMap contributors (ODbL), hospitals",
+        "url": null,
+        "version": null,
+        "fetchedAt": "2026-11-13T16:00:00+02:00",
+        "note": "PLACEHOLDER example values. Never show as a fact."
+      }
+    ]
+  },
+  "detourLoad": {
+    "closureId": "cl_20261108_16dec",
+    "edges": [
+      {
+        "name": "PLACEHOLDER street",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              21.2196,
+              45.7484
+            ],
+            [
+              21.2184,
+              45.7497
+            ]
+          ]
+        },
+        "centralityBefore": 0.012,
+        "centralityAfter": 0.019,
+        "changePct": 58.3,
+        "routeIdsOnEdge": [
+          "R_AB_33"
+        ]
+      }
+    ],
+    "routesSlowedRisk": [
+      "R_AB_33"
+    ],
+    "label": {
+      "ro": "Structura rețelei de străzi, nu volume de trafic. Nu avem numărători.",
+      "en": "Street network structure, not traffic volumes. We have no counts."
+    },
+    "provenance": [
+      {
+        "source": "OpenStreetMap contributors (ODbL), street graph (OSMnx)",
+        "url": null,
+        "version": null,
+        "fetchedAt": "2026-11-13T16:00:00+02:00",
+        "note": "PLACEHOLDER example values. Never show as a fact."
+      }
+    ]
+  },
+  "summary": {
+    "residentsLosingStop": null,
+    "residentsLosingAccess": null,
+    "departuresLost": 51
+  },
+  "provenance": [
+    {
+      "source": "Rețeaua Vie scenario run",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

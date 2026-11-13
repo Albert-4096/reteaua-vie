@@ -1,0 +1,48 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "dest": "hospital",
+  "minutes": 30,
+  "at": "2026-11-08T10:30:00+02:00",
+  "totals": {
+    "residentsBefore": null,
+    "residentsAfter": null,
+    "residentsLosing": null
+  },
+  "byZone": [
+    {
+      "slug": "iosefin",
+      "name": "Iosefin",
+      "residentsBefore": null,
+      "residentsAfter": null,
+      "residentsLosing": null
+    }
+  ],
+  "estimate": true,
+  "method": {
+    "ro": "Timp de călătorie pe orarul planificat, de la fiecare celulă de populație la cel mai apropiat spital, înainte și după închidere.",
+    "en": "Planned-timetable travel time from each population cell to the nearest hospital, before and with the closure."
+  },
+  "provenance": [
+    {
+      "source": "GHSL population grid",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    },
+    {
+      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    },
+    {
+      "source": "OpenStreetMap contributors (ODbL), hospitals",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

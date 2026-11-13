@@ -1,0 +1,19 @@
+[
+  {
+    "closureId": "cl_20261108_16dec",
+    "otherClosureId": "cl_PLACEHOLDER",
+    "otherTitle": {
+      "ro": "PLACEHOLDER: altă lucrare",
+      "en": "PLACEHOLDER: other works"
+    },
+    "overlap": {
+      "start": "2026-11-08T10:00:00+02:00",
+      "end": "2026-11-08T18:00:00+02:00"
+    },
+    "kind": "shared_detour",
+    "stopIds": [],
+    "routeIds": [
+      "R_TV_2"
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "at": "2026-11-08T12:00:00+02:00",
+  "activeClosures": [
+    {
+      "id": "cl_20261108_16dec",
+      "title": {
+        "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
+        "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+      },
+      "status": "published",
+      "window": {
+        "start": "2026-11-08T10:00:00+02:00",
+        "end": "2026-11-08T18:00:00+02:00"
+      },
+      "routeIds": [
+        "R_TV_2",
+        "R_TV_4",
+        "R_TV_7"
+      ],
+      "zoneSlugs": [
+        "iosefin"
+      ],
+      "stopsSuspended": 1,
+      "departuresLost": 51,
+      "publishedAt": "2026-11-13T14:05:00+02:00"
+    }
+  ],
+  "upcomingClosures": [],
+  "ghostDeparturesToday": 51,
+  "vehiclesLive": 128,
+  "vehiclesAt": "2026-11-08T11:59:45+02:00",
+  "compliance": {
+    "covered": 2,
+    "partial": 3,
+    "missing": 2
+  },
+  "provenance": [
+    {
+      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    },
+    {
+      "source": "CityApp live vehicles (undocumented)",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

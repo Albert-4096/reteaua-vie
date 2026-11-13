@@ -1,0 +1,25 @@
+[
+  {
+    "id": "cl_20261108_16dec",
+    "title": {
+      "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
+      "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+    },
+    "status": "published",
+    "window": {
+      "start": "2026-11-08T10:00:00+02:00",
+      "end": "2026-11-08T18:00:00+02:00"
+    },
+    "routeIds": [
+      "R_TV_2",
+      "R_TV_4",
+      "R_TV_7"
+    ],
+    "zoneSlugs": [
+      "iosefin"
+    ],
+    "stopsSuspended": 1,
+    "departuresLost": 51,
+    "publishedAt": "2026-11-13T14:05:00+02:00"
+  }
+]

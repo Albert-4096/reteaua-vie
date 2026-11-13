@@ -1,0 +1,75 @@
+{
+  "from": [
+    21.216,
+    45.75
+  ],
+  "to": [
+    21.229,
+    45.74
+  ],
+  "at": "2026-11-08T11:00:00+02:00",
+  "legs": [
+    {
+      "mode": "walk",
+      "routeId": null,
+      "fromStopId": null,
+      "toStopId": "55",
+      "departAt": "2026-11-08T11:00:00+02:00",
+      "arriveAt": "2026-11-08T11:12:00+02:00",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2196,
+            45.7484
+          ],
+          [
+            21.2184,
+            45.7497
+          ]
+        ]
+      }
+    },
+    {
+      "mode": "tram",
+      "routeId": "R_TV_8",
+      "fromStopId": "55",
+      "toStopId": "PLACEHOLDER",
+      "departAt": "2026-11-08T11:14:00+02:00",
+      "arriveAt": "2026-11-08T11:24:00+02:00",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            21.2196,
+            45.7484
+          ],
+          [
+            21.2184,
+            45.7497
+          ]
+        ]
+      }
+    }
+  ],
+  "durationMinutes": 24,
+  "avoidedStopIds": [
+    "61"
+  ],
+  "provenance": [
+    {
+      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    },
+    {
+      "source": "Rețeaua Vie published alerts",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}

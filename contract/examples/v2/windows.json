@@ -1,0 +1,45 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "hours": 8,
+  "searchFrom": "2026-11-14T00:00:00+02:00",
+  "searchTo": "2026-11-28T00:00:00+02:00",
+  "candidates": [
+    {
+      "window": {
+        "start": "2026-11-15T08:00:00+02:00",
+        "end": "2026-11-15T16:00:00+02:00"
+      },
+      "departuresLost": 38,
+      "residentsLosingStop": null,
+      "conflicts": 0,
+      "rank": 1
+    },
+    {
+      "window": {
+        "start": "2026-11-17T10:00:00+02:00",
+        "end": "2026-11-17T18:00:00+02:00"
+      },
+      "departuresLost": 64,
+      "residentsLosingStop": null,
+      "conflicts": 1,
+      "rank": 2
+    }
+  ],
+  "best": {
+    "start": "2026-11-15T08:00:00+02:00",
+    "end": "2026-11-15T16:00:00+02:00"
+  },
+  "method": {
+    "ro": "Ferestrele sunt ordonate după plecările pierdute în stațiile suspendate, apoi după conflictele cu alte lucrări.",
+    "en": "Windows are ranked by departures lost at suspended stops, then by conflicts with other works."
+  },
+  "provenance": [
+    {
+      "source": "Stop timetables, cont.primariatm.ro",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-13T16:00:00+02:00",
+      "note": "PLACEHOLDER example values. Never show as a fact."
+    }
+  ]
+}
