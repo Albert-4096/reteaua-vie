@@ -280,22 +280,43 @@ class LiveObservation(Model):
     served: bool
     seenAt: IsoTime
     delaySec: int | None
+    state: Literal["skipped", "served", "unknown"] | None = None  # v2.3
+    evidence: Literal["stopped_at", "gps"] | None = None  # v2.3
 
 
 class LiveSummary(Model):
     vehiclesSeen: int | None
     stopsSkipped: int | None
     stopsServedAnyway: int | None
+    stopsUnknown: int | None = None  # v2.3
+
+
+class LiveStopRow(Model):
+    """v2.3: passages per affected stop (one trip past one stop)."""
+
+    stopId: str
+    name: str | None
+    routeId: str
+    directionId: DirectionId
+    skipped: int
+    served: int
+    unknown: int
 
 
 class LiveCheck(Model):
     closureId: str
     from_: IsoTime = Field(alias="from")
     to: IsoTime
-    source: Literal["live", "replay"]
+    source: Literal["live", "replay"] | None  # v2.3: null = no recording covers the window
     observations: list[LiveObservation]
     summary: LiveSummary
     provenance: list[Provenance]
+    byStop: list[LiveStopRow] | None = None  # v2.3
+    recordedFrom: IsoTime | None = None  # v2.3
+    recordedTo: IsoTime | None = None  # v2.3
+    label: I18n | None = None  # v2.3, e.g. „Înregistrare reală, 13–14 nov”
+    method: I18n | None = None  # v2.3
+    note: I18n | None = None  # v2.3: why a value is null
 
 
 # --- cases ----------------------------------------------------------------------

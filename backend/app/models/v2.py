@@ -46,7 +46,7 @@ class Overview(Model):
     ghostDeparturesToday: int | None
     vehiclesLive: int | None
     vehiclesAt: IsoTime | None
-    compliance: ComplianceCounts
+    compliance: ComplianceCounts | None  # v2.3: null until M7 serves counts
     provenance: list[Provenance]
 
 
@@ -243,9 +243,12 @@ class ReportSummary(Model):
     radiusMeters: float
     from_: IsoTime = Field(alias="from")
     to: IsoTime
-    total: int
+    total: int | None  # v2.3: null when our recording does not cover the period
     byCategory: list[ReportCategory]
     provenance: list[Provenance]
+    coveredFrom: IsoTime | None = None  # v2.3: what the sesizări recording covers
+    coveredTo: IsoTime | None = None  # v2.3
+    note: I18n | None = None  # v2.3
 
 
 class WindowCandidate(Model):
@@ -376,7 +379,7 @@ class ZoneNotice(Model):
     stopIds: list[str]
     routeIds: list[str]
     alertIds: list[str]
-    publishedAt: IsoTime
+    publishedAt: IsoTime | None  # v2.3: null before the closure is published
 
 
 class RouteLeg(Model):
