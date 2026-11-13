@@ -119,11 +119,37 @@ def prepare_cases(reset: bool = False) -> list[dict]:
     return rows
 
 
+def warm_posters(rows: list[dict]) -> None:
+    """Render the A4 poster of every stop counted as lost (m1-outputs caches the PDF by content)."""
+    poster_pdf = _optional("app.m1_disruption.poster", "poster_pdf")
+    counts_as_lost = _optional("app.m1_disruption.impact", "counts_as_lost")
+    if poster_pdf is None or counts_as_lost is None:
+        print("posters: skipped (m1-outputs poster module not there yet)")
+        return
+    from app.common import state
+
+    print("posters:", flush=True)
+    for info in rows:
+        analysis = state.read("closures", info["id"], state.PART_ANALYSIS) or {}
+        stop_ids = sorted({r["stopId"] for r in analysis.get("stops") or [] if counts_as_lost(r)})
+        t, failed = time.perf_counter(), 0
+        for sid in stop_ids:
+            try:
+                poster_pdf(info["id"], sid)
+            except Exception as e:  # one bad stop must not stop the others
+                failed += 1
+                if failed == 1:
+                    print(f"  note {info['id']} stop {sid}: {type(e).__name__}: {e}")
+        print(f"  ok   {info['id']}: {len(stop_ids) - failed}/{len(stop_ids)} posters "
+              f"({time.perf_counter() - t:.1f} s)", flush=True)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Warm the caches and store the prepared closures as analyzed.")
     ap.add_argument("--reset", action="store_true",
                     help="drop the prepared closures' decisions and publish records first (demo restart)")
     ap.add_argument("--cases-only", action="store_true", help="skip the cache warm-up")
+    ap.add_argument("--no-posters", action="store_true", help="skip rendering the posters")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.WARNING)
     s = get_settings()
@@ -133,6 +159,8 @@ def main(argv: list[str] | None = None) -> int:
     if not args.cases_only:
         warm_caches()
     rows = prepare_cases(reset=args.reset)
+    if not args.no_posters:
+        warm_posters(rows)
     bad = [r["id"] for r in rows if r["status"] not in ("analyzed", "published")]
     print(f"done in {time.perf_counter() - t0:.1f} s" + (f"; not analyzed: {', '.join(bad)}" if bad else ""))
     return 1 if bad else 0
