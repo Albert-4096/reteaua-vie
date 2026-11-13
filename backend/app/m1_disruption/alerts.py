@@ -428,13 +428,21 @@ def pick_nearest(rows: list[dict], stop_id: str) -> dict | None:
     """The nearest served stop for a stop's rows: the stop itself when another line still
     serves it (m1-core reports it at 0 m), else the closest one."""
     found = [r["nearestServed"] for r in rows if r.get("nearestServed")]
-    own = [n for n in found if str(n.get("stopId")) == str(stop_id)]
+    # nearestServed is stored at analyze time; a line ticked later (PATCH) no longer serves the stop
+    lost_here = {r["routeId"] for r in rows if str(r["stopId"]) == str(stop_id) and is_suspended(r)}
+    own = []
+    for n in found:
+        if str(n.get("stopId")) == str(stop_id):
+            left = [x for x in n.get("routeIds") or [] if x not in lost_here]
+            if left:
+                own.append({**n, "routeIds": left})
     if own:
         return own[0]
-    known = [n for n in found if n.get("distanceMeters") is not None]
+    others = [n for n in found if str(n.get("stopId")) != str(stop_id)]
+    known = [n for n in others if n.get("distanceMeters") is not None]
     if known:
         return min(known, key=lambda n: float(n["distanceMeters"]))
-    return found[0] if found else None
+    return others[0] if others else None
 
 
 def _nearest_texts(nearest: dict | None, short_of: dict[str, str], stop_id: str,
