@@ -1,14 +1,18 @@
-"""`make precompute`: warm the caches and store the three prepared closures as `analyzed`.
+"""`make precompute`: warm the caches and store the three prepared closures at the demo start.
 
     uv run python -m app.precompute            # idempotent; keeps decisions and a published case
-    uv run python -m app.precompute --reset    # back to the demo start: prepared cases analyzed,
-                                               # their decisions and publish record removed
+    uv run python -m app.precompute --reset    # back to the demo start: the hero analyzed with no
+                                               # decisions, E3 and Mocioni published again
 
 Steps (SPEC §10): city files, GTFS stop patterns and departure index, the OSM street cache the
 notice parser uses, m1-core's walking graph and population grid; then for each case of
 app.cases.catalog: build the closure from its real notice (app.cases.build), analyze it with
-app.m1_disruption.analysis and compute its impact. A prepared case is never `published` here
-(D-011): „Publică” is pressed live in the demo.
+app.m1_disruption.analysis and compute its impact.
+The hero case stays `analyzed` (D-011): „Publică” is pressed live in the demo. E3 and Mocioni
+(`starts_published`) were really in force at the demo clock, so they are published here with the
+decisions their notices name (every row the notice names is confirmed; an `unsure` row it does
+not name is unticked), dated at the notice's post time. `main()` then validates their feed and makes
+Mocioni's MP3s (budget-checked); `prepare_cases` alone never starts a thread or calls ElevenLabs.
 Last, every app/<package>/warm*.py that defines `warm(closure_ids: list[str]) -> None` is called
 with the prepared closure ids (module caches: access, detour, windows, …); a failing one is
 reported and the rest go on.
@@ -73,6 +77,66 @@ def reset_case(closure_id: str) -> None:
     state.delete("published", closure_id)
 
 
+def notice_decisions(analysis: dict) -> list[dict]:
+    """The decisions a clerk takes from the notice alone: confirm every row the notice names,
+    untick an `unsure` row it does not name; leave the other rows to the model."""
+    out = []
+    for r in analysis.get("stops") or []:
+        named = "NAMED_IN_NOTICE" in (r.get("reasons") or [])
+        if named or r.get("state") == "unsure":
+            out.append({"stopId": r["stopId"], "routeId": r["routeId"],
+                        "directionId": int(r["directionId"]), "confirmed": named})
+    return out
+
+
+def publish_as_noticed(case) -> dict:
+    """Publish a `starts_published` case as STPT did: its notice's decisions, at its post time."""
+    from app.common import state
+    from app.common.stpt_posts import get_post
+    from app.m1_disruption.analysis import apply_decisions
+    from app.m1_disruption.publish import publish
+
+    cid = case.closure_id
+    analysis = state.read("closures", cid, state.PART_ANALYSIS) or {}
+    decisions = notice_decisions(analysis)
+    if decisions:
+        apply_decisions(cid, decisions)
+    post = get_post(case.post_id)
+    result = publish(cid, at=post.date if post else None, background=False)
+    return {"decisions": len(decisions), "alerts": len(result.alerts), "posters": len(result.posters),
+            "publishedAt": result.publishedAt}
+
+
+def finish_published(closure_id: str) -> None:
+    """What publish() does in the background, done here and now: the feed validator, the MP3s."""
+    get_validation = _optional("app.m1_disruption.publish", "get_validation")
+    if get_validation is not None:
+        try:
+            v = get_validation(closure_id)
+            print(f"  ok   validator {closure_id}: passed={v.passed} errors={v.errorCount} "
+                  f"warnings={v.warningCount} ({v.method})", flush=True)
+        except Exception as e:  # Java or the jar missing: GET .../validation retries later
+            print(f"  note {closure_id} feed not validated: {type(e).__name__}: {e}", flush=True)
+    make_audio(closure_id)
+
+
+def make_audio(closure_id: str) -> None:
+    """The MP3s of a published case (only the closures audio.AUDIO_CLOSURE_IDS names), budget-checked."""
+    audio = _optional("app.m1_disruption.audio", "generate")
+    if audio is None or closure_id not in (_optional("app.m1_disruption.audio", "AUDIO_CLOSURE_IDS") or ()):
+        return
+    try:
+        s = audio(closure_id)
+    except Exception as e:  # BudgetRefused or the network: the QR page falls back to Web Speech
+        print(f"  note {closure_id} audio not made: {type(e).__name__}: {e}", flush=True)
+        return
+    if s.get("skipped"):
+        print(f"  note {closure_id} audio skipped: {s['skipped']}", flush=True)
+    else:
+        print(f"  ok   audio {closure_id}: {len(s.get('made') or [])} made, {s.get('cached', 0)} cached, "
+              f"{s.get('charsSpent', 0)} characters", flush=True)
+
+
 def prepare_cases(reset: bool = False) -> list[dict]:
     from app.cases.build import build_case
     from app.cases.catalog import CASES
@@ -107,6 +171,12 @@ def prepare_cases(reset: bool = False) -> list[dict]:
                 except Exception as e:  # e.g. 422 OUTSIDE_FEED: the number stays unknown, never 0
                     print(f"  note {cid} impact not computed: {getattr(e, 'code', type(e).__name__)}: {e}")
         info["status"] = (state.read("closures", cid) or {}).get("status")
+        if case.starts_published and info["status"] == "analyzed":
+            try:
+                info.update(publish_as_noticed(case))
+            except Exception as e:  # e.g. 409 UNCONFIRMED: reported; the case stays analyzed
+                print(f"  FAIL {cid} not published: {getattr(e, 'code', type(e).__name__)}: {e}")
+            info["status"] = (state.read("closures", cid) or {}).get("status")
         info["seconds"] = round(time.perf_counter() - t, 1)
         rows.append(info)
         print("  ok   " + "  ".join(f"{k}={v}" for k, v in info.items()), flush=True)
@@ -185,7 +255,7 @@ def run_warms(closure_ids: list[str]) -> dict[str, str]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Warm the caches and store the prepared closures as analyzed.")
+    ap = argparse.ArgumentParser(description="Warm the caches and store the prepared closures at the demo start.")
     ap.add_argument("--reset", action="store_true",
                     help="drop the prepared closures' decisions and publish records first (demo restart)")
     ap.add_argument("--cases-only", action="store_true", help="skip the cache warm-up")
@@ -200,6 +270,11 @@ def main(argv: list[str] | None = None) -> int:
     if not args.cases_only:
         warm_caches()
     rows = prepare_cases(reset=args.reset)
+    from app.cases.catalog import CASES_BY_CLOSURE
+
+    for r in rows:
+        if CASES_BY_CLOSURE[r["id"]].starts_published and r["status"] == "published":
+            finish_published(r["id"])
     if not args.no_posters:
         warm_posters(rows)
     if not args.no_warm:
@@ -212,7 +287,9 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  FAIL {r['id']} is {status} after the warm-ups; run --reset", flush=True)
             r["status"] = status
     bad = [r["id"] for r in rows if r["status"] not in ("analyzed", "published")]
-    print(f"done in {time.perf_counter() - t0:.1f} s" + (f"; not analyzed: {', '.join(bad)}" if bad else ""))
+    # E3 and Mocioni must be published at the demo start, or step 0 is empty
+    bad += [r["id"] for r in rows if CASES_BY_CLOSURE[r["id"]].starts_published and r["status"] != "published"]
+    print(f"done in {time.perf_counter() - t0:.1f} s" + (f"; not at the demo start: {', '.join(bad)}" if bad else ""))
     return 1 if bad else 0
 
 

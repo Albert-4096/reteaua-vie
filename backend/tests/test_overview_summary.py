@@ -17,10 +17,14 @@ needs_cases = pytest.mark.skipif(not HAS_CASES, reason="no prepared cases (make 
 
 @pytest.fixture
 def cases_copy(isolated_state):
-    """The three prepared closures in a temp state dir, so a test can publish one."""
+    """The three prepared closures in a temp state dir, all `analyzed`, so a test can publish one
+    (the real state starts with E3 and Mocioni published: T4)."""
     src = DATA_DIR / "state" / "closures"
     for p in src.glob("cl_2026110*"):
         shutil.copy(p, isolated_state.state_dir / "closures" / p.name)
+    for cid in state.list_ids("closures"):
+        c = state.read("closures", cid)
+        state.write("closures", cid, {**c, "status": "analyzed"})
     return isolated_state
 
 

@@ -44,7 +44,8 @@ def test_history_and_indicators(client):
     r = client.get("/api/history", params={"from": "2026-11-01", "to": "2026-11-30"})
     assert r.status_code == 200
     rows = r.json()
-    assert any(x["closureId"] == "stpt_11065" for x in rows)
+    # E3 (notice 11065): back-filled, or the platform row once precompute published it (T4)
+    assert any(x["closureId"] in ("stpt_11065", "cl_20261107_e3") for x in rows)
     for x in rows:
         HistoryEntry.model_validate({k: v for k, v in x.items() if k not in ("note", "sourceUrl", "provenance")})
     assert client.get("/api/history", params={"from": "nope"}).status_code == 422

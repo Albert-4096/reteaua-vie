@@ -1,5 +1,8 @@
 """The three prepared demo cases (SPEC §5): descriptions only, no figures.
 
+E3 and Mocioni were really in force at the demo clock, so they start `published`; only the
+hero case starts `analyzed` (D-011, frontend-plan §6.5).
+
 Every number about a case (stops, departures, residents) is computed by the
 M1 pipeline from real data; nothing here is a result. `build.py` (m1-notices)
 turns each case into a stored Closure using these ids and windows.
@@ -27,6 +30,9 @@ class Case:
     open_end: bool               # True: "până la finalizarea lucrărilor"
     cause: str                   # GTFS-RT cause name
     route_ids: tuple[str, ...]   # lines the notice names (city ids)
+    # In force at the demo clock (8 Nov 12:00): `make precompute` loads it as published, with
+    # the decisions its notice names. The hero stays `analyzed`, so „Publică” is pressed live.
+    starts_published: bool = False
 
     def summary(self) -> CaseSummary:
         return CaseSummary(id=self.id, title=self.title, kind="notice", date=self.date,
@@ -79,6 +85,7 @@ CASES: tuple[Case, ...] = (
         open_end=False,
         cause="CONSTRUCTION",
         route_ids=("R_AB_E3",),
+        starts_published=True,
     ),
     Case(
         id="case_mocioni",
@@ -102,6 +109,7 @@ CASES: tuple[Case, ...] = (
         open_end=True,
         cause="CONSTRUCTION",
         route_ids=("R_AB_M32", "R_AB_M36", "R_AB_M37", "R_AB_M38", "R_AB_M46", "R_AB_M51"),
+        starts_published=True,
     ),
 )
 

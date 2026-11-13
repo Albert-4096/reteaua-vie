@@ -105,6 +105,16 @@ def test_short_text_drops_parts_to_stay_under_the_limit():
     assert too_long is None
 
 
+def test_short_text_keeps_a_long_header_alone():
+    # Mocioni stop 356: the stop name and four lines make a 206-character header
+    name = "Piața A. Mocioni, Sinaia, șaisprezece Decembrie o mie nouă sute optzeci și nouă"
+    alert = _alert("356", name)
+    alert.ttsHeaderText.ro = (f"Atenție. Stația {name} nu este deservită de liniile M treizeci și doi, "
+                              "M treizeci și șase, M treizeci și șapte și M cincizeci și unu.")
+    assert audio.MAX_CHARS < len(alert.ttsHeaderText.ro) <= audio.MAX_HEADER_CHARS
+    assert audio.short_text(alert, CLOSURE) == alert.ttsHeaderText.ro
+
+
 def test_hash_covers_voice_model_and_text():
     h = audio.text_hash("a", "v1", "m1")
     assert h != audio.text_hash("a", "v2", "m1")
@@ -160,7 +170,7 @@ def test_no_key_or_other_closure_makes_nothing(isolated_state, monkeypatch):
     monkeypatch.delenv("ELEVENLABS_API_KEY", raising=False)
     _store([_alert("85")])
     assert audio.generate(HERO)["skipped"] == "no ELEVENLABS_API_KEY"
-    assert audio.generate("cl_20261107_e3")["skipped"] == "not the hero case"
+    assert audio.generate("cl_20261107_e3")["skipped"] == "no audio for this closure"
     assert audio.start_after_publish("cl_20261107_e3") is None
 
 
@@ -177,7 +187,7 @@ def test_endpoint_serves_the_mp3_and_404s_otherwise(isolated_state, key, client)
     assert client.head(f"/api/closures/{HERO}/audio/85.mp3").status_code == 200
     for path in (f"/api/closures/{HERO}/audio/87.mp3",          # not made
                  f"/api/closures/{HERO}/audio/999.mp3",         # not affected
-                 "/api/closures/cl_20261107_e3/audio/85.mp3"):  # not the hero case
+                 "/api/closures/cl_20261107_e3/audio/85.mp3"):  # no audio for E3
         r = client.get(path)
         assert r.status_code == 404, path
         assert r.json()["error"]["code"] == "NO_AUDIO"

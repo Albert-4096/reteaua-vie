@@ -91,7 +91,9 @@ def feed_url() -> str:
     return f"{config.get_settings().public_base_url}/api/feed/alerts.pb"
 
 
-def publish(closure_id: str) -> PublishResult:
+def publish(closure_id: str, at: datetime | None = None, background: bool = True) -> PublishResult:
+    """Publish now. `at` sets publishedAt instead (a prepared case published at its notice's date);
+    background=False skips the validator and audio threads (precompute runs them itself)."""
     closure = closure_or_404(closure_id)
     analysis = analysis_or_409(closure_id)
     undecided = undecided_rows(analysis)
@@ -113,7 +115,7 @@ def publish(closure_id: str) -> PublishResult:
         alerts=alerts,
         feedUrl=feed_url(),
         posters=[Poster(stopId=s, url=poster_url(closure_id, s)) for s in stop_ids],
-        publishedAt=iso(config.now()),
+        publishedAt=iso(at or config.now()),
     )
     state.write("published", closure_id, result)
     state.delete("published", closure_id, PART_VALIDATION)
@@ -122,8 +124,9 @@ def publish(closure_id: str) -> PublishResult:
         return {**(old or closure), "status": "published"}
 
     state.update("closures", closure_id, _set_status)
-    start_validation(closure_id)
-    start_audio(closure_id)
+    if background:
+        start_validation(closure_id)
+        start_audio(closure_id)
     return result
 
 

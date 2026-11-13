@@ -1,12 +1,13 @@
 """Audio version of a stop alert (SPEC §6.1 item 15).
 
-At publish of the hero case, one short Romanian MP3 per affected stop is made with
+At publish of the hero case or Mocioni, one short Romanian MP3 per affected stop is made with
 ElevenLabs (multilingual v2) and cached under $DATA_DIR/cache/audio/<sha256>.mp3,
 where the hash covers (voice, model, text). An existing hash is never generated again.
 
 Budget (free tier, 10,000 characters a month): before a batch we read the account's
 character_count and refuse the whole batch if it would push the count above
-CHAR_CEILING. Texts are at most MAX_CHARS characters. Only HERO_CLOSURE_ID gets MP3s;
+CHAR_CEILING. Texts are at most MAX_CHARS characters. Only AUDIO_CLOSURE_IDS get MP3s (the
+hero, and Mocioni for the Living Labs test at its stops);
 every other closure answers 404 and the QR page reads `ttsDescriptionText` with Web
 Speech (ro-RO).
 
@@ -37,6 +38,7 @@ from app.models.v1 import Alert
 log = logging.getLogger("reteaua_vie.audio")
 
 HERO_CLOSURE_ID = "cl_20261108_16dec"
+AUDIO_CLOSURE_IDS = (HERO_CLOSURE_ID, "cl_20261102_mocioni")
 API = "https://api.elevenlabs.io/v1"
 MODEL_ID = "eleven_multilingual_v2"
 # Premade ElevenLabs voice "Daniel - Steady Broadcaster" (multilingual v2). Override with
@@ -45,6 +47,9 @@ DEFAULT_VOICE_ID = "onwK4e9ZLuTAKqWW03F9"
 DEFAULT_VOICE_NAME = "Daniel"
 OUTPUT_FORMAT = "mp3_44100_128"
 MAX_CHARS = 200
+# The header alone may be longer: a long stop name with four lines (Mocioni 356, 206 characters)
+# must still get its MP3 rather than none.
+MAX_HEADER_CHARS = 240
 CHAR_CEILING = 8000  # never let the month's character_count go above this
 LABEL = {"ro": "Voce generată automat (AI), ElevenLabs", "en": "AI-generated voice, ElevenLabs"}
 
@@ -83,7 +88,7 @@ def short_text(alert: Alert, closure: dict) -> str | None:
     """A ≤ MAX_CHARS Romanian text for one stop alert, or None if even the header is too long.
 
     Order of preference: header + window + what to do; header + what to do;
-    header + window; header alone.
+    header + window; header alone (allowed up to MAX_HEADER_CHARS).
     """
     if alert.ttsHeaderText is None or not alert.ttsHeaderText.ro:
         return None
@@ -100,7 +105,7 @@ def short_text(alert: Alert, closure: dict) -> str | None:
         text = " ".join(p for p in parts if p)
         if len(text) <= MAX_CHARS:
             return text
-    return None
+    return header if len(header) <= MAX_HEADER_CHARS else None
 
 
 def text_hash(text: str, voice: str | None = None, model: str = MODEL_ID) -> str:
@@ -144,7 +149,7 @@ def items_for(closure: dict, published: dict) -> list[Item]:
 
 def audio_file(closure_id: str, stop_id: str) -> Path | None:
     """The cached MP3 for this stop of a published closure, or None."""
-    if closure_id != HERO_CLOSURE_ID:
+    if closure_id not in AUDIO_CLOSURE_IDS:
         return None
     try:
         published = state.read("published", closure_id)
@@ -231,8 +236,8 @@ def generate(closure_id: str, limit: int | None = None, client: httpx.Client | N
     that is also appended to $DATA_DIR/cache/audio/runs.jsonl. Raises BudgetRefused when
     the batch would exceed CHAR_CEILING (nothing is generated then).
     """
-    if closure_id != HERO_CLOSURE_ID:
-        return {"closureId": closure_id, "skipped": "not the hero case"}
+    if closure_id not in AUDIO_CLOSURE_IDS:
+        return {"closureId": closure_id, "skipped": "no audio for this closure"}
     published = state.read("published", closure_id)
     closure = state.read("closures", closure_id)
     if not published or not closure:
@@ -315,8 +320,8 @@ def _run(closure_id: str) -> None:
 
 
 def start_after_publish(closure_id: str) -> threading.Thread | None:
-    """Called by publish(): make the hero case's MP3s in a background thread."""
-    if closure_id != HERO_CLOSURE_ID:
+    """Called by publish(): make the MP3s of an AUDIO_CLOSURE_IDS case in a background thread."""
+    if closure_id not in AUDIO_CLOSURE_IDS:
         return None
     job = threading.Thread(target=_run, args=(closure_id,), daemon=True, name=f"audio-{closure_id}")
     job.start()

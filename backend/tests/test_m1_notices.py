@@ -232,14 +232,16 @@ def test_build_cases():
     assert moc[("R_AB_M38", 0)] == []                          # M38 keeps its stops
 
 
-def test_precompute_is_idempotent_and_never_publishes(state_dir):
+def test_precompute_is_idempotent_and_never_publishes_the_hero(state_dir):
     from app import precompute
     from app.common import state
 
     first = precompute.prepare_cases()
     snap = {p.name: p.read_bytes() for p in (state_dir.state_dir / "closures").glob("*.json")}
     second = precompute.prepare_cases()
-    assert {r["id"]: r["status"] for r in first} == {r["id"]: "analyzed" for r in first}
+    # T4: E3 and Mocioni were in force at the demo clock; only the hero is published live (D-011)
+    assert {r["id"]: r["status"] for r in first} == {
+        "cl_20261108_16dec": "analyzed", "cl_20261107_e3": "published", "cl_20261102_mocioni": "published"}
     assert [r["rows"] for r in first] == [r["rows"] for r in second]
     assert {p.name: p.read_bytes() for p in (state_dir.state_dir / "closures").glob("*.json")} == snap
-    assert state.list_ids("published") == []
+    assert sorted(state.list_ids("published")) == ["cl_20261102_mocioni", "cl_20261107_e3"]
