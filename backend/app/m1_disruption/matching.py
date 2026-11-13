@@ -424,10 +424,16 @@ def rows_from_actions(closure: dict, tt: Timetable | None = None) -> tuple[list[
             continue
         per_dir, ambiguous, unres = action_stops(action, tt)
         unresolved += unres
+        # "shortened" whose kept names did not all resolve: which stops are dropped is a guess
+        names = set(action.get("stopNames") or [])
+        guessed = action["action"] == "shortened" and bool(names) and (
+            bool(unres) or (bool(action.get("keepStopIds")) and len(set(action["keepStopIds"])) < len(names)))
         for d, stops in per_dir.items():
             for s in stops:
                 reasons = ["ON_ROUTE_PATH"]
-                if kind == "notice":
+                if guessed:
+                    reasons.append("NOT_NAMED_IN_NOTICE")
+                elif kind == "notice":
                     reasons.append("NAMED_IN_NOTICE")
                 if (s, action["routeId"], d) in ambiguous:
                     reasons.append("DUPLICATE_STOP_NAME")

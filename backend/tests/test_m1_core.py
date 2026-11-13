@@ -238,3 +238,16 @@ def test_mocioni_counts_on_the_timetable_before_the_works():
     expected = sum(_csv_count("356", "R_AB_M36", 0, date(2026, 11, d), "00:00:00", "99:00:00", HISTORY_429)
                    for d in range(2, 10))
     assert expected > 0 and got[("356", 0)] == expected
+
+
+def test_shortened_with_unresolved_kept_names_goes_to_a_person():
+    """Line 7 'Depou Dâmbovița – Gara de Nord': Gara de Nord is not on line 7, so the dropped stops are a guess."""
+    from app.m1_disruption import matching as m
+
+    guessed = {"routeId": "R_TV_7", "directionId": 0, "action": "shortened", "keepStopIds": ["890"],
+               "stopNames": ["Depou Dâmbovița", "Gara de Nord"]}
+    rows, _ = m.rows_from_actions({"kind": "notice", "window": WINDOW, "routeActions": [guessed]})
+    assert rows and all(r["state"] == "unsure" and "NOT_NAMED_IN_NOTICE" in r["reasons"] for r in rows)
+    full = {**guessed, "keepStopIds": ["890", "4"], "stopNames": ["Dâmbovița", "Banatul"]}
+    rows, _ = m.rows_from_actions({"kind": "notice", "window": WINDOW, "routeActions": [full]})
+    assert rows and all(r["state"] == "affected" and r["confidence"] == 0.9 for r in rows)
