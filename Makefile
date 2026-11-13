@@ -14,10 +14,10 @@ FRONTEND := $(ROOT)/frontend
 COMPOSE := docker compose -f $(ROOT)/infra/compose.yml
 FNM := eval "$$(fnm env 2>/dev/null)"
 
-.PHONY: help setup data precompute dev dev-stop test eval up down
+.PHONY: help setup data precompute dev dev-stop test eval web demo up down
 
 help:
-	@echo "make setup | data | precompute | dev | dev-stop | test | eval | up | down"
+	@echo "make setup | data | precompute | dev | dev-stop | test | eval | web | demo | up | down"
 	@echo "DATA_DIR=$(DATA_DIR)  ENV_FILE=$(ENV_FILE)"
 
 setup:
@@ -57,10 +57,31 @@ test:
 eval:
 	cd $(ROOT) && uv run --project $(BACKEND) python eval/run.py
 
-up:
-	@test -f $(ROOT)/infra/compose.yml || { echo "infra/compose.yml does not exist yet"; exit 1; }
-	$(COMPOSE) up -d --build
+# Build the frontend to frontend/dist (served at / by the backend and baked into the image).
+web:
+	@if [ -f $(FRONTEND)/package.json ]; then $(FNM); cd $(FRONTEND) && pnpm install --frozen-lockfile && pnpm build; \
+	else echo "no frontend/package.json yet: nothing to build"; fi
+
+# One process on :$(API_PORT) for / (frontend/dist) and /api, no reload (SPEC §3.4).
+demo: web
+	@if tmux has-session -t rv-api 2>/dev/null; then \
+		echo "rv-api (make dev) already holds :$(API_PORT); it serves frontend/dist after a restart: make dev-stop demo"; \
+	elif tmux has-session -t rv-demo 2>/dev/null; then echo "rv-demo already running"; \
+	else tmux new-session -d -s rv-demo -c $(BACKEND) \
+		"ENV_FILE=$(ENV_FILE) DATA_DIR=$(DATA_DIR) uv run uvicorn app.main:app --host 127.0.0.1 --port $(API_PORT)"; \
+		echo "demo: http://127.0.0.1:$(API_PORT)/  (tmux attach -t rv-demo; stop: tmux kill-session -t rv-demo)"; fi
+
+# Docker stack (SPEC §12): api on 0.0.0.0:3000 + worker (pre-compute, then exits).
+# The containers run as you, so state/ and cache/ stay writable for make dev.
+HOST_UID := $(shell id -u)
+HOST_GID := $(shell id -g)
+STACK_ENV := HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID)
+
+up: web
+	@if [ -z "$$RV_PORT" ] && { tmux has-session -t rv-api 2>/dev/null || tmux has-session -t rv-demo 2>/dev/null; }; then \
+		echo "a native server (rv-api / rv-demo) holds :3000: stop it first (make dev-stop; tmux kill-session -t rv-demo)"; exit 1; fi
+	$(STACK_ENV) $(COMPOSE) up -d --build
+	@echo "stack: http://127.0.0.1:$${RV_PORT:-3000}/api/health   logs: $(COMPOSE) logs -f api"
 
 down:
-	@test -f $(ROOT)/infra/compose.yml || { echo "infra/compose.yml does not exist yet"; exit 1; }
-	$(COMPOSE) down
+	$(STACK_ENV) $(COMPOSE) down

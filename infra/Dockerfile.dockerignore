@@ -2,7 +2,13 @@
 **/.venv
 **/__pycache__
 **/*.pyc
+**/.pytest_cache
+**/.ruff_cache
 **/node_modules
 **/.pnpm-store
 **/.env
 **/.env.*
+# Only the built frontend goes into the image.
+frontend/**
+!frontend/dist
+!frontend/dist/**

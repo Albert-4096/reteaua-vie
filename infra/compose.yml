@@ -1,6 +1,10 @@
-# Rețeaua Vie on the VM: `make up` / `make down`.
+# Rețeaua Vie on the VM: `make up` / `make down` (SPEC §12).
 # DATA_DIR and ENV_FILE come from the environment (the Makefile sets them).
-# Sources are mounted read-only; only state/ and cache/ are writable.
+# $DATA_DIR is mounted read-only; only state/ and cache/ are writable.
+# The containers run as the host user (HOST_UID/HOST_GID, set by the Makefile), so
+# files they write in state/ and cache/ stay usable by `make dev`.
+# RV_BIND/RV_PORT exist for a side-by-side test (e.g. 127.0.0.1:3005); the
+# default is the public setup: 0.0.0.0:3000 (Nginx Proxy Manager forwards to it).
 name: reteaua-vie
 
 x-backend: &backend
@@ -8,11 +12,13 @@ x-backend: &backend
     context: ..
     dockerfile: infra/Dockerfile
   image: reteaua-vie-backend
+  user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
   env_file:
     - path: ${ENV_FILE:?set ENV_FILE to the env file}
       required: false
   environment:
     DATA_DIR: /data
+    LIVE_DIR: /data/live
   volumes:
     - ${DATA_DIR:?set DATA_DIR to the data directory}:/data:ro
     - ${DATA_DIR}/state:/data/state
@@ -22,11 +28,15 @@ services:
   api:
     <<: *backend
     ports:
-      - "0.0.0.0:3000:3000"
+      - "${RV_BIND:-0.0.0.0}:${RV_PORT:-3000}:3000"
     restart: unless-stopped
 
-  # Pre-compute and long jobs: `docker compose -f infra/compose.yml run --rm worker`.
+  # Pre-compute (caches, the three prepared cases, module warm-ups), then exit.
+  # Slow jobs run in the api process and share the result cache in /data/cache/jobs.
+  # Restart the demo state: docker compose -f infra/compose.yml run --rm worker python -m app.precompute --reset
   worker:
     <<: *backend
-    profiles: ["jobs"]
     command: ["python", "-m", "app.precompute"]
+    restart: "no"
+    healthcheck:
+      disable: true
