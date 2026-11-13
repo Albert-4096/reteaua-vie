@@ -1,0 +1,46 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "alerts": [
+    {
+      "id": "al_20261108_16dec_1",
+      "closureId": "cl_20261108_16dec",
+      "activePeriod": [
+        {
+          "start": "2026-11-08T10:00:00+02:00",
+          "end": "2026-11-08T18:00:00+02:00"
+        }
+      ],
+      "cause": "MAINTENANCE",
+      "effect": "NO_SERVICE",
+      "informedEntity": [
+        {
+          "routeId": "R_TV_4",
+          "stopId": "61",
+          "directionId": 0
+        },
+        {
+          "routeId": "R_TV_7",
+          "stopId": "61",
+          "directionId": 1
+        }
+      ],
+      "headerText": {
+        "ro": "Stația Piața Sfânta Maria nu este deservită de liniile 4 și 7",
+        "en": "Piața Sfânta Maria stop not served by lines 4 and 7"
+      },
+      "descriptionText": {
+        "ro": "8 noiembrie, 10:00–18:00: lucrări la linia de tramvai pe Bd. 16 Decembrie 1989. Cea mai apropiată stație deservită: Piața N. Bălcescu (Gheorghe Doja).",
+        "en": "8 November, 10:00–18:00: tram track works on 16 Decembrie 1989 Blvd. Nearest served stop: Piața N. Bălcescu (Gheorghe Doja)."
+      },
+      "url": "http://127.0.0.1:3010/a/cl_20261108_16dec"
+    }
+  ],
+  "feedUrl": "http://127.0.0.1:3000/api/feed/alerts.pb",
+  "posters": [
+    {
+      "stopId": "61",
+      "url": "http://127.0.0.1:3000/api/closures/cl_20261108_16dec/poster.pdf?stopId=61"
+    }
+  ],
+  "publishedAt": "2026-11-13T14:05:00+02:00"
+}

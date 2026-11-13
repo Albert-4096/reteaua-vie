@@ -1,0 +1,7 @@
+{
+  "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+  "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+  "version": "4.31-4",
+  "fetchedAt": "2026-11-13T13:29:00+02:00",
+  "note": null
+}

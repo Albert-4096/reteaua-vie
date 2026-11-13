@@ -1,0 +1,176 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "feedVersion": "4.31-4",
+  "stops": [
+    {
+      "stopId": "61",
+      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "location": [
+        21.21924,
+        45.74881
+      ],
+      "zoneSlug": "iosefin",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "affected",
+      "confidence": 0.93,
+      "reasons": [
+        "IN_BUFFER",
+        "ON_ROUTE_PATH",
+        "DIRECTION_MATCH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": {
+        "stopId": "55",
+        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "location": [
+          21.22496,
+          45.74184
+        ],
+        "distanceMeters": null,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "61",
+      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "location": [
+        21.21924,
+        45.74881
+      ],
+      "zoneSlug": "iosefin",
+      "routeId": "R_TV_7",
+      "routeShortName": "7",
+      "directionId": 1,
+      "headsign": "Bulevardul Dâmbovița",
+      "state": "affected",
+      "confidence": 0.81,
+      "reasons": [
+        "IN_BUFFER",
+        "ON_ROUTE_PATH",
+        "DIRECTION_MATCH"
+      ],
+      "confirmed": null,
+      "departuresLost": 24,
+      "nearestServed": {
+        "stopId": "55",
+        "name": "Piața N. Bălcescu (Gheorghe Doja)",
+        "location": [
+          21.22496,
+          45.74184
+        ],
+        "distanceMeters": null,
+        "routeIds": [
+          "R_TV_1",
+          "R_TV_8"
+        ]
+      }
+    },
+    {
+      "stopId": "61",
+      "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "location": [
+        21.21924,
+        45.74881
+      ],
+      "zoneSlug": "iosefin",
+      "routeId": "R_TV_2",
+      "routeShortName": "2",
+      "directionId": 1,
+      "headsign": "Shopping City",
+      "state": "unsure",
+      "confidence": 0.48,
+      "reasons": [
+        "IN_BUFFER",
+        "ON_ROUTE_PATH",
+        "DIRECTION_UNCLEAR"
+      ],
+      "confirmed": null,
+      "departuresLost": 29,
+      "nearestServed": null
+    },
+    {
+      "stopId": "57",
+      "name": "Parcul C. Sylva (Parc Doina)",
+      "location": [
+        21.22204,
+        45.74464
+      ],
+      "zoneSlug": "odobescu",
+      "routeId": "R_TV_4",
+      "routeShortName": "4",
+      "directionId": 0,
+      "headsign": "Piața Gh. Domășneanu",
+      "state": "unsure",
+      "confidence": 0.55,
+      "reasons": [
+        "EDGE_OF_BUFFER",
+        "ON_ROUTE_PATH",
+        "NAMED_IN_NOTICE"
+      ],
+      "confirmed": null,
+      "departuresLost": 27,
+      "nearestServed": null
+    }
+  ],
+  "routes": [
+    {
+      "routeId": "R_TV_4",
+      "shortName": "4",
+      "type": 0,
+      "directionIds": [
+        0
+      ],
+      "stopsAffected": 2
+    },
+    {
+      "routeId": "R_TV_7",
+      "shortName": "7",
+      "type": 0,
+      "directionIds": [
+        1
+      ],
+      "stopsAffected": 1
+    },
+    {
+      "routeId": "R_TV_2",
+      "shortName": "2",
+      "type": 0,
+      "directionIds": [
+        1
+      ],
+      "stopsAffected": 1
+    }
+  ],
+  "unsureCount": 2,
+  "provenance": [
+    {
+      "source": "SMTT GTFS via cont.primariatm.ro/api/mobile/transit",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+      "version": "4.31-4",
+      "fetchedAt": "2026-11-13T13:29:00+02:00",
+      "note": null
+    },
+    {
+      "source": "Stop timetables, cont.primariatm.ro",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/stops/61/timetable?date=2026-11-08",
+      "version": "4.31-4",
+      "fetchedAt": "2026-11-13T13:55:00+02:00",
+      "note": "Departures counted 10:00-18:00 on 8 Nov 2026"
+    },
+    {
+      "source": "Primăria Timișoara neighbourhoods",
+      "url": "https://cont.primariatm.ro/api/zones",
+      "version": null,
+      "fetchedAt": "2026-11-13T13:29:00+02:00",
+      "note": null
+    }
+  ]
+}

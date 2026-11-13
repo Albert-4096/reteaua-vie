@@ -1,0 +1,32 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "from": "2026-11-08T10:00:00+02:00",
+  "to": "2026-11-08T18:00:00+02:00",
+  "source": "replay",
+  "observations": [
+    {
+      "vehicleId": "PLACEHOLDER",
+      "routeId": "R_TV_4",
+      "tripId": "PLACEHOLDER",
+      "directionId": 0,
+      "stopId": "61",
+      "served": false,
+      "seenAt": "2026-11-08T10:12:30+02:00",
+      "delaySec": null
+    }
+  ],
+  "summary": {
+    "vehiclesSeen": null,
+    "stopsSkipped": null,
+    "stopsServedAnyway": null
+  },
+  "provenance": [
+    {
+      "source": "CityApp live vehicles (undocumented)",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+      "version": null,
+      "fetchedAt": "2026-11-13T13:47:57+02:00",
+      "note": "PLACEHOLDER: no recording exists for 8 Nov; recording started 13 Nov"
+    }
+  ]
+}

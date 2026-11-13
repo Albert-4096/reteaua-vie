@@ -1,0 +1,36 @@
+{
+  "id": "cl_20261108_16dec",
+  "title": {
+    "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
+    "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+  },
+  "kind": "notice",
+  "geometry": {
+    "type": "LineString",
+    "coordinates": [
+      [
+        21.2196,
+        45.7484
+      ],
+      [
+        21.2184,
+        45.7497
+      ]
+    ]
+  },
+  "bufferMeters": 30,
+  "direction": "along",
+  "window": {
+    "start": "2026-11-08T10:00:00+02:00",
+    "end": "2026-11-08T18:00:00+02:00"
+  },
+  "routeIds": [
+    "R_TV_2",
+    "R_TV_4",
+    "R_TV_7"
+  ],
+  "sourceText": "în data de 8 noiembrie 2026, în intervalul orar 10:00 – 18:00, vor fi executate lucrări de mentenanță la infrastructura de tramvai de pe Bulevardul 16 Decembrie 1989, pe sensul de circulație către Podul Maria. [...] linia 4 va fi suspendată pe întreaga durată a lucrărilor",
+  "sourceUrl": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+  "status": "analyzed",
+  "createdAt": "2026-11-13T14:00:00+02:00"
+}
