@@ -103,15 +103,19 @@ def prepare_cases(reset: bool = False) -> list[dict]:
                     info.update(departuresLost=imp.totals.departuresLost, stopsSuspended=imp.totals.stopsSuspended)
                 except Exception as e:  # e.g. 422 OUTSIDE_FEED: the number stays unknown, never 0
                     print(f"  note {cid} impact not computed: {getattr(e, 'code', type(e).__name__)}: {e}")
-            if conflicts_for is not None:
-                try:
-                    info["conflicts"] = len(conflicts_for(cid))
-                except Exception as e:
-                    print(f"  note {cid} conflicts not computed: {type(e).__name__}: {e}")
         info["status"] = (state.read("closures", cid) or {}).get("status")
         info["seconds"] = round(time.perf_counter() - t, 1)
         rows.append(info)
         print("  ok   " + "  ".join(f"{k}={v}" for k, v in info.items()), flush=True)
+    if conflicts_for is not None and analyze is not None:
+        # after all cases exist, so each one sees the others (Mocioni x 16 Decembrie)
+        for info in rows:
+            try:
+                found = conflicts_for(info["id"])
+                info["conflicts"] = [c.otherClosureId for c in found]
+                print(f"  ok   conflicts {info['id']}: {info['conflicts'] or 'none'}", flush=True)
+            except Exception as e:
+                print(f"  note {info['id']} conflicts not computed: {type(e).__name__}: {e}")
     return rows
 
 
