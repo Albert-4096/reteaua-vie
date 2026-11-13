@@ -30,7 +30,8 @@ function Decide({ closureId, caseKey }: StepProps & { closureId: string }) {
   const scenarios = useResource<Scenario[]>(`scenarios:${closureId}`, () => v2.scenarios(closureId));
   const pair = (scenarios.data ?? []).filter((s) => s.mitigations.length > 0).slice(0, 2);
   const compare = useResource<ScenarioCompare>(
-    pair.length === 2 ? `compare:${pair[0].id}:${pair[1].id}` : null,
+    // The closure id is in the key so a decision in step 1 can drop it (T15).
+    pair.length === 2 ? `compare:${closureId}:${pair[0].id}:${pair[1].id}` : null,
     (onPending) => v2.compare(pair[0].id, pair[1].id, onPending),
   );
 
