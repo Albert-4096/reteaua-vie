@@ -13,6 +13,7 @@ import { lineSchema, rowStatus } from "../../lib/geo";
 import { navigate, stepHref } from "../../lib/router";
 import { invalidate, setData, useResource } from "../../lib/store";
 import type { StepProps } from "../types";
+import { PlanDetails } from "./details/PlanDetails";
 
 export function PlanStep(props: StepProps) {
   if (!props.closureId) return <CasePicker step={1} />;
@@ -164,6 +165,7 @@ function Plan({ closureId, caseKey }: StepProps & { closureId: string }) {
       <details>
         <summary>{t("details")}</summary>
         <Details closure={c} impact={impact.data} />
+        <PlanDetails closureId={closureId} />
       </details>
     </Panel>
   );
