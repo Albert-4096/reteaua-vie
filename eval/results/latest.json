@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-11-13T18:35:56+02:00",
+  "repoCommit": "65e30a2",
+  "feed": {
+    "version": "4.31",
+    "file": "smtt_1bd0e3-65f7b81245f0f.zip",
+    "sha256": "8905216072b3fdac810173f6e212375c9aafb5d58112878ee111406469b94af0",
+    "validFrom": "20261105",
+    "validTo": "20261231"
+  },
+  "labels": {
+    "count": 5,
+    "labelledBy": [
+      "AI-assisted from the notice text; human review pending"
+    ]
+  },
+  "parser": null,
+  "analyzer": null,
+  "scoredFrom": null,
+  "notices": [
+    {
+      "postId": 11058,
+      "title": "Modificări în circulația liniilor M30, M29, M35 M 44 și S7, începând cu 2 noiembrie",
+      "goldSuspended": 0,
+      "goldUncertain": 0
+    },
+    {
+      "postId": 11060,
+      "title": "Modificări temporare ale traseelor liniilor metropolitane S8, M32, M36, M37, M38, M46 și M51, începând cu 2 noiembrie",
+      "goldSuspended": 0,
+      "goldUncertain": 1
+    },
+    {
+      "postId": 11062,
+      "title": "Informare călători privind linia E3",
+      "goldSuspended": 0,
+      "goldUncertain": 0
+    },
+    {
+      "postId": 11065,
+      "title": "Închiderea temporară a circulației pe Strada Ardealului și modificarea traseului liniei E3",
+      "goldSuspended": 11,
+      "goldUncertain": 0
+    },
+    {
+      "postId": 11067,
+      "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989",
+      "goldSuspended": 88,
+      "goldUncertain": 29
+    }
+  ],
+  "overall": {
+    "strict": null,
+    "lenient": null,
+    "neclarShare": null,
+    "pasteToAlertSeconds": null,
+    "gtfsRtValidatorPass": null,
+    "notes": [
+      "Rows are (stopId, routeId, directionId). Gold rows labelled uncertain are not scored.",
+      "strict: only rows in state affected count as suspended; lenient: unsure („neclar”) rows count too.",
+      "gtfsRtValidatorPass: the MobilityData validator is not run by the eval yet (null = unknown)."
+    ]
+  },
+  "e3": {
+    "figure": 253,
+    "date": "2026-11-09",
+    "sameOnEveryWeekdayOfTheWindow": true,
+    "label": {
+      "ro": "plecări programate E3 pe zi lucrătoare în stațiile suspendate (anunț STPT 11065)",
+      "en": "scheduled E3 departures per weekday at the stops suspended by STPT notice 11065"
+    },
+    "stopIdsTotal": 11,
+    "headsigns": {
+      "0": "ELBA",
+      "1": "Apicultorilor"
+    },
+    "method": "GTFS stop_times of trips of route R_AB_E3 whose service runs that day (calendar.txt weekday flags and date range, then calendar_dates.txt add/remove). Departures only: the last stop of a trip is not counted. Stops: the names the notice suspends, per direction, matched to E3's own pattern. Calendar day = local clock (Europe/Bucharest); times >= 24:00 roll to the next day.",
+    "provenance": [
+      {
+        "source": "SMTT GTFS",
+        "url": "https://smtt.ro",
+        "version": "4.31",
+        "fetchedAt": "2026-11-13T13:52:51+02:00",
+        "note": "computed by eval/e3_departures.py"
+      }
+    ]
+  },
+  "errors": [
+    "M1 parser not found. Tried: app.m1_disruption.parser (module not found: app.m1_disruption.parser)",
+    "M1 analysis not found. Tried: app.m1_disruption.analysis (module not found: app.m1_disruption.analysis) -> scoring the parser's routeActions instead"
+  ]
+}
