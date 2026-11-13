@@ -1,0 +1,429 @@
+{
+ "feeds": [
+  {
+   "version": "4.29",
+   "file": "smtt-4.29_mdb-2868-202610240049.zip",
+   "sha256": "1b2b4b212cea",
+   "startDate": "20261024"
+  },
+  {
+   "version": "4.30",
+   "file": "smtt-4.30_mdb-2868-202611020102.zip",
+   "sha256": "cfeb2098580e",
+   "startDate": "20261102"
+  },
+  {
+   "version": "4.31",
+   "file": "smtt_1bd0e3-65f7b81245f0f.zip",
+   "sha256": "8905216072b3",
+   "startDate": "20261105"
+  }
+ ],
+ "method": "Per (route, direction): stop ids on any trip of the older SMTT GTFS version and on no trip of the newer one. Not labelled by us: SMTT's own timetable change.",
+ "transitions": {
+  "4.29->4.30": [
+   {
+    "routeId": "R_AB_E6",
+    "shortName": "E6",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [],
+    "addedStopIds": [
+     "1063"
+    ],
+    "removedNames": [],
+    "addedNames": [
+     "George Ardelean"
+    ]
+   },
+   {
+    "routeId": "R_AB_M29",
+    "shortName": "M29",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "526"
+    ],
+    "addedStopIds": [],
+    "removedNames": [
+     "Moldovei (Ghiroda)"
+    ],
+    "addedNames": []
+   },
+   {
+    "routeId": "R_AB_M29",
+    "shortName": "M29",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "234"
+    ],
+    "addedStopIds": [],
+    "removedNames": [
+     "Moldovei (Ghiroda)"
+    ],
+    "addedNames": []
+   },
+   {
+    "routeId": "R_AB_M30",
+    "shortName": "M30",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "526"
+    ],
+    "addedStopIds": [
+     "1061"
+    ],
+    "removedNames": [
+     "Moldovei (Ghiroda)"
+    ],
+    "addedNames": [
+     "UMFT (Ghiroda)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M30",
+    "shortName": "M30",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "665"
+    ],
+    "addedStopIds": [
+     "1061",
+     "1062"
+    ],
+    "removedNames": [
+     "Girație Pod Bega (Ghiroda)"
+    ],
+    "addedNames": [
+     "UMFT (Ghiroda)",
+     "Girație Pod Bega (Ghiroda)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M32",
+    "shortName": "M32",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "291",
+     "356",
+     "357"
+    ],
+    "addedStopIds": [
+     "478",
+     "479"
+    ],
+    "removedNames": [
+     "Piața Iuliu Maniu (Calea Șagului)",
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)"
+    ],
+    "addedNames": [
+     "C. Brâncoveanu",
+     "C. Porumbescu (C. Brâncoveanu)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M32",
+    "shortName": "M32",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "353",
+     "356"
+    ],
+    "addedStopIds": [
+     "478"
+    ],
+    "removedNames": [
+     "C. Brâncoveanu (16 Decembrie 1989)",
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+    ],
+    "addedNames": [
+     "C. Brâncoveanu"
+    ]
+   },
+   {
+    "routeId": "R_AB_M36",
+    "shortName": "M36",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "356",
+     "357"
+    ],
+    "addedStopIds": [],
+    "removedNames": [
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)"
+    ],
+    "addedNames": []
+   },
+   {
+    "routeId": "R_AB_M36",
+    "shortName": "M36",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "352",
+     "353",
+     "356"
+    ],
+    "addedStopIds": [
+     "270"
+    ],
+    "removedNames": [
+     "Piața Iuliu Maniu (16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)",
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+    ],
+    "addedNames": [
+     "Piața Iuliu Maniu (Reșiței)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M37",
+    "shortName": "M37",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "356",
+     "357"
+    ],
+    "addedStopIds": [],
+    "removedNames": [
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)"
+    ],
+    "addedNames": []
+   },
+   {
+    "routeId": "R_AB_M37",
+    "shortName": "M37",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "352",
+     "353",
+     "354"
+    ],
+    "addedStopIds": [
+     "270"
+    ],
+    "removedNames": [
+     "Piața Iuliu Maniu (16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)",
+     "Piața A. Mocioni (16 Decembrie 1989 - Sinaia)"
+    ],
+    "addedNames": [
+     "Piața Iuliu Maniu (Reșiței)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M38",
+    "shortName": "M38",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "356",
+     "357"
+    ],
+    "addedStopIds": [],
+    "removedNames": [
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)"
+    ],
+    "addedNames": []
+   },
+   {
+    "routeId": "R_AB_M38",
+    "shortName": "M38",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "352",
+     "353",
+     "356"
+    ],
+    "addedStopIds": [
+     "270"
+    ],
+    "removedNames": [
+     "Piața Iuliu Maniu (16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)",
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+    ],
+    "addedNames": [
+     "Piața Iuliu Maniu (Reșiței)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M46",
+    "shortName": "M46",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "356"
+    ],
+    "addedStopIds": [
+     "291"
+    ],
+    "removedNames": [
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+    ],
+    "addedNames": [
+     "Piața Iuliu Maniu (Calea Șagului)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M46",
+    "shortName": "M46",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "356"
+    ],
+    "addedStopIds": [
+     "270"
+    ],
+    "removedNames": [
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+    ],
+    "addedNames": [
+     "Piața Iuliu Maniu (Reșiței)"
+    ]
+   },
+   {
+    "routeId": "R_AB_M51",
+    "shortName": "M51",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "356",
+     "357"
+    ],
+    "addedStopIds": [],
+    "removedNames": [
+     "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)"
+    ],
+    "addedNames": []
+   },
+   {
+    "routeId": "R_AB_M51",
+    "shortName": "M51",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "352",
+     "353",
+     "354"
+    ],
+    "addedStopIds": [
+     "270"
+    ],
+    "removedNames": [
+     "Piața Iuliu Maniu (16 Decembrie 1989)",
+     "C. Brâncoveanu (16 Decembrie 1989)",
+     "Piața A. Mocioni (16 Decembrie 1989 - Sinaia)"
+    ],
+    "addedNames": [
+     "Piața Iuliu Maniu (Reșiței)"
+    ]
+   },
+   {
+    "routeId": "R_TB_M11",
+    "shortName": "M11",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "234"
+    ],
+    "addedStopIds": [],
+    "removedNames": [
+     "Moldovei (Ghiroda)"
+    ],
+    "addedNames": []
+   }
+  ],
+  "4.30->4.31": [
+   {
+    "routeId": "R_AB_E3",
+    "shortName": "E3",
+    "directionId": 0,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "344",
+     "346",
+     "363"
+    ],
+    "addedStopIds": [
+     "312",
+     "345"
+    ],
+    "removedNames": [
+     "Polonă (Pasaj Freidorf)",
+     "Comtim (Smithfield)",
+     "Fabrica de Zahăr"
+    ],
+    "addedNames": [
+     "ELBA (Parc ind. Freidorf)",
+     "Kromberg (Parc ind. Freidorf)"
+    ]
+   },
+   {
+    "routeId": "R_AB_E3",
+    "shortName": "E3",
+    "directionId": 1,
+    "inOld": true,
+    "inNew": true,
+    "removedStopIds": [
+     "314",
+     "315",
+     "346",
+     "347"
+    ],
+    "addedStopIds": [
+     "312",
+     "313",
+     "982",
+     "1064"
+    ],
+    "removedNames": [
+     "Polonă (Pasaj Freidorf)",
+     "Răscoala din 1907",
+     "Comtim (Smithfield)",
+     "Fabrica de Zahăr"
+    ],
+    "addedNames": [
+     "ELBA (Parc ind. Freidorf)",
+     "Kromberg (Parc ind. Freidorf)",
+     "Rudolf Otto",
+     "Răscoala din 1907"
+    ]
+   }
+  ]
+ }
+}

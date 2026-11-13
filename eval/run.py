@@ -4,8 +4,13 @@ Writes eval/results/latest.json with:
   - stop-level precision and recall per notice and overall, on
     (stopId, routeId, directionId) rows; stops labelled "uncertain" are not scored;
   - the share of rows sent to review („neclar”, state "unsure");
-  - seconds from paste to a valid alert (if the publish path exists);
-  - the E3 departures-per-weekday figure (SPEC 5.2, eval/e3_departures.py).
+  - seconds from paste to a valid alert (if the publish path exists), and whether the
+    published feed passes the MobilityData GTFS-RT validator (jar in $DATA_DIR/tools);
+  - precision and recall against an independent gold set: the stops SMTT itself removed
+    from its GTFS between versions (eval/gold_gtfs_diff.py, SPEC §11);
+  - the E3 departures-per-weekday figure (SPEC 5.2, eval/e3_departures.py);
+  - the D-012 hero figures: the hero closure with the gold clerk decisions of 11067
+    applied, on a copy in a temporary state dir (the demo case is never touched).
 
 Run with the backend environment (from repo/):
   DATA_DIR=... uv run --project backend python eval/run.py
@@ -24,6 +29,7 @@ import inspect
 import json
 import os
 import shutil
+import statistics
 import subprocess
 import sys
 import tempfile
@@ -38,6 +44,11 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(REPO / "backend"))
 
 from gtfs_small import TZ, Feed, load_feed  # noqa: E402
+import gold_gtfs_diff  # noqa: E402
+
+HERO_POST = "11067"
+HERO_CLOSURE = "cl_20261108_16dec"
+PREPARED_FOR_INDEPENDENT = {"11060": "cl_20261102_mocioni"}
 
 PARSER_CANDIDATES = [("app.m1_disruption.parser", n) for n in ("parse_notice", "parse", "parse_text")]
 ANALYZER_CANDIDATES = [("app.m1_disruption.analysis", n) for n in ("analyze", "analyze_closure", "run_analysis")]
@@ -201,6 +212,19 @@ def split_parse_output(raw) -> tuple[object, dict, list]:
     return raw, out or {}, get(out, "unread", default=[]) or []
 
 
+def call_parser(parse, text: str, post_date: str | None):
+    """Parse with the notice's post date as the reference day, so „de mâine” resolves
+    to the day after the post (11062: posted 3 Nov -> 4 Nov), not after today."""
+    ref = datetime.fromisoformat(post_date) if post_date else None
+    try:
+        params = inspect.signature(parse).parameters
+    except (TypeError, ValueError):
+        params = {}
+    if ref is not None and "reference" in params:
+        return parse(text, reference=ref)
+    return parse(text)
+
+
 def call_analyzer(analyze, raw_closure, closure: dict) -> dict:
     """Try the parser's own object first, then the plain dict, then the pydantic Closure model."""
     attempts = [raw_closure, closure]
@@ -241,12 +265,39 @@ def isolated_data_dir(real: Path) -> Path:
     return tmp
 
 
-def time_paste_to_alert(text: str) -> dict:
+def set_demo_now(value: str | None) -> None:
+    """Move the app's clock (DEMO_NOW) and drop the cached settings."""
+    if value is None:
+        os.environ.pop("DEMO_NOW", None)
+    else:
+        os.environ["DEMO_NOW"] = value
+    from app import config  # noqa: PLC0415
+    config.get_settings.cache_clear()
+
+
+def run_validator(c, cid: str) -> dict:
+    """GET /api/closures/{id}/validation: the MobilityData validator on the published feed."""
+    r = c.get(f"/api/closures/{cid}/validation")
+    if r.status_code != 200:
+        return {"status": r.status_code, "passed": None}
+    v = r.json()
+    return {"method": v.get("method"), "passed": v.get("passed") if v.get("method") == "validator" else None,
+            "errorCount": v.get("errorCount"), "warningCount": v.get("warningCount"),
+            "rules": [{"id": x["id"], "severity": x["severity"], "occurrences": x["occurrences"]}
+                      for x in v.get("rules") or []],
+            "tool": (v.get("tool") or {}).get("version"), "fallbackReason": v.get("fallbackReason")}
+
+
+def time_paste_to_alert(text: str, post_date: str | None = None) -> dict:
+    """Paste -> parse -> analyze -> confirm -> publish -> valid feed, with the app clock at
+    the notice's post date (as if the clerk pasted it when STPT posted it)."""
     try:
         from fastapi.testclient import TestClient  # noqa: PLC0415
         from app.main import app  # noqa: PLC0415
     except Exception as e:  # pragma: no cover - depends on the backend state
         return {"seconds": None, "status": "skipped", "reason": f"backend app not importable: {e}"}
+    if post_date:
+        set_demo_now(post_date)
     c = TestClient(app)
     t0 = time.perf_counter()
     steps = []
@@ -278,8 +329,9 @@ def time_paste_to_alert(text: str) -> dict:
         ok = (msg.header.gtfs_realtime_version.startswith("2") and alerts
               and all(a.alert.informed_entity and a.alert.header_text.translation for a in alerts))
         secs = time.perf_counter() - t0
+        validator = run_validator(c, cid)
         return {"seconds": round(secs, 3) if ok else None, "status": "valid" if ok else "invalid",
-                "alerts": len(alerts), "steps": steps,
+                "alerts": len(alerts), "steps": steps, "clock": post_date, "validator": validator,
                 "validity": "protobuf parses, header 2.x, every alert has informed_entity and header_text "
                             "(internal check, not the MobilityData validator)",
                 "humanStep": "every analysis row confirmed as proposed (no human think time)"}
@@ -287,6 +339,87 @@ def time_paste_to_alert(text: str) -> dict:
         return {"seconds": None, "status": "not-available", "reason": str(e), "steps": steps}
     except Exception as e:
         return {"seconds": None, "status": "error", "reason": f"{type(e).__name__}: {e}", "steps": steps}
+
+
+# ---------------------------------------------------------------------------
+# D-012 hero figures: gold clerk decisions on a copy of the hero closure
+# ---------------------------------------------------------------------------
+
+def _sha(path: Path) -> str | None:
+    import hashlib  # noqa: PLC0415
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()[:16]
+    except FileNotFoundError:
+        return None
+
+
+def hero_figures(real_data: Path, label: dict) -> dict:
+    """Apply the 11067 gold label as the clerk's decisions to a COPY of the stored hero
+    closure (temporary state dir) and read its Impact: the D-012 pitch figures.
+
+    Decisions: every unsure row whose (stop, route, direction) the label lists as suspended
+    is ticked; every unsure row the label lists as uncertain (the ring Banatul -> Piața
+    Maria) is unticked. Rows the platform already marks affected keep no decision."""
+    from fastapi.testclient import TestClient  # noqa: PLC0415
+    from app.main import app  # noqa: PLC0415
+
+    real_dir = real_data / "state" / "closures"
+    names = [f"{HERO_CLOSURE}.json", f"{HERO_CLOSURE}.analysis.json"]
+    before = {n: _sha(real_dir / n) for n in names}
+    if None in before.values():
+        return {"status": "not-available", "reason": f"{HERO_CLOSURE} is not stored in {real_dir} (run make precompute)"}
+    closure = json.loads((real_dir / names[0]).read_text(encoding="utf-8"))
+    if closure.get("status") != "analyzed":
+        return {"status": "not-available", "reason": f"{HERO_CLOSURE} is {closure.get('status')}, not analyzed "
+                                                     "(run make precompute --reset)"}
+    work = Path(os.environ["DATA_DIR"]) / "state" / "closures"
+    work.mkdir(parents=True, exist_ok=True)
+    for n in names:
+        shutil.copyfile(real_dir / n, work / n)
+
+    pos, unc = gold_rows(label)
+    analysis = json.loads((work / names[1]).read_text(encoding="utf-8"))
+    decisions, ticked, unticked, left = [], 0, 0, []
+    for r in analysis.get("stops") or []:
+        if r.get("state") != "unsure":
+            continue
+        key = (str(r["stopId"]), r["routeId"], r["directionId"])
+        if key in pos:
+            decisions.append({**dict(zip(("stopId", "routeId", "directionId"), key)), "confirmed": True})
+            ticked += 1
+        elif key in unc:
+            decisions.append({**dict(zip(("stopId", "routeId", "directionId"), key)), "confirmed": False})
+            unticked += 1
+        else:
+            left.append(list(key))
+    c = TestClient(app)
+    r = c.patch(f"/api/closures/{HERO_CLOSURE}/stops", json={"decisions": decisions})
+    if r.status_code != 200:
+        return {"status": "error", "reason": f"PATCH stops -> HTTP {r.status_code}: {r.text[:200]}"}
+    r = c.get(f"/api/closures/{HERO_CLOSURE}/impact")
+    if r.status_code != 200:
+        return {"status": "error", "reason": f"GET impact -> HTTP {r.status_code}: {r.text[:200]}"}
+    imp = r.json()
+    after = {n: _sha(real_dir / n) for n in names}
+    t = imp["totals"]
+    return {
+        "status": "ok",
+        "closureId": HERO_CLOSURE,
+        "window": imp["window"],
+        "decisions": {"ticked": ticked, "unticked": unticked, "undecided": left,
+                      "rule": "gold label 11067: tick the unsure rows labelled suspended (line 7, certain), "
+                              "untick the unsure rows labelled uncertain (ring Banatul -> Piața Maria)"},
+        "stopsSuspended": t.get("stopsSuspended"),
+        "departuresLost": t.get("departuresLost"),
+        "residentsLosingStop": t.get("residentsLosingStop"),
+        "stopRoutePairsLost": t.get("stopRoutePairsLost"),
+        "routesAffected": t.get("routesAffected"),
+        "method": imp.get("method"),
+        "provenance": imp.get("provenance"),
+        "labels": {"residentsLosingStop": "model GHSL 2020, nu recensământ"},
+        "demoCaseUntouched": before == after,
+        "computedOn": "a copy of the stored hero closure in a temporary state dir",
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -309,14 +442,19 @@ def main() -> int:
     os.environ["ENV_FILE"] = ""
     for key in ("ELEVENLABS_API_KEY", "GEMINI_API_KEY", "ANTHROPIC_API_KEY"):
         os.environ[key] = ""
-    if not args.no_publish:
-        # Settings are read when app is first imported: switch to the isolated dir before that.
-        tmp = isolated_data_dir(real_data)
-        atexit.register(shutil.rmtree, tmp, True)  # removes the links, never what they point to
-        os.environ["DATA_DIR"] = str(tmp)
-        os.environ.setdefault("LIVE_DIR", str(real_data / "live"))
+    # Settings are read when app is first imported: switch to the isolated dir before that,
+    # so neither the publish timing nor the hero copy ever writes into the demo state.
+    tmp = isolated_data_dir(real_data)
+    atexit.register(shutil.rmtree, tmp, True)  # removes the links, never what they point to
+    os.environ["DATA_DIR"] = str(tmp)
+    os.environ.setdefault("LIVE_DIR", str(real_data / "live"))
+    demo_now = os.environ.get("DEMO_NOW")
 
     feed = load_feed()
+    gold_diff = gold_gtfs_diff.build(real_data)
+    (HERE / "results").mkdir(exist_ok=True)
+    (HERE / "results" / "gold_gtfs_diff.json").write_text(json.dumps(gold_diff, ensure_ascii=False, indent=1) + "\n",
+                                                         encoding="utf-8")
     import e3_departures  # noqa: PLC0415
     e3 = e3_departures.compute(feed)
 
@@ -351,6 +489,8 @@ def main() -> int:
     result["scoredFrom"] = "analysis" if analyze else ("routeActions" if parse else None)
 
     tot = {"strict": [0, 0, 0], "lenient": [0, 0, 0]}
+    ind = {"strict": [0, 0, 0], "lenient": [0, 0, 0]}
+    validations = []
     rows_all = rows_unsure = 0
     timings = []
     for lab in labels:
@@ -361,7 +501,7 @@ def main() -> int:
             continue
         try:
             t0 = time.perf_counter()
-            raw = parse(lab["noticeText"])
+            raw = call_parser(parse, lab["noticeText"], lab.get("postDate"))
             n["parseSeconds"] = round(time.perf_counter() - t0, 3)
             raw_closure, closure, unread = split_parse_output(raw)
             n["unread"] = len(unread)
@@ -389,19 +529,59 @@ def main() -> int:
             for k in ("strict", "lenient"):
                 for i, f in enumerate(("tp", "fp", "fn")):
                     tot[k][i] += n[k][f]
+            ig = gold_gtfs_diff.gold_for_notice(gold_diff, lab["postId"])
+            if ig is not None:
+                gold_set = {tuple(r) for r in ig["rows"]}
+                n["independentGold"] = {
+                    "transition": ig["transition"], "routes": ig["routes"], "goldRows": len(gold_set),
+                    "sameNameSwaps": [list(x) for x in ig["sameNameSwaps"]],
+                    "strict": score(affected, gold_set, set()),
+                    "lenient": score(affected | unsure, gold_set, set()),
+                    # how the AI-assisted label itself compares with SMTT's own change
+                    "aiLabelVsIndependent": score(pos, gold_set, set()),
+                }
+                for k in ("strict", "lenient"):
+                    for i, f in enumerate(("tp", "fp", "fn")):
+                        ind[k][i] += n["independentGold"][k][f]
             if not args.no_publish:
-                t = time_paste_to_alert(lab["noticeText"])
+                t = time_paste_to_alert(lab["noticeText"], lab.get("postDate"))
                 n["pasteToAlert"] = t
                 if t.get("seconds") is not None:
                     timings.append(t["seconds"])
+                v = t.get("validator") or {}
+                if v.get("passed") is not None:
+                    validations.append(v["passed"])
         except Exception as e:
             n["error"] = f"{type(e).__name__}: {e}"
             n["trace"] = traceback.format_exc(limit=3)
             status = status or 1
         result["notices"].append(n)
 
-    def agg(k):
-        tp, fp, fn = tot[k]
+    # The prepared Mocioni case is built on the GTFS 4.29 normal pattern (SPEC 5.3), so it can be
+    # scored against SMTT's own 4.29 -> 4.30 change; read-only from the demo state.
+    prepared_scores = {}
+    for post_id, cid in PREPARED_FOR_INDEPENDENT.items():
+        p = real_data / "state" / "closures" / f"{cid}.analysis.json"
+        ig = gold_gtfs_diff.gold_for_notice(gold_diff, post_id)
+        if ig is None or not p.is_file():
+            continue
+        affected, unsure = rows_from_analysis(json.loads(p.read_text(encoding="utf-8")))
+        gold_set = {tuple(r) for r in ig["rows"]}
+        prepared_scores[post_id] = {"closureId": cid, "goldRows": len(gold_set),
+                                    "strict": score(affected, gold_set, set()),
+                                    "lenient": score(affected | unsure, gold_set, set())}
+
+    set_demo_now(demo_now)
+    hero_label = next((lab for lab in labels if str(lab["postId"]) == HERO_POST), None)
+    try:
+        result["hero"] = hero_figures(real_data, hero_label) if hero_label else {
+            "status": "not-available", "reason": f"no label {HERO_POST}"}
+    except Exception as e:
+        result["hero"] = {"status": "error", "reason": f"{type(e).__name__}: {e}"}
+        status = status or 1
+
+    def agg(k, src=tot):
+        tp, fp, fn = src[k]
         return {"tp": tp, "fp": fp, "fn": fn,
                 "precision": round(tp / (tp + fp), 4) if tp + fp else None,
                 "recall": round(tp / (tp + fn), 4) if tp + fn else None}
@@ -410,13 +590,21 @@ def main() -> int:
         "strict": agg("strict") if parse else None,
         "lenient": agg("lenient") if parse else None,
         "neclarShare": round(rows_unsure / rows_all, 4) if rows_all and analyze else None,
-        "pasteToAlertSeconds": {"median": sorted(timings)[len(timings) // 2], "max": max(timings),
+        "pasteToAlertSeconds": {"median": round(statistics.median(timings), 3), "max": max(timings),
                                 "n": len(timings)} if timings else None,
-        "gtfsRtValidatorPass": None,
+        "gtfsRtValidatorPass": (all(validations) if validations else None),
+        "gtfsRtValidatorRuns": len(validations),
+        "independentGold": {"strict": agg("strict", ind), "lenient": agg("lenient", ind),
+                            "notices": sorted(gold_gtfs_diff.NOTICE_TRANSITIONS),
+                            "preparedCases": prepared_scores} if parse else None,
         "notes": [
             "Rows are (stopId, routeId, directionId). Gold rows labelled uncertain are not scored.",
             "strict: only rows in state affected count as suspended; lenient: unsure („neclar”) rows count too.",
-            "gtfsRtValidatorPass: the MobilityData validator is not run by the eval yet (null = unknown).",
+            "gtfsRtValidatorPass: the MobilityData gtfs-realtime-validator ($DATA_DIR/tools) on the feed after "
+            "each publish; null = it did not run (no publish, or the internal fallback check ran instead).",
+            "independentGold: rows SMTT removed from its own GTFS between versions (eval/gold_gtfs_diff.py), "
+            "not labelled by us. The pipeline reads each notice against the current feed (4.31), which already "
+            "contains the 11060 and 11062 diversions.",
         ],
     }
 
@@ -424,6 +612,9 @@ def main() -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"overall": result["overall"], "e3": {"figure": e3["figure"], "date": e3["date"]},
+                      "hero": {k: result["hero"].get(k) for k in ("status", "stopsSuspended", "departuresLost",
+                                                                  "residentsLosingStop", "stopRoutePairsLost",
+                                                                  "decisions", "demoCaseUntouched", "reason")},
                       "scoredFrom": result["scoredFrom"], "errors": result["errors"]}, ensure_ascii=False, indent=2))
     print(f"[eval] wrote {out.relative_to(REPO) if out.is_relative_to(REPO) else out}")
     return status

@@ -50,7 +50,22 @@ DATA_DIR=/path/to/data uv run --project backend python eval/run.py
 
 To use other functions, pass `--parser module:function` and `--analyzer module:function`. If the parser is missing, `run.py` says so and exits with code 2. If only the analysis is missing, it scores the parser's `routeActions` on the GTFS patterns and records that in `scoredFrom`.
 
-For the paste-to-alert time, `run.py` drives the API in-process. It parses the notice, analyzes it, confirms every row as proposed, publishes and reads `/api/feed/alerts.pb`. It uses a temporary `DATA_DIR` with its own empty `state/`, so the demo state is never touched. It never loads the env file, so no LLM or text-to-speech key is used. `--no-publish` skips this step.
+The parser gets the notice's post date as its reference day, so „de mâine” in 11062 (posted 3 Nov) reads as 4 Nov.
+
+For the paste-to-alert time, `run.py` drives the API in-process with the app clock at the notice's post date. It parses the notice, analyzes it, confirms every row as proposed, publishes and reads `/api/feed/alerts.pb`, then runs the MobilityData GTFS-RT validator on the published feed (`gtfsRtValidatorPass`). It uses a temporary `DATA_DIR` with its own empty `state/`, so the demo state is never touched. It never loads the env file, so no LLM or text-to-speech key is used. `--no-publish` skips this step.
+
+## Independent gold: SMTT's own timetable changes
+
+`gold_gtfs_diff.py` needs no labels at all. It compares consecutive SMTT GTFS versions (`$DATA_DIR/gtfs-history/*.zip` and the current zip) and lists, per line and direction, the stop ids served on some trip of the older version and on no trip of the newer one. `run.py` scores the pipeline against it next to the AI-assisted labels:
+- 4.29 → 4.30 (2 Nov), lines M32, M36, M37, M38, M46, M51: the Mocioni diversion (notice 11060).
+- 4.29 → 4.30, lines M11, M29, M30: compared with notice 11058. The notice names the M30 extension to the UMFT campus, and the GTFS adds that stop. The GTFS also drops „Moldovei (Ghiroda)” from M11, M29 and M30, which the notice does not mention, and renumbers „Girație Pod Bega” (listed under `sameNameSwaps`).
+- 4.30 → 4.31 (5 Nov), line E3: the Podul Polonă closure (notice 11062).
+
+The pipeline reads each notice against the current feed (4.31), which already runs the 11060 and 11062 diversions, so on those notices it finds no row. The prepared Mocioni case (built on the 4.29 pattern, SPEC 5.3) is scored too, under `overall.independentGold.preparedCases`. The full diff is written to `results/gold_gtfs_diff.json`.
+
+## Hero figures (D-012)
+
+`run.py` copies the stored hero closure (`cl_20261108_16dec`) into its temporary state dir, applies the clerk decisions of the 11067 gold label (tick the unsure line 7 rows the label lists as suspended, untick the ring rows it lists as uncertain) and reads the impact. The result is the `hero` block: `stopsSuspended`, `departuresLost`, `residentsLosingStop` (model GHSL 2020, nu recensământ), `stopRoutePairsLost`, with provenance. `demoCaseUntouched` checks the stored demo case did not change.
 
 ## Output: `results/latest.json`
 
