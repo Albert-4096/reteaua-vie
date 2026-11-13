@@ -557,6 +557,11 @@ def build_alerts(closure: dict, analysis: dict, base_url: str | None = None) -> 
         by_stop.setdefault(str(r["stopId"]), []).append(r)
     suspended = {(str(r["stopId"]), r["routeId"], int(r["directionId"])) for r in rows}
     remaining = _remaining_service(ctx, list(by_stop), suspended)
+    from app.m1_disruption import impact
+
+    # T12: a stop a shortened line still reaches according to the notice is not a certain loss
+    # (impact.certain_suspended), so its alert is DETOUR like the impact, not NO_SERVICE
+    by_notice = impact.announced_stops(closure) if rows else set()
 
     for stop_id, stop_rows in by_stop.items():
         first = stop_rows[0]
@@ -570,7 +575,7 @@ def build_alerts(closure: dict, analysis: dict, base_url: str | None = None) -> 
             closureId=ctx.id,
             activePeriod=period,
             cause=cause,
-            effect="DETOUR" if remaining.get(stop_id) else "NO_SERVICE",
+            effect="DETOUR" if remaining.get(stop_id) or stop_id in by_notice else "NO_SERVICE",
             informedEntity=[InformedEntity(routeId=r, stopId=stop_id, directionId=d) for r, d in entities],
             headerText=I18n(ro=t_ro["stop_header"].format(stop=name, lines=lines_phrase(shorts, "ro")),
                             en=t_en["stop_header"].format(stop=name, lines=lines_phrase(shorts, "en"))),
