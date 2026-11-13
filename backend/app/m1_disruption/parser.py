@@ -847,9 +847,10 @@ def _expand(a: _Action) -> list[RouteAction]:
             served = set(hits)
             idx = sorted(order.index(h) for h in served)
             susp = [s for s in order[idx[0]:idx[-1] + 1] if s not in served] if len(idx) >= 2 else []
+            # the notice lists the stops still served: only the suspended ones go in the action
+            # (stopNames on a rerouted action are read as suspended names, so the served list stays out)
             out.append(RouteAction(routeId=a.route_id, directionId=d, action="rerouted",
-                                   keepStopIds=[s for s in order if s in served], suspendedStopIds=susp,
-                                   stopNames=a.names))
+                                   suspendedStopIds=susp, stopNames=None))
         else:
             susp = [s for s in order if s in set(hits)]
             out.append(RouteAction(routeId=a.route_id, directionId=d, action="rerouted",
