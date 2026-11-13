@@ -212,3 +212,18 @@ def test_frequency_mitigation_adds_trips_but_never_a_suspended_call():
     assert sum(n for k, n in with_f.items() if k[1] == "R_TV_7") > sum(n for k, n in without.items() if k[1] == "R_TV_7")
     assert sum(with_f.get(k, 0) for k in lost) == 0
     assert all(with_f.get(k, 0) == without.get(k, 0) for k in set(with_f) | set(without) if k[1] != "R_TV_7")
+
+
+def test_d012_decisions_for_the_pre_warm_match_the_eval_rule():
+    """The hero with the 11067 gold label as clerk decisions: 21 rows ticked, 29 ring rows unticked (D-012)."""
+    from app.common import state
+    from app.m4_access import warm
+
+    _hero_or_skip()
+    stored = state.read("closures", HERO, state.PART_ANALYSIS)
+    a = warm.gold_analysis()
+    if a is None:
+        pytest.skip("no gold label")
+    assert sum(1 for r in a["stops"] if r.get("confirmed") is True) == 21
+    assert sum(1 for r in a["stops"] if r.get("confirmed") is False) == 29
+    assert state.read("closures", HERO, state.PART_ANALYSIS) == stored   # nothing written

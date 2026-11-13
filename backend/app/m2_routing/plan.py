@@ -57,8 +57,15 @@ DEMO_PLACE = "Piața Victoriei"
 # --- which closures ------------------------------------------------------------------------
 
 
-def active_closures(at: datetime) -> list[tuple[dict, set]]:
-    """Stored closures whose window contains `at`, with their lost rows (non-empty only)."""
+Override = dict[str, dict]   # closure id -> a hypothetical analysis (pre-warm of planned decisions)
+
+
+def active_closures(at: datetime, override: Override | None = None) -> list[tuple[dict, set]]:
+    """Stored closures whose window contains `at`, with their lost rows (non-empty only).
+
+    `override` replaces a closure's stored analysis (used only to pre-warm decisions a clerk
+    is expected to take; nothing is written).
+    """
     out = []
     for c in state.list_all("closures"):
         if c.get("status") not in ACTIVE_STATUSES or not c.get("window"):
@@ -66,7 +73,10 @@ def active_closures(at: datetime) -> list[tuple[dict, set]]:
         try:
             if not parse_iso(c["window"]["start"]) <= at < parse_iso(c["window"]["end"]):
                 continue
-            _, lost = patched_gtfs.lost_rows(c["id"])
+            if override and c["id"] in override:
+                lost = {imp.row_key(r) for r in override[c["id"]]["stops"] if imp.counts_as_lost(r)}
+            else:
+                _, lost = patched_gtfs.lost_rows(c["id"])
         except Exception:  # a closure without an analysis does not change the timetable
             continue
         if lost:
@@ -74,13 +84,17 @@ def active_closures(at: datetime) -> list[tuple[dict, set]]:
     return sorted(out, key=lambda it: it[0]["id"])
 
 
-def closures_fingerprint(at: datetime) -> str:
+def closures_fingerprint(at: datetime, override: Override | None = None) -> str:
     """Hash of what the route at `at` depends on: the active closures and their decisions."""
-    from app.common.jobs import closure_fingerprint
+    from app.common import jobs
 
-    ids = [c["id"] for c, _ in active_closures(at)]
-    blob = json.dumps([[i, closure_fingerprint(i)] for i in ids])
-    return hashlib.sha256(blob.encode()).hexdigest()[:16]
+    parts = []
+    for c, _ in active_closures(at, override):
+        if override and c["id"] in override:
+            parts.append([c["id"], jobs.fingerprint_of(c, override[c["id"]])])
+        else:
+            parts.append([c["id"], jobs.closure_fingerprint(c["id"])])
+    return hashlib.sha256(json.dumps(parts).encode()).hexdigest()[:16]
 
 
 # --- itineraries ------------------------------------------------------------------------------
@@ -165,11 +179,12 @@ def _r5_provenance(pf: patched_gtfs.PatchedFeed | None, closures: list[dict], at
                            now(), "https://r5py.readthedocs.io", None, note)
 
 
-def plan_route(frm: tuple[float, float], to: tuple[float, float], at: datetime | None = None) -> RoutePlan:
+def plan_route(frm: tuple[float, float], to: tuple[float, float], at: datetime | None = None,
+               override: Override | None = None) -> RoutePlan:
     at = (at or now()).astimezone(TZ)
     if not r5.available():
         raise unavailable("Routing engine (Java / r5py) is not available.", code="ROUTER_UNAVAILABLE")
-    items = active_closures(at)
+    items = active_closures(at, override)
     base_src, _ = patched_gtfs.base_feed(at)
     base = patched_gtfs.clean_base(base_src)
     pf = patched_gtfs.patched_combined(items, at) if items else None
@@ -236,14 +251,15 @@ def demo_pair() -> tuple[tuple[float, float], tuple[float, float], datetime, str
     return (loc[0], loc[1]), place_location(DEMO_PLACE), parse_iso(DEMO_AT), stop
 
 
-def route_key(frm: tuple[float, float], to: tuple[float, float], at: datetime) -> str:
+def route_key(frm: tuple[float, float], to: tuple[float, float], at: datetime,
+              override: Override | None = None) -> str:
     return (f"route:v{ROUTE_VERSION}:{frm[0]:.5f},{frm[1]:.5f}:{to[0]:.5f},{to[1]:.5f}:"
-            f"{iso(at.astimezone(TZ))}:{closures_fingerprint(at)}")
+            f"{iso(at.astimezone(TZ))}:{closures_fingerprint(at, override)}")
 
 
-def warm_demo_route() -> RoutePlan:
+def warm_demo_route(override: Override | None = None) -> RoutePlan:
     from app.common.jobs import compute_and_cache
 
     frm, to, at, _ = demo_pair()
-    return compute_and_cache(route_key(frm, to, at), lambda: plan_route(frm, to, at))
+    return compute_and_cache(route_key(frm, to, at, override), lambda: plan_route(frm, to, at, override))
 
