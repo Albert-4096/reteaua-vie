@@ -148,6 +148,63 @@ def test_hero_final_with_d012_decisions(hero_final):
     assert n.sourceText and n.sourceUrl and "stpt.ro" in n.sourceUrl
 
 
+def _fresh(cid: str) -> tuple[dict, list[dict]]:
+    """The stored rows re-enriched in memory, as `make precompute` stores them."""
+    from app.m1_disruption import analysis as an
+
+    closure, analysis = _read(cid), copy.deepcopy(_read(cid, "analysis"))
+    rows, _ = an.enrich(closure, analysis["stops"])
+    return closure, rows
+
+
+def _built(closure: dict, rows: list[dict]):
+    from app.m1_disruption import impact as imp
+    from app.m1_disruption.notice_text import build_notice
+    from app.models.v1 import Analysis
+
+    analysis = dict(_read(closure["id"], "analysis"), stops=rows)
+    return build_notice(closure, Analysis.model_validate(analysis), imp.build_impact(closure, rows))
+
+
+def test_hero_draft_never_offers_the_undecided_line_7():
+    """T3: before any decision every line 7 row is undecided, so line 7 is never a stop's alternative."""
+    import re
+
+    from app.m1_disruption import impact as imp
+
+    closure, rows = _fresh(HERO)
+    assert all(imp.is_undecided(r) for r in rows if r["routeId"] == "R_TV_7")
+    undecided = {(r["stopId"], r["routeId"]) for r in rows if imp.is_undecided(r)}
+    for r in rows:  # the nearest served stop never relies on an undecided row (890, kept, still counts)
+        ns = r["nearestServed"] or {}
+        assert not any((ns.get("stopId"), rid) in undecided for rid in ns.get("routeIds") or []), r
+    for n in (_built(closure, rows), _notice(HERO)):  # fresh, and as stored now
+        assert n.status == "draft"
+        for text, cut in ((n.text.ro, "De confirmat"), (n.text.en, "To confirm")):
+            final_part = text.split(cut)[0]
+            assert not re.search(r"\b7\b", final_part), final_part
+        # the stops with no service are still the impact's: undecided rows count only after a decision
+        assert len(n.stopsWithNoService) == imp.build_impact(closure, rows).totals.stopsSuspended
+    # the only line left at a stop is undecided and no sure stop is known: „de confirmat”, not the line
+    no_near = copy.deepcopy(rows)
+    for r in no_near:
+        if r["stopId"] in ("85", "86"):  # Catedrala Mitropolitană, both sides
+            r["nearestServed"] = None
+    n = _built(closure, no_near)
+    assert re.search(r"– Catedrala Mitropolitană[^\n]*\. Alternativa: de confirmat\.", n.text.ro)
+    assert re.search(r"– Catedrala Mitropolitană[^\n]*\. Alternative: to be confirmed\.", n.text.en)
+
+
+def test_e3_and_mocioni_have_nothing_undecided():
+    """T3 changes only notices with undecided rows, so E3 and Mocioni keep their text."""
+    from app.m1_disruption import impact as imp
+
+    for cid in (E3, MOCIONI):
+        closure, rows = _fresh(cid)
+        assert not any(imp.is_undecided(r) for r in rows)
+        assert "de confirmat" not in _built(closure, rows).text.ro
+
+
 def test_hero_same_name_stops_do_not_contradict(hero_final):
     """A name shared by a served and a not-served stop is qualified with the mode and the lines."""
     from app.m1_disruption.notice_text import _service, _Text
@@ -250,7 +307,8 @@ def test_build_notice_is_pure():
 
 
 def test_api_notice_draft_and_timing(client):
-    client.get(f"/api/closures/{HERO}/notice")  # warm the impact cache once
+    for cid in (HERO, E3, MOCIONI):  # warm the impact caches once (Mocioni loads GTFS 4.29 cold: ~10 s)
+        client.get(f"/api/closures/{cid}/notice")
     for cid in (HERO, E3, MOCIONI):
         t0 = time.perf_counter()
         r = client.get(f"/api/closures/{cid}/notice")
@@ -260,10 +318,9 @@ def test_api_notice_draft_and_timing(client):
     body = client.get(f"/api/closures/{HERO}/notice").json()
     assert body["status"] == "draft" and body["unsureCount"] == 50
     assert client.get("/api/closures/nope/notice").json()["error"]["code"] == "NOT_FOUND"
-    # the prepared cases stay `analyzed` with no decisions (D-011)
-    for cid in (HERO, E3, MOCIONI):
-        assert _read(cid)["status"] == "analyzed"
-        assert not (REAL_STATE / f"{cid}.decisions.json").exists()
+    # the hero stays `analyzed` with no decisions (D-011); E3 and Mocioni may be pre-published (T4)
+    assert _read(HERO)["status"] == "analyzed"
+    assert not (REAL_STATE / f"{HERO}.decisions.json").exists()
 
 
 def test_api_notice_final_after_decisions(client, isolated_state):

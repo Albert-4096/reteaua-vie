@@ -11,6 +11,8 @@
 
 Which rows count (CONTRACT: "unsure stops count only after a decision"):
 `affected` rows unless a person unticked them, `unsure` rows only when ticked.
+An undecided `unsure` row is not a sure service either: the nearest served stop
+never relies on it (ServiceState `undecided`).
 
 Public: compute_impact(closure_id) -> Impact, plus the helpers analysis.py
 uses to fill departuresLost and nearestServed on each row.
@@ -73,6 +75,11 @@ def counts_as_lost(row: dict) -> bool:
     if row["state"] == "affected":
         return row.get("confirmed") is not False
     return row.get("confirmed") is True
+
+
+def is_undecided(row: dict) -> bool:
+    """An `unsure` row nobody decided yet: neither lost nor a sure service."""
+    return row["state"] == "unsure" and row.get("confirmed") is None
 
 
 def row_key(row: dict) -> Key:
@@ -321,17 +328,27 @@ def timetable_provenance(tt: Timetable, cw: CountWindow) -> Provenance:
 
 @dataclass
 class ServiceState:
-    """Who still serves which stop in the window, given the lost rows."""
+    """Who still serves which stop in the window, given the lost rows.
+
+    `undecided` rows (unsure, no decision yet) are neither lost nor served: they go to
+    `pending`, so a nearest served stop or „still served by” never names them, and a stop
+    they alone still serve is not counted as suspended (unsure rows count only after a decision).
+    """
     counts: dict[Key, int] | None
     lost: set[Key]
     remaining: dict[str, dict[tuple[str, int], int]] = field(default_factory=dict)
+    pending: dict[str, set[tuple[str, int]]] = field(default_factory=dict)
 
     @classmethod
-    def build(cls, counts: dict[Key, int] | None, lost: set[Key]) -> "ServiceState":
+    def build(cls, counts: dict[Key, int] | None, lost: set[Key],
+              undecided: set[Key] | frozenset = frozenset()) -> "ServiceState":
         st = cls(counts, lost)
         for (s, r, d), n in (counts or {}).items():
             if n > 0 and (s, r, d) not in lost:
-                st.remaining.setdefault(s, {})[(r, d)] = n
+                if (s, r, d) in undecided:
+                    st.pending.setdefault(s, set()).add((r, d))
+                else:
+                    st.remaining.setdefault(s, {})[(r, d)] = n
         return st
 
     def served(self, stop_id: str, without: tuple[str, int] | None = None) -> set[tuple[str, int]]:
@@ -343,7 +360,7 @@ class ServiceState:
     def suspended_stops(self) -> set[str]:
         if self.counts is None:
             return set()
-        return {s for (s, _, _) in self.lost if not self.remaining.get(s)}
+        return {s for (s, _, _) in self.lost if not self.remaining.get(s) and not self.pending.get(s)}
 
 
 # --- walking graph (OSM pedestrian network) ----------------------------------------------
@@ -543,8 +560,9 @@ def nearest_served(row: dict, svc: ServiceState, stats: NearestStats | None = No
 
     Candidates: any stop within 1,500 m (straight line) that keeps a departure
     of any route in the window (the row's own stop counts if another line
-    still serves it). The same route and direction wins when it is at most
-    400 m farther on foot than the nearest one.
+    still serves it); a route whose row there is undecided does not count.
+    The same route and direction wins when it is at most 400 m farther on foot
+    than the nearest one.
     """
     if svc.counts is None:
         return None

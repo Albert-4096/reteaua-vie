@@ -225,13 +225,15 @@ def _sections(closure: dict, rows: list[dict]) -> list[NoticeSection]:
 
 
 def _service(closure: dict, rows: list[dict]) -> imp.ServiceState | None:
-    """Who still serves which stop in the window (impact's rule), or None outside every timetable."""
+    """Who still serves which stop in the window (impact's rule), or None outside every timetable.
+    An undecided row is pending: never named as a line that still serves the stop."""
     start, end = parse_iso(closure["window"]["start"]), parse_iso(closure["window"]["end"])
     tt = imp.timetable_for(start)
     counts = imp.departure_counts(imp.count_window(start, end, tt), tt)
     if counts is None:
         return None
-    return imp.ServiceState.build(counts, {imp.row_key(r) for r in rows if imp.counts_as_lost(r)})
+    return imp.ServiceState.build(counts, {imp.row_key(r) for r in rows if imp.counts_as_lost(r)},
+                                  {imp.row_key(r) for r in rows if _undecided(r)})
 
 
 def _no_service_stops(rows: list[dict], svc: imp.ServiceState | None) -> list[NoticeStop]:
@@ -360,6 +362,8 @@ class _Text:
                     e["info"] = ("still", tuple(lines)) if lines else None
                 else:
                     e["info"] = ("near", near.stopId, near.distanceMeters, near.approximate)
+            if e["info"] is None and self.svc is not None and self.svc.pending.get(stop.stopId):
+                e["info"] = ("pending",)  # the only line left here is undecided: never named as serving
         return list(out.values())
 
     def direction_label(self, block: dict, d: int) -> str:
@@ -469,12 +473,16 @@ class _Text:
             return t["distance_approx" if approx else "distance"].format(meters=m)
 
         def one(info: tuple) -> str:
+            if info[0] == "pending":
+                return t["pending"]
             if info[0] == "still":
                 return t["still"].format(lines=self.vehicles(info[1], lang))
             return t["near"].format(name=self.served_label(info[1], lang),
                                     distance=distance([al._round10(info[2])], info[3]))
 
         complete = len(infos) == len(entries)
+        if complete and all(i[0] == "pending" for _, i in infos):
+            return one(infos[0][1])
         if complete and all(i[0] == "still" for _, i in infos) and len({i[1] for _, i in infos}) == 1:
             return one(infos[0][1])
         if complete and all(i[0] == "near" for _, i in infos):

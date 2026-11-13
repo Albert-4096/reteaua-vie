@@ -73,6 +73,7 @@
     "near_split": "cea mai apropiată stație deservită: {parts} pe jos",
     "near_part": "spre {headsign}, {name}, {distance}",
     "still": "stația rămâne deservită de {lines}",
+    "pending": "alternativa: de confirmat",
     "split_part": "spre {headsign}, {info}",
     "vehicle": {
       "tram": [
@@ -190,6 +191,7 @@
     "near_split": "nearest served stop: {parts} on foot",
     "near_part": "towards {headsign}, {name}, {distance}",
     "still": "the stop is still served by {lines}",
+    "pending": "alternative: to be confirmed",
     "split_part": "towards {headsign}, {info}",
     "vehicle": {
       "tram": [

@@ -67,7 +67,7 @@ def enrich(closure: dict, rows: list[dict]) -> tuple[list[dict], list[Any]]:
     cw = imp.count_window(start, end, tt)
     counts = imp.departure_counts(cw, tt)
     lost = {imp.row_key(r) for r in rows if imp.counts_as_lost(r)}
-    svc = imp.ServiceState.build(counts, lost)
+    svc = imp.ServiceState.build(counts, lost, {imp.row_key(r) for r in rows if imp.is_undecided(r)})
     stats = imp.NearestStats()
     for r in rows:
         r["departuresLost"] = None if counts is None else int(counts.get(imp.row_key(r), 0))
