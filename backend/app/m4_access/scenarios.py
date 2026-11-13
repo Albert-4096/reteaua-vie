@@ -199,12 +199,15 @@ def _detour(closure: dict, same_geometry: bool):
     """DetourLoad from the detour agent's module: the stored closure's cached one when the
     geometry is unchanged, else computed on the modified copy (segment)."""
     try:
+        result = None
         if same_geometry:
             fn = _optional("app.m4_access.detour", "compute_for")
-            if fn is not None:
-                return fn(closure["id"])
-        fn = _optional("app.m4_access.detour", "compute_detour_load")
-        return fn(closure) if fn is not None else None
+            result = fn(closure["id"]) if fn is not None else None
+        if result is None:
+            fn = _optional("app.m4_access.detour", "compute_detour_load")
+            result = fn(closure) if fn is not None else None
+        spill = _optional("app.m4_access.spillover", "with_spillover")
+        return spill(closure, result) if result is not None and spill is not None else result
     except Exception:
         log.exception("detour load for scenario failed")
         return None
@@ -386,9 +389,16 @@ def compare(a: str, b: str) -> ScenarioCompare:
 # --- job keys (the routes and warm_decide use the same ones) ----------------------------------------
 
 
+def modules_stamp() -> str:
+    """Which optional modules exist: a cached impact made without one is redone once it lands."""
+    found = [_optional("app.m4_access.access", "access_for"), _optional("app.m5_bike.bike", "bike_impact_for"),
+             _optional("app.m4_access.detour", "compute_detour_load")]
+    return "".join("1" if f is not None else "0" for f in found)
+
+
 def impact_job_key(scenario_id: str) -> str:
-    return f"scenario-impact:v1:{scenario_id}:{fingerprint(get(scenario_id))}"
+    return f"scenario-impact:v1:{modules_stamp()}:{scenario_id}:{fingerprint(get(scenario_id))}"
 
 
 def compare_job_key(a: str, b: str) -> str:
-    return f"scenario-compare:v1:{a}:{fingerprint(get(a))}:{b}:{fingerprint(get(b))}"
+    return f"scenario-compare:v1:{modules_stamp()}:{a}:{fingerprint(get(a))}:{b}:{fingerprint(get(b))}"
