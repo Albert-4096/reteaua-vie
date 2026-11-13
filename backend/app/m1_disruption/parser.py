@@ -104,9 +104,10 @@ def split_sentences(text: str) -> list[str]:
             continue
         start = 0
         for m in re.finditer(r"[.!?](?=\s+[A-ZĂÂÎȘŞȚŢ⚠📅])", line):
-            word = re.search(r"([\w\-]+)$", line[start:m.start()])
+            word = re.search(r"([\w\-.]+)$", line[start:m.start()])
             w = word.group(1) if word else ""
-            if len(w) <= 2 or fold(w) in _SHORT_ABBR:
+            acronym = re.fullmatch(r"(?:\w\.){1,}\w", w) is not None    # „B.A.T.M.” ends a sentence, „C.” does not
+            if not acronym and (len(w) <= 2 or fold(w) in _SHORT_ABBR):
                 continue
             out.append(line[start:m.end()].strip())
             start = m.end()
