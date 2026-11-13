@@ -234,6 +234,30 @@ def test_announced_route_is_named_and_labelled_not_counted(hero_final, hero_draf
         assert not any(p.source.startswith("Anunțul STPT: trasee") for p in _case(cid)[2].provenance)
 
 
+def test_stop_served_according_to_the_notice_is_not_a_certain_loss(hero_final):
+    """T12 (D-012: only certain losses count): line 2 reaches AEM in the notice, so 945 AEM (Dräxlmaier)
+    is not a stop with no service, nor are its residents; departures stay the GTFS ones."""
+    from app.m1_disruption import impact as imp
+    from app.m1_disruption.notice_text import _service
+
+    closure, analysis, impact = _case(HERO, d012_decisions(_read(HERO, "analysis")))
+    rows = [r.model_dump(mode="json") for r in analysis.stops]
+    svc = _service(closure, rows)
+    certain, by_notice = imp.certain_suspended(closure, svc)
+    assert by_notice == {"945"} and svc.suspended_stops() == certain | {"945"} and "907" in certain
+    assert impact.totals.stopsSuspended == len(certain) == 16  # D-012 figures: 16 stops, 2,262 departures
+    assert impact.totals.departuresLost == sum(r["departuresLost"] for r in rows if imp.counts_as_lost(r)) == 2262
+    res = imp.residents_losing(certain, svc)
+    assert impact.totals.residentsLosingStop == sum(int(round(p)) for p, _ in res.values())
+    assert "945" not in {s.stopId for s in hero_final.stopsWithNoService}
+    assert len(hero_final.stopsWithNoService) == 16
+    note = next(p.note for p in impact.provenance if p.source.startswith("Anunțul STPT: trasee anunțate"))
+    assert "AEM (Dräxlmaier) (945): deservită conform anunțului; cursele nu sunt în orarul GTFS" in note
+    assert imp.announced_stops(closure) == {"945", "946", "73", "74"}   # AEM and Gara de Nord tram stops
+    for cid in (E3, MOCIONI):
+        assert imp.announced_stops(_read(cid)) == set()
+
+
 def test_e3_and_mocioni_have_nothing_undecided():
     """T3 changes only notices with undecided rows, so E3 and Mocioni keep their text."""
     from app.m1_disruption import impact as imp

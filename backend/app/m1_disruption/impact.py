@@ -2,7 +2,8 @@
 
 - Departures lost: GTFS departures of each lost (stop, route, direction) row
   inside window ∩ the service days the feed covers (foundation's index).
-- stopsSuspended: lost stops with no remaining departure of any route.
+- stopsSuspended: lost stops with no remaining departure of any route, unless the notice
+  says a line still serves them (T12: „deservită conform anunțului”, no GTFS trips).
 - Nearest served stop: walking distance on the OSM pedestrian graph
   (pyrosm, cached in $DATA_DIR/cache); straight line × 1.3 when the graph
   cannot connect the two stops ("aproximativ").
@@ -42,7 +43,7 @@ from shapely import STRtree
 
 from app.common import gtfs, state
 from app.common import provenance as prov
-from app.common.city import load_network, load_zones, zone_for_point
+from app.common.city import load_network, load_zones, route_mode, zone_for_point
 from app.common.errors import invalid, not_found
 from app.common.geo import project_lonlats
 from app.common.timeutil import from_unix, gtfs_service_start, iso, local_midnight, parse_iso
@@ -708,19 +709,55 @@ def residents_losing(suspended: set[str], svc: ServiceState) -> dict[int, tuple[
 
 METHOD = I18n(
     ro="Plecări pierdute: orarul GTFS al fiecărei linii și direcții, la fiecare stație afectată, în fereastra "
-       "lucrării. Stație suspendată: nicio altă plecare a vreunei linii în fereastră. Locuitori fără stație: "
+       "lucrării. Stație suspendată: nicio altă plecare a vreunei linii în fereastră, iar anunțul nu spune că o "
+       "linie o deservește. Locuitori fără stație: "
        "celule GHSL 2020 de 100 m (model, nu recensământ) aflate la cel mult 400 m (linie dreaptă) de o stație "
        "suspendată și fără nicio stație deservită la 400 m. Stațiile neclare contează doar după o decizie.",
     en="Departures lost: the GTFS timetable of each line and direction at each affected stop inside the "
-       "closure window. Suspended stop: no other departure of any line in the window. Residents losing their "
+       "closure window. Suspended stop: no other departure of any line in the window, and the notice does not "
+       "say a line serves it. Residents losing their "
        "stop: GHSL 2020 100 m cells (a model, not a census) within 400 m (straight line) of a suspended stop "
        "with no served stop within 400 m. Unsure stops count only after a decision.",
 )
 
 
-def announced_routes_note(closure: dict) -> Provenance | None:
+def announced_stops(closure: dict) -> set[str]:
+    """T12: stops a shortened line reaches only according to the notice text (no GTFS timetable).
+
+    A name of the announced route that is not on the line's own GTFS route, matched to the
+    network stops with exactly that name before any parenthesis („AEM” -> AEM (Dräxlmaier)).
+    """
+    from app.m1_disruption import matching  # matching imports this module
+
+    tt = timetable_for_closure(closure)
+    out: set[str] = set()
+    for a in closure.get("routeActions") or []:
+        if a["action"] != "shortened" or not a.get("stopNames"):
+            continue
+        dirs = [a["directionId"]] if a.get("directionId") is not None else matching.directions_of(a["routeId"], tt)
+        for name in a["stopNames"]:
+            base = matching.base_name(name)
+            if not base or any(matching.resolve_name(name, a["routeId"], d, tt)[0] for d in dirs):
+                continue
+            mode = route_mode(a["routeId"])  # a tram reaches tram stops only
+            out |= {s["id"] for s in load_network().stops if matching.base_name(s["name"]) == base
+                    and any(route_mode(r) == mode for r in s.get("routeIds") or [])}
+    return out
+
+
+def certain_suspended(closure: dict, svc: ServiceState) -> tuple[set[str], set[str]]:
+    """(suspended stops, stops served according to the notice). D-012 counts only certain losses:
+    a stop the notice says a line still serves is not suspended, although its trips are not in
+    the GTFS (T12)."""
+    raw = svc.suspended_stops()
+    by_notice = raw & announced_stops(closure)
+    return raw - by_notice, by_notice
+
+
+def announced_routes_note(closure: dict, by_notice: set[str] = frozenset()) -> Provenance | None:
     """T12: a shortened line's route as the notice gives it has no GTFS timetable. Only its stops
-    on the line's GTFS route count as served; its trips elsewhere are not subtracted from the losses."""
+    on the line's GTFS route count as served; its trips elsewhere are not subtracted from the losses.
+    Stops it alone reaches are not counted as suspended („deservită conform anunțului”)."""
     parts: dict[str, str] = {}
     for a in closure.get("routeActions") or []:
         if a["action"] == "shortened" and a.get("stopNames") and a["routeId"] not in parts:
@@ -728,13 +765,20 @@ def announced_routes_note(closure: dict) -> Provenance | None:
             parts[a["routeId"]] = f"linia {short}: „{' – '.join(a['stopNames'])}”"
     if not parts:
         return None
+    net = load_network()
+    served = "; ".join(f"{net.stop_by_id[s]['name']} ({s})" for s in sorted(by_notice) if s in net.stop_by_id)
+    note = (f"Traseu din anunț ({'; '.join(parts.values())}): se numără ca deservite doar stațiile lui din GTFS; "
+            "plecările de pe restul traseului au frecvență necunoscută și nu sunt scăzute din pierderi")
+    if served:
+        note += (f". {served}: deservită conform anunțului; cursele nu sunt în orarul GTFS (nu e numărată "
+                 "printre stațiile fără niciun mijloc de transport)")
+    note += (" / only the announced route's GTFS stops count as served; its trips elsewhere have no timetable "
+             "and are not subtracted from the losses")
+    if served:
+        note += f"; {served}: served according to the notice, trips not in the GTFS (not counted as suspended)"
     return prov.provenance(
         "Anunțul STPT: trasee anunțate, fără orar GTFS / STPT notice: announced routes, no GTFS timetable",
-        now(), closure.get("sourceUrl"), None,
-        f"Traseu din anunț ({'; '.join(parts.values())}): se numără ca deservite doar stațiile lui din GTFS; "
-        "plecările de pe restul traseului au frecvență necunoscută și nu sunt scăzute din pierderi / "
-        "only the announced route's GTFS stops count as served; its trips elsewhere have no timetable "
-        "and are not subtracted from the losses")
+        now(), closure.get("sourceUrl"), None, note)
 
 
 def _closure_and_analysis(closure_id: str) -> tuple[dict, dict]:
@@ -761,7 +805,7 @@ def build_impact(closure: dict, rows: list[dict]) -> Impact:
     lost_rows = [r for r in rows if counts_as_lost(r)]
     lost = {row_key(r) for r in lost_rows}
     svc = ServiceState.build(counts, lost)
-    suspended = svc.suspended_stops()
+    suspended, by_notice = certain_suspended(closure, svc)
 
     z = load_zones()
     zone_of_stop = {r["stopId"]: r.get("zoneSlug") or zone_for_point(*r["location"]) for r in lost_rows}
@@ -806,7 +850,7 @@ def build_impact(closure: dict, rows: list[dict]) -> Impact:
     else:
         provenance.append(prov.provenance("GHSL population grid (JRC)", now(), None, None,
                                           "Lipsește rasterul GHSL: locuitori necunoscuți / raster missing"))
-    announced = announced_routes_note(closure)
+    announced = announced_routes_note(closure, by_notice)
     if announced is not None:
         provenance.append(announced)
     return Impact(

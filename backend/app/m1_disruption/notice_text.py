@@ -236,11 +236,12 @@ def _service(closure: dict, rows: list[dict]) -> imp.ServiceState | None:
                                   {imp.row_key(r) for r in rows if _undecided(r)})
 
 
-def _no_service_stops(rows: list[dict], svc: imp.ServiceState | None) -> list[NoticeStop]:
-    """The impact's suspended stops: no departure of any line left in the window."""
+def _no_service_stops(closure: dict, rows: list[dict], svc: imp.ServiceState | None) -> list[NoticeStop]:
+    """The impact's suspended stops: no departure of any line left in the window, and not served
+    according to the notice (T12)."""
     if svc is None:
         return []
-    suspended = svc.suspended_stops()
+    suspended, _ = imp.certain_suspended(closure, svc)
     out: dict[str, NoticeStop] = {}
     for r in rows:  # analysis order: by line, direction and stop sequence
         sid = str(r["stopId"])
@@ -606,7 +607,7 @@ def build_notice(closure: Closure | dict, analysis: Analysis | dict, impact: Imp
     unsure_count = sum(1 for r in rows if _undecided(r))
     sections = _sections(c, rows)
     svc = _service(c, rows)
-    no_service = _no_service_stops(rows, svc)
+    no_service = _no_service_stops(c, rows, svc)
     map_url = al.alert_url(c["id"], None, base_url)
     ctx = _Text(c, rows, sections, no_service, svc)
     text = I18n(**{lang: _text(ctx, unsure_count, map_url, lang) for lang in LANGS})
