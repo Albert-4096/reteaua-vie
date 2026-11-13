@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import threading
 
 import pytest
 from shapely.geometry import Point, shape
@@ -117,3 +118,27 @@ def test_park_and_ride_drops_lines_the_closure_suspends():
             assert out[o.stopId].routeIds == left
         else:
             assert o.stopId not in out
+
+
+@needs_data
+def test_parking_endpoint(client):
+    _stored(HERO)
+    r = client.get(f"/api/closures/{HERO}/parking")
+    assert r.status_code == 200, r.text
+    from app.models.v2 import ParkingImpact
+
+    body = ParkingImpact.model_validate(r.json())
+    assert body.closureId == HERO and body.streetsAffected and body.provenance
+    assert any("fără date de ocupare" in (p.note or "") for p in body.provenance)
+    assert client.get("/api/closures/no_such_closure/parking").status_code == 404
+    # let the routers' background warm-ups finish: a short run must not exit while they are in C code
+    for t in threading.enumerate():
+        if t.name.endswith("-warm"):
+            t.join(180)
+
+
+@needs_data
+def test_warm_runs_on_the_prepared_cases():
+    from app.m6_parking.warm import warm
+
+    warm([HERO, E3])

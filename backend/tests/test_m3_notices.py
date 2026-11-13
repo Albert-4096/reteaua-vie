@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import threading
 from datetime import datetime
 
 import pytest
@@ -179,3 +180,30 @@ def test_publish_fills_alert_ids_and_the_feed(published_state):
     # the feed: active at the demo clock (8 Nov 12:00), gone after the window (13 Nov 00:00)
     assert [n.id for n in notices.feed(datetime(2026, 11, 8, 12, tzinfo=TZ))] == [n.id for n in after]
     assert notices.feed(datetime(2026, 11, 13, 0, tzinfo=TZ)) == []
+
+
+@needs_data
+def test_notice_endpoints(client):
+    _stored(E3)
+    r = client.get(f"/api/closures/{E3}/notices")
+    assert r.status_code == 200, r.text
+    from app.m3_notices.notices import ZoneNotice
+
+    notices = [ZoneNotice.model_validate(n) for n in r.json()]
+    assert notices and all(n.closureId == E3 for n in notices)
+    assert client.get("/api/closures/no_such_closure/notices").status_code == 404
+    feed = client.get("/api/feed/notices.json")
+    assert feed.status_code == 200 and isinstance(feed.json(), list)
+    for n in feed.json():
+        assert n["publishedAt"] is not None
+    # let the routers' background warm-ups finish: a short run must not exit while they are in C code
+    for t in threading.enumerate():
+        if t.name.endswith("-warm"):
+            t.join(180)
+
+
+@needs_data
+def test_warm_runs_on_the_prepared_cases():
+    from app.m3_notices.warm import warm
+
+    warm([HERO, E3, MOCIONI])

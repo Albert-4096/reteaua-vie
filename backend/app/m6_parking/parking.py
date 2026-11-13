@@ -212,6 +212,29 @@ def parking_impact(closure_id: str) -> ParkingImpact:
                          provenance=provenance_list(with_pr=True))
 
 
+def warm_caches() -> None:
+    """Load what a request needs (GTFS stop patterns, OSM names, Timpark index, street register)."""
+    import logging
+
+    try:
+        from app.m1_disruption.parser import register
+
+        osm_ways.named_ways()
+        _parking_index()
+        all_park_and_ride()
+        register()
+    except Exception:  # a missing source shows up in the request, not here
+        logging.getLogger("reteaua_vie.m6").exception("warm-up failed")
+
+
+def warm_in_background():
+    import threading
+
+    t = threading.Thread(target=warm_caches, name="m6-warm", daemon=True)
+    t.start()
+    return t
+
+
 def clear_caches() -> None:
     _parking_index.cache_clear()
     all_park_and_ride.cache_clear()
