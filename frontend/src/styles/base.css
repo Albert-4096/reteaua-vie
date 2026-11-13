@@ -329,6 +329,11 @@ button {
   flex-wrap: wrap;
 }
 
+.choice .btn {
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-s);
+}
+
 /* line schema: stops of the affected section in order, lost stops struck */
 .schema {
   list-style: none;
@@ -404,9 +409,17 @@ details[open] > summary {
   vertical-align: top;
 }
 
+.table th {
+  font-weight: 600;
+  color: var(--c-text-muted);
+}
+
 .table td.num,
 .table th.num {
   text-align: right;
+}
+
+.table td.num {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }

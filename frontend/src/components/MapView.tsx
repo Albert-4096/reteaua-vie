@@ -26,6 +26,8 @@ export type MapOverlay = {
   tempRoutes?: GeoJSON.Geometry[];
   highlightRouteIds?: string[];
   stops?: MapStop[];
+  /** A short honesty label about what is drawn (e.g. „locație aproximativă”). */
+  note?: string;
   /** Change it to refit the view to the overlay. */
   fitKey?: string;
 };
@@ -174,6 +176,7 @@ export function MapView({ network, zones, overlay }: Props) {
   useEffect(() => {
     if (!el.current) return;
     let usedFallback = false;
+    let baseLoaded = false;
     const map = new maplibregl.Map({
       container: el.current,
       style: BASE_STYLE,
@@ -191,13 +194,15 @@ export function MapView({ network, zones, overlay }: Props) {
       setFallback(true);
       map.setStyle(fallbackStyle());
     };
+    // Fall back only when the base style itself never loads; a slow or failed tile later is not a reason.
     const timer = window.setTimeout(() => {
-      if (!map.isStyleLoaded()) toFallback();
+      if (!baseLoaded) toFallback();
     }, 8000);
-    map.on("error", (e) => {
-      if (!map.isStyleLoaded() || (e as { sourceId?: string }).sourceId === "openmaptiles") toFallback();
+    map.on("error", () => {
+      if (!baseLoaded) toFallback();
     });
     map.on("style.load", () => {
+      baseLoaded = true;
       addCityLayers(map);
       setReady((n) => n + 1);
     });
@@ -337,7 +342,13 @@ export function MapView({ network, zones, overlay }: Props) {
   return (
     <div className="map">
       <div ref={el} style={{ position: "absolute", inset: 0 }} aria-label="Hartă" role="region" />
-      {fallback && <p className="map-note">{t("mapFallback")}</p>}
+      {(fallback || overlay.note) && (
+        <p className="map-note">
+          {overlay.note}
+          {fallback && overlay.note && <br />}
+          {fallback && t("mapFallback")}
+        </p>
+      )}
     </div>
   );
 }
