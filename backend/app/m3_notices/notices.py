@@ -35,15 +35,8 @@ from app.config import TZ
 from app.m1_disruption.alerts import EN_MONTHS, RO_MONTHS, is_open_end, lines_phrase, pick_nearest
 from app.m1_disruption.impact import counts_as_lost
 from app.m3_notices import osm_ways
-from app.models.base import I18n, IsoTime, Window
-from app.models.v2 import NoticeStreet
-from app.models.v2 import ZoneNotice as _ContractZoneNotice
-
-
-class ZoneNotice(_ContractZoneNotice):
-    """CONTRACT ZoneNotice; publishedAt is null while the closure is not published (asked for in CONTRACT 2.3)."""
-
-    publishedAt: IsoTime | None
+from app.models.base import I18n, Window
+from app.models.v2 import NoticeStreet, ZoneNotice
 
 RO_DAYS = ["luni", "marți", "miercuri", "joi", "vineri", "sâmbătă", "duminică"]
 EN_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]

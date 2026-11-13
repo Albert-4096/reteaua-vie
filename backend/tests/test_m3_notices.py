@@ -187,7 +187,7 @@ def test_notice_endpoints(client):
     _stored(E3)
     r = client.get(f"/api/closures/{E3}/notices")
     assert r.status_code == 200, r.text
-    from app.m3_notices.notices import ZoneNotice
+    from app.models.v2 import ZoneNotice
 
     notices = [ZoneNotice.model_validate(n) for n in r.json()]
     assert notices and all(n.closureId == E3 for n in notices)

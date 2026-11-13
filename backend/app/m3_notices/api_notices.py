@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter
 
 from app.m3_notices import notices
-from app.m3_notices.notices import ZoneNotice
+from app.models.v2 import ZoneNotice
 
 router = APIRouter(tags=["M3 notices"])
 
