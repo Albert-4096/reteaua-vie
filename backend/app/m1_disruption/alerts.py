@@ -341,28 +341,19 @@ def suspended_rows(analysis: dict) -> list[dict]:
 
 # --- cause --------------------------------------------------------------------------
 
-_MAINTENANCE_WORDS = re.compile(r"tramvai|cale de rulare|șin[ăe]|linia de contact|întreținere|mentenanț|"
-                                r"revizi|tram track|maintenance", re.I)
-_CONSTRUCTION_WORDS = re.compile(r"lucr[ăa]ri|șantier|asfalt|carosabil|canalizare|rețea|construc|"
-                                 r"închis|roadworks|works|construction", re.I)
-
-
 def alert_cause(closure: dict) -> str:
     """CONSTRUCTION for roadworks, MAINTENANCE for track and equipment works, else OTHER_CAUSE.
 
-    A prepared case carries its cause; other closures are classified from their title
-    and notice text.
+    A prepared case carries its cause; other closures are classified from their notice
+    text and title by the notice parser's rule (m1-notices' parser.infer_cause).
     """
     case = CASES_BY_CLOSURE.get(closure.get("id", ""))
     if case is not None:
         return case.cause
+    from app.m1_disruption.parser import infer_cause
+
     title = closure.get("title") or {}
-    text = " ".join(filter(None, [title.get("ro"), title.get("en"), closure.get("sourceText")]))
-    if _MAINTENANCE_WORDS.search(text):
-        return "MAINTENANCE"
-    if _CONSTRUCTION_WORDS.search(text):
-        return "CONSTRUCTION"
-    return "OTHER_CAUSE"
+    return infer_cause(" ".join(filter(None, [closure.get("sourceText"), title.get("ro")])))
 
 
 def is_open_end(closure: dict) -> bool:
@@ -486,20 +477,20 @@ def _remaining_service(ctx: _Ctx, stop_ids: list[str], suspended: set[tuple[str,
                        ) -> dict[str, set[tuple[str, int]]]:
     """(route, direction) pairs that still depart from each stop in the window.
 
-    From the GTFS departure index when the feed covers the window; otherwise from the
-    lines the network lists at the stop (no direction).
+    Same timetable and rule as m1-core's impact (the feed in force before the works,
+    ServiceState), so NO_SERVICE stops are exactly the impact's stopsSuspended. When
+    the window lies outside every feed: the lines the network lists at the stop.
     """
-    out: dict[str, set[tuple[str, int]]] = {s: set() for s in stop_ids}
-    if gtfs.is_covered(ctx.start, ctx.end):
-        df = gtfs.departures(ctx.start, ctx.end, stop_ids=stop_ids)
-        if not df.empty:
-            pairs = df[["stop_id", "route_id", "direction_id"]].drop_duplicates()
-            for s, r, d in pairs.itertuples(index=False):
-                if (str(s), str(r), int(d)) not in suspended:
-                    out[str(s)].add((str(r), int(d)))
-        return out
+    from app.m1_disruption import impact
+
+    tt = impact.timetable_for(ctx.start)
+    counts = impact.departure_counts(impact.count_window(ctx.start, ctx.end, tt), tt)
+    if counts is not None:
+        svc = impact.ServiceState.build(counts, suspended)
+        return {s: svc.served(s) for s in stop_ids}
     net = load_network()
     suspended_routes = {(s, r) for s, r, _ in suspended}
+    out: dict[str, set[tuple[str, int]]] = {s: set() for s in stop_ids}
     for s in stop_ids:
         for r in (net.stop_by_id.get(s) or {}).get("routeIds") or []:
             if (s, r) not in suspended_routes:
