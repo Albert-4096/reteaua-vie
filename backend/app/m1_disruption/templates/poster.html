@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<title>$title</title>
+<style>$css</style>
+</head>
+<body>
+<header class="top">
+  <div class="kicker"><span class="sign">!</span>$kicker</div>
+  <h1 class="stop">$stop_name</h1>
+  <div class="lines">$badges<span class="lines-label">$lines_label</span></div>
+</header>
+
+<section class="row">
+  <div class="col-text">
+    <div class="block">
+      <div class="label">Când <span class="en">/ When</span></div>
+      <div class="value">$window_ro</div>
+      <div class="value en">$window_en</div>
+    </div>
+    <div class="block">
+      <div class="label">$near_label</div>
+      <div class="near-name">$near_name</div>
+      <div class="value">$near_distance</div>
+      <div class="near-lines">$near_badges</div>
+    </div>
+  </div>
+  <div class="col-map">
+    $map_svg
+    <div class="legend">$legend</div>
+  </div>
+</section>
+
+<section class="row bottom">
+  <div class="col-text">
+    <div class="msg" lang="ro">
+      <h2>$header_ro</h2>
+      <p>$description_ro</p>
+    </div>
+    <div class="msg en" lang="en">
+      <h2>$header_en</h2>
+      <p>$description_en</p>
+    </div>
+  </div>
+  <div class="col-qr">
+    <img class="qr" src="$qr_src" alt="Cod QR către $url">
+    <div class="qr-call">Scanați pentru varianta audio</div>
+    <div class="qr-call en">Scan for the audio version</div>
+    <div class="url">$url</div>
+  </div>
+</section>
+
+<footer>
+  <div>$footer_ro</div>
+  <div class="en">$footer_en</div>
+</footer>
+</body>
+</html>

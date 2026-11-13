@@ -1,0 +1,39 @@
+{
+  "_comment": "Alert texts (GTFS-RT header_text, description_text and their tts_ variants). Placeholders in {braces} are filled by app/m1_disruption/alerts.py. The tts_ texts get every placeholder already spoken: numbers as words, no abbreviations.",
+  "ro": {
+    "stop_header": "Stația {stop} nu este deservită de {lines}",
+    "route_header": "{line} nu circulă",
+    "route_header_direction": "{line} nu circulă spre {headsign}",
+    "description": "{window}: {reason}.{temporary}{nearest}",
+    "nearest": " Cea mai apropiată stație deservită: {name}, {distance} pe jos ({lines}).",
+    "nearest_unknown": " Cea mai apropiată stație deservită: necunoscută.",
+    "temporary": " Linie temporară: {mode} {line}, pe traseul {streets}.",
+    "tts_stop_header": "Atenție. Stația {stop} nu este deservită de {lines}.",
+    "tts_route_header": "Atenție. {line} nu circulă.",
+    "tts_route_header_direction": "Atenție. {line} nu circulă spre {headsign}.",
+    "tts_description": "{window}, {reason}.{temporary}{nearest}",
+    "tts_nearest": " Cea mai apropiată stație deservită este {name}, la {distance} de mers pe jos.",
+    "tts_nearest_unknown": "",
+    "tts_temporary": " Circulă temporar {mode} {line}, pe traseul {streets}.",
+    "still_served": " Stația rămâne deservită de {lines}.",
+    "tts_still_served": " Stația rămâne deservită de {lines}."
+  },
+  "en": {
+    "stop_header": "{stop} stop not served by {lines}",
+    "route_header": "{line} not running",
+    "route_header_direction": "{line} not running towards {headsign}",
+    "description": "{window}: {reason}.{temporary}{nearest}",
+    "nearest": " Nearest served stop: {name}, {distance} on foot ({lines}).",
+    "nearest_unknown": " Nearest served stop: unknown.",
+    "temporary": " Temporary line: {mode} {line}, via {streets}.",
+    "tts_stop_header": "Attention. {stop} stop is not served by {lines}.",
+    "tts_route_header": "Attention. {line} is not running.",
+    "tts_route_header_direction": "Attention. {line} is not running towards {headsign}.",
+    "tts_description": "{window}, {reason}.{temporary}{nearest}",
+    "tts_nearest": " The nearest served stop is {name}, {distance} away on foot.",
+    "tts_nearest_unknown": "",
+    "tts_temporary": " A temporary {mode} {line} runs via {streets}.",
+    "still_served": " The stop is still served by {lines}.",
+    "tts_still_served": " The stop is still served by {lines}."
+  }
+}
