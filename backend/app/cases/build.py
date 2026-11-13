@@ -4,8 +4,9 @@ Each closure comes from the notice text through the same parser a clerk uses
 (app.m1_disruption.parser), then gets what SPEC §5 fixes for the demo:
   - the id, title, window and lines of app.cases.catalog;
   - the geometry from the OSM extract:
-      16dec:   the tram track of Bd. 16 Decembrie 1989 towards Podul Maria, between Piața Iuliu
-               Maniu and Piața Maria (the notice gives only „10–15 m”: approximate location);
+      16dec:   the tram track of Bd. 16 Decembrie 1989 towards Podul Maria just past the Piața Maria
+               junction, where lines 2, 4 and 7 share it and lines 1 and 8 have turned off, as long
+               as the notice says („10–15 m”: approximate location);
       e3:      Str. Ardealului between Str. Rahovei and Str. Martir Gogu Opre (from the notice);
       mocioni: Bd. 16 Decembrie 1989 at Piața Alexandru Mocioni („zona …”: approximate location);
   - sourceText and sourceUrl of the real post.
@@ -16,6 +17,7 @@ Nothing in this file is a figure: every number about a case is computed later fr
 from __future__ import annotations
 
 import io
+import re
 import zipfile
 from collections import Counter
 from dataclasses import dataclass
@@ -24,18 +26,18 @@ from pathlib import Path
 
 import pandas as pd
 
-from shapely.geometry import LineString, MultiLineString, MultiPoint, Point, shape
+from shapely.geometry import LineString, MultiLineString, shape
 from shapely.geometry.base import BaseGeometry
-from shapely.ops import linemerge, nearest_points
+from shapely.ops import linemerge, substring
 
 from app.cases.catalog import CASES, CASES_BY_CLOSURE, Case
 from app.common import gtfs, state
-from app.common.city import load_network
+from app.common.city import load_network, route_mode
 from app.common.geo import to_geojson, to_metric, to_wgs84
 from app.common.stpt_posts import get_post
 from app.common.timeutil import iso
 from app.config import get_settings, now
-from app.m1_disruption import parser
+from app.m1_disruption import matching, parser
 from app.models.base import I18n
 from app.models.v1 import Closure, RouteAction
 
@@ -72,38 +74,52 @@ def _street(name: str):
     return st, geom
 
 
-def _toward(line: LineString, target: BaseGeometry) -> bool:
-    """True when the line, in its drawn order, ends closer to the target than it starts."""
-    tm = to_metric(target)
-    start, end = to_metric(Point(line.coords[0])), to_metric(Point(line.coords[-1]))
-    return end.distance(tm) < start.distance(tm)
+LENGTH_RE = re.compile(r"(\d+)\s*m\s*[-–]\s*(\d+)\s*m\b")
+SAME_TRACK_M = 5.0      # a line "runs here" when its path is this close
+BUFFER_M = 30.0         # the closure's bufferMeters
 
 
-def geometry_16dec() -> tuple[BaseGeometry, str]:
-    """Tram track on Bd. 16 Decembrie 1989, the track used towards Podul Maria (Piața Maria end)."""
+def geometry_16dec(case: Case, text: str) -> tuple[BaseGeometry, str]:
+    """The works on Bd. 16 Decembrie 1989 towards Podul Maria, at the Piața Maria junction (T11).
+
+    The notice gives no point, only a length („aproximativ 10 m – 15 m”). It stops or turns back
+    the case's lines (2, 4, 7) and leaves the other tram lines (1, 8) running, so the works sit where
+    the case's lines share the track and the others have turned off: along line 2 eastbound, from the
+    first point past its Piața Maria stop where every case line runs within 5 m and every other tram
+    line is farther than the 30 m buffer, for the longest length the notice gives.
+    """
+    found = LENGTH_RE.search(text or "")
+    if found is None:
+        raise CaseBuildError("the notice gives no length „N m – M m” for the works")
+    length = float(max(int(found.group(1)), int(found.group(2))))
+    base = ("R_TV_2", 0)  # line 2 eastbound: Piața Maria → Catedrala, along Bd. 16 Decembrie 1989
+    path = matching.path_metric(*base)
+    maria_ids = {s["id"] for s in _stops_named("Piața Sfânta Maria")}
+    maria = [s for s in gtfs.stop_patterns()[base].stop_ids if s in maria_ids]
+    if path is None or not maria:
+        raise CaseBuildError("line 2 eastbound has no path or no Piața Sfânta Maria stop")
+    trams = {r for r, _d in load_network().path_lines if route_mode(r) == "tram"}
+    paths = {r: [p for p in (matching.path_metric(r, 0), matching.path_metric(r, 1)) if p is not None] for r in trams}
+    others = trams - set(case.route_ids)
+
+    def gap(route_id: str, x: float) -> float:
+        pt = path.interpolate(x)
+        return min(p.distance(pt) for p in paths[route_id])
+
+    x0 = path.project(matching.stop_metric(maria[0]))
+    start = next((x0 + k for k in range(int(path.length - x0))
+                  if all(gap(r, x0 + k) <= SAME_TRACK_M for r in case.route_ids)
+                  and all(gap(r, x0 + k) > BUFFER_M for r in others)), None)
+    if start is None:
+        raise CaseBuildError("no track past Piața Maria that only the notice's lines use")
+    seg = substring(path, start, start + length)
     _bd, bd = _street("Bulevardul 16 Decembrie 1989")
-    _pim, pim = _street("Piața Iuliu Maniu")
-    maria_stops = _stops_named("Piața Sfânta Maria")
-    if not maria_stops:
-        raise CaseBuildError("no GTFS stop named Piața Sfânta Maria")
-    maria = MultiPoint([s["location"] for s in maria_stops]).centroid
-    a = nearest_points(bd, pim)[0]
-    b = nearest_points(bd, maria)[0]
-    section = parser.cut_between(bd, a, b, max_gap_m=150)
-    if section is None:
-        raise CaseBuildError("could not cut Bd. 16 Decembrie 1989 between Piața Iuliu Maniu and Piața Maria")
-    rails = [r for r in parser.tram_along(section, max_dist_m=30, min_share=0.3) if _toward(r, maria)]
-    if not rails:
-        raise CaseBuildError("no tram track towards Piața Maria along Bd. 16 Decembrie 1989")
-    clip = to_wgs84(to_metric(section).buffer(35))
-    parts = []
-    for r in rails:
-        g = r.intersection(clip)
-        parts += [p for p in getattr(g, "geoms", [g]) if p.geom_type == "LineString" and not p.is_empty]
-    merged = linemerge(parts)
-    note = (f"OSM railway=tram along Bd. 16 Decembrie 1989 (stops {', '.join(s['id'] for s in maria_stops)} "
-            f"mark Piața Maria), {int(to_metric(merged).length)} m")
-    return merged, note
+    if to_metric(bd).distance(seg) > SAME_TRACK_M * 3:
+        raise CaseBuildError("the junction section is not on Bd. 16 Decembrie 1989")
+    note = (f"line 2 eastbound path, {int(start - x0)} m past stop {maria[0]} (Piața Maria): lines "
+            f"{', '.join(sorted(case.route_ids))} share the track, {', '.join(sorted(others))} are > {BUFFER_M:.0f} m away; "
+            f"{length:.0f} m, the longest length the notice gives")
+    return to_wgs84(seg), note
 
 
 def _parsed_geometry(d: parser.ParseDetail) -> BaseGeometry:
@@ -189,7 +205,7 @@ def build_case(case: Case) -> Built:
     d = parser.parse_detail(post.text, reference=post.date)
     direction = "both"
     if case.id == "case_16dec":
-        geom, note = geometry_16dec()
+        geom, note = geometry_16dec(case, post.text)
         direction = "along"   # drawn towards Podul Maria: only that track is closed
     else:
         geom = _parsed_geometry(d)

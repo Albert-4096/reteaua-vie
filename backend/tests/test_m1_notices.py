@@ -223,7 +223,7 @@ def test_build_cases():
     built = {b.closure.id: b for b in build_all(save=False)}
     hero = built["cl_20261108_16dec"].closure
     assert hero.direction == "along" and hero.geometry.type == "LineString"
-    assert 200 < length_m(shape(hero.geometry.model_dump())) < 1500
+    assert 10 <= length_m(shape(hero.geometry.model_dump())) <= 15.5   # T11: the notice's „10 m – 15 m”
     assert hero.window.start == CASES_BY_ID["case_16dec"].window_start
     assert hero.sourceUrl.startswith("https://stpt.ro/") and "linia 4 va fi suspendată" in hero.sourceText
     assert built["cl_20261108_16dec"].approximate and not built["cl_20261107_e3"].approximate
