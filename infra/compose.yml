@@ -1,0 +1,32 @@
+# Rețeaua Vie on the VM: `make up` / `make down`.
+# DATA_DIR and ENV_FILE come from the environment (the Makefile sets them).
+# Sources are mounted read-only; only state/ and cache/ are writable.
+name: reteaua-vie
+
+x-backend: &backend
+  build:
+    context: ..
+    dockerfile: infra/Dockerfile
+  image: reteaua-vie-backend
+  env_file:
+    - path: ${ENV_FILE:?set ENV_FILE to the env file}
+      required: false
+  environment:
+    DATA_DIR: /data
+  volumes:
+    - ${DATA_DIR:?set DATA_DIR to the data directory}:/data:ro
+    - ${DATA_DIR}/state:/data/state
+    - ${DATA_DIR}/cache:/data/cache
+
+services:
+  api:
+    <<: *backend
+    ports:
+      - "0.0.0.0:3000:3000"
+    restart: unless-stopped
+
+  # Pre-compute and long jobs: `docker compose -f infra/compose.yml run --rm worker`.
+  worker:
+    <<: *backend
+    profiles: ["jobs"]
+    command: ["python", "-m", "app.precompute"]
