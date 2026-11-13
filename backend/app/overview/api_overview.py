@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
 
 from fastapi import APIRouter, Query
 
@@ -20,6 +19,8 @@ from app.models.v2 import ClosureSummary
 from app.overview.closures import list_summaries
 
 router = APIRouter(tags=["overview"])
+
+STATUSES = ("draft", "analyzed", "published")
 
 
 @router.get("/health", response_model=Health)
@@ -79,7 +80,9 @@ def _opt_time(value: str | None, name: str) -> datetime | None:
 def closures(
     from_: str | None = Query(None, alias="from", description="ISO time; closures ending after it"),
     to: str | None = Query(None, description="ISO time; closures starting before it"),
-    status: Literal["draft", "analyzed", "published"] | None = None,
+    status: str | None = Query(None, description="draft | analyzed | published"),
 ) -> list[ClosureSummary]:
-    return list_summaries(_opt_time(from_, "from"), _opt_time(to, "to"), status)
+    if status and status not in STATUSES:
+        raise invalid(f"`status` must be one of {', '.join(STATUSES)}")
+    return list_summaries(_opt_time(from_, "from"), _opt_time(to, "to"), status or None)
 
