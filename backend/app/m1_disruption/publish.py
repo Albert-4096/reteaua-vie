@@ -31,6 +31,7 @@ from app.m1_disruption.alerts import (
     undecided_rows,
     validate_feed,
 )
+from app.models.base import I18n
 from app.models.v1 import Alert, Poster, PublishResult
 
 log = logging.getLogger("reteaua_vie.publish")
@@ -82,6 +83,16 @@ def analysis_or_409(closure_id: str) -> dict:
     return analysis
 
 
+def reconstructed_fields(closure_id: str) -> dict:
+    """{reconstructed, reconstructedNote} of a closure's publish record, or {} (for Closure / ClosureSummary)."""
+    try:
+        pub = state.read("published", closure_id) or {}
+    except ValueError:
+        return {}
+    return ({"reconstructed": True, "reconstructedNote": pub.get("reconstructedNote")}
+            if pub.get("reconstructed") else {})
+
+
 def poster_url(closure_id: str, stop_id: str) -> str:
     base = config.get_settings().public_base_url
     return f"{base}/api/closures/{closure_id}/poster.pdf?stopId={stop_id}"
@@ -91,9 +102,11 @@ def feed_url() -> str:
     return f"{config.get_settings().public_base_url}/api/feed/alerts.pb"
 
 
-def publish(closure_id: str, at: datetime | None = None, background: bool = True) -> PublishResult:
+def publish(closure_id: str, at: datetime | None = None, background: bool = True,
+            reconstructed_note: I18n | None = None) -> PublishResult:
     """Publish now. `at` sets publishedAt instead (a prepared case published at its notice's date);
-    background=False skips the validator and audio threads (precompute runs them itself)."""
+    background=False skips the validator and audio threads (precompute runs them itself).
+    `reconstructed_note` marks a publish the platform did not really make (precompute only)."""
     closure = closure_or_404(closure_id)
     analysis = analysis_or_409(closure_id)
     undecided = undecided_rows(analysis)
@@ -116,6 +129,8 @@ def publish(closure_id: str, at: datetime | None = None, background: bool = True
         feedUrl=feed_url(),
         posters=[Poster(stopId=s, url=poster_url(closure_id, s)) for s in stop_ids],
         publishedAt=iso(at or config.now()),
+        reconstructed=True if reconstructed_note else None,
+        reconstructedNote=reconstructed_note,
     )
     state.write("published", closure_id, result)
     state.delete("published", closure_id, PART_VALIDATION)

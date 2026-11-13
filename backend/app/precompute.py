@@ -89,6 +89,27 @@ def notice_decisions(analysis: dict) -> list[dict]:
     return out
 
 
+def reconstructed_note(case):
+    """„reconstituit: publicat în demo din anunțul STPT din <data>” (the platform did not publish it then)."""
+    from app.common.stpt_posts import get_post
+    from app.models.base import I18n
+
+    post = get_post(case.post_id)
+    day = post.date.strftime("%d.%m.%Y") if post else "?"
+    return I18n(ro=f"reconstituit: publicat în demo din anunțul STPT din {day}",
+                en=f"reconstructed: published in the demo from the STPT notice of {day}")
+
+
+def mark_reconstructed(case) -> None:
+    """Label the stored publish record of a `starts_published` case (a run after its first publish)."""
+    from app.common import state
+
+    if not state.exists("published", case.closure_id):
+        return
+    note = reconstructed_note(case).model_dump()
+    state.update("published", case.closure_id, lambda old: {**old, "reconstructed": True, "reconstructedNote": note})
+
+
 def publish_as_noticed(case) -> dict:
     """Publish a `starts_published` case as STPT did: its notice's decisions, at its post time."""
     from app.common import state
@@ -102,7 +123,8 @@ def publish_as_noticed(case) -> dict:
     if decisions:
         apply_decisions(cid, decisions)
     post = get_post(case.post_id)
-    result = publish(cid, at=post.date if post else None, background=False)
+    result = publish(cid, at=post.date if post else None, background=False,
+                     reconstructed_note=reconstructed_note(case))
     return {"decisions": len(decisions), "alerts": len(result.alerts), "posters": len(result.posters),
             "publishedAt": result.publishedAt}
 
@@ -177,6 +199,8 @@ def prepare_cases(reset: bool = False) -> list[dict]:
             except Exception as e:  # e.g. 409 UNCONFIRMED: reported; the case stays analyzed
                 print(f"  FAIL {cid} not published: {getattr(e, 'code', type(e).__name__)}: {e}")
             info["status"] = (state.read("closures", cid) or {}).get("status")
+        elif case.starts_published and info["status"] == "published":
+            mark_reconstructed(case)
         info["seconds"] = round(time.perf_counter() - t, 1)
         rows.append(info)
         print("  ok   " + "  ".join(f"{k}={v}" for k, v in info.items()), flush=True)

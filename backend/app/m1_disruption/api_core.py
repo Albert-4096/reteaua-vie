@@ -78,7 +78,9 @@ def create_closure(body: ClosureInput) -> Closure:
 
 @router.get("/closures/{closure_id}", response_model=Closure)
 def get_closure(closure_id: str) -> Closure:
-    return Closure.model_validate(_load(closure_id))
+    from app.m1_disruption.publish import reconstructed_fields
+
+    return Closure.model_validate({**_load(closure_id), **reconstructed_fields(closure_id)})
 
 
 @router.post("/closures/{closure_id}/analyze", response_model=Analysis)

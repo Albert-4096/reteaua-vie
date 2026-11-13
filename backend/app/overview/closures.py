@@ -55,6 +55,9 @@ def summarize(closure: dict) -> ClosureSummary:
         stopsSuspended=totals.get("stopsSuspended"),
         departuresLost=totals.get("departuresLost"),
         publishedAt=(published or {}).get("publishedAt"),
+        reconstructed=True if (published or {}).get("reconstructed") else None,
+        reconstructedNote=(published or {}).get("reconstructedNote") if (published or {}).get("reconstructed")
+        else None,
     )
 
 

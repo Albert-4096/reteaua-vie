@@ -15,6 +15,7 @@ from app.cases.catalog import CASES, CASES_BY_CLOSURE
 from app.common.stpt_posts import get_post
 from app.common.timeutil import parse_iso
 from tests.conftest import needs_data
+from tests.test_m1_outputs import outputs_state  # noqa: F401
 
 HERO = "cl_20261108_16dec"
 E3 = "cl_20261107_e3"
@@ -92,6 +93,39 @@ def test_precompute_publishes_e3_and_mocioni_and_fills_the_overview(demo_state):
     assert ov["ghostDeparturesToday"] and ov["ghostDeparturesToday"] > 0
     assert any(p["source"].startswith("SMTT GTFS") for p in ov["provenance"])
 
-    # a second run keeps them published and does not publish the hero
+    # labelled as reconstructed wherever they appear; a live publish is never labelled
+    from app.m1_disruption.api_core import get_closure
+    from app.m7_compliance.history import platform_rows
+    from app.overview.closures import summarize
+
+    for cid in (E3, MOCIONI):
+        day = get_post(CASES_BY_CLOSURE[cid].post_id).date.strftime("%d.%m.%Y")
+        note = f"reconstituit: publicat în demo din anunțul STPT din {day}"
+        assert state.read("published", cid)["reconstructedNote"]["ro"] == note
+        c = get_closure(cid)
+        assert c.reconstructed is True and c.reconstructedNote.ro == note
+        s = summarize(state.read("closures", cid))
+        assert s.reconstructed is True and s.reconstructedNote.ro == note
+        assert next(r for r in platform_rows() if r.closureId == cid).note.ro == note
+    assert get_closure(HERO).reconstructed is None and summarize(state.read("closures", HERO)).reconstructed is None
+    assert [c["reconstructed"] for c in ov["activeClosures"]] == [True, True]
+
+    # a second run keeps them published (and labelled) and does not publish the hero
     again = {r["id"]: r["status"] for r in precompute.prepare_cases(reset=False)}
     assert again == {HERO: "analyzed", E3: "published", MOCIONI: "published"}
+    assert state.read("published", E3)["reconstructed"] is True
+
+
+@needs_data
+def test_a_live_publish_is_never_labelled_reconstructed(outputs_state, client):  # noqa: F811
+    from app.overview.closures import summarize
+    from tests.test_m1_outputs import CLOSURE_ID, _analysis, _closure, _store
+
+    _store(_closure(), _analysis(unsure_decision=True))
+    r = client.post(f"/api/closures/{CLOSURE_ID}/publish")
+    assert r.status_code == 200, r.text
+    assert r.json().get("reconstructed") is None
+    assert client.get(f"/api/closures/{CLOSURE_ID}").json().get("reconstructed") is None
+    from app.common import state
+
+    assert summarize(state.read("closures", CLOSURE_ID)).reconstructed is None

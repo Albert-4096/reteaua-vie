@@ -196,7 +196,8 @@ def platform_rows() -> list[HistoryRow]:
             routeIds=list(closure.get("routeIds") or sorted({a["informedEntity"][0]["routeId"]
                                                                for a in pub.get("alerts") or []
                                                                if a.get("informedEntity")})),
-            note=NOTE_PLATFORM,
+            note=(I18n.model_validate(pub["reconstructedNote"]) if pub.get("reconstructed")
+                  and pub.get("reconstructedNote") else NOTE_PLATFORM),
             sourceUrl=closure.get("sourceUrl"),
             provenance=(impact or {}).get("provenance") or None,
         ))

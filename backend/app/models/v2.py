@@ -31,6 +31,8 @@ class ClosureSummary(Model):
     stopsSuspended: int | None
     departuresLost: int | None
     publishedAt: IsoTime | None
+    reconstructed: bool | None = None       # v2.8: see Closure.reconstructed
+    reconstructedNote: I18n | None = None
 
 
 class ComplianceCounts(Model):

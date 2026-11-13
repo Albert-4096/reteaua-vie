@@ -138,6 +138,10 @@ class Closure(ClosureInput):
     id: str
     status: ClosureStatus
     createdAt: IsoTime
+    # v2.8: true only for a prepared case that `make precompute` published from its STPT notice (never a
+    # live „Publică”); reconstructedNote says so in plain words
+    reconstructed: bool | None = None
+    reconstructedNote: I18n | None = None
 
 
 class ParseResult(Model):
@@ -283,6 +287,8 @@ class PublishResult(Model):
     feedUrl: str
     posters: list[Poster]
     publishedAt: IsoTime
+    reconstructed: bool | None = None       # v2.8: see Closure.reconstructed
+    reconstructedNote: I18n | None = None
 
 
 # --- live check -----------------------------------------------------------------
