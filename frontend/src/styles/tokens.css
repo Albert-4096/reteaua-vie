@@ -26,6 +26,12 @@
   --map-closure-casing: #16181b;
   --map-temp-route: #12355b;
 
+  /* simulated station display and phone mock-up */
+  --led-bg: #111111;
+  --led-text: #ffb000;
+  --phone-frame: #16181b;
+  --phone-radius: 28px;
+
   /* type */
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -48,6 +54,8 @@
   /* layout */
   --topbar-h: 44px;
   --panel-w: 380px;
+  --phone-w: 300px;
+  --stage-max: 1100px;
   --rule-w: 1px;
   --focus-w: 3px;
 }

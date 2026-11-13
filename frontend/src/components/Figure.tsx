@@ -42,7 +42,8 @@ export function Figure({ value, label, unit, provenance, method, inline }: Props
           <span key={i}>
             {i > 0 && "; "}
             {p.source}
-            {p.version ? ` ${p.version}` : ""}, {t("sourceDate", { date: fmtDateTime(p.fetchedAt) })}
+            {p.version ? ` ${p.version}` : ""}
+            {p.fetchedAt ? `, ${t("sourceDate", { date: fmtDateTime(p.fetchedAt) })}` : ""}
             {p.note ? ` (${p.note})` : ""}
           </span>
         ))}

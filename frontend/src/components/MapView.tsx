@@ -30,7 +30,17 @@ export type MapOverlay = {
   note?: string;
   /** Change it to refit the view to the overlay. */
   fitKey?: string;
+  /** Extra thematic layers (steps 0 and 4). One source and layer per id; colours from tokens. */
+  layers?: { id: ExtraLayerId; data: GeoJSON.FeatureCollection }[];
+  hideNetwork?: boolean;
 };
+
+export type ExtraLayerId = "bike" | "parking" | "population" | "vehicles" | "detour";
+const EXTRA_IDS: ExtraLayerId[] = ["bike", "parking", "population", "vehicles", "detour"];
+
+function extraData(o: MapOverlay, id: ExtraLayerId): GeoJSON.FeatureCollection {
+  return o.layers?.find((l) => l.id === id)?.data ?? empty;
+}
 
 const BASE_STYLE = "https://tiles.openfreemap.org/styles/positron";
 const CENTER: [number, number] = [21.2272, 45.7537];
@@ -243,6 +253,8 @@ export function MapView({ network, zones, overlay }: Props) {
     (map.getSource("rv-closure") as GeoJSONSource | undefined)?.setData(d.closure);
     (map.getSource("rv-temp") as GeoJSONSource | undefined)?.setData(d.temp);
     (map.getSource("rv-stops") as GeoJSONSource | undefined)?.setData(d.stops);
+    for (const id of EXTRA_IDS) (map.getSource(`rv-x-${id}`) as GeoJSONSource | undefined)?.setData(extraData(overlay, id));
+    if (map.getLayer("rv-network")) map.setLayoutProperty("rv-network", "visibility", overlay.hideNetwork ? "none" : "visible");
     const hi = overlay.highlightRouteIds ?? [];
     if (map.getLayer("rv-network-hi")) map.setFilter("rv-network-hi", ["in", ["get", "routeId"], ["literal", hi]]);
   }, [overlay, ready]);
@@ -265,6 +277,7 @@ export function MapView({ network, zones, overlay }: Props) {
     map.addSource("rv-temp", { type: "geojson", data: d.temp });
     map.addSource("rv-closure", { type: "geojson", data: d.closure });
     map.addSource("rv-stops", { type: "geojson", data: d.stops });
+    for (const id of EXTRA_IDS) map.addSource(`rv-x-${id}`, { type: "geojson", data: extraData(o, id) });
     map.addLayer({
       id: "rv-zones",
       type: "line",
@@ -272,10 +285,19 @@ export function MapView({ network, zones, overlay }: Props) {
       paint: { "line-color": cssVar("--map-zone"), "line-width": 0.8, "line-dasharray": [3, 2] },
     });
     map.addLayer({
+      id: "rv-x-population",
+      type: "fill",
+      source: "rv-x-population",
+      paint: {
+        "fill-color": cssVar("--c-text"),
+        "fill-opacity": ["interpolate", ["linear"], ["coalesce", ["get", "residents"], 0], 0, 0, 300, 0.35],
+      },
+    });
+    map.addLayer({
       id: "rv-network",
       type: "line",
       source: "rv-network",
-      layout: { "line-join": "round", "line-cap": "round" },
+      layout: { "line-join": "round", "line-cap": "round", visibility: o.hideNetwork ? "none" : "visible" },
       paint: { "line-color": cssVar("--map-network"), "line-width": 1.2, "line-opacity": 0.8 },
     });
     map.addLayer({
@@ -285,6 +307,26 @@ export function MapView({ network, zones, overlay }: Props) {
       filter: ["in", ["get", "routeId"], ["literal", o.highlightRouteIds ?? []]],
       layout: { "line-join": "round", "line-cap": "round" },
       paint: { "line-color": cssVar("--map-route-hi"), "line-width": 2.2 },
+    });
+    for (const id of ["bike", "detour"] as const)
+      map.addLayer({
+        id: `rv-x-${id}`,
+        type: "line",
+        source: `rv-x-${id}`,
+        layout: { "line-join": "round" },
+        paint: { "line-color": cssVar("--map-temp-route"), "line-width": 2 },
+      });
+    map.addLayer({
+      id: "rv-x-parking",
+      type: "line",
+      source: "rv-x-parking",
+      paint: { "line-color": cssVar("--c-text-muted"), "line-width": 1.5 },
+    });
+    map.addLayer({
+      id: "rv-x-vehicles",
+      type: "circle",
+      source: "rv-x-vehicles",
+      paint: { "circle-color": cssVar("--c-text"), "circle-radius": 3.5 },
     });
     map.addLayer({
       id: "rv-temp",

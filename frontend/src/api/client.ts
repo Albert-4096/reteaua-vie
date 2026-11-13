@@ -16,6 +16,7 @@ export type Network = S["Network"];
 export type CaseSummary = S["CaseSummary"];
 export type Health = S["Health"];
 export type Job = S["Job"];
+export type ClosureSummary = S["ClosureSummary"];
 
 /** Optional, added by ticket T2: one human question for many unsure rows. */
 export type DecisionGroup = {
@@ -85,6 +86,7 @@ export const api = {
   network: () => apiGet<Network>("/api/network"),
   zones: () => apiGet<GeoJSON.FeatureCollection>("/api/zones"),
   cases: () => apiGet<CaseSummary[]>("/api/cases"),
+  closures: () => apiGet<ClosureSummary[]>("/api/closures"),
   closure: (id: string) => apiGet<Closure>(`/api/closures/${enc(id)}`),
   analysis: (id: string) => apiGet<Analysis>(`/api/closures/${enc(id)}/analysis`),
   impact: (id: string) => apiGet<Impact>(`/api/closures/${enc(id)}/impact`),

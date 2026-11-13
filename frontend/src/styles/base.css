@@ -185,6 +185,119 @@ button {
   min-height: 0;
 }
 
+.workspace > .map,
+.workspace > .stage {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.workspace > .panel {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* A step that needs room (step 3) covers the map with a plain stage. */
+.stage {
+  z-index: 2;
+  background: var(--c-bg);
+  overflow-y: auto;
+  padding: var(--sp-5);
+  min-width: 0;
+}
+
+.stage h2 {
+  font-size: var(--fs-m);
+  margin-bottom: var(--sp-2);
+}
+
+.stage-picker {
+  margin-bottom: var(--sp-4);
+}
+
+.stage-picker select {
+  font: inherit;
+  padding: var(--sp-1);
+  max-width: 100%;
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+  max-width: var(--stage-max);
+}
+
+.compare article + article {
+  border-left: var(--rule-w) solid var(--c-rule);
+  padding-left: var(--sp-5);
+}
+
+.tag {
+  margin-left: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  border: var(--rule-w) solid var(--c-text-muted);
+  padding: 0 var(--sp-1);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mock-label {
+  font-size: var(--fs-s);
+  color: var(--c-text-muted);
+  margin-bottom: var(--sp-2);
+}
+
+.phone {
+  width: var(--phone-w);
+  min-height: 520px;
+  border: 10px solid var(--phone-frame);
+  border-radius: var(--phone-radius);
+  padding: var(--sp-5) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.phone-lines {
+  display: flex;
+  gap: var(--sp-1);
+  flex-wrap: wrap;
+}
+
+.line-chip {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: var(--fs-s);
+  border: var(--rule-w) solid var(--c-text);
+  padding: 0 var(--sp-1);
+}
+
+.phone-near {
+  border-top: var(--rule-w) solid var(--c-rule);
+  border-bottom: var(--rule-w) solid var(--c-rule);
+  padding: var(--sp-2) 0;
+}
+
+.station {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 720px;
+}
+
+.led {
+  background: var(--led-bg);
+  color: var(--led-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-m);
+  padding: var(--sp-2) var(--sp-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: var(--sp-1);
+}
+
 .map {
   position: relative;
   min-width: 0;
