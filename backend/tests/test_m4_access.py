@@ -193,3 +193,22 @@ def test_access_endpoint_errors(client):
     assert r.status_code == 422
     r = client.get(f"/api/closures/{HERO}/access?dest=pharmacy")
     assert r.status_code == 422
+
+
+def test_frequency_mitigation_adds_trips_but_never_a_suspended_call():
+    """SPEC §6.4 `frequency`: line 7 every 6 min in the hero window; line 4 is suspended, so nothing is added."""
+    from app.common.timeutil import parse_iso
+    from app.m1_disruption import impact as imp
+    from app.m4_access import patched_gtfs as pg
+
+    closure, lost = _hero_or_skip()
+    freq = [{"routeId": "R_TV_7", "headwayMinutes": 6}, {"routeId": "R_TV_4", "headwayMinutes": 6}]
+    pf = pg.patched_for(closure, lost, freq)
+    plain = pg.patched_for(closure, lost)
+    assert pf.path != plain.path and pf.trips_added > 0
+    assert any(n.startswith("R_TV_4: nicio cursă") for n in pf.frequency_notes)
+    start, end = parse_iso(closure["window"]["start"]), parse_iso(closure["window"]["end"])
+    with_f, without = imp.HistoryTimetable(pf.path).counts(start, end), imp.HistoryTimetable(plain.path).counts(start, end)
+    assert sum(n for k, n in with_f.items() if k[1] == "R_TV_7") > sum(n for k, n in without.items() if k[1] == "R_TV_7")
+    assert sum(with_f.get(k, 0) for k in lost) == 0
+    assert all(with_f.get(k, 0) == without.get(k, 0) for k in set(with_f) | set(without) if k[1] != "R_TV_7")

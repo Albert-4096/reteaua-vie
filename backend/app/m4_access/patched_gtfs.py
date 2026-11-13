@@ -52,6 +52,7 @@ from app.config import TZ, get_settings
 from app.m1_disruption import impact as imp
 
 PATCH_VERSION = 1
+FREQ_VERSION = 2    # only in keys with frequencies, so plain patches (and their R5 networks) stay cached
 Key = tuple[str, str, int]
 
 _lock = threading.Lock()
@@ -277,7 +278,8 @@ def patch_tables(t: dict[str, pd.DataFrame], lost: set[Key], start: datetime, en
 
 
 def _patch_key(base_name: str, window: dict, lost: set[Key], frequencies: list[dict] | None) -> str:
-    payload = json.dumps([PATCH_VERSION, base_name, window, sorted(lost), frequencies or []], sort_keys=True)
+    extra = [FREQ_VERSION, frequencies] if frequencies else []
+    payload = json.dumps([PATCH_VERSION, base_name, window, sorted(lost), *extra], sort_keys=True)
     return hashlib.sha256(payload.encode()).hexdigest()[:16]
 
 
@@ -305,7 +307,7 @@ def patched_for(closure: dict, lost: set[Key], frequencies: list[dict] | None = 
         else:
             tables, stats = patch_tables(_read_tables(base), lost, start, end)
             if frequencies:
-                tables, fstats = add_frequency_trips(tables, frequencies, start, end)
+                tables, fstats = add_frequency_trips(tables, frequencies, start, end, lost)
                 stats.update(fstats)
             _write_zip(tables, dest)
             meta.write_text(json.dumps(stats))
@@ -360,8 +362,84 @@ def patched_combined(items: list[tuple[dict, set[Key]]], at: datetime) -> Patche
     return pf
 
 
+def _hms_str(sec: int) -> str:
+    return f"{sec // 3600:02d}:{sec % 3600 // 60:02d}:{sec % 60:02d}"
+
+
 def add_frequency_trips(t: dict[str, pd.DataFrame], frequencies: list[dict], start: datetime,
-                        end: datetime) -> tuple[dict, dict]:
-    """Placeholder until the frequency mitigation is built: no trip added, a note says so."""
-    notes = [f"{f.get('routeId')}: frecvența nu e modelată încă / frequency not modelled yet" for f in frequencies]
-    return t, {"trips_added": 0, "frequency_notes": notes}
+                        end: datetime, lost: set[Key] = frozenset()) -> tuple[dict, dict]:
+    """SPEC §6.4 mitigation `frequency`: a line runs at least every N minutes inside the window.
+
+    Per service date and direction, every gap longer than N minutes between two scheduled
+    departures (first stop) inside the window gets extra trips every N minutes. An extra trip
+    copies the trip before the gap, shifted in time, so it keeps the (patched) pattern of a
+    shortened line. Service hours are not extended. Each extra trip runs only on its date, and
+    never calls at a `lost` (stop, route, direction) inside the window.
+    """
+    trips, st = t["trips"], t["stop_times"]
+    cal = t.get("calendar", pd.DataFrame())
+    cd = t.get("calendar_dates", pd.DataFrame(columns=["service_id", "date", "exception_type"]))
+    days_of = service_dates(cal, cd)
+    t0, t1 = int(start.timestamp()), int(end.timestamp())
+    d0 = start.astimezone(TZ).date() - timedelta(days=1)
+    d1 = (end - timedelta(seconds=1)).astimezone(TZ).date()
+    new_trips, new_st, new_cd, notes = [], [], [], []
+    added_total = 0
+    for f in frequencies:
+        route, headway = str(f.get("routeId")), int(f.get("headwayMinutes") or 0)
+        if headway <= 0:
+            notes.append(f"{route}: interval invalid / invalid headway")
+            continue
+        h = headway * 60
+        rt = trips[trips["route_id"] == route]
+        if rt.empty:
+            notes.append(f"{route}: linia nu e în orar / route not in the timetable")
+            continue
+        calls = st[st["trip_id"].isin(rt["trip_id"])]
+        first = calls.assign(_seq=calls["stop_sequence"].astype(int)).sort_values("_seq").groupby("trip_id").first()
+        first_sec = pd.Series(_hms(first["departure_time"]), index=first.index)
+        added = 0
+        d = d0
+        while d <= d1:
+            base = int(gtfs_service_start(d).timestamp())
+            active = {sid for sid, days in days_of.items() if d in days}
+            for _, g in rt[rt["service_id"].isin(active)].groupby(rt["direction_id"].replace("", "0")):
+                deps = sorted((base + int(first_sec[tid]), tid) for tid in g["trip_id"] if tid in first_sec.index)
+                deps = [x for x in deps if t0 <= x[0] < t1]
+                for (a, tid), (b, _) in zip(deps, deps[1:]):
+                    k = 1
+                    while a + k * h < b - 60:          # keep at least one minute before the next trip
+                        shift = k * h
+                        new_id = f"{tid}_f{d:%Y%m%d}_{k}"
+                        sid = f"rvf_{d:%Y%m%d}"
+                        row = trips[trips["trip_id"] == tid].iloc[0].to_dict()
+                        row.update(trip_id=new_id, service_id=sid)
+                        new_trips.append(row)
+                        tpl = st[st["trip_id"] == tid].copy()
+                        for col in ("arrival_time", "departure_time"):
+                            ok = tpl[col] != ""
+                            tpl.loc[ok, col] = [_hms_str(x + shift) for x in _hms(tpl.loc[ok, col])]
+                        ts = base + _hms(tpl["departure_time"])
+                        dir_ = int(row["direction_id"] or 0)
+                        drop = [(sid_, route, dir_) in lost and t0 <= x < t1 for sid_, x in zip(tpl["stop_id"], ts)]
+                        tpl = tpl[[not x for x in drop]]
+                        if len(tpl) < 2:
+                            new_trips.pop()
+                            k += 1
+                            continue
+                        new_st.append(tpl.assign(trip_id=new_id))
+                        new_cd.append({"service_id": sid, "date": d.strftime("%Y%m%d"), "exception_type": "1"})
+                        added += 1
+                        k += 1
+            d += timedelta(days=1)
+        added_total += added
+        notes.append(f"{route}: {added} curse adăugate, cel mult {headway} min între plecări în fereastră"
+                     if added else f"{route}: nicio cursă de adăugat (nu circulă în fereastră sau are deja "
+                                   f"cel mult {headway} min)")
+    out = dict(t)
+    if new_trips:
+        out["trips"] = pd.concat([trips, pd.DataFrame(new_trips)], ignore_index=True)
+        out["stop_times"] = pd.concat([st] + new_st, ignore_index=True)
+        cd_new = pd.DataFrame(new_cd).drop_duplicates()
+        out["calendar_dates"] = pd.concat([cd, cd_new], ignore_index=True)
+    return out, {"trips_added": added_total, "frequency_notes": notes}
