@@ -747,7 +747,6 @@ def build_impact(closure: dict, rows: list[dict]) -> Impact:
     res = residents_losing(suspended, svc)
     total_res = None
     if res is not None:
-        total_res = 0.0
         for row in by_zone.values():
             row["residentsLosingStop"] = 0
         for zi, (people, mx) in res.items():
@@ -756,11 +755,10 @@ def build_impact(closure: dict, rows: list[dict]) -> Impact:
             if mx is not None:
                 cur = row["maxExtraWalkMeters"]
                 row["maxExtraWalkMeters"] = round(mx) if cur is None else max(cur, round(mx))
-            total_res += people
         for row in by_zone.values():
             if row["residentsLosingStop"] is None:
                 row["residentsLosingStop"] = 0
-        total_res = int(round(total_res))
+        total_res = sum(row["residentsLosingStop"] for row in by_zone.values())   # = the column sum shown per zone
 
     zones = sorted(by_zone.values(), key=lambda r: (r["slug"] == OUTSIDE_SLUG, -r["departuresLost"],
                                                     -r["stopsSuspended"], r["name"]))
