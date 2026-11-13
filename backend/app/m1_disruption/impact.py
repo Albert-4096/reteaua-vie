@@ -718,6 +718,25 @@ METHOD = I18n(
 )
 
 
+def announced_routes_note(closure: dict) -> Provenance | None:
+    """T12: a shortened line's route as the notice gives it has no GTFS timetable. Only its stops
+    on the line's GTFS route count as served; its trips elsewhere are not subtracted from the losses."""
+    parts: dict[str, str] = {}
+    for a in closure.get("routeActions") or []:
+        if a["action"] == "shortened" and a.get("stopNames") and a["routeId"] not in parts:
+            short = (load_network().route_by_id.get(a["routeId"]) or {}).get("shortName", a["routeId"])
+            parts[a["routeId"]] = f"linia {short}: „{' – '.join(a['stopNames'])}”"
+    if not parts:
+        return None
+    return prov.provenance(
+        "Anunțul STPT: trasee anunțate, fără orar GTFS / STPT notice: announced routes, no GTFS timetable",
+        now(), closure.get("sourceUrl"), None,
+        f"Traseu din anunț ({'; '.join(parts.values())}): se numără ca deservite doar stațiile lui din GTFS; "
+        "plecările de pe restul traseului au frecvență necunoscută și nu sunt scăzute din pierderi / "
+        "only the announced route's GTFS stops count as served; its trips elsewhere have no timetable "
+        "and are not subtracted from the losses")
+
+
 def _closure_and_analysis(closure_id: str) -> tuple[dict, dict]:
     try:
         closure = state.read("closures", closure_id)
@@ -787,6 +806,9 @@ def build_impact(closure: dict, rows: list[dict]) -> Impact:
     else:
         provenance.append(prov.provenance("GHSL population grid (JRC)", now(), None, None,
                                           "Lipsește rasterul GHSL: locuitori necunoscuți / raster missing"))
+    announced = announced_routes_note(closure)
+    if announced is not None:
+        provenance.append(announced)
     return Impact(
         closureId=closure["id"],
         window=Window(**closure["window"]),

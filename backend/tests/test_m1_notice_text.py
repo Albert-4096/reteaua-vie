@@ -218,6 +218,22 @@ def test_notice_and_analysis_give_the_same_walking_distances():
             assert s.nearestServed is not None and s.nearestServed.distanceMeters == min(known), (cid, s)
 
 
+def test_announced_route_is_named_and_labelled_not_counted(hero_final, hero_draft):
+    """T12: line 2 runs to AEM and line 7 to Gara de Nord only in the notice text (no GTFS timetable):
+    the notice repeats the announced route, and the impact says that service is not counted."""
+    line2 = "Traseul anunțat de STPT pentru linia 2: Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM."
+    line7 = "Traseul anunțat de STPT pentru linia 7: Depou Dâmbovița – Gara de Nord."
+    assert line2 in hero_draft.text.ro and line7 not in hero_draft.text.ro   # line 7 undecided: no block yet
+    assert line2 in hero_final.text.ro and line7 in hero_final.text.ro
+    assert "Route announced by STPT for line 2: " in hero_final.text.en
+    _, _, impact = _case(HERO)
+    notes = [p.note for p in impact.provenance if p.source.startswith("Anunțul STPT: trasee anunțate")]
+    assert len(notes) == 1 and "linia 2: „Shopping City" in notes[0] and "nu sunt scăzute" in notes[0]
+    for cid in (E3, MOCIONI):  # rerouted lines: their notices name the lost stops, no announced route
+        assert "Traseul anunțat" not in _notice(cid).text.ro
+        assert not any(p.source.startswith("Anunțul STPT: trasee") for p in _case(cid)[2].provenance)
+
+
 def test_e3_and_mocioni_have_nothing_undecided():
     """T3 changes only notices with undecided rows, so E3 and Mocioni keep their text."""
     from app.m1_disruption import impact as imp

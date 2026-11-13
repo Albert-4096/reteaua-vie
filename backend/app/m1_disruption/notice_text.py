@@ -524,6 +524,10 @@ class _Text:
                 stop = self.lost_label(entry["name"], mode, lang)
                 info = self.info(sorted(by_dir.items()), lang, block)
                 lines.append(t["stop_info"].format(stop=stop, info=al._cap(info)) if info else t["stop"].format(stop=stop))
+        for sec in secs:  # T12: the route the notice gives a shortened line, as STPT wrote it (no GTFS timetable)
+            a = _action_of(self.closure, sec.routeId, sec.directionId) or {}
+            if a.get("action") == "shortened" and a.get("stopNames"):
+                lines.append(t["announced_route"].format(line=sec.shortName, route=" – ".join(a["stopNames"])))
         return "\n".join(lines)
 
     def action_sentence(self, sec: NoticeSection, label: str, n: int, lang: str) -> str:

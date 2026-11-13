@@ -74,6 +74,7 @@
     "near_part": "spre {headsign}, {name}, {distance}",
     "still": "stația rămâne deservită de {lines}",
     "pending": "alternativa: de confirmat",
+    "announced_route": "Traseul anunțat de STPT pentru linia {line}: {route}.",
     "split_part": "spre {headsign}, {info}",
     "vehicle": {
       "tram": [
@@ -192,6 +193,7 @@
     "near_part": "towards {headsign}, {name}, {distance}",
     "still": "the stop is still served by {lines}",
     "pending": "alternative: to be confirmed",
+    "announced_route": "Route announced by STPT for line {line}: {route}.",
     "split_part": "towards {headsign}, {info}",
     "vehicle": {
       "tram": [
