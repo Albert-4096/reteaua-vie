@@ -151,8 +151,8 @@ export function StationView({
             <span className={v.passed ? "st-ok" : "st-lost"} style={{ fontWeight: 600 }}>
               {v.passed ? t("publish.passed") : t("publish.failed")}
             </span>{" "}
-            · <Figure inline value={v.errorCount} provenance={v.provenance} /> {t("publish.errors")} ·{" "}
-            <Figure inline value={v.warningCount} provenance={v.provenance} /> {t("publish.warnings")}
+            · <Figure inline value={v.errorCount} provenance={v.provenance} /> {t("publish.errors", { count: v.errorCount })} ·{" "}
+            <Figure inline value={v.warningCount} provenance={v.provenance} /> {t("publish.warnings", { count: v.warningCount })}
             <br />
             <span className="small muted">{tr(v.label)}</span>
           </p>

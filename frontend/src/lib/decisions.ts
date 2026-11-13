@@ -2,11 +2,15 @@
 // backend sends it; otherwise groups the unsure rows by line and reasons on the client.
 import type { AffectedStop, Analysis, Decision } from "../api/client";
 
+type Text = { ro: string; en?: string | null };
+
 export type Group = {
   id: string;
   routeId: string;
   /** Server question (T2); null = the client builds the default question. */
-  question: { ro: string; en?: string | null } | null;
+  question: Text | null;
+  reason: Text | null;
+  suggestedLost: boolean;
   rows: AffectedStop[];
 };
 
@@ -28,14 +32,16 @@ export function decisionGroups(a: Analysis): Group[] {
       id: g.id,
       routeId: g.routeId,
       question: g.question,
-      rows: g.rowKeys.map((k) => matchKey(k, a.stops)).filter((r): r is AffectedStop => !!r),
+      reason: g.reason ?? null,
+      suggestedLost: g.suggested === "affected",
+      rows: (g.rows ?? g.rowKeys ?? []).map((k) => matchKey(k, a.stops)).filter((r): r is AffectedStop => !!r),
     }));
   }
   const byKey = new Map<string, Group>();
   for (const r of a.stops) {
     if (r.state !== "unsure") continue;
     const id = `${r.routeId}|${[...r.reasons].sort().join(",")}`;
-    const g = byKey.get(id) ?? { id, routeId: r.routeId, question: null, rows: [] };
+    const g = byKey.get(id) ?? { id, routeId: r.routeId, question: null, reason: null, suggestedLost: false, rows: [] };
     g.rows.push(r);
     byKey.set(id, g);
   }

@@ -18,12 +18,18 @@ export type Health = S["Health"];
 export type Job = S["Job"];
 export type ClosureSummary = S["ClosureSummary"];
 
+type RowRef = { stopId: string; routeId: string; directionId: number };
+
 /** Optional, added by ticket T2: one human question for many unsure rows. */
 export type DecisionGroup = {
   id: string;
   routeId: string;
   question: I18n;
-  rowKeys: (string | { stopId: string; routeId: string; directionId: number })[];
+  reason?: I18n | null;
+  /** "affected" = the platform suggests „nu oprește”; null = no suggestion. */
+  suggested?: "affected" | "served" | null;
+  rows?: RowRef[];
+  rowKeys?: (string | RowRef)[];
 };
 
 export type Decision = { stopId: string; routeId: string; directionId: number; confirmed: boolean };

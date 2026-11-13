@@ -190,9 +190,16 @@ function Question({ g, line, busy, onChoose }: { g: Group; line: string; busy: b
   return (
     <div className="question">
       <p>{text}</p>
+      {g.reason && (
+        <details className="small">
+          <summary>{t("plan.why")}</summary>
+          <p className="muted">{tr(g.reason)}</p>
+        </details>
+      )}
       <div className="choice">
         <button type="button" className="btn" disabled={busy} aria-pressed={st === "lost"} onClick={() => { setEditing(false); onChoose(true); }}>
           {t("plan.yesLost")}
+          {g.suggestedLost && <span className="small"> ({t("plan.suggested")})</span>}
         </button>
         <button type="button" className="btn" disabled={busy} aria-pressed={st === "served"} onClick={() => { setEditing(false); onChoose(false); }}>
           {t("plan.noServed")}
