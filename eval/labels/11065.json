@@ -1,0 +1,281 @@
+{
+  "postId": 11065,
+  "title": "Închiderea temporară a circulației pe Strada Ardealului și modificarea traseului liniei E3",
+  "postDate": "2026-11-05T18:11:39+02:00",
+  "sourceUrl": "https://stpt.ro/inchiderea-temporara-a-circulatiei-pe-strada-ardealului-si-modificarea-traseului-liniei-e3/",
+  "sourceFile": "live/stpt-posts/11065_20261105T181255.json",
+  "noticeText": "Pentru desfășurarea în condiții de siguranță a lucrărilor de întreținere și reparații ale carosabilului, circulația rutieră va fi închisă pe ambele sensuri de mers pe Strada Ardealului, pe tronsonul cuprins între Strada Rahovei și Strada Martir Gogu Opre, în perioada 07 noiembrie 2026, ora 0400 – 12 noiembrie 2026, ora 2400.\nCa urmare a instituirii acestor restricții de trafic, traseul Liniei Expres 3 va fi modificat temporar după cum urmează:\nSensul de deplasare către Elba (Parcul Industrial Freidorf) – Autobuzele vor circula pe traseul obișnuit până la intersecția Străzii Budai Deleanu, după care vor fi deviate pe strada Nicolae Andreescu, strada Ion Slavici, urmând să reintre pe traseul normal până la capătul de linie Elba (Parcul Industrial Freidorf).\nSe suspendă temporar următoarele stații: Dâmbovița (Buclă), Baba Novac, Opre Gogu (Ardealului), Păcii (Ardealului), Canton CFR, Liceul Auto (Ardealului).\nSensul de deplasare către Apicultorilor – autobuzele vor circula pe traseul obișnuit de la\nElba (Parcul Industrial Freidorf) până pe Strada Ion Slavici, după care vor fi deviate pe strada Nicolae Andreescu, strada Banatul, urmând să reintre pe traseul normal până la capătul de linie Apicultorilor.\nSe suspendă temporar următoarele stații: Liceul Auto (Ardealului), Canton CFR, Păcii (Ardealului), Opre Gogu (Ardealului), Dâmbovița (Buclă).\nTransportatorul public recomandă călătorilor să consulte informațiile actualizate privind circulația mijloacelor de transport și să își planifice deplasările ținând cont de modificările temporare ale traseelor și de suspendarea stațiilor menționate.",
+  "labelledBy": "AI-assisted from the notice text; human review pending",
+  "feed": {
+    "version": "4.31",
+    "file": "smtt_1bd0e3-65f7b81245f0f.zip",
+    "sha256": "8905216072b3fdac810173f6e212375c9aafb5d58112878ee111406469b94af0",
+    "validFrom": "20261105",
+    "validTo": "20261231"
+  },
+  "window": {
+    "start": "2026-11-07T04:00:00+02:00",
+    "end": "2026-11-13T00:00:00+02:00"
+  },
+  "cause": "CONSTRUCTION",
+  "gold": {
+    "routeActions": [
+      {
+        "routeId": "R_AB_E3",
+        "shortName": "E3",
+        "directionId": 0,
+        "headsign": "ELBA",
+        "patternStopIds": [
+          "328",
+          "329",
+          "187",
+          "188",
+          "189",
+          "174",
+          "175",
+          "190",
+          "191",
+          "330",
+          "331",
+          "131",
+          "129",
+          "985",
+          "357",
+          "332",
+          "333",
+          "334",
+          "335",
+          "336",
+          "337",
+          "338",
+          "339",
+          "340",
+          "341",
+          "342",
+          "343",
+          "345",
+          "312"
+        ],
+        "action": "rerouted",
+        "stopNames": [
+          "Dâmbovița (Buclă)",
+          "Baba Novac",
+          "Opre Gogu (Ardealului)",
+          "Păcii (Ardealului)",
+          "Canton CFR",
+          "Liceul Auto (Ardealului)"
+        ],
+        "resolved": [
+          {
+            "name": "Dâmbovița (Buclă)",
+            "stopId": "335",
+            "gtfsName": "Dâmbovița (Bucla)",
+            "match": "normalized"
+          },
+          {
+            "name": "Baba Novac",
+            "stopId": "336",
+            "gtfsName": "Baba Novac",
+            "match": "exact"
+          },
+          {
+            "name": "Opre Gogu (Ardealului)",
+            "stopId": "337",
+            "gtfsName": "Opre Gogu (Ardealului)",
+            "match": "exact"
+          },
+          {
+            "name": "Păcii (Ardealului)",
+            "stopId": "338",
+            "gtfsName": "Păcii (Ardealului)",
+            "match": "exact"
+          },
+          {
+            "name": "Canton CFR",
+            "stopId": "339",
+            "gtfsName": "Canton C.F.R.",
+            "match": "normalized"
+          },
+          {
+            "name": "Liceul Auto (Ardealului)",
+            "stopId": "340",
+            "gtfsName": "Liceul Auto (Ardealului)",
+            "match": "exact"
+          }
+        ],
+        "suspendedStopIds": [
+          "335",
+          "336",
+          "337",
+          "338",
+          "339",
+          "340"
+        ],
+        "keptStopIds": [
+          "328",
+          "329",
+          "187",
+          "188",
+          "189",
+          "174",
+          "175",
+          "190",
+          "191",
+          "330",
+          "331",
+          "131",
+          "129",
+          "985",
+          "357",
+          "332",
+          "333",
+          "334",
+          "341",
+          "342",
+          "343",
+          "345",
+          "312"
+        ],
+        "uncertainStopIds": [],
+        "suspendedStopNames": [
+          "Dâmbovița (Bucla)",
+          "Baba Novac",
+          "Opre Gogu (Ardealului)",
+          "Păcii (Ardealului)",
+          "Canton C.F.R.",
+          "Liceul Auto (Ardealului)"
+        ],
+        "notes": [
+          "Direction from the notice: „Sensul de deplasare către Elba (Parcul Industrial Freidorf)” matched to the GTFS headsign.",
+          "Spelling differs from the GTFS: „Buclă” vs „Bucla”, „Canton CFR” vs „Canton C.F.R.” (normalized match).",
+          "Every other E3 stop keeps its service: the detour (Budai Deleanu – Nicolae Andreescu – Ion Slavici, back via Banatul) has no new stops named in the notice."
+        ]
+      },
+      {
+        "routeId": "R_AB_E3",
+        "shortName": "E3",
+        "directionId": 1,
+        "headsign": "Apicultorilor",
+        "patternStopIds": [
+          "312",
+          "313",
+          "1064",
+          "316",
+          "317",
+          "318",
+          "319",
+          "320",
+          "321",
+          "322",
+          "323",
+          "324",
+          "352",
+          "959",
+          "128",
+          "130",
+          "325",
+          "326",
+          "181",
+          "182",
+          "166",
+          "167",
+          "168",
+          "169",
+          "327",
+          "328",
+          "982"
+        ],
+        "action": "rerouted",
+        "stopNames": [
+          "Liceul Auto (Ardealului)",
+          "Canton CFR",
+          "Păcii (Ardealului)",
+          "Opre Gogu (Ardealului)",
+          "Dâmbovița (Buclă)"
+        ],
+        "resolved": [
+          {
+            "name": "Liceul Auto (Ardealului)",
+            "stopId": "318",
+            "gtfsName": "Liceul Auto (Ardealului)",
+            "match": "exact"
+          },
+          {
+            "name": "Canton CFR",
+            "stopId": "319",
+            "gtfsName": "Canton C.F.R.",
+            "match": "normalized"
+          },
+          {
+            "name": "Păcii (Ardealului)",
+            "stopId": "320",
+            "gtfsName": "Păcii (Ardealului)",
+            "match": "exact"
+          },
+          {
+            "name": "Opre Gogu (Ardealului)",
+            "stopId": "321",
+            "gtfsName": "Opre Gogu (Ardealului)",
+            "match": "exact"
+          },
+          {
+            "name": "Dâmbovița (Buclă)",
+            "stopId": "322",
+            "gtfsName": "Dâmbovița (Bucla)",
+            "match": "normalized"
+          }
+        ],
+        "suspendedStopIds": [
+          "318",
+          "319",
+          "320",
+          "321",
+          "322"
+        ],
+        "keptStopIds": [
+          "312",
+          "313",
+          "1064",
+          "316",
+          "317",
+          "323",
+          "324",
+          "352",
+          "959",
+          "128",
+          "130",
+          "325",
+          "326",
+          "181",
+          "182",
+          "166",
+          "167",
+          "168",
+          "169",
+          "327",
+          "328",
+          "982"
+        ],
+        "uncertainStopIds": [],
+        "suspendedStopNames": [
+          "Liceul Auto (Ardealului)",
+          "Canton C.F.R.",
+          "Păcii (Ardealului)",
+          "Opre Gogu (Ardealului)",
+          "Dâmbovița (Bucla)"
+        ],
+        "notes": [
+          "Direction from the notice: „Sensul de deplasare către Apicultorilor” matched to the GTFS headsign.",
+          "Spelling differs from the GTFS: „Buclă” vs „Bucla”, „Canton CFR” vs „Canton C.F.R.” (normalized match).",
+          "Every other E3 stop keeps its service: the detour (Budai Deleanu – Nicolae Andreescu – Ion Slavici, back via Banatul) has no new stops named in the notice."
+        ]
+      }
+    ],
+    "temporaryRoutes": [],
+    "notes": [
+      "„12 noiembrie 2026, ora 24 00” is written as 2026-11-13T00:00+02:00.",
+      "Closure: Str. Ardealului between Str. Rahovei and Str. Martir Gogu Opre, both directions.",
+      "Pattern day: Monday 9 Nov 2026 (service WDSC). GTFS 4.31 still has the normal E3 pattern on Str. Ardealului."
+    ]
+  }
+}

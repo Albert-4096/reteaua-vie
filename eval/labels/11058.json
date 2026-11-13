@@ -1,0 +1,30 @@
+{
+  "postId": 11058,
+  "title": "Modificări în circulația liniilor M30, M29, M35 M 44 și S7, începând cu 2 noiembrie",
+  "postDate": "2026-10-30T15:12:43+02:00",
+  "sourceUrl": "https://stpt.ro/modificari-in-circulatia-liniilor-m30-m29-m35-m-44-si-s7-incepand-cu-2-noiembrie/",
+  "sourceFile": "live/stpt-posts/11058_20261030T151422.json",
+  "noticeText": "Societatea de Transport Public Timișoara informează că, începând de luni, 2 noiembrie 2026, vor intra în vigoare modificări ale traseelor și programelor de circulație pentru liniile M30, M29, M35, M44 și S7, conform hotărârii Asociației de Dezvoltare Intercomunitară Societatea Metropolitană de Transport Timișoara.\nModificările sunt următoarele:\nLinia M30 – Traseul va fi prelungit până în zona Campusului Universității de Medicină și Farmacie Victor Babeș. Programul de circulație va fi adaptat corespunzător noului traseu.\nLiniile M29 și M35 – Programele de circulație vor fi modificate pentru adaptarea timpilor de parcurgere a traseelor la valorile actuale de trafic.\nLinia M44 – Se modifică programul unei curse, care va avea plecarea de la stația Hector la ora 06 15 și de la stația Becicherecu Mic la 0647.\nLinia școlară S7 – Traseul va fi prelungit până la Dudeștii Noi, cu plecare din stația Primărie Dudeștii Noi la ora 06:45. Totodată, plecarea de la ora 06:55 din aceeași stație va fi devansată cu cinci minute, la ora 06:50.\nModificările sunt necesare pentru asigurarea capacității de transport, în contextul întârzierilor majore generate de lucrările de pe DN6, care afectează linia M44.",
+  "labelledBy": "AI-assisted from the notice text; human review pending",
+  "feed": {
+    "version": "4.31",
+    "file": "smtt_1bd0e3-65f7b81245f0f.zip",
+    "sha256": "8905216072b3fdac810173f6e212375c9aafb5d58112878ee111406469b94af0",
+    "validFrom": "20261105",
+    "validTo": "20261231"
+  },
+  "window": {
+    "start": "2026-11-02T00:00:00+02:00",
+    "end": null
+  },
+  "cause": null,
+  "gold": {
+    "routeActions": [],
+    "temporaryRoutes": [],
+    "notes": [
+      "Not a closure: M30 and S7 are extended, M29/M35/M44 change timetables. Gold: no suspended stop.",
+      "Any stop the pipeline marks as suspended for this notice is a false positive.",
+      "S7 is not in the GTFS."
+    ]
+  }
+}

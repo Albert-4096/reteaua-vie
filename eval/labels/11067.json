@@ -1,0 +1,662 @@
+{
+  "postId": 11067,
+  "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989",
+  "postDate": "2026-11-06T10:26:44+02:00",
+  "sourceUrl": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+  "sourceFile": "live/stpt-posts/11067_20261106T102739.json",
+  "noticeText": "Societatea de Transport Public Timișoara informează că, în data de 8 noiembrie 2026, în intervalul orar 1000 – 1800, vor fi executate lucrări de mentenanță la infrastructura de tramvai de pe Bulevardul 16 Decembrie 1989, pe sensul de circulație către Podul Maria.\nIntervenția este necesară ca urmare a gradului avansat de uzură al unor componente ale liniei de tramvai și are ca scop creșterea siguranței circulației atât pentru mijloacele de transport public, cât și pentru participanții la trafic.\nPe durata lucrărilor, traficul rutier va fi restricționat și deviat pe o porțiune de aproximativ 10 m – 15 m, iar circulația tramvaielor va fi reorganizată după cum urmează:\nModificări ale transportului cu tramvaiul\nlinia 4 va fi suspendată pe întreaga durată a lucrărilor;\nlinia 2 va circula, tur – retur, pe traseul Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM;\nlinia 7 va circula, tur – retur, pe traseul: Depou Dâmbovița – Gara de Nord.\nPentru asigurarea continuității serviciului de transport public și limitarea disconfortului călătorilor, STPT introduce temporar linia de autobuz 4b, care va relua fluxul de călători afectat de modificările din circulația tramvaielor. Autobuzul 4b va circula pe traseul: Piața Iuliu Maniu – Bulevardul 16 Decembrie 1989 – Bulevardul Regele Ferdinand I – Strada Doctor Iosif Nemoianu – Strada Coriolan Brediceanu – Calea Bogdăneștilor – Bulevardul Cetății – Calea Torontalului, cu retur pe același traseu. Călătorii sunt rugați să consulte informațiile afișate în stații și pe canalele oficiale ale STPT, pentru a planifica deplasările ținând cont de aceste modificări temporare",
+  "labelledBy": "AI-assisted from the notice text; human review pending",
+  "feed": {
+    "version": "4.31",
+    "file": "smtt_1bd0e3-65f7b81245f0f.zip",
+    "sha256": "8905216072b3fdac810173f6e212375c9aafb5d58112878ee111406469b94af0",
+    "validFrom": "20261105",
+    "validTo": "20261231"
+  },
+  "window": {
+    "start": "2026-11-08T10:00:00+02:00",
+    "end": "2026-11-08T18:00:00+02:00"
+  },
+  "cause": "MAINTENANCE",
+  "gold": {
+    "routeActions": [
+      {
+        "routeId": "R_TV_4",
+        "shortName": "4",
+        "directionId": 0,
+        "headsign": "Piața Gh. Domășneanu",
+        "patternStopIds": [
+          "896",
+          "897",
+          "898",
+          "899",
+          "900",
+          "458",
+          "459",
+          "901",
+          "88",
+          "86",
+          "61",
+          "57",
+          "55",
+          "75",
+          "77",
+          "79",
+          "81",
+          "84",
+          "941",
+          "942",
+          "943",
+          "944",
+          "945"
+        ],
+        "action": "suspended",
+        "stopNames": null,
+        "resolved": null,
+        "suspendedStopIds": [
+          "896",
+          "897",
+          "898",
+          "899",
+          "900",
+          "458",
+          "459",
+          "901",
+          "88",
+          "86",
+          "61",
+          "57",
+          "55",
+          "75",
+          "77",
+          "79",
+          "81",
+          "84",
+          "941",
+          "942",
+          "943",
+          "944",
+          "945"
+        ],
+        "keptStopIds": [],
+        "uncertainStopIds": [],
+        "suspendedStopNames": [
+          "Calea Torontalului (Ciocanul)",
+          "Matei Basarab (Cetății)",
+          "Amforei (Cetății)",
+          "Gheorghe Lazăr (Cetății)",
+          "Balta Verde (Cetății)",
+          "Mendeleev",
+          "Circumvalațiunii (Brediceanu)",
+          "Nemoianu (Brediceanu)",
+          "Spitalul de Copii (Nemoianu)",
+          "Catedrala Mitropolitană",
+          "Piața Sfânta Maria (16 Decembrie 1989)",
+          "Parcul C. Sylva (Parc Doina)",
+          "Piața N. Bălcescu (Gheorghe Doja)",
+          "Piața Crucii",
+          "Strada Cluj (1 Decembrie 1918)",
+          "Sala C. Jude (Olimpia)",
+          "Deliblata",
+          "Banatim",
+          "Banatim (Cimitir Buziașului)",
+          "Bătania",
+          "Fabrica de Detergenți",
+          "Mecatim",
+          "AEM (Dräxlmaier)"
+        ],
+        "notes": [
+          "„linia 4 va fi suspendată pe întreaga durată a lucrărilor”: every stop, both directions."
+        ]
+      },
+      {
+        "routeId": "R_TV_4",
+        "shortName": "4",
+        "directionId": 1,
+        "headsign": "Calea Torontalului (Ciocanul)",
+        "patternStopIds": [
+          "946",
+          "947",
+          "948",
+          "949",
+          "950",
+          "83",
+          "82",
+          "80",
+          "78",
+          "76",
+          "56",
+          "58",
+          "60",
+          "85",
+          "87",
+          "902",
+          "434",
+          "435",
+          "903",
+          "904",
+          "905",
+          "906",
+          "907"
+        ],
+        "action": "suspended",
+        "stopNames": null,
+        "resolved": null,
+        "suspendedStopIds": [
+          "946",
+          "947",
+          "948",
+          "949",
+          "950",
+          "83",
+          "82",
+          "80",
+          "78",
+          "76",
+          "56",
+          "58",
+          "60",
+          "85",
+          "87",
+          "902",
+          "434",
+          "435",
+          "903",
+          "904",
+          "905",
+          "906",
+          "907"
+        ],
+        "keptStopIds": [],
+        "uncertainStopIds": [],
+        "suspendedStopNames": [
+          "AEM (Dräxlmaier)",
+          "Mecatim",
+          "Fabrica de Detergenți",
+          "Bătania",
+          "Banatim (Cimitir Buziașului)",
+          "Banatim",
+          "Deliblata",
+          "Sala C. Jude (Olimpia)",
+          "Strada Cluj (1 Decembrie 1918)",
+          "Piața Crucii",
+          "Piața N. Bălcescu (Gheorghe Doja)",
+          "Parcul C. Sylva (Parc Doina)",
+          "Piața Sfânta Maria (Gheorghe Doja)",
+          "Catedrala Mitropolitană",
+          "Spitalul de Copii (Nemoianu)",
+          "Nemoianu (Brediceanu)",
+          "Circumvalațiunii (Brediceanu)",
+          "Mendeleev",
+          "Balta Verde (Cetății)",
+          "Gheorghe Lazăr (Cetății)",
+          "Amforei (Cetății)",
+          "Matei Basarab (Cetății)",
+          "Calea Torontalului (Ciocanul)"
+        ],
+        "notes": [
+          "„linia 4 va fi suspendată pe întreaga durată a lucrărilor”: every stop, both directions."
+        ]
+      },
+      {
+        "routeId": "R_TV_2",
+        "shortName": "2",
+        "directionId": 0,
+        "headsign": "Calea Torontalului (Ciocanul)",
+        "patternStopIds": [
+          "13",
+          "11",
+          "7",
+          "5",
+          "2",
+          "71",
+          "70",
+          "68",
+          "65",
+          "63",
+          "59",
+          "85",
+          "87",
+          "902",
+          "434",
+          "435",
+          "903",
+          "904",
+          "905",
+          "906",
+          "907"
+        ],
+        "action": "shortened",
+        "stopNames": [
+          "Shopping City",
+          "Piața Maria",
+          "Gheorghe Doja",
+          "Piața Bălcescu",
+          "AEM"
+        ],
+        "resolved": [
+          {
+            "name": "Shopping City",
+            "stopId": "13",
+            "gtfsName": "Shopping City",
+            "match": "exact"
+          },
+          {
+            "name": "Piața Maria",
+            "stopId": "59",
+            "gtfsName": "Piața Sfânta Maria (16 Decembrie 1989)",
+            "match": "manual"
+          },
+          {
+            "name": "Gheorghe Doja",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          },
+          {
+            "name": "Piața Bălcescu",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          },
+          {
+            "name": "AEM",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          }
+        ],
+        "suspendedStopIds": [
+          "85",
+          "87",
+          "902",
+          "434",
+          "435",
+          "903",
+          "904",
+          "905",
+          "906",
+          "907"
+        ],
+        "keptStopIds": [
+          "13",
+          "11",
+          "7",
+          "5",
+          "2",
+          "71",
+          "70",
+          "68",
+          "65",
+          "63",
+          "59"
+        ],
+        "uncertainStopIds": [],
+        "suspendedStopNames": [
+          "Catedrala Mitropolitană",
+          "Spitalul de Copii (Nemoianu)",
+          "Nemoianu (Brediceanu)",
+          "Circumvalațiunii (Brediceanu)",
+          "Mendeleev",
+          "Balta Verde (Cetății)",
+          "Gheorghe Lazăr (Cetății)",
+          "Amforei (Cetății)",
+          "Matei Basarab (Cetății)",
+          "Calea Torontalului (Ciocanul)"
+        ],
+        "notes": [
+          "„linia 2 va circula, tur – retur, pe traseul Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM”: kept = line 2 stops from Shopping City to Piața Maria; the rest of line 2 (Catedrala Mitropolitană to Calea Torontalului) is suspended.",
+          "Gheorghe Doja, Piața Bălcescu and AEM are not on line 2's GTFS pattern (they are on line 4's): line 2 takes line 4's south branch to AEM. Those stops are served by line 2 during the works but they are not line 2 stops in the GTFS, so they are not labelled here.",
+          "The notice calls this a new route, not just a shortening; SPEC 5.1 models it as `shortened` with keepStopIds."
+        ]
+      },
+      {
+        "routeId": "R_TV_2",
+        "shortName": "2",
+        "directionId": 1,
+        "headsign": "Shopping City",
+        "patternStopIds": [
+          "896",
+          "897",
+          "898",
+          "899",
+          "900",
+          "458",
+          "459",
+          "901",
+          "88",
+          "86",
+          "61",
+          "62",
+          "66",
+          "67",
+          "69",
+          "72",
+          "1",
+          "4",
+          "6",
+          "12",
+          "14"
+        ],
+        "action": "shortened",
+        "stopNames": [
+          "Shopping City",
+          "Piața Maria",
+          "Gheorghe Doja",
+          "Piața Bălcescu",
+          "AEM"
+        ],
+        "resolved": [
+          {
+            "name": "Shopping City",
+            "stopId": "14",
+            "gtfsName": "Shopping City",
+            "match": "exact"
+          },
+          {
+            "name": "Piața Maria",
+            "stopId": "60",
+            "gtfsName": "Piața Sfânta Maria (Gheorghe Doja)",
+            "match": "manual"
+          },
+          {
+            "name": "Gheorghe Doja",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          },
+          {
+            "name": "Piața Bălcescu",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          },
+          {
+            "name": "AEM",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          }
+        ],
+        "suspendedStopIds": [
+          "896",
+          "897",
+          "898",
+          "899",
+          "900",
+          "458",
+          "459",
+          "901",
+          "88",
+          "86",
+          "61"
+        ],
+        "keptStopIds": [
+          "62",
+          "66",
+          "67",
+          "69",
+          "72",
+          "1",
+          "4",
+          "6",
+          "12",
+          "14"
+        ],
+        "uncertainStopIds": [],
+        "suspendedStopNames": [
+          "Calea Torontalului (Ciocanul)",
+          "Matei Basarab (Cetății)",
+          "Amforei (Cetății)",
+          "Gheorghe Lazăr (Cetății)",
+          "Balta Verde (Cetății)",
+          "Mendeleev",
+          "Circumvalațiunii (Brediceanu)",
+          "Nemoianu (Brediceanu)",
+          "Spitalul de Copii (Nemoianu)",
+          "Catedrala Mitropolitană",
+          "Piața Sfânta Maria (16 Decembrie 1989)"
+        ],
+        "notes": [
+          "„linia 2 va circula, tur – retur, pe traseul Shopping City – Piața Maria – Gheorghe Doja – Piața Bălcescu – AEM”: kept = line 2 stops from Shopping City to Piața Maria; the rest of line 2 (Catedrala Mitropolitană to Calea Torontalului) is suspended.",
+          "Gheorghe Doja, Piața Bălcescu and AEM are not on line 2's GTFS pattern (they are on line 4's): line 2 takes line 4's south branch to AEM. Those stops are served by line 2 during the works but they are not line 2 stops in the GTFS, so they are not labelled here.",
+          "The notice calls this a new route, not just a shortening; SPEC 5.1 models it as `shortened` with keepStopIds.",
+          "Stop 61 „Piața Sfânta Maria (16 Decembrie 1989)” is labelled suspended: in this GTFS it is used only by trams arriving from Catedrala Mitropolitană (2 dir 1, 4 dir 0, 7 dir 1). A line 2 tram coming from Gheorghe Doja reaches Piața Maria at stop 60 (as line 1 does). Reviewer: confirm."
+        ]
+      },
+      {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "directionId": 0,
+        "headsign": "Calea Torontalului (Ciocanul)",
+        "patternStopIds": [
+          "890",
+          "4",
+          "6",
+          "12",
+          "16",
+          "17",
+          "19",
+          "21",
+          "23",
+          "25",
+          "27",
+          "29",
+          "53",
+          "56",
+          "58",
+          "60",
+          "85",
+          "87",
+          "902",
+          "434",
+          "435",
+          "903",
+          "904",
+          "905",
+          "906",
+          "907"
+        ],
+        "action": "shortened",
+        "stopNames": [
+          "Depou Dâmbovița",
+          "Gara de Nord"
+        ],
+        "resolved": [
+          {
+            "name": "Depou Dâmbovița",
+            "stopId": "890",
+            "gtfsName": "Dâmbovița",
+            "match": "manual"
+          },
+          {
+            "name": "Gara de Nord",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          }
+        ],
+        "suspendedStopIds": [
+          "85",
+          "87",
+          "902",
+          "434",
+          "435",
+          "903",
+          "904",
+          "905",
+          "906",
+          "907"
+        ],
+        "keptStopIds": [
+          "890"
+        ],
+        "uncertainStopIds": [
+          "4",
+          "6",
+          "12",
+          "16",
+          "17",
+          "19",
+          "21",
+          "23",
+          "25",
+          "27",
+          "29",
+          "53",
+          "56",
+          "58",
+          "60"
+        ],
+        "suspendedStopNames": [
+          "Catedrala Mitropolitană",
+          "Spitalul de Copii (Nemoianu)",
+          "Nemoianu (Brediceanu)",
+          "Circumvalațiunii (Brediceanu)",
+          "Mendeleev",
+          "Balta Verde (Cetății)",
+          "Gheorghe Lazăr (Cetății)",
+          "Amforei (Cetății)",
+          "Matei Basarab (Cetății)",
+          "Calea Torontalului (Ciocanul)"
+        ],
+        "notes": [
+          "„linia 7 va circula, tur – retur, pe traseul: Depou Dâmbovița – Gara de Nord”: the notice names only the two ends. Gara de Nord is not on line 7's GTFS pattern.",
+          "Certain: the section Catedrala Mitropolitană – Calea Torontalului is lost (as for lines 2 and 4).",
+          "Not certain (labelled uncertain, not scored): the path from Dâmbovița to Gara de Nord. Either (a) the usual line 7 ring (Banatul – Piața Veteranilor – Victor Hugo – Drubeta – Memorandumului – Piața Bălcescu – Parcul C. Sylva – Piața Maria) and then Piața Mocioni – Bd. Regele Carol I – Gara de Nord, or (b) Banatul – Dâmbovița (Ion Barac) – Crizantemelor – Bd. Iuliu Maniu – Bd. Regele Carol I – Gara de Nord (line 2's track). Under (b) the ring stops are lost too.",
+          "Kept for sure: stop 890 Dâmbovița (the depot end)."
+        ]
+      },
+      {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "directionId": 1,
+        "headsign": "Bulevardul Dâmbovița",
+        "patternStopIds": [
+          "896",
+          "897",
+          "898",
+          "899",
+          "900",
+          "458",
+          "459",
+          "901",
+          "88",
+          "86",
+          "61",
+          "57",
+          "55",
+          "54",
+          "31",
+          "28",
+          "26",
+          "24",
+          "22",
+          "20",
+          "18",
+          "15",
+          "11",
+          "7",
+          "5",
+          "890"
+        ],
+        "action": "shortened",
+        "stopNames": [
+          "Depou Dâmbovița",
+          "Gara de Nord"
+        ],
+        "resolved": [
+          {
+            "name": "Depou Dâmbovița",
+            "stopId": "890",
+            "gtfsName": "Dâmbovița",
+            "match": "manual"
+          },
+          {
+            "name": "Gara de Nord",
+            "stopId": null,
+            "gtfsName": null,
+            "match": "none"
+          }
+        ],
+        "suspendedStopIds": [
+          "896",
+          "897",
+          "898",
+          "899",
+          "900",
+          "458",
+          "459",
+          "901",
+          "88",
+          "86",
+          "61"
+        ],
+        "keptStopIds": [
+          "890"
+        ],
+        "uncertainStopIds": [
+          "57",
+          "55",
+          "54",
+          "31",
+          "28",
+          "26",
+          "24",
+          "22",
+          "20",
+          "18",
+          "15",
+          "11",
+          "7",
+          "5"
+        ],
+        "suspendedStopNames": [
+          "Calea Torontalului (Ciocanul)",
+          "Matei Basarab (Cetății)",
+          "Amforei (Cetății)",
+          "Gheorghe Lazăr (Cetății)",
+          "Balta Verde (Cetății)",
+          "Mendeleev",
+          "Circumvalațiunii (Brediceanu)",
+          "Nemoianu (Brediceanu)",
+          "Spitalul de Copii (Nemoianu)",
+          "Catedrala Mitropolitană",
+          "Piața Sfânta Maria (16 Decembrie 1989)"
+        ],
+        "notes": [
+          "„linia 7 va circula, tur – retur, pe traseul: Depou Dâmbovița – Gara de Nord”: the notice names only the two ends. Gara de Nord is not on line 7's GTFS pattern.",
+          "Certain: the section Catedrala Mitropolitană – Calea Torontalului is lost (as for lines 2 and 4).",
+          "Not certain (labelled uncertain, not scored): the path from Dâmbovița to Gara de Nord. Either (a) the usual line 7 ring (Banatul – Piața Veteranilor – Victor Hugo – Drubeta – Memorandumului – Piața Bălcescu – Parcul C. Sylva – Piața Maria) and then Piața Mocioni – Bd. Regele Carol I – Gara de Nord, or (b) Banatul – Dâmbovița (Ion Barac) – Crizantemelor – Bd. Iuliu Maniu – Bd. Regele Carol I – Gara de Nord (line 2's track). Under (b) the ring stops are lost too.",
+          "Kept for sure: stop 890 Dâmbovița (the depot end).",
+          "Stop 61: see the line 2 note (only trams from Catedrala use it)."
+        ]
+      }
+    ],
+    "temporaryRoutes": [
+      {
+        "shortName": "4b",
+        "mode": "bus",
+        "streets": [
+          "Piața Iuliu Maniu",
+          "Bulevardul 16 Decembrie 1989",
+          "Bulevardul Regele Ferdinand I",
+          "Strada Doctor Iosif Nemoianu",
+          "Strada Coriolan Brediceanu",
+          "Calea Bogdăneștilor",
+          "Bulevardul Cetății",
+          "Calea Torontalului"
+        ],
+        "stopIds": null,
+        "notes": [
+          "The notice gives streets, no stops: stopIds is null. „cu retur pe același traseu”."
+        ]
+      }
+    ],
+    "notes": [
+      "The works are on Bd. 16 Decembrie 1989, „pe sensul de circulație către Podul Maria”, on 10–15 m; the exact point is not given.",
+      "Tram line 8 also stops at Piața Maria (stops 59, 60) and is not named in the notice: not labelled (not affected by the notice).",
+      "Pattern day: Sunday 8 Nov 2026 (service WEDU)."
+    ]
+  }
+}

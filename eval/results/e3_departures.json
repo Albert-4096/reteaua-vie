@@ -1,0 +1,171 @@
+{
+  "figure": 253,
+  "date": "2026-11-09",
+  "sameOnEveryWeekdayOfTheWindow": true,
+  "label": {
+    "ro": "plecări programate E3 pe zi lucrătoare în stațiile suspendate (anunț STPT 11065)",
+    "en": "scheduled E3 departures per weekday at the stops suspended by STPT notice 11065"
+  },
+  "stops": {
+    "0": [
+      {
+        "stopId": "335",
+        "name": "Dâmbovița (Bucla)"
+      },
+      {
+        "stopId": "336",
+        "name": "Baba Novac"
+      },
+      {
+        "stopId": "337",
+        "name": "Opre Gogu (Ardealului)"
+      },
+      {
+        "stopId": "338",
+        "name": "Păcii (Ardealului)"
+      },
+      {
+        "stopId": "339",
+        "name": "Canton C.F.R."
+      },
+      {
+        "stopId": "340",
+        "name": "Liceul Auto (Ardealului)"
+      }
+    ],
+    "1": [
+      {
+        "stopId": "318",
+        "name": "Liceul Auto (Ardealului)"
+      },
+      {
+        "stopId": "319",
+        "name": "Canton C.F.R."
+      },
+      {
+        "stopId": "320",
+        "name": "Păcii (Ardealului)"
+      },
+      {
+        "stopId": "321",
+        "name": "Opre Gogu (Ardealului)"
+      },
+      {
+        "stopId": "322",
+        "name": "Dâmbovița (Bucla)"
+      }
+    ]
+  },
+  "headsigns": {
+    "0": "ELBA",
+    "1": "Apicultorilor"
+  },
+  "stopIdsTotal": 11,
+  "weekdays": [
+    {
+      "date": "2026-11-09",
+      "weekday": "Monday",
+      "services": [
+        "S_AB_E3_WDSC"
+      ],
+      "byDirection": {
+        "0": {
+          "stops": 6,
+          "calendarDay": 138,
+          "serviceDay": 138
+        },
+        "1": {
+          "stops": 5,
+          "calendarDay": 115,
+          "serviceDay": 115
+        }
+      },
+      "serviceDayTotal": 253,
+      "calendarDayTotal": 253,
+      "allRoutesAtTheseStops": 253
+    },
+    {
+      "date": "2026-11-10",
+      "weekday": "Tuesday",
+      "services": [
+        "S_AB_E3_WDSC"
+      ],
+      "byDirection": {
+        "0": {
+          "stops": 6,
+          "calendarDay": 138,
+          "serviceDay": 138
+        },
+        "1": {
+          "stops": 5,
+          "calendarDay": 115,
+          "serviceDay": 115
+        }
+      },
+      "serviceDayTotal": 253,
+      "calendarDayTotal": 253,
+      "allRoutesAtTheseStops": 253
+    },
+    {
+      "date": "2026-11-11",
+      "weekday": "Wednesday",
+      "services": [
+        "S_AB_E3_WDSC"
+      ],
+      "byDirection": {
+        "0": {
+          "stops": 6,
+          "calendarDay": 138,
+          "serviceDay": 138
+        },
+        "1": {
+          "stops": 5,
+          "calendarDay": 115,
+          "serviceDay": 115
+        }
+      },
+      "serviceDayTotal": 253,
+      "calendarDayTotal": 253,
+      "allRoutesAtTheseStops": 253
+    },
+    {
+      "date": "2026-11-12",
+      "weekday": "Thursday",
+      "services": [
+        "S_AB_E3_WDSC"
+      ],
+      "byDirection": {
+        "0": {
+          "stops": 6,
+          "calendarDay": 138,
+          "serviceDay": 138
+        },
+        "1": {
+          "stops": 5,
+          "calendarDay": 115,
+          "serviceDay": 115
+        }
+      },
+      "serviceDayTotal": 253,
+      "calendarDayTotal": 253,
+      "allRoutesAtTheseStops": 253
+    }
+  ],
+  "method": "GTFS stop_times of trips of route R_AB_E3 whose service runs that day (calendar.txt weekday flags and date range, then calendar_dates.txt add/remove). Departures only: the last stop of a trip is not counted. Stops: the names the notice suspends, per direction, matched to E3's own pattern. Calendar day = local clock (Europe/Bucharest); times >= 24:00 roll to the next day.",
+  "feed": {
+    "version": "4.31",
+    "file": "smtt_1bd0e3-65f7b81245f0f.zip",
+    "sha256": "8905216072b3fdac810173f6e212375c9aafb5d58112878ee111406469b94af0",
+    "validFrom": "20261105",
+    "validTo": "20261231"
+  },
+  "provenance": [
+    {
+      "source": "SMTT GTFS",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "computed by eval/e3_departures.py"
+    }
+  ]
+}
