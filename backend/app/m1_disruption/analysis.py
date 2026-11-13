@@ -18,13 +18,14 @@ from typing import Any, Iterable
 
 from app.common import gtfs, state
 from app.common import provenance as prov
-from app.common.city import load_network
+from app.common.city import load_network, route_mode
 from app.common.errors import conflict, invalid, not_found
 from app.common.timeutil import iso, parse_iso
 from app.config import now
 from app.m1_disruption import impact as imp
 from app.m1_disruption import matching
-from app.models.v1 import Analysis, AnalysisRoute, Closure
+from app.models.base import I18n
+from app.models.v1 import Analysis, AnalysisRoute, Closure, DecisionGroup, StopRowKey
 
 PART_DECISIONS = "decisions"
 _ID_RE = re.compile(r"^[A-Za-z0-9_-]{1,120}$")
@@ -100,6 +101,111 @@ def _routes(rows: list[dict]) -> list[AnalysisRoute]:
     return sorted(res, key=lambda a: (a.shortName.zfill(4), a.routeId))
 
 
+# --- decision groups: one question per line and cause instead of a checkbox per row ---------
+
+_VEHICLE = {"tram": (("tramvaiul", "tramvaiele"), ("tram", "trams")),
+            "bus": (("autobuzul", "autobuzele"), ("bus", "buses")),
+            "trolleybus": (("troleibuzul", "troleibuzele"), ("trolleybus", "trolleybuses"))}
+_MODE = {"tram": ("tramvai", "tram"), "bus": ("autobuz", "bus"), "trolleybus": ("troleibuz", "trolleybus")}
+_REASON_TEXT = {
+    "NOT_NAMED_IN_NOTICE": ("Anunțul nu numește aceste stații.", "The notice does not name these stops."),
+    "ROUTE_NOT_IN_NOTICE": ("Anunțul nu numește linia.", "The notice does not name the line."),
+    "DIRECTION_UNCLEAR": ("Sensul nu reiese din desen.", "The direction is unclear from the drawing."),
+    "EDGE_OF_BUFFER": ("Stațiile sunt la marginea zonei închise.", "The stops are at the edge of the closed area."),
+    "DUPLICATE_STOP_NAME": ("Mai multe stații poartă acest nume.", "Several stops share this name."),
+}
+
+
+def _lines(route_ids: Iterable[str], mode: str, lang: int) -> str:
+    shorts = sorted({matching.route_short_name(r) for r in route_ids}, key=lambda s: (s.zfill(4), s))
+    word = _VEHICLE[mode][lang][len(shorts) > 1]
+    names = shorts[0] if len(shorts) == 1 else f"{', '.join(shorts[:-1])} {('și', 'and')[lang]} {shorts[-1]}"
+    return f"{word} {names}"
+
+
+def decision_groups(closure: dict, rows: list[dict]) -> list[DecisionGroup]:
+    """Every `unsure` row in one group: same line, same reasons, same fact of the timetable (T2).
+
+    The fact: every other line of the same mode that stops there loses the stop in this closure
+    and no other line of that mode still stops there in the window, so this line cannot reach it
+    either (suggested "affected"). Otherwise no suggestion: a person answers. Pure, data only.
+    """
+    start, end = parse_iso(closure["window"]["start"]), parse_iso(closure["window"]["end"])
+    tt = imp.timetable_for(start)
+    counts = imp.departure_counts(imp.count_window(start, end, tt), tt)
+    svc = imp.ServiceState.build(counts, {imp.row_key(r) for r in rows if imp.counts_as_lost(r)},
+                                 {imp.row_key(r) for r in rows if imp.is_undecided(r)})
+    lost_at: dict[str, set[str]] = {}
+    for r in rows:
+        if imp.counts_as_lost(r):
+            lost_at.setdefault(r["stopId"], set()).add(r["routeId"])
+    groups: dict[tuple, dict] = {}
+    for r in rows:
+        if r["state"] != "unsure":
+            continue
+        rid, mode = r["routeId"], route_mode(r["routeId"])
+        others = {o for o in lost_at.get(r["stopId"], ()) if o != rid and route_mode(o) == mode}
+        still = {o for o, _ in svc.served(r["stopId"]) if o != rid and route_mode(o) == mode}
+        cut = bool(others) and not still
+        g = groups.setdefault((rid, tuple(r["reasons"]), cut), {"rows": [], "others": set(), "still": set()})
+        g["rows"].append(r)
+        g["others"] |= others
+        g["still"] |= still
+    out: list[DecisionGroup] = []
+    for (rid, reasons, cut), g in sorted(groups.items(), key=lambda kv: (kv[1]["rows"][0]["routeShortName"].zfill(4),
+                                                                         kv[0][0], not kv[0][2])):
+        gid = f"{rid}-{'lost' if cut else 'open'}"
+        same = sum(1 for o in out if o.id == gid or o.id.startswith(gid + "-"))
+        out.append(_group(closure, gid + (f"-{same + 1}" if same else ""), rid, reasons, cut, g))
+    return out
+
+
+def _cap(text: str) -> str:
+    return text[:1].upper() + text[1:]
+
+
+def _group(closure: dict, gid: str, rid: str, reasons: tuple, cut: bool, g: dict) -> DecisionGroup:
+    mode, rows = route_mode(rid), g["rows"]
+    by_dir: dict[int, list[dict]] = {}
+    for r in rows:
+        by_dir.setdefault(r["directionId"], []).append(r)
+    span = max(by_dir.values(), key=len)  # travel order of the direction with the most rows
+    first, last = span[0]["name"], span[-1]["name"]
+    line = [_lines([rid], mode, k) for k in (0, 1)]
+    question = (I18n(ro=f"Oprește {line[0]} între {first} și {last}?", en=f"Does {line[1]} stop between {first} and {last}?")
+                if first != last else I18n(ro=f"Oprește {line[0]} în stația {first}?", en=f"Does {line[1]} stop at {first}?"))
+    names = next((a.get("stopNames") for a in closure.get("routeActions") or []
+                  if a["routeId"] == rid and a.get("stopNames")), None)
+    parts: list[tuple[str, str]] = []
+    if "NOT_NAMED_IN_NOTICE" in reasons and names:
+        short = matching.route_short_name(rid)
+        parts.append((f"Anunțul dă linia {short} doar ca „{' – '.join(names)}”, fără stațiile de pe traseu.",
+                      f"The notice gives line {short} only as „{' – '.join(names)}”, without the stops on the way."))
+    else:
+        parts += [_REASON_TEXT[x] for x in reasons if x in _REASON_TEXT]
+    n_dirs = ("un sens", "one direction") if len(by_dir) == 1 else ("ambele sensuri", "both directions")
+    n = len(rows)
+    de = " de" if n >= 20 and (n % 100 >= 20 or n % 100 == 0) else ""
+    parts.append(("1 stație" if n == 1 else f"{n}{de} stații", "1 stop" if n == 1 else f"{n} stops"))
+    parts[-1] = (f"{parts[-1][0]}, {n_dirs[0]}.", f"{parts[-1][1]}, {n_dirs[1]}.")
+    if cut:
+        parts.append((f"{_cap(_lines(g['others'], mode, 0))} nu mai opresc în aceste stații și niciun alt "
+                      f"{_MODE[mode][0]} nu oprește aici în interval: propunere „nu oprește”.",
+                      f"{_cap(_lines(g['others'], mode, 1))} lose these stops and no other {_MODE[mode][1]} "
+                      f"stops here in the window: suggested „does not stop”."))
+    elif g["still"]:
+        parts.append((f"{_cap(_lines(g['still'], mode, 0))} încă opresc în unele dintre ele.",
+                      f"{_cap(_lines(g['still'], mode, 1))} still stop at some of them."))
+    return DecisionGroup(
+        id=gid,
+        routeId=rid,
+        question=question,
+        reason=I18n(ro=" ".join(p[0] for p in parts), en=" ".join(p[1] for p in parts)),
+        suggested="affected" if cut else None,
+        rows=[StopRowKey(stopId=r["stopId"], routeId=rid, directionId=r["directionId"]) for r in rows],
+    )
+
+
 def _build(closure: dict, rows: list[dict], extra_provenance: Iterable[Any] = ()) -> Analysis:
     rows, provenance = enrich(closure, rows)
     rows = _order_rows(rows, imp.timetable_for_closure(closure))
@@ -111,6 +217,7 @@ def _build(closure: dict, rows: list[dict], extra_provenance: Iterable[Any] = ()
         routes=_routes(rows),
         unsureCount=unsure,
         provenance=[*provenance, *extra_provenance],
+        decisionGroups=decision_groups(closure, rows),
     )
 
 
@@ -150,12 +257,21 @@ def analyze_closure(closure: Closure | dict) -> Analysis:
 
 
 def get_analysis(closure_id: str) -> Analysis | None:
-    """The stored Analysis (decisions applied), or None if never analyzed."""
+    """The stored Analysis (decisions applied), or None if never analyzed.
+
+    The decision groups are a view of the rows: computed again here, so an analysis
+    stored before they existed has them too.
+    """
     try:
         data = state.read("closures", closure_id, state.PART_ANALYSIS)
+        closure = state.read("closures", closure_id)
     except ValueError:
         return None
-    return Analysis.model_validate(data) if data is not None else None
+    if data is None:
+        return None
+    if closure is not None:
+        data = dict(data, decisionGroups=[g.model_dump(mode="json") for g in decision_groups(closure, data["stops"])])
+    return Analysis.model_validate(data)
 
 
 def apply_decisions(closure_id: str, decisions: list[dict]) -> Analysis:

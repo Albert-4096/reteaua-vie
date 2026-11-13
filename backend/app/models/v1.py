@@ -181,6 +181,22 @@ class AnalysisRoute(Model):
     stopsAffected: int
 
 
+class StopRowKey(Model):
+    stopId: str
+    routeId: str
+    directionId: DirectionId
+
+
+class DecisionGroup(Model):
+    """v2.5: one human question for `unsure` rows of one line that share a cause."""
+    id: str
+    routeId: str
+    question: I18n
+    reason: I18n
+    suggested: Literal["affected", "served"] | None = None  # derived from the data; null = no suggestion
+    rows: list[StopRowKey]
+
+
 class Analysis(Model):
     closureId: str
     feedVersion: str
@@ -188,6 +204,7 @@ class Analysis(Model):
     routes: list[AnalysisRoute]
     unsureCount: int
     provenance: list[Provenance]
+    decisionGroups: list[DecisionGroup] | None = None  # v2.5: every `unsure` row is in exactly one group
 
 
 class StopDecision(Model):
