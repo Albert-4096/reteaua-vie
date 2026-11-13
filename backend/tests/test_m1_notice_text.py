@@ -195,6 +195,29 @@ def test_hero_draft_never_offers_the_undecided_line_7():
     assert re.search(r"– Catedrala Mitropolitană[^\n]*\. Alternative: to be confirmed\.", n.text.en)
 
 
+def test_notice_and_analysis_give_the_same_walking_distances():
+    """T13: one figure per nearest served stop (10 m steps) in the rows, the JSON and the text;
+    a stop with no service carries the nearest served stop of its rows."""
+    for cid in (HERO, E3, MOCIONI):
+        closure, rows = _fresh(cid)
+        n = _built(closure, rows)
+        dists = {(r["stopId"], r["nearestServed"]["stopId"]): r["nearestServed"]["distanceMeters"]
+                 for r in rows if r["nearestServed"]}
+        assert all(d % 10 == 0 for d in dists.values())
+        for sec in n.sections:
+            for s in sec.stopsNotServed:
+                ns = s.nearestServed
+                if ns and ns.stopId != s.stopId:
+                    assert ns.distanceMeters == dists[(s.stopId, ns.stopId)]
+                    if sec.routeId != "R_TV_4":  # whole line 4: the text has no stop list
+                        assert f"{int(ns.distanceMeters)}" in n.text.ro
+        assert n.stopsWithNoService or cid == MOCIONI  # Mocioni: other lines stop everywhere
+        for s in n.stopsWithNoService:
+            known = [r["nearestServed"]["distanceMeters"] for r in rows
+                     if r["stopId"] == s.stopId and r["nearestServed"] and r["nearestServed"]["stopId"] != s.stopId]
+            assert s.nearestServed is not None and s.nearestServed.distanceMeters == min(known), (cid, s)
+
+
 def test_e3_and_mocioni_have_nothing_undecided():
     """T3 changes only notices with undecided rows, so E3 and Mocioni keep their text."""
     from app.m1_disruption import impact as imp

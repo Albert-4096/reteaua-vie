@@ -594,8 +594,9 @@ def nearest_served(row: dict, svc: ServiceState, stats: NearestStats | None = No
         stats.total += 1
         stats.approx += 0 if exact else 1
     s = n.stop_by_id[sid]
+    # to 10 m, the precision of a snapped walking path: every output (row, notice, alert, poster) shows this figure
     return {"stopId": sid, "name": s["name"], "location": s["location"],
-            "distanceMeters": round(dist), "routeIds": sorted({r for r, _ in keys_of[sid]})}
+            "distanceMeters": int(round(dist / 10.0) * 10), "routeIds": sorted({r for r, _ in keys_of[sid]})}
 
 
 def walking_note(stats: NearestStats) -> str:

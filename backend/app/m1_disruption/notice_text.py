@@ -245,7 +245,8 @@ def _no_service_stops(rows: list[dict], svc: imp.ServiceState | None) -> list[No
     for r in rows:  # analysis order: by line, direction and stop sequence
         sid = str(r["stopId"])
         if imp.counts_as_lost(r) and sid in suspended and sid not in out:
-            out[sid] = NoticeStop(stopId=sid, name=r["name"])
+            at_stop = [x for x in rows if str(x["stopId"]) == sid and imp.counts_as_lost(x)]
+            out[sid] = NoticeStop(stopId=sid, name=r["name"], nearestServed=_nearest(al.pick_nearest(at_stop, sid), sid))
     return list(out.values())
 
 
