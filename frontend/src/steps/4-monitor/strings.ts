@@ -33,4 +33,45 @@ export const S = {
     en: "openings of the posters' QR page, not unique people",
   },
   scansByStop: { ro: "Deschideri pe stație", en: "Openings per stop" },
+  // O2, prepared case case_l23: lines with no vehicle in the live data (never „cursă neefectuată”).
+  missing: {
+    title: { ro: "Linii fără vehicul în datele live", en: "Lines with no vehicle in the live data" },
+    sentence: (when: string) => ({
+      ro: `${when}. Din datele live ale Primăriei, înregistrate de noi; neconfirmat de STPT.`,
+      en: `${when}. From the City Hall's live data, recorded by us; not confirmed by STPT.`,
+    }),
+    figNone: { ro: "linii fără vehicul", en: "lines with no vehicle" },
+    figPartial: { ro: "linii parțial (unele curse nevăzute)", en: "lines partly seen (some trips not seen)" },
+    figHealthy: { ro: "din minute cu date bune", en: "of minutes with good data" },
+    incomplete: {
+      ro: "Înregistrare incompletă (sub 80% din minute cu date bune): nu marcăm nicio linie.",
+      en: "Incomplete recording (under 80% of minutes with good data): we flag no line.",
+    },
+    empty: { ro: "Nicio linie marcată în această fereastră.", en: "No line flagged in this window." },
+    list: { ro: "Liniile marcate", en: "Flagged lines" },
+    line: (n: string) => ({ ro: `Linia ${n}`, en: `Line ${n}` }),
+    none: {
+      ro: "fără vehicul în datele live (neconfirmat de STPT)",
+      en: "no vehicle in the live data (not confirmed by STPT)",
+    },
+    partial: { ro: "parțial: unele curse nevăzute", en: "partly: some trips not seen" },
+    since: (t: string) => ({ ro: `din ${t}`, en: `since ${t}` }),
+    seen: { ro: "curse văzute din", en: "trips seen of" },
+    inService: { ro: "în orar", en: "scheduled" },
+    lastSeen: (t: string) => ({ ro: `văzută ultima dată ${t}`, en: `last seen ${t}` }),
+    neverSeen: { ro: "nicio apariție", en: "never seen" },
+    firstMissed: { ro: "Prima cursă fără vehicul", en: "First trip with no vehicle" },
+    byMode: { ro: "Curse fără vehicul în datele live, pe mod", en: "Trips with no vehicle in the live data, by mode" },
+    of: { ro: "din", en: "of" },
+    mode: {
+      autobuz: { ro: "autobuz", en: "bus" },
+      troleibuz: { ro: "troleibuz", en: "trolleybus" },
+      tramvai: { ro: "tramvai", en: "tram" },
+    } as Record<string, { ro: string; en: string }>,
+    recording: { ro: "instantanee înregistrate, dintre care bune", en: "snapshots recorded, of which good" },
+    mapStops: (names: string) => ({
+      ro: `prima stație fără vehicul: ${names}`,
+      en: `first stop with no vehicle: ${names}`,
+    }),
+  },
 };

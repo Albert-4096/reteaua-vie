@@ -24,4 +24,22 @@ export const S = {
   partial: { ro: "parțial", en: "partly" },
   missing: { ro: "lipsă", en: "missing" },
   upcoming: { ro: "Încep în următoarele 7 zile", en: "Starting in the next 7 days" },
+  // O2: lines with no vehicle in our live recording. Ticket wording; never „cursă neefectuată”.
+  noVehicle: {
+    title: { ro: "Linii fără vehicul", en: "Lines with no vehicle" },
+    label: { ro: "din datele live ale Primăriei, înregistrate de noi", en: "from the City Hall's live data, recorded by us" },
+    now: { ro: "Acum, ultimele 60 de minute", en: "Now, the last 60 minutes" },
+    brief: (when: string) => ({ ro: `${when} · fără vehicul:`, en: `${when} · no vehicle:` }),
+    partial: { ro: "· parțial:", en: "· partly seen:" },
+    incomplete: {
+      ro: "înregistrare incompletă, nu marcăm nicio linie",
+      en: "incomplete recording, we flag no line",
+    },
+    line: (n: string) => ({ ro: `Linia ${n}`, en: `Line ${n}` }),
+    row: (since: string) => ({
+      ro: ` · nicio apariție în datele live din ${since} · `,
+      en: ` · not seen in the live data since ${since} · `,
+    }),
+    trips: { ro: "curse în orar", en: "scheduled trips" },
+  },
 };

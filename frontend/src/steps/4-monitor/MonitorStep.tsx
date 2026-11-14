@@ -1,4 +1,5 @@
 // Step 4 Urmărești: „Se respectă devierea?” The recorded passes at each suspended stop: skipped, served, unknown.
+// The prepared case case_l23 (`?case=l23`) shows the lines with no vehicle instead (MissingLines.tsx).
 // The only closure with a vehicle recording is the Mocioni diversion (SPEC 5.3), so the prepared case
 // opens it unless the URL names a closure directly (`?closure=`).
 import { useMemo } from "react";
@@ -13,6 +14,8 @@ import { navigate, stepHref } from "../../lib/router";
 import { useResource } from "../../lib/store";
 import { useCases } from "../../lib/useCase";
 import type { StepProps } from "../types";
+import { isMissingCase } from "./missing";
+import { MissingLines } from "./MissingLines";
 import { S } from "./strings";
 
 const LIVE_CASE = "case_mocioni";
@@ -28,7 +31,12 @@ type ScanCounts = {
 
 type StopRow = { stopId: string; name: string; skipped: number; served: number; unknown: number };
 
-export function MonitorStep({ caseKey, closureId }: StepProps) {
+/** `?case=l23` (O2) lists the lines with no vehicle; any other case checks a diversion. */
+export function MonitorStep(props: StepProps) {
+  return isMissingCase(props.caseKey) ? <MissingLines {...props} /> : <DiversionCheck {...props} />;
+}
+
+function DiversionCheck({ caseKey, closureId }: StepProps) {
   const { t } = useTranslation();
   const cases = useCases();
   const id = !caseKey && closureId ? closureId : (cases.data?.find((c) => c.id === LIVE_CASE)?.closureId ?? null);

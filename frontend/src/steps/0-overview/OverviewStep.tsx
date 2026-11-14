@@ -2,14 +2,20 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { api, type Closure } from "../../api/client";
-import { v2, type ClosureSummary, type LayerCollection, type Overview } from "../../api/v2";
+import { v2, type ClosureSummary, type LayerCollection } from "../../api/v2";
 import { Figure } from "../../components/Figure";
 import { useMapOverlay, type ExtraLayerId } from "../../components/MapView";
 import { LoadState, Panel } from "../../components/Panel";
-import { fmtDateTime, fmtWindow, tr } from "../../lib/format";
+import { fmtDateTime, fmtTime, fmtWindow, tr } from "../../lib/format";
 import { navigate, stepHref } from "../../lib/router";
 import { useResource } from "../../lib/store";
 import { useCases } from "../../lib/useCase";
+import {
+  briefProvenance,
+  MISSING_CASE_KEY,
+  type MissingBrief,
+  type OverviewWithMissing,
+} from "../4-monitor/missing";
 import type { StepProps } from "../types";
 import { S } from "./strings";
 
@@ -18,7 +24,7 @@ const TOGGLES: Toggle[] = ["network", "closures", "bike", "parking", "population
 
 export function OverviewStep({ caseKey }: StepProps) {
   const { t } = useTranslation();
-  const overview = useResource<Overview>("overview", () => v2.overview());
+  const overview = useResource<OverviewWithMissing>("overview", () => v2.overview());
   const cases = useCases();
   const [on, setOn] = useState<Record<Toggle, boolean>>({
     network: true,
@@ -121,6 +127,8 @@ export function OverviewStep({ caseKey }: StepProps) {
         )}
       </section>
 
+      {o.missingLines !== undefined && <MissingSection o={o} />}
+
       <details>
         <summary>{t("details")}</summary>
         <fieldset style={{ border: 0, margin: 0, padding: 0, display: "grid", gap: "var(--sp-1)" }}>
@@ -161,6 +169,67 @@ export function OverviewStep({ caseKey }: StepProps) {
         )}
       </details>
     </Panel>
+  );
+}
+
+/** O2: the prepared case (14 Nov, opens in step 4) and the last 60 minutes; only the lines with no vehicle are rows. */
+function MissingSection({ o }: { o: OverviewWithMissing }) {
+  const { t } = useTranslation();
+  const M = S.noVehicle;
+  const prepared = o.missingLines?.prepared ?? null;
+  const live = o.missingLines?.live ?? null;
+  const parts: { key: string; b: MissingBrief | null; when: string; href: string | null }[] = [];
+  if (prepared) {
+    const when = `${prepared.case ? tr(prepared.case.label) : ""}, ${fmtTime(prepared.window.start)}–${fmtTime(prepared.window.end)}`;
+    parts.push({ key: "prepared", b: prepared, when, href: stepHref(4, MISSING_CASE_KEY) });
+  }
+  parts.push({ key: "live", b: live, when: tr(M.now), href: null });
+  return (
+    <section>
+      <h2>{tr(M.title)}</h2>
+      <p className="small muted">{tr(M.label)}</p>
+      <ul className="list" style={{ marginTop: "var(--sp-2)" }}>
+        {parts.map(({ key, b, when, href }) => {
+          const p = b ? briefProvenance(o.provenance, b) : [];
+          const ok = b?.status === "ok";
+          return (
+            <li key={key}>
+              <p className="small muted">
+                {tr(M.brief(when))} <Figure inline value={ok ? b.count : null} provenance={p} />{" "}
+                {ok && (
+                  <>
+                    {tr(M.partial)} <Figure inline value={b.partialCount} provenance={p} />
+                  </>
+                )}
+                {b && !ok && <> · {tr(M.incomplete)}</>}
+              </p>
+              {ok &&
+                b.rows
+                  .filter((r) => r.state === "fara_vehicul")
+                  .map((r) => (
+                    <p key={r.routeId}>
+                      {href ? (
+                        <a
+                          href={href}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(href);
+                          }}
+                        >
+                          {tr(M.line(r.shortName))}
+                        </a>
+                      ) : (
+                        tr(M.line(r.shortName))
+                      )}
+                      {tr(M.row(r.since ? fmtTime(r.since) : t("unknown")))}
+                      <Figure inline value={r.tripsInService} provenance={p} /> {tr(M.trips)}
+                    </p>
+                  ))}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
 
