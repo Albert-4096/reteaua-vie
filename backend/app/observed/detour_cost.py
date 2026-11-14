@@ -67,13 +67,15 @@ METHOD = I18n(
     ro=("Planificat: orarul SMTT de dinainte de lucrare comparat cursă cu cursă cu cel în vigoare la începutul ei, pe "
         "porțiunea care s-a schimbat. Măsurat: din orarul observat (plecarea din prima stație a porțiunii → sosirea "
         "în ultima). Estimat: metoda pentru o lucrare nouă: viteza măsurată a altor linii pe aceleași străzi (OSM), "
-        "la aceeași oră (±1 h), plus staționarea măsurată în stații. Mediane cu interval bootstrap 90 %, o cursă = un "
+        "la aceeași oră (±1 h), plus staționarea măsurată în stații; estimarea nu folosește nicio cursă a liniilor "
+        "lucrării, deci nici cursele măsurate cu care e comparată. Mediane cu interval bootstrap 90 %, o cursă = un "
         f"bloc; sub {MIN_TRIPS} curse: „neconcludent”. Doar vineri după-amiază și weekend; fără extrapolare la zile "
         "lucrătoare."),
     en=("Planned: SMTT's timetable before the works compared trip by trip with the one in force when they start, on "
         "the stretch that changed. Measured: from the observed timetable (departure at the stretch's first stop → "
         "arrival at its last). Estimated: the method for a new closure: other lines' measured speed on the same "
-        "streets (OSM), same hour (±1 h), plus measured dwell at stops. Medians with a 90 % bootstrap interval, one "
+        "streets (OSM), same hour (±1 h), plus measured dwell at stops; the estimate uses no trip of the closure's "
+        "lines, so none of the measured trips it is compared with. Medians with a 90 % bootstrap interval, one "
         f"trip = one block; under {MIN_TRIPS} trips: inconclusive. Friday afternoon and weekend only; no weekday "
         "extrapolation."),
 )

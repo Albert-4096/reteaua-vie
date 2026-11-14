@@ -73,6 +73,21 @@ The pipeline reads each notice against the current feed (4.31), which already ru
 
 `run.py` copies the stored hero closure (`cl_20261108_16dec`) into its temporary state dir, applies the clerk decisions of the 11067 gold label (tick the unsure line 7 rows the label lists as suspended, untick the ring rows it lists as uncertain) and reads the impact. The result is the `hero` block: `stopsSuspended`, `departuresLost`, `residentsLosingStop` (model GHSL 2020, nu recensământ), `stopRoutePairsLost`, with provenance. `demoCaseUntouched` checks the stored demo case did not change.
 
+## L1 back-test: detour minutes estimated from other lines' speeds
+
+`detour_backtest.py` checks the method the platform uses to price a detour that has not happened yet (`/api/closures/{id}/detour-cost`, `estimated`): the time over a changed stretch estimated from **other** lines' measured runs on the same OSM streets (same direction, same hour ±1 h, plus measured dwell), against the time the diverted line's own trips took, measured in the observed timetable (L0, our live-vehicle recording). It is held out: the estimate uses no trip of the case's own lines, so none of the trips it is compared with. One trip is one bootstrap block (90 % interval); under 10 trips a figure is „neconcludent”.
+
+Cases are the changes L0 recorded with the timetable before them on disk: Mocioni (11060, GTFS 4.29 → 4.30) and Podul Polonă (11062, 4.30 → 4.31, line E3). Limits: Friday afternoon and weekend only (no weekday peak); two diversions, both terminal moves, not mid-route detours; on Podul Polonă few other buses run on E3's new streets, so most of that estimate falls back to the median speed of the area around the stretch (see the coverage column). The numbers move while the recording grows: rerun the script (`results/detour_backtest.json` holds the full output).
+
+<!-- backtest:start -->
+
+| Case | Recording | Days | Trips (n) | Street coverage | Estimate − measured, median [90 %] | Measured − timetable | Timetable after − before |
+|---|---|---|---|---|---|---|---|
+| Mocioni (11060), M32–M51 | din 23 ore înregistrate (vin. 13:47 → sâm. 12:59) | fri, sat | 49 | 94 %–100 % (trip-weighted 98 %) | −0.2 min [−0.5, +0.1] | −0.6 min (n 49) | −2.0 min (n 184) |
+| Podul Polonă (11062), E3 | din 23 ore înregistrate (vin. 13:47 → sâm. 12:59) | fri, sat | 17; mostly the area's median speed | 1 %–25 % (trip-weighted 17 %) | −0.3 min [−0.5, −0.1] | −0.5 min (n 17) | +0.0 min (n 77) |
+
+<!-- backtest:end -->
+
 ## Output: `results/latest.json`
 
 - `notices[]`: per notice, the rows found, the precision and recall (`strict` = only `affected` rows count as suspended; `lenient` = „neclar” (`unsure`) rows count too), the share sent to „neclar”, the number of `unread` sentences, whether the window matches, and the paste-to-alert time.

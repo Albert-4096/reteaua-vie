@@ -83,15 +83,15 @@
       },
       "estimated": {
         "sec": 271.5,
-        "low": 260.6,
-        "high": 385.0,
+        "low": 258.8,
+        "high": 349.0,
         "n": 19,
         "conclusive": true
       },
       "estimateError": {
         "sec": -54.0,
-        "low": -112.4,
-        "high": 3.4,
+        "low": -122.9,
+        "high": -13.8,
         "n": 19,
         "conclusive": true
       },
@@ -278,15 +278,15 @@
       },
       "estimated": {
         "sec": 76.8,
-        "low": 65.3,
-        "high": 83.0,
+        "low": 68.2,
+        "high": 83.5,
         "n": 12,
         "conclusive": true
       },
       "estimateError": {
         "sec": 6.2,
-        "low": -21.5,
-        "high": 23.3,
+        "low": -20.4,
+        "high": 24.7,
         "n": 12,
         "conclusive": true
       },
@@ -504,15 +504,15 @@
       },
       "estimated": {
         "sec": 87.1,
-        "low": 76.2,
-        "high": 98.3,
+        "low": 73.3,
+        "high": 95.4,
         "n": 6,
         "conclusive": false
       },
       "estimateError": {
         "sec": 0.3,
-        "low": -47.7,
-        "high": 19.2,
+        "low": -48.2,
+        "high": 17.8,
         "n": 6,
         "conclusive": false
       },
@@ -694,15 +694,15 @@
       },
       "estimated": {
         "sec": 99.7,
-        "low": 74.6,
-        "high": 132.5,
+        "low": 74.7,
+        "high": 137.9,
         "n": 3,
         "conclusive": false
       },
       "estimateError": {
         "sec": 18.0,
-        "low": -41.5,
-        "high": 32.3,
+        "low": -35.6,
+        "high": 41.7,
         "n": 3,
         "conclusive": false
       },
@@ -863,15 +863,15 @@
       },
       "estimated": {
         "sec": 120.7,
-        "low": 104.5,
-        "high": 147.4,
+        "low": 104.4,
+        "high": 150.3,
         "n": 2,
         "conclusive": false
       },
       "estimateError": {
         "sec": 17.4,
-        "low": -10.7,
-        "high": 55.5,
+        "low": -10.5,
+        "high": 55.6,
         "n": 2,
         "conclusive": false
       },
@@ -1045,15 +1045,15 @@
       },
       "estimated": {
         "sec": 113.5,
-        "low": 104.6,
-        "high": 148.8,
+        "low": 104.5,
+        "high": 158.0,
         "n": 1,
         "conclusive": false
       },
       "estimateError": {
         "sec": 1.0,
-        "low": -7.9,
-        "high": 36.3,
+        "low": -8.0,
+        "high": 45.5,
         "n": 1,
         "conclusive": false
       },
@@ -1201,14 +1201,14 @@
       "estimated": {
         "sec": 81.2,
         "low": 74.7,
-        "high": 116.0,
+        "high": 115.5,
         "n": 6,
         "conclusive": false
       },
       "estimateError": {
         "sec": -1.2,
-        "low": -51.9,
-        "high": 15.9,
+        "low": -49.9,
+        "high": 16.7,
         "n": 6,
         "conclusive": false
       },
@@ -1284,15 +1284,15 @@
     },
     "estimateError": {
       "sec": -13.7,
-      "low": -30.8,
-      "high": 8.4,
+      "low": -29.5,
+      "high": 8.1,
       "n": 49,
       "conclusive": true
     }
   },
   "method": {
-    "ro": "Planificat: orarul SMTT de dinainte de lucrare comparat cursă cu cursă cu cel în vigoare la începutul ei, pe porțiunea care s-a schimbat. Măsurat: din orarul observat (plecarea din prima stație a porțiunii → sosirea în ultima). Estimat: metoda pentru o lucrare nouă: viteza măsurată a altor linii pe aceleași străzi (OSM), la aceeași oră (±1 h), plus staționarea măsurată în stații. Mediane cu interval bootstrap 90 %, o cursă = un bloc; sub 10 curse: „neconcludent”. Doar vineri după-amiază și weekend; fără extrapolare la zile lucrătoare.",
-    "en": "Planned: SMTT's timetable before the works compared trip by trip with the one in force when they start, on the stretch that changed. Measured: from the observed timetable (departure at the stretch's first stop → arrival at its last). Estimated: the method for a new closure: other lines' measured speed on the same streets (OSM), same hour (±1 h), plus measured dwell at stops. Medians with a 90 % bootstrap interval, one trip = one block; under 10 trips: inconclusive. Friday afternoon and weekend only; no weekday extrapolation."
+    "ro": "Planificat: orarul SMTT de dinainte de lucrare comparat cursă cu cursă cu cel în vigoare la începutul ei, pe porțiunea care s-a schimbat. Măsurat: din orarul observat (plecarea din prima stație a porțiunii → sosirea în ultima). Estimat: metoda pentru o lucrare nouă: viteza măsurată a altor linii pe aceleași străzi (OSM), la aceeași oră (±1 h), plus staționarea măsurată în stații; estimarea nu folosește nicio cursă a liniilor lucrării, deci nici cursele măsurate cu care e comparată. Mediane cu interval bootstrap 90 %, o cursă = un bloc; sub 10 curse: „neconcludent”. Doar vineri după-amiază și weekend; fără extrapolare la zile lucrătoare.",
+    "en": "Planned: SMTT's timetable before the works compared trip by trip with the one in force when they start, on the stretch that changed. Measured: from the observed timetable (departure at the stretch's first stop → arrival at its last). Estimated: the method for a new closure: other lines' measured speed on the same streets (OSM), same hour (±1 h), plus measured dwell at stops; the estimate uses no trip of the closure's lines, so none of the measured trips it is compared with. Medians with a 90 % bootstrap interval, one trip = one block; under 10 trips: inconclusive. Friday afternoon and weekend only; no weekday extrapolation."
   },
   "provenance": [
     {

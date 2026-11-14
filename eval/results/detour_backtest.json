@@ -1,0 +1,243 @@
+{
+ "cases": [
+  {
+   "case": "Mocioni (11060), M32–M51",
+   "status": "ok",
+   "feedBefore": "4.29",
+   "feedAfter": "4.30",
+   "recording": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "stretches": 12,
+   "stretchesMeasured": 7,
+   "days": [
+    "fri",
+    "sat"
+   ],
+   "streetCoverage": {
+    "min": 0.937,
+    "max": 1.0,
+    "tripWeighted": 0.979
+   },
+   "plannedExtra": {
+    "sec": -120.0,
+    "low": -180.0,
+    "high": -120.0,
+    "n": 184,
+    "conclusive": true
+   },
+   "measuredVsPlanned": {
+    "sec": -33.0,
+    "low": -61.0,
+    "high": -1.5,
+    "n": 49,
+    "conclusive": true
+   },
+   "estimateError": {
+    "sec": -13.7,
+    "low": -29.5,
+    "high": 8.1,
+    "n": 49,
+    "conclusive": true
+   },
+   "perStretch": [
+    {
+     "line": "M32",
+     "direction": 0,
+     "kind": "start_moved",
+     "after": [
+      "478",
+      "479",
+      "292"
+     ],
+     "coverage": 1.0,
+     "estimateError": {
+      "sec": -54.0,
+      "low": -122.9,
+      "high": -13.8,
+      "n": 19,
+      "conclusive": true
+     }
+    },
+    {
+     "line": "M32",
+     "direction": 1,
+     "kind": "end_moved",
+     "after": [
+      "352",
+      "478"
+     ],
+     "coverage": 1.0,
+     "estimateError": {
+      "sec": 6.2,
+      "low": -20.4,
+      "high": 24.7,
+      "n": 12,
+      "conclusive": true
+     }
+    },
+    {
+     "line": "M36",
+     "direction": 1,
+     "kind": "end_moved",
+     "after": [
+      "324",
+      "270"
+     ],
+     "coverage": 0.937,
+     "estimateError": {
+      "sec": 0.3,
+      "low": -48.2,
+      "high": 17.8,
+      "n": 6,
+      "conclusive": false
+     }
+    },
+    {
+     "line": "M37",
+     "direction": 1,
+     "kind": "end_moved",
+     "after": [
+      "269",
+      "270"
+     ],
+     "coverage": 0.946,
+     "estimateError": {
+      "sec": 18.0,
+      "low": -35.6,
+      "high": 41.7,
+      "n": 3,
+      "conclusive": false
+     }
+    },
+    {
+     "line": "M38",
+     "direction": 1,
+     "kind": "end_moved",
+     "after": [
+      "269",
+      "270"
+     ],
+     "coverage": 0.946,
+     "estimateError": {
+      "sec": 17.4,
+      "low": -10.5,
+      "high": 55.6,
+      "n": 2,
+      "conclusive": false
+     }
+    },
+    {
+     "line": "M46",
+     "direction": 1,
+     "kind": "end_moved",
+     "after": [
+      "269",
+      "270"
+     ],
+     "coverage": 0.946,
+     "estimateError": {
+      "sec": 1.0,
+      "low": -8.0,
+      "high": 45.5,
+      "n": 1,
+      "conclusive": false
+     }
+    },
+    {
+     "line": "M51",
+     "direction": 1,
+     "kind": "end_moved",
+     "after": [
+      "269",
+      "270"
+     ],
+     "coverage": 0.946,
+     "estimateError": {
+      "sec": -1.2,
+      "low": -49.9,
+      "high": 16.7,
+      "n": 6,
+      "conclusive": false
+     }
+    }
+   ]
+  },
+  {
+   "case": "Podul Polonă (11062), E3",
+   "status": "ok",
+   "feedBefore": "4.30",
+   "feedAfter": "4.31",
+   "recording": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "stretches": 2,
+   "stretchesMeasured": 2,
+   "days": [
+    "fri",
+    "sat"
+   ],
+   "streetCoverage": {
+    "min": 0.012,
+    "max": 0.252,
+    "tripWeighted": 0.167
+   },
+   "plannedExtra": {
+    "sec": 0.0,
+    "low": 0.0,
+    "high": 0.0,
+    "n": 77,
+    "conclusive": true
+   },
+   "measuredVsPlanned": {
+    "sec": -30.5,
+    "low": -61.0,
+    "high": -8.5,
+    "n": 17,
+    "conclusive": true
+   },
+   "estimateError": {
+    "sec": -15.4,
+    "low": -28.6,
+    "high": -5.0,
+    "n": 17,
+    "conclusive": true
+   },
+   "perStretch": [
+    {
+     "line": "E3",
+     "direction": 0,
+     "kind": "end_moved",
+     "after": [
+      "343",
+      "345",
+      "312"
+     ],
+     "coverage": 0.012,
+     "estimateError": {
+      "sec": -18.8,
+      "low": -31.9,
+      "high": -7.0,
+      "n": 6,
+      "conclusive": false
+     }
+    },
+    {
+     "line": "E3",
+     "direction": 1,
+     "kind": "start_moved",
+     "after": [
+      "312",
+      "313",
+      "1064",
+      "316"
+     ],
+     "coverage": 0.252,
+     "estimateError": {
+      "sec": -8.8,
+      "low": -34.9,
+      "high": -0.7,
+      "n": 11,
+      "conclusive": true
+     }
+    }
+   ]
+  }
+ ]
+}
