@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-14T00:51:23+02:00",
-  "repoCommit": "76ea5a5",
+  "generatedAt": "2026-11-14T14:02:07+02:00",
+  "repoCommit": "3c4452c",
   "feed": {
     "version": "4.31",
     "file": "smtt_1bd0e3-65f7b81245f0f.zip",
@@ -13,68 +13,7 @@
     "labelledBy": [
       "AI-assisted from the notice text; human review pending"
     ],
-    "humanReview": {
-      "notices": {
-        "11058": {
-          "groups": 0,
-          "ok": 0,
-          "wrong": 0,
-          "open": 0,
-          "stale": 0,
-          "wrongGroups": [],
-          "reviewer": null,
-          "date": null
-        },
-        "11060": {
-          "groups": 13,
-          "ok": 0,
-          "wrong": 0,
-          "open": 13,
-          "stale": 0,
-          "wrongGroups": [],
-          "reviewer": null,
-          "date": null
-        },
-        "11062": {
-          "groups": 2,
-          "ok": 0,
-          "wrong": 0,
-          "open": 2,
-          "stale": 0,
-          "wrongGroups": [],
-          "reviewer": null,
-          "date": null
-        },
-        "11065": {
-          "groups": 4,
-          "ok": 0,
-          "wrong": 0,
-          "open": 4,
-          "stale": 0,
-          "wrongGroups": [],
-          "reviewer": null,
-          "date": null
-        },
-        "11067": {
-          "groups": 12,
-          "ok": 0,
-          "wrong": 0,
-          "open": 12,
-          "stale": 0,
-          "wrongGroups": [],
-          "reviewer": null,
-          "date": null
-        }
-      },
-      "groups": 31,
-      "ok": 0,
-      "wrong": 0,
-      "open": 31,
-      "stale": 0,
-      "complete": false,
-      "allOk": false,
-      "note": "Group verdicts of the human review sheet (eval/review.py). labelledBy changes only by hand, once every group is ok."
-    }
+    "humanReview": null
   },
   "parser": "app.m1_disruption.parser:parse_notice",
   "analyzer": "app.m1_disruption.analysis:analyze_closure",
@@ -85,8 +24,8 @@
       "title": "Modificări în circulația liniilor M30, M29, M35 M 44 și S7, începând cu 2 noiembrie",
       "goldSuspended": 0,
       "goldUncertain": 0,
-      "parseSeconds": 1.865,
-      "unread": 5,
+      "parseSeconds": 1.696,
+      "unread": 7,
       "windowMatch": {
         "start": true,
         "end": false
@@ -95,7 +34,7 @@
         "gold": [],
         "predicted": []
       },
-      "analysisSeconds": 4.199,
+      "analysisSeconds": 4.454,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -265,8 +204,8 @@
       "title": "Modificări temporare ale traseelor liniilor metropolitane S8, M32, M36, M37, M38, M46 și M51, începând cu 2 noiembrie",
       "goldSuspended": 0,
       "goldUncertain": 1,
-      "parseSeconds": 9.267,
-      "unread": 2,
+      "parseSeconds": 5.691,
+      "unread": 4,
       "windowMatch": {
         "start": true,
         "end": false
@@ -289,7 +228,7 @@
           "R_AB_M51"
         ]
       },
-      "analysisSeconds": 0.051,
+      "analysisSeconds": 0.012,
       "rows": {
         "affected": 0,
         "unsure": 0
@@ -784,9 +723,9 @@
     {
       "postId": 11062,
       "title": "Informare călători privind linia E3",
-      "goldSuspended": 0,
+      "goldSuspended": 2,
       "goldUncertain": 0,
-      "parseSeconds": 0.029,
+      "parseSeconds": 0.021,
       "unread": 2,
       "windowMatch": {
         "start": true,
@@ -800,27 +739,27 @@
           "R_AB_E3"
         ]
       },
-      "analysisSeconds": 4.664,
+      "analysisSeconds": 4.241,
       "rows": {
-        "affected": 0,
+        "affected": 2,
         "unsure": 0
       },
-      "neclarShare": null,
+      "neclarShare": 0.0,
       "strict": {
-        "tp": 0,
+        "tp": 2,
         "fp": 0,
         "fn": 0,
-        "precision": null,
-        "recall": null,
+        "precision": 1.0,
+        "recall": 1.0,
         "falsePositives": [],
         "missed": []
       },
       "lenient": {
-        "tp": 0,
+        "tp": 2,
         "fp": 0,
         "fn": 0,
-        "precision": null,
-        "recall": null,
+        "precision": 1.0,
+        "recall": 1.0,
         "falsePositives": [],
         "missed": []
       },
@@ -838,27 +777,17 @@
           ]
         ],
         "strict": {
-          "tp": 0,
+          "tp": 2,
           "fp": 0,
-          "fn": 7,
-          "precision": null,
-          "recall": 0.0,
+          "fn": 5,
+          "precision": 1.0,
+          "recall": 0.2857,
           "falsePositives": [],
           "missed": [
-            [
-              "314",
-              "R_AB_E3",
-              1
-            ],
             [
               "315",
               "R_AB_E3",
               1
-            ],
-            [
-              "344",
-              "R_AB_E3",
-              0
             ],
             [
               "346",
@@ -883,27 +812,17 @@
           ]
         },
         "lenient": {
-          "tp": 0,
+          "tp": 2,
           "fp": 0,
-          "fn": 7,
-          "precision": null,
-          "recall": 0.0,
+          "fn": 5,
+          "precision": 1.0,
+          "recall": 0.2857,
           "falsePositives": [],
           "missed": [
-            [
-              "314",
-              "R_AB_E3",
-              1
-            ],
             [
               "315",
               "R_AB_E3",
               1
-            ],
-            [
-              "344",
-              "R_AB_E3",
-              0
             ],
             [
               "346",
@@ -928,27 +847,17 @@
           ]
         },
         "aiLabelVsIndependent": {
-          "tp": 0,
+          "tp": 2,
           "fp": 0,
-          "fn": 7,
-          "precision": null,
-          "recall": 0.0,
+          "fn": 5,
+          "precision": 1.0,
+          "recall": 0.2857,
           "falsePositives": [],
           "missed": [
-            [
-              "314",
-              "R_AB_E3",
-              1
-            ],
             [
               "315",
               "R_AB_E3",
               1
-            ],
-            [
-              "344",
-              "R_AB_E3",
-              0
             ],
             [
               "346",
@@ -974,9 +883,9 @@
         }
       },
       "pasteToAlert": {
-        "seconds": null,
-        "status": "not-available",
-        "reason": "publish -> HTTP 409",
+        "seconds": 0.165,
+        "status": "valid",
+        "alerts": 2,
         "steps": [
           {
             "step": "parse",
@@ -987,10 +896,36 @@
             "status": 200
           },
           {
+            "step": "confirm",
+            "status": 200
+          },
+          {
             "step": "publish",
-            "status": 409
+            "status": 200
+          },
+          {
+            "step": "feed",
+            "status": 200
           }
-        ]
+        ],
+        "clock": "2026-11-03T19:00:10+02:00",
+        "validator": {
+          "method": "validator",
+          "passed": true,
+          "errorCount": 0,
+          "warningCount": 1,
+          "rules": [
+            {
+              "id": "W008",
+              "severity": "WARNING",
+              "occurrences": 1
+            }
+          ],
+          "tool": "1.0.0-SNAPSHOT",
+          "fallbackReason": null
+        },
+        "validity": "protobuf parses, header 2.x, every alert has informed_entity and header_text (internal check, not the MobilityData validator)",
+        "humanStep": "every analysis row confirmed as proposed (no human think time)"
       }
     },
     {
@@ -998,7 +933,7 @@
       "title": "Închiderea temporară a circulației pe Strada Ardealului și modificarea traseului liniei E3",
       "goldSuspended": 11,
       "goldUncertain": 0,
-      "parseSeconds": 0.032,
+      "parseSeconds": 0.118,
       "unread": 0,
       "windowMatch": {
         "start": true,
@@ -1012,7 +947,7 @@
           "R_AB_E3"
         ]
       },
-      "analysisSeconds": 0.061,
+      "analysisSeconds": 0.055,
       "rows": {
         "affected": 11,
         "unsure": 0
@@ -1037,9 +972,9 @@
         "missed": []
       },
       "pasteToAlert": {
-        "seconds": 0.179,
+        "seconds": 0.256,
         "status": "valid",
-        "alerts": 11,
+        "alerts": 13,
         "steps": [
           {
             "step": "parse",
@@ -1087,7 +1022,7 @@
       "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989",
       "goldSuspended": 88,
       "goldUncertain": 29,
-      "parseSeconds": 0.903,
+      "parseSeconds": 0.524,
       "unread": 3,
       "windowMatch": {
         "start": true,
@@ -1105,7 +1040,7 @@
           "R_TV_7"
         ]
       },
-      "analysisSeconds": 0.577,
+      "analysisSeconds": 0.289,
       "rows": {
         "affected": 67,
         "unsure": 50
@@ -1236,9 +1171,9 @@
         "missed": []
       },
       "pasteToAlert": {
-        "seconds": 1.285,
+        "seconds": 1.121,
         "status": "valid",
-        "alerts": 82,
+        "alerts": 84,
         "steps": [
           {
             "step": "parse",
@@ -1284,41 +1219,41 @@
   ],
   "overall": {
     "strict": {
-      "tp": 78,
+      "tp": 80,
       "fp": 0,
       "fn": 21,
       "precision": 1.0,
-      "recall": 0.7879
+      "recall": 0.7921
     },
     "lenient": {
-      "tp": 99,
+      "tp": 101,
       "fp": 0,
       "fn": 0,
       "precision": 1.0,
       "recall": 1.0
     },
-    "neclarShare": 0.3906,
+    "neclarShare": 0.3846,
     "pasteToAlertSeconds": {
-      "median": 0.732,
-      "max": 1.285,
-      "n": 2
+      "median": 0.256,
+      "max": 1.121,
+      "n": 3
     },
     "gtfsRtValidatorPass": true,
-    "gtfsRtValidatorRuns": 2,
+    "gtfsRtValidatorRuns": 3,
     "independentGold": {
       "strict": {
-        "tp": 0,
+        "tp": 2,
         "fp": 0,
-        "fn": 39,
-        "precision": null,
-        "recall": 0.0
+        "fn": 37,
+        "precision": 1.0,
+        "recall": 0.0513
       },
       "lenient": {
-        "tp": 0,
+        "tp": 2,
         "fp": 0,
-        "fn": 39,
-        "precision": null,
-        "recall": 0.0
+        "fn": 37,
+        "precision": 1.0,
+        "recall": 0.0513
       },
       "notices": [
         "11058",
@@ -1330,124 +1265,22 @@
           "closureId": "cl_20261102_mocioni",
           "goldRows": 27,
           "strict": {
-            "tp": 17,
+            "tp": 27,
             "fp": 0,
-            "fn": 10,
+            "fn": 0,
             "precision": 1.0,
-            "recall": 0.6296,
+            "recall": 1.0,
             "falsePositives": [],
-            "missed": [
-              [
-                "352",
-                "R_AB_M36",
-                1
-              ],
-              [
-                "352",
-                "R_AB_M37",
-                1
-              ],
-              [
-                "352",
-                "R_AB_M38",
-                1
-              ],
-              [
-                "352",
-                "R_AB_M51",
-                1
-              ],
-              [
-                "353",
-                "R_AB_M38",
-                1
-              ],
-              [
-                "356",
-                "R_AB_M38",
-                0
-              ],
-              [
-                "356",
-                "R_AB_M38",
-                1
-              ],
-              [
-                "356",
-                "R_AB_M46",
-                0
-              ],
-              [
-                "356",
-                "R_AB_M46",
-                1
-              ],
-              [
-                "357",
-                "R_AB_M38",
-                0
-              ]
-            ]
+            "missed": []
           },
           "lenient": {
-            "tp": 17,
+            "tp": 27,
             "fp": 0,
-            "fn": 10,
+            "fn": 0,
             "precision": 1.0,
-            "recall": 0.6296,
+            "recall": 1.0,
             "falsePositives": [],
-            "missed": [
-              [
-                "352",
-                "R_AB_M36",
-                1
-              ],
-              [
-                "352",
-                "R_AB_M37",
-                1
-              ],
-              [
-                "352",
-                "R_AB_M38",
-                1
-              ],
-              [
-                "352",
-                "R_AB_M51",
-                1
-              ],
-              [
-                "353",
-                "R_AB_M38",
-                1
-              ],
-              [
-                "356",
-                "R_AB_M38",
-                0
-              ],
-              [
-                "356",
-                "R_AB_M38",
-                1
-              ],
-              [
-                "356",
-                "R_AB_M46",
-                0
-              ],
-              [
-                "356",
-                "R_AB_M46",
-                1
-              ],
-              [
-                "357",
-                "R_AB_M38",
-                0
-              ]
-            ]
+            "missed": []
           }
         }
       }

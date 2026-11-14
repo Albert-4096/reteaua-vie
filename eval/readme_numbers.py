@@ -156,29 +156,35 @@ def gold_part(d: dict) -> list[str]:
         f"versions, `eval/gold_gtfs_diff.py`, no labels of ours), {fp} false.*",
     ]
     prepared = (ig.get("preparedCases") or {}).get("11060")
-    if found == 0 and prepared and "11060" in rows:
+    if found < gold and prepared and "11060" in rows:
         p_found, p_gold, p_fp = scored(prepared["strict"])
         base = rows["11060"]["transition"].split("->")[0]
         feed = d["feed"]["version"]
-        parts = [(rows[k]["goldRows"], GOLD_TOPIC.get(k, (f"anunțul {k}", f"notice {k}")))
-                 for k in ("11060", "11062", "11058") if k in rows]
-        ro_list = ", ".join(f"{n} pentru {t[0]}" for n, t in parts)
-        en_list = ", ".join(f"{n} for {t[1]}" for n, t in parts)
-        out += [
-            f"- De ce calea anunțului are {found} din {gold} aici: evaluarea citește fiecare anunț pe GTFS-ul "
-            f"de azi, {feed}, din care SMTT a scos deja aceste {gold} {de(gold)}rânduri stație–linie–sens "
-            f"({ro_list}), deci nu mai are ce găsi; cifra independentă onestă este cazul Mocioni pregătit pe "
-            f"GTFS-ul în vigoare înainte de lucrări ({base}), care găsește **{p_found} din {p_gold}** "
-            f"{de(p_gold)}rânduri, {p_fp} false. "
-            "Ca fiecare anunț să fie punctat pe feedul în vigoare la data postării, potrivirea M1 trebuie să "
-            "ruleze pe un GTFS mai vechi, ceea ce încă nu poate.  \n"
-            f"  *Why the notice path scores {found} of {gold} here: the eval reads every notice against "
-            f"today's GTFS {feed}, in which SMTT has already removed those {gold} stop–line–direction rows "
-            f"({en_list}), so there is nothing left for it to find; the honest independent figure is the "
-            f"prepared Mocioni case, built on the GTFS in force before the works ({base}), which finds "
-            f"{p_found} of those {p_gold} rows with {p_fp} false positives. Scoring each notice on the feed in "
-            "force at its post date needs the M1 matching to run on an older GTFS, which it cannot do yet.*",
-        ]
+        ro, en = [f"- De ce calea anunțului are {found} din {gold}:"], [f"  *Why the notice path scores {found} of {gold}:"]
+        if "11062" in rows:
+            f62, g62, _ = scored(rows["11062"]["strict"])
+            b62 = rows["11062"]["transition"].split("->")[0]
+            ro.append(f"la 11062 găsește {f62} din {g62}, stațiile E3 de pe strada Polonă, citite pe GTFS-ul în vigoare "
+                      f"când începe schimbarea ({b62}); celelalte {g62 - f62} sunt stații pe care noul traseu nu le mai "
+                      "deservește și pe care anunțul nu le numește.")
+            en.append(f"on 11062 it finds {f62} of {g62}, the E3 stops on Polonă street, read on the GTFS in force when "
+                      f"the change starts ({b62}); the other {g62 - f62} are stops the new route no longer serves, which "
+                      "the notice does not name.")
+        f60, g60, _ = scored(rows["11060"]["strict"])
+        ro.append(f"La 11060 găsește {f60} din {g60}: parserul citește listele de stații deservite pe GTFS-ul de azi, "
+                  f"{feed}, unde traseul e deja deviat; cifra independentă onestă este cazul Mocioni pregătit pe "
+                  f"GTFS-ul în vigoare înainte de lucrări ({base}), care găsește **{p_found} din {p_gold}** "
+                  f"{de(p_gold)}rânduri, {p_fp} false.")
+        en.append(f"On 11060 it finds {f60} of {g60}: the parser reads the served-stop lists on today's GTFS, {feed}, "
+                  "where the route is already diverted; the honest independent figure is the prepared Mocioni case, "
+                  f"built on the GTFS in force before the works ({base}), which finds {p_found} of those {p_gold} rows "
+                  f"with {p_fp} false positives.")
+        if "11058" in rows:
+            g58 = scored(rows["11058"]["strict"])[1]
+            t58 = GOLD_TOPIC["11058"]
+            ro.append(f"Cele {g58} {de(g58)}rânduri ale 11058 sunt {t58[0]}.")
+            en.append(f"The {g58} rows of 11058 are {t58[1]}.")
+        out += [" ".join(ro) + "  \n" + " ".join(en) + "*"]
     return out
 
 
