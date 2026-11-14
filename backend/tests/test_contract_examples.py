@@ -25,6 +25,8 @@ MODELS: dict[str, object] = {
     "publish-result.json": m.PublishResult,
     "live-check.json": m.LiveCheck,
     "cases.json": list[m.CaseSummary],
+    "v2/health.json": m.Health,
+    "v2/scans.json": m.ScanCounts,
     "v2/closure-summary.json": list[m.ClosureSummary],
     "v2/overview.json": m.Overview,
     "v2/layer-bike.json": m.LayerCollection,

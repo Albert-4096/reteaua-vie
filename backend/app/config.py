@@ -20,7 +20,7 @@ DEFAULT_DEMO_NOW = "2026-11-08T12:00:00+02:00"
 DEFAULT_PUBLIC_BASE_URL = "https://unihack.alberyt.xyz"
 DEFAULT_DATA_DIR = "/srv/unihack/app/data"
 
-STATE_KINDS = ("closures", "scenarios", "published")
+STATE_KINDS = ("closures", "scenarios", "published", "scans")
 
 
 def load_env_file(path: str | os.PathLike | None) -> int:

@@ -1,0 +1,46 @@
+{
+    "ok": true,
+    "feedVersion": "4.31",
+    "dataFetchedAt": "2026-11-13T13:52:51+02:00",
+    "dataFrozenAt": null,
+    "demoNow": "2026-11-08T12:00:00+02:00",
+    "modulesFailed": [],
+    "sources": [
+        {
+            "id": "gtfs",
+            "lastOkAt": "2026-11-13T13:52:51+02:00",
+            "version": "4.31",
+            "stale": false
+        },
+        {
+            "id": "vehicles",
+            "lastOkAt": "2026-11-14T12:47:18+02:00",
+            "version": "20261114-10",
+            "stale": false
+        },
+        {
+            "id": "stpt",
+            "lastOkAt": "2026-11-13T13:49:58+02:00",
+            "version": "10851",
+            "stale": false
+        },
+        {
+            "id": "sesizari",
+            "lastOkAt": "2026-11-14T11:53:13+02:00",
+            "version": "20261114-0953",
+            "stale": false
+        },
+        {
+            "id": "events",
+            "lastOkAt": "2026-11-14T07:52:53+02:00",
+            "version": "20261114-0552",
+            "stale": false
+        },
+        {
+            "id": "parking",
+            "lastOkAt": "2026-11-13T13:29:14+02:00",
+            "version": null,
+            "stale": false
+        }
+    ]
+}

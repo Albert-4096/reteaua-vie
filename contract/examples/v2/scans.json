@@ -1,0 +1,28 @@
+{
+    "closureId": "cl_20261102_mocioni",
+    "total": 3,
+    "bucket": "hour",
+    "stops": [
+        {
+            "stopId": "434",
+            "count": 2,
+            "firstBucket": "2026-11-14T12:00:00+02:00",
+            "lastBucket": "2026-11-14T12:00:00+02:00"
+        },
+        {
+            "stopId": "12",
+            "count": 1,
+            "firstBucket": "2026-11-14T12:00:00+02:00",
+            "lastBucket": "2026-11-14T12:00:00+02:00"
+        }
+    ],
+    "provenance": [
+        {
+            "source": "Re\u021beaua Vie, scan\u0103ri afi\u0219e (QR)",
+            "url": null,
+            "version": null,
+            "fetchedAt": "2026-11-14T12:47:00+02:00",
+            "note": "Doar contor pe sta\u021bie \u0219i or\u0103; f\u0103r\u0103 IP, agent sau cookie. Fiecare deschidere a paginii QR, nu persoane unice."
+        }
+    ]
+}

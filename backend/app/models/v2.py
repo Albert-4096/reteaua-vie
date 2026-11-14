@@ -530,3 +530,26 @@ class Job(Model):
 
 class JobAccepted(Model):
     jobId: str
+
+
+class ScanStop(Model):
+    """v2.4 (R7): poster scans of one stop. Counts only, no visitor data."""
+
+    stopId: str
+    count: int
+    firstBucket: str  # hour bucket, Europe/Bucharest, e.g. 2026-11-14T12:00+02:00
+    lastBucket: str
+
+
+class ScanCounts(Model):
+    closureId: str
+    total: int
+    bucket: Literal["hour"] = "hour"
+    stops: list[ScanStop]
+    provenance: list[Provenance]
+
+
+class ScanAck(Model):
+    ok: bool = True
+    closureId: str
+    stopId: str
