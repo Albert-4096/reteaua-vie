@@ -4,9 +4,9 @@ import i18n from "../i18n";
 const TZ = "Europe/Bucharest";
 const locale = () => (i18n.language === "en" ? "en-GB" : "ro-RO");
 
-export function fmtNumber(n: number | null | undefined): string | null {
+export function fmtNumber(n: number | null | undefined, digits = 0): string | null {
   if (n === null || n === undefined || Number.isNaN(n)) return null;
-  return new Intl.NumberFormat(locale(), { maximumFractionDigits: 0 }).format(n);
+  return new Intl.NumberFormat(locale(), { maximumFractionDigits: digits }).format(n);
 }
 
 function parts(iso: string) {

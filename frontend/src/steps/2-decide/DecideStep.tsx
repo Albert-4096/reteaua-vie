@@ -12,6 +12,7 @@ import { navigate, stepHref } from "../../lib/router";
 import { useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { ApprovalFile } from "./ApprovalFile";
+import { KmRows } from "./KmRows";
 import { A, S } from "./strings";
 
 export function DecideStep(props: StepProps) {
@@ -125,6 +126,8 @@ function Decide({ closureId, caseKey }: StepProps & { closureId: string }) {
           <CompareTable a={compare.data.a} b={compare.data.b} titles={pair.map((s) => tr(s.title))} />
         )}
       </section>
+
+      <KmRows closureId={closureId} />
 
       <details>
         <summary>{t("details")}</summary>

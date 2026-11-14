@@ -114,3 +114,34 @@ export const A = {
   signature: { ro: "Semnătura", en: "Signature" },
   date: { ro: "Data", en: "Date" },
 };
+
+// R5: km not run on the cut section and the walk between its ends, for SMTT. Km only, never money.
+export const K = {
+  title: { ro: "Km nefăcuți, pentru SMTT", en: "Km not run, for SMTT" },
+  mode: {
+    tram: { ro: "Tramvai", en: "Tram" },
+    bus: { ro: "Autobuz", en: "Bus" },
+    trolleybus: { ro: "Troleibuz", en: "Trolleybus" },
+  } as Record<string, { ro: string; en: string }>,
+  trips: { ro: "curse", en: "trips" },
+  perTrip: { ro: "km nefăcuți", en: "km not run" },
+  walk: { ro: "pe jos între capete", en: "on foot between the ends" },
+  none: { ro: "Nicio linie nu pierde o porțiune de traseu.", en: "No line loses part of its route." },
+  source: (v: string) => ({
+    ro: `Din orarul GTFS SMTT ${v}, pentru perioada din anunț. Doar km, fără costuri.`,
+    en: `From the SMTT GTFS timetable ${v}, for the notice's window. Km only, no costs.`,
+  }),
+  methodKm: {
+    ro: "Lungimea traseului GTFS între prima și ultima stație lipsă × cursele din fereastră, pe fiecare sens; km pe cursă = totalul ÷ curse.",
+    en: "Length of the GTFS route between the first and the last lost stop × the trips in the window, per direction; km per trip = the total ÷ trips.",
+  },
+  methodWalk: {
+    ro: "Distanța pe jos (OSM) între ultima stație servită înainte de porțiunea închisă și prima de după, la 80 m/min.",
+    en: "Walking distance (OSM) between the last served stop before the closed section and the first one after it, at 80 m/min.",
+  },
+  csv: { ro: "Km nefăcuți pe linii, pentru SMTT (CSV)", en: "Km not run per line, for SMTT (CSV)" },
+  csvHint: {
+    ro: "Câți km din orar nu se fac pe fiecare linie și sens în perioada lucrării, ca SMTT să verifice raportul lunar al STPT.",
+    en: "How many timetabled km each line and direction does not run during the works, for SMTT to check STPT's monthly report.",
+  },
+};

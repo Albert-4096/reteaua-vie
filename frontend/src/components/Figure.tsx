@@ -12,13 +12,15 @@ type Props = {
   /** One sentence on how the number is made (e.g. Impact.method). */
   method?: string | null;
   inline?: boolean;
+  /** Decimals to show (default 0), e.g. 1 for a section length in km. */
+  digits?: number;
 };
 
-export function Figure({ value, label, unit, provenance, method, inline }: Props) {
+export function Figure({ value, label, unit, provenance, method, inline, digits }: Props) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const id = useId();
-  const shown = fmtNumber(value);
+  const shown = fmtNumber(value, digits);
   return (
     <span className={inline ? "figure figure-inline" : "figure"} onMouseLeave={() => setOpen(false)}>
       <button
