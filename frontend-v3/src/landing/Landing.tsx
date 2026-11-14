@@ -72,7 +72,7 @@ export function Landing() {
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}>
             Biroul de mobilitate al Primăriei Timișoara și al STPT pentru lucrările care închid o stradă cu transport public. De la plan la raport, pe datele reale ale orașului.
           </motion.p>
-          <motion.div className="mt-9 flex items-center justify-center gap-3"
+          <motion.div className="mt-9 flex flex-wrap items-center justify-center gap-3"
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
             <Button asChild size="lg" className="h-12 rounded-full px-6 text-base shadow-[inset_0_1px_0_rgb(255_255_255/0.25),0_8px_20px_-8px_var(--primary)]">
               <a href={APP}>Deschide platforma <ArrowRight className="size-4" /></a>

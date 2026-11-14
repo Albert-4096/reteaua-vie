@@ -48,6 +48,26 @@ function Pill({ n, x, y, align }: { n: Node; x: number; y: number; align: "left"
   );
 }
 
+/** Below md the hub does not fit: the same nodes as two plain lists. */
+function NodeList({ title, nodes }: { title: string; nodes: Node[] }) {
+  return (
+    <div>
+      <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+      <ul className="mt-3 divide-y border-y">
+        {nodes.map((n) => (
+          <li key={n.label} className="flex items-center gap-3 py-3">
+            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-muted">
+              <n.icon className="size-4" strokeWidth={1.8} />
+            </span>
+            <span className="text-sm font-medium">{n.label}</span>
+            <span className="ml-auto text-right text-xs text-muted-foreground">{n.note}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function Integration() {
   const inY = ys(IN.length);
   const outY = ys(OUT.length);
@@ -56,7 +76,12 @@ export function Integration() {
     ...outY.map((y, i) => ({ d: beam(HUB.x + 70, HUB.y, RIGHT_X, y), delay: 1.2 + i * 0.3 })),
   ];
   return (
-    <div className="relative mx-auto aspect-[1000/440] w-full max-w-5xl">
+    <>
+    <div className="mx-auto max-w-md space-y-8 md:hidden">
+      <NodeList title="Intră" nodes={IN} />
+      <NodeList title="Iese" nodes={OUT} />
+    </div>
+    <div className="relative mx-auto hidden aspect-[1000/440] w-full max-w-5xl md:block">
       <svg viewBox={`0 0 ${VW} ${VH}`} className="absolute inset-0 h-full w-full" aria-hidden>
         {paths.map((p, i) => (
           <g key={i}>
@@ -76,5 +101,6 @@ export function Integration() {
         </div>
       </div>
     </div>
+    </>
   );
 }
