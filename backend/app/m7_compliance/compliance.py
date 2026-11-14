@@ -14,6 +14,7 @@ from typing import Iterable
 from app import config
 from app.common import provenance as prov
 from app.common.timeutil import iso
+from app.m7_compliance import webaccess
 from app.m7_compliance.exports import available
 from app.models.base import I18n
 from app.models.v2 import ComplianceCounts, ComplianceReport, Obligation
@@ -121,6 +122,7 @@ def report(mounted_paths: Iterable[str]) -> ComplianceReport:
         obligations.append(Obligation(id=r.id, act=r.act, requirement=r.requirement, deadline=r.deadline,
                                       owner=r.owner, status=status, coveredBy=covered_by,
                                       note=_note(r, status, covered_by, missing)))
+    obligations.append(webaccess.obligation())
     return ComplianceReport(
         generatedAt=iso(config.real_now()),
         obligations=obligations,

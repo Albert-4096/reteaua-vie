@@ -11,10 +11,11 @@ ALL = {f"/api{e.path}" for e in exports.EXPORTS}
 SPEC_TABLE = {   # SPEC §6.7: the status of OUR exports per obligation
     "MMTIS": "partial", "RTTI": "covered", "TEN-T": "partial", "AFIR-20": "missing",
     "EPBD-BIKE": "partial", "ROAD-SAFETY": "missing", "AIR-QUALITY": "missing",
+    "WEB-ACCESS": "partial",   # R22-B: from our measured axe run (0 violations; an automatic scan is never `covered`)
 }
 DEADLINES = {   # the team's checked EU deadlines
     "MMTIS": "2025-12-01", "TEN-T": "2027-12-31", "AFIR-20": "2026-04-14", "EPBD-BIKE": "2026-05-29",
-    "AIR-QUALITY": "2026-12-11", "RTTI": None, "ROAD-SAFETY": None,
+    "AIR-QUALITY": "2026-12-11", "RTTI": None, "ROAD-SAFETY": None, "WEB-ACCESS": None,
 }
 
 
@@ -44,7 +45,7 @@ def test_a_missing_export_is_never_claimed():
 
 def test_counts_add_up():
     c = compliance.counts(ALL)
-    assert (c.covered, c.partial, c.missing) == (1, 3, 3)
+    assert (c.covered, c.partial, c.missing) == (1, 4, 3)  # + WEB-ACCESS (R22-B)
 
 
 def test_export_files_have_the_contract_shape(isolated_state):
