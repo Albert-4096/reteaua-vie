@@ -4,6 +4,7 @@ import { useEffect, useState, type MouseEvent } from "react";
  * Places, not steps. Four things a person opens the platform for:
  *   /app                       Azi: what waits for a person, and the network right now
  *   /app/lucrari               every work
+ *   /app/lucrari/nou[?c=<id>]  a new work, from its notice (c = a draft read earlier)
  *   /app/lucrari/<id>/<tab>    one work, the only place with a sequence: impact → perioada → anunt → teren
  *   /app/linii[/<routeId>]     the lines, each with its route and its vehicles
  *   /app/rapoarte              what is reported
@@ -14,6 +15,7 @@ export type WorkTab = (typeof WORK_TABS)[number];
 export type Route =
   | { page: "azi" }
   | { page: "lucrari" }
+  | { page: "nou"; c?: string }
   | { page: "lucrare"; id: string; tab: WorkTab; q?: string }
   | { page: "linii"; routeId?: string }
   | { page: "rapoarte" };
@@ -26,6 +28,7 @@ const OLD_STEP: Record<string, WorkTab> = { planifici: "impact", decizi: "perioa
 function read(): Route {
   const [, , a, b, c] = location.pathname.split("/").map(decodeURIComponent);
   const qs = new URLSearchParams(location.search);
+  if (a === "lucrari" && b === "nou") return { page: "nou", c: qs.get("c") ?? undefined };
   if (a === "lucrari") return b ? { page: "lucrare", id: b, tab: (WORK_TABS as readonly string[]).includes(c) ? (c as WorkTab) : "impact", q: qs.get("q") ?? undefined } : { page: "lucrari" };
   if (a === "linii") return { page: "linii", routeId: b || undefined };
   if (a === "rapoarte" || a === "raportezi") return { page: "rapoarte" };
@@ -38,6 +41,7 @@ export function href(r: Route): string {
   switch (r.page) {
     case "azi": return "/app";
     case "lucrari": return "/app/lucrari";
+    case "nou": return `/app/lucrari/nou${r.c ? `?c=${enc(r.c)}` : ""}`;
     case "lucrare": return `/app/lucrari/${enc(r.id)}/${r.tab}${r.q ? `?q=${enc(r.q)}` : ""}`;
     case "linii": return r.routeId ? `/app/linii/${enc(r.routeId)}` : "/app/linii";
     case "rapoarte": return "/app/rapoarte";

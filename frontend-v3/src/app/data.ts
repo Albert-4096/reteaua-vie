@@ -11,8 +11,8 @@ export type TempRoute = { shortName: string; mode: string; streets: string[]; ge
 export type ClosureSummary = Closure & {
   window: Window;
   zoneSlugs: string[];
-  stopsSuspended: number;
-  departuresLost: number;
+  stopsSuspended: number | null; // null until the impact of a new work has been computed
+  departuresLost: number | null;
   publishedAt: string | null;
   sourceText?: string | null;
   sourceUrl?: string | null;
@@ -91,7 +91,7 @@ export type Recording = { from: string; to: string; hours: number; label: I18n }
 export type LineReliability = {
   routeId: string;
   shortName: string;
-  punctuality: { trips: number; medianSec: number | null; early: number | null; onTime: number | null; late: number | null; veryLate: number | null; conclusive: boolean };
+  punctuality: { trips: number; medianSec: number | null; early: number | null; onTime: number | null; late: number | null; veryLate: number | null; conclusive: boolean; vehicles?: number | null; reason?: string | null };
   headway: { pairs: number; medianRealMin: number | null; medianSchedMin: number | null };
   trips: { scheduled: number; observed: number; missed: number; share: number | null };
   hours: { hour: number; trips: { scheduled: number; observed: number } }[];
@@ -194,6 +194,9 @@ export const app = {
   decideStops: (id: string, decisions: (DecisionRow & { confirmed: boolean })[]) =>
     send<Analysis>("PATCH", `/api/closures/${enc(id)}/stops`, { decisions }),
   publish: (id: string) => send<unknown>("POST", `/api/closures/${enc(id)}/publish`),
+  /** Reads a pasted notice with fixed rules (no language model) and saves it as a draft work; `unread` = the sentences it could not use. */
+  parseNotice: (text: string) => send<{ closure: ClosureSummary; unread: string[] }>("POST", "/api/closures/parse", { text }),
+  analyze: (id: string) => send<Analysis>("POST", `/api/closures/${enc(id)}/analyze`),
   triage: (routeId: string, window: Window, decision: "confirmat" | "respins", who: string) =>
     send<{ decision: string }>("PATCH", `/api/live/missing/${enc(routeId)}`, { window, decision, reason: null, who, note: null }),
   posterUrl: (id: string, stopId: string) => `/api/closures/${enc(id)}/poster.pdf?stopId=${enc(stopId)}`,
@@ -216,9 +219,11 @@ export const dt = (iso: string) => part(iso, { weekday: "short", day: "numeric",
 
 /** A window in the fewest words: one day with its hours, or two dates. */
 export function when(w: Window) {
-  const sameDay = day(w.start) === day(w.end);
-  if (sameDay) return `${part(w.start, { weekday: "short", day: "numeric", month: "short" })}, ${hhmm(w.start)}–${hhmm(w.end)}`;
-  return `${day(w.start)} – ${day(w.end)}`;
+  // an end at midnight belongs to the day before, as the notices write it ("12 noiembrie, ora 24:00")
+  const midnight = hhmm(w.end) === "00:00";
+  const end = midnight ? new Date(Date.parse(w.end) - 60_000).toISOString() : w.end;
+  if (day(w.start) === day(end)) return `${part(w.start, { weekday: "short", day: "numeric", month: "short" })}, ${hhmm(w.start)}–${midnight ? "24:00" : hhmm(w.end)}`;
+  return `${day(w.start)} – ${day(end)}`;
 }
 
 /** Names on the map must not sit on each other: the second label near another one goes below its point. */
@@ -237,7 +242,7 @@ export function phase(w: Window, now: string): "urmează" | "în desfășurare" 
 
 /** The street of a work, short enough to write on the map: "Bd. 16 Decembrie 1989 – Piața Mocioni". */
 export function place(title: string) {
-  const hits = title.match(/(Bd\.|Bulevardul|Str\.|Strada|Piața|Calea|Splaiul|Podul)\s+[^,–]+/g) ?? [];
+  const hits = title.match(/(Bd\.|Bulevardul|Str\.|Strada|Piața|Calea|Splaiul|Podul)\s+[^,–·]+/g) ?? [];
   const names = hits.map((h) => h.replace(/\s+(închisă|închis|deviată)$/, "").trim()).slice(0, 2);
   return names.length ? names.join(" – ") : title.split(",")[0];
 }
@@ -275,3 +280,8 @@ export function count(n: number, one: string, many: string) {
   return `${fmt.format(n)}${n === 1 ? "" : de} ${n === 1 ? one : many}`;
 }
 export const uniq = <T,>(xs: T[]) => [...new Set(xs)];
+/** "16 stații fără serviciu · 2.262 plecări pierdute"; a work whose impact was never computed says so. */
+export function losses(c: { stopsSuspended: number | null; departuresLost: number | null }) {
+  if (c.departuresLost == null) return "impact necalculat";
+  return `${c.stopsSuspended ? `${count(c.stopsSuspended, "stație fără serviciu", "stații fără serviciu")} · ` : ""}${fmt.format(c.departuresLost)} plecări pierdute`;
+}

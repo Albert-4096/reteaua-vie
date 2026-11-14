@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import type { Position } from "geojson";
 import { LineBadge } from "@/landing/LineBadge";
-import { app, count, fmt, phase, place, spread, useLoad, when, type ClosureSummary } from "../data";
+import { Plus } from "lucide-react";
+import { app, losses, phase, place, spread, useLoad, when, type ClosureSummary } from "../data";
 import { link } from "../router";
 import { Loading, Panel, Problem, Tag, Title, useMapLayers, type Layers } from "../ui";
 
@@ -32,18 +33,23 @@ export function Works() {
         <ul className="-mx-2 -mt-1 divide-y">
           {list.map((c) => (
             <li key={c.id}>
-              <a {...link({ page: "lucrare", id: c.id, tab: "impact" })} onPointerEnter={() => setHover(c.id)} onPointerLeave={() => setHover(null)} onFocus={() => setHover(c.id)} onBlur={() => setHover(null)}
+              <a {...link(c.status === "draft" ? { page: "nou", c: c.id } : { page: "lucrare", id: c.id, tab: "impact" })} onPointerEnter={() => setHover(c.id)} onPointerLeave={() => setHover(null)} onFocus={() => setHover(c.id)} onBlur={() => setHover(null)}
                 className="block rounded-lg px-2 py-4 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
                 <span className="block font-medium leading-snug">{c.title.ro}</span>
                 <span className="tabular mt-1 block text-sm text-muted-foreground">{when(c.window)}{now ? ` · ${phase(c.window, now)}` : ""}</span>
                 <span className="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                  {c.status === "published" ? <Tag tone="green">Publicată</Tag> : <Tag tone="closure">Nepublicată</Tag>}
+                  {c.status === "published" ? <Tag tone="green">Publicată</Tag> : c.status === "draft" ? <Tag>Ciornă</Tag> : <Tag tone="closure">Nepublicată</Tag>}
                   <span className="flex gap-1">{c.routeIds.slice(0, 6).map((r) => <LineBadge key={r} routeId={r} />)}</span>
-                  <span className="tabular ml-auto text-sm text-muted-foreground">{c.stopsSuspended > 0 ? `${count(c.stopsSuspended, "stație fără serviciu", "stații fără serviciu")} · ` : ""}{fmt.format(c.departuresLost)} plecări pierdute</span>
+                  <span className="tabular ml-auto text-sm text-muted-foreground">{losses(c)}</span>
                 </span>
               </a>
             </li>
           ))}
+          <li>
+            <a {...link({ page: "nou" })} className="flex items-center gap-2 rounded-lg px-2 py-3.5 text-sm font-medium text-foreground/80 outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
+              <Plus className="size-4" /> Lucrare nouă, din anunț
+            </a>
+          </li>
         </ul>
       )}
     </Panel>

@@ -60,6 +60,8 @@ export function Work({ id, tab, q }: { id: string; tab: WorkTab; q?: string }) {
   const answers = useMemo(() => new Map(groups.map((g) => [g.id, a ? answerOf(g, a) : null] as const)), [groups, a]);
   const open = groups.filter((g) => !answers.get(g.id)).length;
   const isPublished = c?.status === "published" || published;
+  // a notice that was read but never analysed has no impact to show yet: it goes back to where it is finished
+  useEffect(() => { if (c?.status === "draft") go({ page: "nou", c: id }, { replace: true }); }, [c?.status, id]);
 
   // an unanswered question opens by itself, so the first thing on screen is the thing to do
   const firstOpen = groups.find((g) => !answers.get(g.id))?.id;

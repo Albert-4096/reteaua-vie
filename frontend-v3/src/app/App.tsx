@@ -9,6 +9,7 @@ import { app, count, day, hhmm } from "./data";
 import { MapView } from "./MapView";
 import { go, link, useRoute, type Route } from "./router";
 import { Lines } from "./pages/Lines";
+import { NewWork } from "./pages/NewWork";
 import { Reports } from "./pages/Reports";
 import { Today } from "./pages/Today";
 import { Work } from "./pages/Work";
@@ -32,12 +33,13 @@ export function App() {
   const route = useRoute();
   const [layers, setLayers] = useState<Layers>({});
   const [slot, setSlot] = useState<HTMLElement | null>(null);
-  const place = route.page === "lucrare" ? "lucrari" : route.page;
+  const place = route.page === "lucrare" || route.page === "nou" ? "lucrari" : route.page;
   const hasMap = route.page !== "rapoarte";
 
   let page: ReactNode;
   if (route.page === "azi") page = <Today />;
   else if (route.page === "lucrari") page = <Works />;
+  else if (route.page === "nou") page = <NewWork key={route.c ?? "new"} draftId={route.c} />;
   else if (route.page === "lucrare") page = <Work key={route.id} id={route.id} tab={route.tab} q={route.q} />;
   else if (route.page === "linii") page = <Lines routeId={route.routeId} />;
   else page = <Reports />;

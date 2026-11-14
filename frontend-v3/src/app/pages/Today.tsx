@@ -3,7 +3,7 @@ import { ArrowRight, Construction } from "lucide-react";
 import type { Position } from "geojson";
 import { LineBadge } from "@/landing/LineBadge";
 import { useNetwork } from "@/lib/network";
-import { app, count, fmt, hhmm, phase, place, registrySpan, seenByLine, spread, useLoad, weekday, when, type ClosureSummary } from "../data";
+import { app, count, fmt, hhmm, losses, phase, place, registrySpan, seenByLine, spread, useLoad, weekday, when, type ClosureSummary } from "../data";
 import type { MapLabel } from "../MapView";
 import { link, type Route } from "../router";
 import { SeenBar } from "../Measured";
@@ -46,9 +46,10 @@ export function Today() {
       const a = analyses.data?.[i];
       const open = a ? a.decisionGroups.filter((g) => !answerOf(g, a)).length : 0;
       const lead = <span className="grid size-9 place-items-center rounded-md bg-closure-soft text-closure-ink"><Construction className="size-[18px]" strokeWidth={1.8} /></span>;
+      if (c.status === "draft") return { key: c.id, lead, title: "Anunț citit, impact necalculat", detail: place(c.title.ro), owner: "Primărie · mobilitate", action: "Continuă", to: { page: "nou", c: c.id }, closureId: c.id };
       return open > 0
         ? { key: c.id, lead, title: open === 1 ? "O întrebare despre stații" : `${open} întrebări despre stații`, detail: place(c.title.ro), owner: "Primărie · mobilitate", action: "Răspunde", to: { page: "lucrare", id: c.id, tab: "impact" }, closureId: c.id }
-        : { key: c.id, lead, title: "Lucrare analizată, nepublicată", detail: place(c.title.ro), numbers: `${c.stopsSuspended > 0 ? `${count(c.stopsSuspended, "stație fără serviciu", "stații fără serviciu")} · ` : ""}${fmt.format(c.departuresLost)} plecări pierdute`, owner: "STPT · informare călători", action: "Deschide", to: { page: "lucrare", id: c.id, tab: "impact" }, closureId: c.id };
+        : { key: c.id, lead, title: "Lucrare analizată, nepublicată", detail: place(c.title.ro), numbers: losses(c), owner: "STPT · informare călători", action: "Deschide", to: { page: "lucrare", id: c.id, tab: "impact" }, closureId: c.id };
     }),
     ...noVehicle.map((r): Task => ({
       key: r.routeId, lead: <LineBadge routeId={r.routeId} label={r.shortName} size="lg" />,
