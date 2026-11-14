@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/landing/Logo";
-import { app, day, hhmm } from "./data";
+import { app, count, day, hhmm } from "./data";
 import { MapView } from "./MapView";
 import { go, link, useRoute, type Route } from "./router";
 import { Lines } from "./pages/Lines";
@@ -81,7 +81,7 @@ function Rail({ place }: { place: Place["id"] }) {
                   <p.icon className="size-5" strokeWidth={on ? 2.1 : 1.8} />
                   {p.id === "azi" && waiting > 0 && (
                     <span className="tabular absolute -right-0.5 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-closure px-1 text-[0.6875rem] font-semibold leading-none text-white ring-2 ring-card">
-                      {waiting}<span className="sr-only"> lucruri așteaptă un om</span>
+                      <span aria-hidden>{waiting}</span><span className="sr-only">{count(waiting, "lucru așteaptă", "lucruri așteaptă")} un om</span>
                     </span>
                   )}
                 </span>

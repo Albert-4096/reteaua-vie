@@ -108,7 +108,7 @@ function LineList() {
         <>
           <div className="flex items-start justify-between gap-4">
             <p className="text-sm leading-snug text-muted-foreground">
-              Curse din orar la care am văzut un vehicul în datele live ale Primăriei{reg.data ? `, ${registrySpan(reg.data)}` : ""}. Cele mai puține, primele.
+              Curse din orar la care am văzut un vehicul în datele live ale Primăriei{reg.data ? ` (${registrySpan(reg.data)})` : ""}. Cele mai puține, primele.
             </p>
             <Kind k="measured" />
           </div>
