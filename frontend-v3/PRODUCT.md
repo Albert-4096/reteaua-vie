@@ -22,7 +22,7 @@ The UniHack 8 jury (judging Sun 15 Nov 2026) evaluates it as this staff tool. Th
 
 The published timetable is the network on paper. Rețeaua Vie is the network on the street: it compares the timetable with street works and with the vehicles in the City Hall's live data. Where the two differ, the City Hall decides on numbers, and CityApp, Google and the stop poster receive the same alert.
 
-It follows one closure through six steps: **Ansamblu** (what is closed now), **Planifici** (who loses service), **Decizi** (when the works happen), **Publici** (what riders learn), **Urmărești** (what vehicles actually did), **Raportezi** (what we report against EU and national obligations). Three verbs: it sees (Vede), helps decide (Decide), announces (Anunță).
+The app is organised by what people open it for, not by a tour. Four places: **Azi** (what waits for a person, and the timetable against the street right now; where STPT dispatch stays), **Lucrări** (every work; one work is the only sequence: *Impact* who loses service → *Perioadă* when it hurts least → *Anunț* what riders learn → *Pe teren* what vehicles actually did; where the City Hall decides), **Linii** (each line with its stations in order, its vehicles and its recorded day) and **Rapoarte** (obligations, the daily trip registry, public files; opened monthly). Three verbs: it sees (Vede), helps decide (Decide), announces (Anunță).
 
 Success metric: phantom departures (*plecări-fantomă*), meaning departures the published timetable lists that do not run, either because works suspend the stop or because the trip has no vehicle in the live data. Success means each one becomes an announced change.
 
@@ -43,7 +43,7 @@ What a neighbouring product cannot truthfully copy: it runs only on data the cit
 
 ## Capabilities and Constraints
 
-- **Built and live (unihack.alberyt.xyz):** the six steps on one shared map. Closure impact (lines, stops, departures lost, residents beyond 400 m, GHSL 2020 model), the questions a person must answer about unclear stops, the window with least impact, conflicts between works, publish to all channels, lines with scheduled trips but no vehicle in the live data, measured detour effect, and the compliance report with public files. Modules for bikes (M5) and parking (M6) stay built (all-in-one platform).
+- **Built and live (unihack.alberyt.xyz):** four places beside one shared map (Azi, Lucrări, Linii, Rapoarte; see DESIGN.md). Closure impact (lines, stops, departures lost, residents beyond 400 m, GHSL 2020 model), the questions a person must answer about unclear stops, the window with least impact, conflicts between works, publish to all channels, lines with scheduled trips but no vehicle in the live data, measured detour effect, and the compliance report with public files. Modules for bikes (M5) and parking (M6) stay built (all-in-one platform).
 - **No mock data.** What cannot be computed is `null` ("necunoscut"). No number appears in the UI without a source in the evaluation (`eval/results/latest.json`, README §7) or our own measurement.
 - **Human in the loop.** A detected "line without vehicle" reaches CityApp only after a person confirms it. We never send GTFS-RT `CANCELED`: we infer, we do not know.
 - **Interface language: Romanian only.** The API carries Romanian and English text (`{ ro, en }`), and the README is bilingual. The app screens stay Romanian.
@@ -71,7 +71,9 @@ What a neighbouring product cannot truthfully copy: it runs only on data the cit
 2. **Every feature names two gains:** a direct one for the City Hall, STPT or SMTT (money, staff time, evidence for contract payments, compliance) and one for citizens. If we cannot say it in a sentence, it does not get built.
 3. **Real data, honest labels.** Measured and estimated look different, unknown stays unknown, simulation is labelled.
 4. **A person decides; the platform prepares.** Recommendations are marked as ours; nothing reaches a citizen without a human confirmation.
-5. **Keep it simple.** One question per step, one answer, details folded, one next action. Nothing is removed from the product, and nothing new opens in a default view.
+5. **Keep it simple.** Everything has one place. A screen says what to do, or that there is nothing to do: one question, its answer as a sentence, details folded, one next action. Nothing is removed from the product, and nothing new opens in a default view.
+6. **Nobody has to know the city.** A stop, street or line named in a panel is framed and named on the map, and a line is shown as its stations in order.
+7. **The recording is the proof.** Where we have measured vehicles (the City Hall live feed, kept every 15 s), the measured number is shown next to the timetable one, with its recording span.
 
 ## Accessibility & Inclusion
 
