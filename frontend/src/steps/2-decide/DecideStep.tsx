@@ -189,7 +189,7 @@ function CompareTable({ a, b, titles }: { a: ScenarioImpact; b: ScenarioImpact; 
     <table className="table" style={{ marginTop: "var(--sp-2)", tableLayout: "fixed" }}>
       <thead>
         <tr>
-          <th style={{ width: "40%" }} />
+          <td style={{ width: "40%" }} />
           {titles.map((t) => (
             <th key={t} style={{ textAlign: "right" }}>
               {t}
