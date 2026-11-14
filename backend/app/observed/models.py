@@ -52,3 +52,69 @@ class ObservedSummary(Model):
     label: I18n | None                     # „din N ore înregistrate (vin. 13:47 → …)”
     method: I18n
     provenance: list[Provenance]
+
+
+# --- L1-B: GET /api/closures/{id}/detour-cost (CONTRACT `DetourCost`) ---------------------------------
+
+class Estimate(Model):
+    sec: float | None          # median, seconds
+    low: float | None          # 90 % bootstrap interval, one trip = one block
+    high: float | None
+    n: int                     # trips
+    conclusive: bool           # n >= minTrips; false = „neconcludent”
+
+
+class PlannedTimes(Model):
+    before: Estimate           # scheduled time over the stretch, timetable before the works
+    after: Estimate            # ... timetable in force when they start
+    extra: Estimate            # after - before, trip by trip
+
+
+class DetourStops(Model):
+    stopIds: list[str]
+    stopNames: list[str]
+
+
+class DetourHour(Model):
+    hour: int                  # Bucharest
+    dayType: str               # fri | sat | sun
+    n: int
+    measuredSec: float | None
+    estimatedSec: float | None
+
+
+class DetourStretch(Model):
+    routeId: str
+    shortName: str
+    directionId: int
+    kind: str                  # detour | start_moved | end_moved | truncated_start | truncated_end
+    before: DetourStops        # anchors included
+    after: DetourStops
+    planned: PlannedTimes
+    measured: Estimate | None             # L0 run time over `after`; null when `after` is one stop
+    measuredVsPlanned: Estimate | None    # measured - planned (timetable in force on the recorded day)
+    estimated: Estimate | None            # other lines' speeds on the same streets, at each trip's hour
+    estimateError: Estimate | None        # estimated - measured (the back-test)
+    coverage: float | None                # share of `after` length with >= 3 other-line runs on the street
+    otherRoutes: list[str]
+    byHour: list[DetourHour]
+
+
+class DetourTotals(Model):
+    plannedExtra: Estimate
+    measuredVsPlanned: Estimate
+    estimateError: Estimate
+
+
+class DetourCost(Model):
+    closureId: str
+    status: str                # ok | fara_inregistrare | fara_orar_vechi | fara_schimbare
+    label: I18n | None         # „din N ore înregistrate (vin. 13:47 → …)”
+    finding: I18n | None
+    minTrips: int
+    feedBefore: str | None
+    feedAfter: str | None
+    stretches: list[DetourStretch]
+    totals: DetourTotals
+    method: I18n
+    provenance: list[Provenance]

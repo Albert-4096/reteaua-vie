@@ -13,6 +13,7 @@ import zipfile
 from dataclasses import dataclass
 from datetime import date
 from functools import lru_cache
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -51,6 +52,7 @@ class Timetable:
     trips: dict[str, TripPlan]
     stop_xy: dict[str, tuple[float, float]]       # stop_id -> UTM metres
     shapes: dict[str, LineString]                 # shape_id -> UTM metres
+    stop_names: dict[str, str]
 
 
 def _read_shapes(path: str) -> dict[str, LineString]:
@@ -73,7 +75,7 @@ def _read_shapes(path: str) -> dict[str, LineString]:
 def _timetable(sha: str) -> Timetable:
     f = gtfs._FEEDS[sha]
     st = f.stop_times.sort_values(["trip_id", "stop_sequence"])
-    trips = f.trips.set_index("trip_id")
+    trips = f.trips.drop_duplicates("trip_id").set_index("trip_id").to_dict("index")
     tid = st["trip_id"].to_numpy()
     seq = st["stop_sequence"].to_numpy(int)
     sid = st["stop_id"].to_numpy()
@@ -83,9 +85,9 @@ def _timetable(sha: str) -> Timetable:
     plans: dict[str, TripPlan] = {}
     for lo, hi in zip(np.r_[0, cuts], np.r_[cuts, len(tid)]):
         t = str(tid[lo])
-        if t not in trips.index:
+        row = trips.get(t)
+        if row is None:
             continue
-        row = trips.loc[t]
         plans[t] = TripPlan(
             trip_id=t, route_id=str(row["route_id"]), direction_id=int(row["direction_id"]),
             service_id=str(row["service_id"]), shape_id=str(row.get("shape_id") or ""),
@@ -94,12 +96,27 @@ def _timetable(sha: str) -> Timetable:
     stops = f.stops
     xy = project_lonlats(zip(stops["stop_lon"].astype(float), stops["stop_lat"].astype(float)))
     stop_xy = {str(s): (float(x), float(y)) for s, (x, y) in zip(stops["stop_id"], xy)}
-    return Timetable(sha=sha, version=f.version, trips=plans, stop_xy=stop_xy, shapes=_read_shapes(str(f.path)))
+    names = {str(a): str(b) for a, b in zip(stops["stop_id"], stops.get("stop_name", stops["stop_id"]))}
+    return Timetable(sha=sha, version=f.version, trips=plans, stop_xy=stop_xy, shapes=_read_shapes(str(f.path)),
+                     stop_names=names)
 
 
 def timetable_on(day: date) -> Timetable:
     """The timetable of the feed in force on a service date."""
     return _timetable(gtfs.feed(at=day).sha256)
+
+
+_BY_PATH: dict[tuple[str, float], str] = {}
+
+
+def timetable_for(path: Path) -> Timetable:
+    """The timetable of one GTFS zip (an older version, e.g. $DATA_DIR/gtfs-history/), cached by sha."""
+    key = (str(path), path.stat().st_mtime)
+    if key not in _BY_PATH:
+        f = gtfs._load_feed.__wrapped__(*key)   # not through gtfs' 2-slot cache: keep the feed in force there
+        gtfs._FEEDS.setdefault(f.sha256, f)
+        _BY_PATH[key] = f.sha256
+    return _timetable(_BY_PATH[key])
 
 
 def runs_on(plan: TripPlan, day: date) -> bool:
