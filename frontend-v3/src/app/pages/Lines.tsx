@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LineBadge } from "@/landing/LineBadge";
 import { FAMILIES, useNetwork, type Route as NetRoute } from "@/lib/network";
 import { cn } from "@/lib/utils";
-import { app, count, dt, fmt, hhmm, useLoad, weekday, type LineReliability } from "../data";
+import { app, count, dt, fmt, hhmm, registrySpan, seenByLine, useLoad, weekday, type LineReliability } from "../data";
 import { lineShape, type Station } from "../lines";
 import { LineStrip, type StripRow } from "../LineStrip";
 import type { MapLabel } from "../MapView";
@@ -28,7 +28,7 @@ function LineList() {
   const status = useLoad(app.linesStatus);
   const missing = useLoad(app.missing, "", 60_000);
   const vehicles = useLoad(app.vehicles, "", 15_000);
-  const rel = useLoad(app.reliability);
+  const reg = useLoad(app.registry);
   const [q, setQ] = useState("");
   const [order, setOrder] = useState<"seen" | "type">("seen");
   const [hover, setHover] = useState<string | null>(null);
@@ -40,7 +40,7 @@ function LineList() {
   }, [vehicles.data]);
   const noVehicle = useMemo(() => new Set((missing.data?.routes ?? []).filter((r) => r.state === "fara_vehicul").map((r) => r.routeId)), [missing.data]);
   const state = useMemo(() => new Map((status.data?.lines ?? []).map((l) => [l.routeId, l])), [status.data]);
-  const seen = useMemo(() => new Map((rel.data?.lines ?? []).map((l) => [l.routeId, l.trips])), [rel.data]);
+  const seen = useMemo(() => seenByLine(reg.data), [reg.data]);
 
   const layers = useMemo<Layers>(() => ({
     fit: { key: "city" },
@@ -108,12 +108,12 @@ function LineList() {
         <>
           <div className="flex items-start justify-between gap-4">
             <p className="text-sm leading-snug text-muted-foreground">
-              Curse din orar văzute în datele live ale Primăriei{rel.data ? `, ${rel.data.recording.label.ro}` : ""}. Cele mai puține, primele.
+              Curse din orar la care am văzut un vehicul în datele live ale Primăriei{reg.data ? `, ${registrySpan(reg.data)}` : ""}. Cele mai puține, primele.
             </p>
             <Kind k="measured" />
           </div>
           <ul className="-mx-2 mt-3">{bySeen.map(row)}</ul>
-          {rel.data && <Method>{rel.data.caveat.ro}</Method>}
+          <Method>Din registrul zilnic al curselor, înregistrat la 15 secunde. Estimare din datele live, nu raportul oficial; nu arată nicio vină a cuiva și nu e o clasificare a curselor: doar SMTT le încadrează.</Method>
         </>
       ) : FAMILIES.map((f) => {
         const rs = routes.filter(f.test);

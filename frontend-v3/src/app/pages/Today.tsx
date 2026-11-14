@@ -3,7 +3,7 @@ import { ArrowRight, Construction } from "lucide-react";
 import type { Position } from "geojson";
 import { LineBadge } from "@/landing/LineBadge";
 import { useNetwork } from "@/lib/network";
-import { app, count, fmt, hhmm, phase, place, spread, useLoad, weekday, when, type ClosureSummary } from "../data";
+import { app, count, fmt, hhmm, phase, place, registrySpan, seenByLine, spread, useLoad, weekday, when, type ClosureSummary } from "../data";
 import type { MapLabel } from "../MapView";
 import { link, type Route } from "../router";
 import { SeenBar } from "../Measured";
@@ -26,7 +26,7 @@ export function Today() {
   const missing = useLoad(app.missing, "", 60_000);
   const vehicles = useLoad(app.vehicles, "", 15_000);
   const dev = useLoad(app.deviations, "", 60_000);
-  const rel = useLoad(app.reliability);
+  const reg = useLoad(app.registry);
   const net = useNetwork();
   const [hover, setHover] = useState<string | null>(null);
 
@@ -37,7 +37,7 @@ export function Today() {
   const noVehicle = (missing.data?.routes ?? []).filter((r) => r.state === "fara_vehicul" && !r.decision);
   const current = (closures.data ?? []).filter((c) => now && phase(c.window, now) === "în desfășurare");
   const offRoute = (dev.data?.groups ?? []).filter((g) => g.classification === "fara_anunt");
-  const worst = [...(rel.data?.lines ?? [])].filter((l) => l.trips.missed > 0).sort((a, b) => (a.trips.share ?? 1) - (b.trips.share ?? 1)).slice(0, 3);
+  const worst = [...seenByLine(reg.data)].map(([routeId, trips]) => ({ routeId, trips })).filter((l) => l.trips.missed > 0).sort((a, b) => (a.trips.share ?? 1) - (b.trips.share ?? 1)).slice(0, 3);
 
   const tasks: Task[] = [
     ...waiting.map((c, i): Task => {
@@ -122,7 +122,7 @@ export function Today() {
             <span className="tabular font-semibold text-foreground">{fmt.format(o.data.ghostDeparturesToday)}</span> de plecări din orarul de azi nu au loc: stațiile lor sunt suspendate de o lucrare publicată.
           </p>
         )}
-        {rel.data && worst.length > 0 && (
+        {reg.data && worst.length > 0 && (
           <>
             <div className="mt-5 flex items-center justify-between gap-3">
               <p className="text-sm text-muted-foreground">Curse din orar văzute în datele live</p>
@@ -132,7 +132,7 @@ export function Today() {
               {worst.map((l) => (
                 <li key={l.routeId}>
                   <a {...link({ page: "linii", routeId: l.routeId })} className="flex items-center gap-3 rounded-lg px-2 py-2 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
-                    <LineBadge routeId={l.routeId} label={l.shortName} size="lg" />
+                    <LineBadge routeId={l.routeId} size="lg" />
                     <span className="min-w-0 flex-1">
                       <span className="tabular block text-sm"><span className="font-semibold">{fmt.format(l.trips.observed)} din {fmt.format(l.trips.scheduled)}</span> <span className="text-muted-foreground">· {fmt.format(l.trips.missed)} nevăzute</span></span>
                       <SeenBar t={l.trips} className="mt-1.5" />
@@ -142,7 +142,7 @@ export function Today() {
               ))}
             </ul>
             <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              {rel.data.recording.label.ro[0].toUpperCase() + rel.data.recording.label.ro.slice(1)}, la 15 secunde. Estimare din datele live, nu raportul oficial.{" "}
+              Din registrul zilnic al curselor, {registrySpan(reg.data)}, înregistrat la 15 secunde. Estimare din datele live, nu raportul oficial.{" "}
               <a {...link({ page: "linii" })} className="font-medium text-foreground underline underline-offset-4">Toate liniile</a>
             </p>
           </>

@@ -236,6 +236,32 @@ export function place(title: string) {
   return names.length ? names.join(" – ") : title.split(",")[0];
 }
 
+/**
+ * Trips seen against the timetable, per line, summed over the recorded days of the daily registry.
+ * The registry is the one rule for these counts on every screen. A day counts once it has timetable trips
+ * inside its recorded hours; seen is capped at scheduled per day.
+ */
+export function seenByLine(reg: Registry | null) {
+  const by = new Map<string, LineReliability["trips"]>();
+  for (const e of reg?.entries ?? []) {
+    for (const l of e.lines) {
+      if (!l.tripsScheduledInRecording) continue;
+      const t = by.get(l.routeId) ?? { scheduled: 0, observed: 0, missed: 0, share: null };
+      t.scheduled += l.tripsScheduledInRecording;
+      t.observed += Math.min(l.tripsSeen, l.tripsScheduledInRecording);
+      t.missed = t.scheduled - t.observed;
+      t.share = t.observed / t.scheduled;
+      by.set(l.routeId, t);
+    }
+  }
+  return by;
+}
+/** "13 nov. – 14 nov.": the days the registry has compared so far. */
+export function registrySpan(reg: Registry | null) {
+  const days = (reg?.entries ?? []).filter((e) => e.lines.some((l) => l.tripsScheduledInRecording > 0)).map((e) => e.date);
+  return days.length ? (days.length === 1 ? day(days[0]) : `${day(days[0])} – ${day(days[days.length - 1])}`) : "";
+}
+
 export const fmt = new Intl.NumberFormat("ro-RO");
 /** Romanian counts: "1 stație", "16 stații", "21 de stații". */
 export function count(n: number, one: string, many: string) {
