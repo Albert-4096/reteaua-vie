@@ -1,7 +1,7 @@
 {
   "window": {
-    "start": "2026-11-14T10:00:00+02:00",
-    "end": "2026-11-14T11:00:00+02:00"
+    "start": "2026-11-14T06:00:00+02:00",
+    "end": "2026-11-14T13:00:00+02:00"
   },
   "status": "ok",
   "thresholds": {
@@ -13,27 +13,29 @@
     "beforeTripMinutes": 20,
     "afterTripMinutes": 60,
     "standingMinutes": 5,
-    "standingMetresPerSecond": 1.0
+    "standingMetresPerSecond": 1.0,
+    "gpsLossMinutes": 5
   },
-  "reports": 12334,
+  "reports": 103207,
   "counts": {
-    "runs": 25,
-    "ignoredOffSchedule": 4,
-    "ignoredStanding": 2,
-    "ignoredTerminal": 18,
+    "runs": 193,
+    "ignoredGpsLoss": 27,
+    "ignoredOffSchedule": 3,
+    "ignoredStanding": 24,
+    "ignoredTerminal": 135,
     "ignoredDepot": 0,
-    "kept": 1,
+    "kept": 4,
     "announced": 0,
-    "unannounced": 1
+    "unannounced": 4
   },
   "groups": [
     {
-      "routeId": "R_TV_7",
-      "shortName": "7",
-      "mode": "tramvai",
-      "directionId": 1,
-      "street": "Bulevardul 16 Decembrie 1989",
-      "nearStop": "Piața A. Mocioni (16 Decembrie 1989 - Sinaia)",
+      "routeId": "R_AB_33",
+      "shortName": "33",
+      "mode": "autobuz",
+      "directionId": 0,
+      "street": "Bulevardul Mihai Viteazu",
+      "nearStop": "Facultatea de Electrotehnică",
       "classification": "fara_anunt",
       "label": {
         "ro": "abatere de la traseu fără anunț găsit de noi — de verificat",
@@ -43,33 +45,189 @@
       "notice": null,
       "runs": 1,
       "trips": 1,
-      "tripsSeen": 5,
-      "share": 0.2,
-      "firstAt": "2026-11-14T10:18:27+02:00",
-      "lastAt": "2026-11-14T10:18:57+02:00",
-      "maxDistanceM": 358,
-      "extraKm": 0.15,
+      "tripsSeen": 27,
+      "share": 0.037,
+      "firstAt": "2026-11-14T12:07:56+02:00",
+      "lastAt": "2026-11-14T12:08:36+02:00",
+      "maxDistanceM": 117,
+      "extraKm": 0.0,
       "tracks": [
         {
-          "tripId": "7.1_WESB_R_03_03",
-          "vehicleId": "3527",
-          "start": "2026-11-14T10:18:27+02:00",
-          "end": "2026-11-14T10:18:57+02:00",
-          "reports": 3,
-          "maxDistanceM": 358,
-          "extraKm": 0.15,
+          "tripId": "33.1_WESB_T_03_09",
+          "vehicleId": "01 VYI",
+          "start": "2026-11-14T12:07:56+02:00",
+          "end": "2026-11-14T12:08:36+02:00",
+          "reports": 4,
+          "maxDistanceM": 117,
+          "extraKm": 0.0,
           "coordinates": [
             [
-              21.21733,
-              45.74742
+              21.22625,
+              45.74722
             ],
             [
-              21.21643,
-              45.74663
+              21.22621,
+              45.74719
             ],
             [
-              21.21538,
-              45.74628
+              21.22621,
+              45.74719
+            ],
+            [
+              21.22621,
+              45.74719
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M3",
+      "shortName": "M3",
+      "mode": "autobuz",
+      "directionId": 1,
+      "street": "Strada Unitatii",
+      "nearStop": "Egalității (Giroc)",
+      "classification": "fara_anunt",
+      "label": {
+        "ro": "abatere de la traseu fără anunț găsit de noi — de verificat",
+        "en": "off route, no notice found by us — to be checked"
+      },
+      "closureId": null,
+      "notice": null,
+      "runs": 1,
+      "trips": 1,
+      "tripsSeen": 6,
+      "share": 0.1667,
+      "firstAt": "2026-11-14T12:15:02+02:00",
+      "lastAt": "2026-11-14T12:16:05+02:00",
+      "maxDistanceM": 115,
+      "extraKm": 0.0,
+      "tracks": [
+        {
+          "tripId": "M3.1_WESB_R_01_06",
+          "vehicleId": "62 PMT",
+          "start": "2026-11-14T12:15:02+02:00",
+          "end": "2026-11-14T12:16:05+02:00",
+          "reports": 5,
+          "maxDistanceM": 115,
+          "extraKm": 0.0,
+          "coordinates": [
+            [
+              21.23889,
+              45.71462
+            ],
+            [
+              21.23885,
+              45.71471
+            ],
+            [
+              21.23912,
+              45.71567
+            ],
+            [
+              21.23931,
+              45.71631
+            ],
+            [
+              21.23943,
+              45.71695
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M3",
+      "shortName": "M3",
+      "mode": "autobuz",
+      "directionId": 0,
+      "street": "Strada Unitatii",
+      "nearStop": "Egalității (Giroc)",
+      "classification": "fara_anunt",
+      "label": {
+        "ro": "abatere de la traseu fără anunț găsit de noi — de verificat",
+        "en": "off route, no notice found by us — to be checked"
+      },
+      "closureId": null,
+      "notice": null,
+      "runs": 1,
+      "trips": 1,
+      "tripsSeen": 6,
+      "share": 0.1667,
+      "firstAt": "2026-11-14T12:53:01+02:00",
+      "lastAt": "2026-11-14T12:54:09+02:00",
+      "maxDistanceM": 114,
+      "extraKm": 0.0,
+      "tracks": [
+        {
+          "tripId": "M3.1_WESB_T_01_07",
+          "vehicleId": "62 PMT",
+          "start": "2026-11-14T12:53:01+02:00",
+          "end": "2026-11-14T12:54:09+02:00",
+          "reports": 3,
+          "maxDistanceM": 114,
+          "extraKm": 0.0,
+          "coordinates": [
+            [
+              21.23935,
+              45.7164
+            ],
+            [
+              21.23889,
+              45.71482
+            ],
+            [
+              21.23891,
+              45.71464
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M41",
+      "shortName": "M41",
+      "mode": "autobuz",
+      "directionId": 0,
+      "street": "Centura Timisoara Nord",
+      "nearStop": "B. Braun Medical (Sânandrei)",
+      "classification": "fara_anunt",
+      "label": {
+        "ro": "abatere de la traseu fără anunț găsit de noi — de verificat",
+        "en": "off route, no notice found by us — to be checked"
+      },
+      "closureId": null,
+      "notice": null,
+      "runs": 1,
+      "trips": 1,
+      "tripsSeen": 1,
+      "share": 1.0,
+      "firstAt": "2026-11-14T06:43:19+02:00",
+      "lastAt": "2026-11-14T06:43:51+02:00",
+      "maxDistanceM": 439,
+      "extraKm": 0.03,
+      "tracks": [
+        {
+          "tripId": "M41.2_WESB_T_01_01",
+          "vehicleId": "HAA",
+          "start": "2026-11-14T06:43:19+02:00",
+          "end": "2026-11-14T06:43:51+02:00",
+          "reports": 3,
+          "maxDistanceM": 439,
+          "extraKm": 0.03,
+          "coordinates": [
+            [
+              21.18949,
+              45.82477
+            ],
+            [
+              21.19073,
+              45.82677
+            ],
+            [
+              21.19017,
+              45.8287
             ]
           ]
         }
@@ -88,15 +246,15 @@
       "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
       "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
       "version": null,
-      "fetchedAt": "2026-11-14T10:59:28+02:00",
-      "note": "Fereastra / window 2026-11-14T10:00:00+02:00 – 2026-11-14T11:00:00+02:00; 12334 poziții proaspete / fresh positions; 100% din minute acoperite; fișiere / files: 20261114-08.jsonl.gz"
+      "fetchedAt": "2026-11-14T12:59:35+02:00",
+      "note": "Fereastra / window 2026-11-14T06:00:00+02:00 – 2026-11-14T13:00:00+02:00; 103207 poziții proaspete / fresh positions; 100% din minute acoperite; fișiere / files: 20261114-04.jsonl.gz, 20261114-05.jsonl.gz, 20261114-06.jsonl.gz, 20261114-07.jsonl.gz, 20261114-08.jsonl.gz, 20261114-09.jsonl.gz, 20261114-10.jsonl.gz"
     },
     {
       "source": "Rețeaua Vie R18, abateri de la traseu / off-route detector",
       "url": null,
       "version": null,
-      "fetchedAt": "2026-11-14T13:40:32+02:00",
-      "note": "≥ 3 poziții consecutive la > 80 m de orice traseu GTFS al liniei; ignorate: în afara orei cursei (cu 20 min înainte, 60 min după), vehicul staționat (≥ 5 min sub 1 m/s), ≤ 250 m de capetele traseului (bucle, plecare spre buclă), ≤ 300 m de un garaj. Străzi: OpenStreetMap. „Anunțată” = lucrare publicată în platformă sau anunț STPT care numește linia și strada. Deducem din datele live; nu e o constatare a STPT."
+      "fetchedAt": "2026-11-14T14:05:21+02:00",
+      "note": "≥ 3 poziții consecutive la > 80 m de orice traseu GTFS al liniei; ignorate: urmate de pierderea semnalului GPS (nicio poziție nouă ≥ 5 min: pozițiile de dinainte sunt extrapolate), în afara orei cursei (cu 20 min înainte, 60 min după), vehicul staționat (≥ 5 min sub 1 m/s), ≤ 250 m de capetele traseului (bucle, plecare spre buclă), ≤ 300 m de un garaj. Străzi: OpenStreetMap. „Anunțată” = lucrare publicată în platformă sau anunț STPT care numește linia și strada. Deducem din datele live; nu e o constatare a STPT."
     }
   ]
 }

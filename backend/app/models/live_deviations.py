@@ -50,6 +50,7 @@ class DeviationGroup(Model):
 
 class DeviationCounts(Model):
     runs: int                      # every run of >= minReports fresh positions > offRouteMeters
+    ignoredGpsLoss: int            # runs followed by >= gpsLossMinutes with no fresh position (extrapolated)
     ignoredOffSchedule: int        # runs outside the reported trip's time (positioning, layover, wrong trip id)
     ignoredStanding: int           # a vehicle standing off the line (layover)
     ignoredTerminal: int           # runs near the first or last point of the shape (turning loops)
@@ -69,6 +70,7 @@ class DeviationThresholds(Model):
     afterTripMinutes: int
     standingMinutes: int
     standingMetresPerSecond: float
+    gpsLossMinutes: int
 
 
 class Deviations(Model):

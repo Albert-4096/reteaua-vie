@@ -4,14 +4,19 @@ Each fresh vehicle position (healthy snapshot, position at most MAX_REPORT_AGE_S
 one per vehicle and updatedAt) is measured against every GTFS shape of its line (UTM
 34N): the feed often tags a vehicle with another trip of its line. A run is >=
 MIN_REPORTS consecutive positions of one vehicle on one trip more than OFF_ROUTE_M from
-all of them. Ignored: runs whose middle is outside the reported trip's time (BEFORE_TRIP /
+all of them. Ignored: runs followed by a GPS loss (no fresh position of the vehicle for
+GPS_LOSS: the positions just before it are the onboard unit's extrapolation; tram 7 at
+Piața Sfânta Maria on 14 Nov ran on straight along 16 Decembrie on screen, then
+reappeared on its own route; every tram shape lies within 5 m of the OSM tram rails,
+so it was not a wrong shape); runs whose middle is outside the reported trip's time (BEFORE_TRIP /
 AFTER_TRIP: positioning, a wrong trip id); a vehicle standing (>= STANDING_MIN under
 STANDING_MPS: layover); runs around either end of the trip's shape, leaving its last
 stop or reaching its first (turning loops; trams run on 90-350 m past the last stop to
 their loop); runs near a garage stop. The rest are grouped by line, direction and the named OSM street the
 positions are nearest to, then classified:
 
-- „anuntata”: a published closure active at that time acts on the line, or a saved STPT
+- „anuntata”: a published closure active at that time acts on the line and lies within
+  CLOSURE_M of the run, or a saved STPT
   notice names both the line and that street and the run falls in a window the notice
   states (no window stated: within NOTICE_DAYS after it was posted);
 - „fara_anunt”: „abatere de la traseu fără anunț găsit de noi — de verificat”, for a
@@ -48,7 +53,9 @@ BEFORE_TRIP = timedelta(minutes=20)   # a run this long before the trip's first 
 AFTER_TRIP = timedelta(minutes=60)    # ... or this long after its last one (a late vehicle keeps its trip id)
 STANDING_MIN = timedelta(minutes=5)   # a run this long at under STANDING_MPS is a vehicle standing (layover)
 STANDING_MPS = 1.0
+GPS_LOSS = timedelta(minutes=5)       # no fresh position of the vehicle this long after a run: signal lost
 NOTICE_DAYS = 60
+CLOSURE_M = 2000   # a closure explains a run only this close to its geometry (a detour stays near the works)
 LABEL_FARA = {"ro": "abatere de la traseu fără anunț găsit de noi — de verificat",
               "en": "off route, no notice found by us — to be checked"}
 
@@ -192,15 +199,21 @@ def find_runs(df: pd.DataFrame, f: gtfs.Feed) -> list[dict]:
 
 # --- classification -----------------------------------------------------------------------
 
-def _published_actions(at: datetime) -> dict[str, str]:
-    """route_id -> closure id, for published closures active at `at` that act on the route."""
+def _published_actions(at: datetime) -> dict[str, tuple[str, object]]:
+    """route_id -> (closure id, its geometry in UTM or None), for published closures active at `at`
+    that act on the route."""
+    from shapely.geometry import shape
+
+    from app.common.geo import to_metric
+
     out = {}
     for c in state.list_all("closures"):
         if c.get("status") != "published" or not c.get("window"):
             continue
         if parse_iso(c["window"]["start"]) <= at < parse_iso(c["window"]["end"]):
+            geom = to_metric(shape(c["geometry"])) if c.get("geometry") else None
             for a in c.get("routeActions") or []:
-                out.setdefault(a.get("routeId"), c["id"])
+                out.setdefault(a.get("routeId"), (c["id"], geom))
     return out
 
 
@@ -215,7 +228,7 @@ def _notice_index(signature: tuple) -> list[tuple]:
         for sentence in parser.split_sentences(p.title + ". " + p.text):
             w = parser.window_from(sentence, p.date)
             if w is not None:
-                windows.append((w.start, w.end))
+                windows.append((w.start, w.end, w.open_end))
             for tok in parser.line_tokens(sentence):
                 rid = parser._route_for(tok)
                 if rid:
@@ -234,7 +247,10 @@ def _notice_for(route_id: str, street_key: str | None, at: datetime):
         if route_id not in routes or street_key not in streets:
             continue
         if windows:
-            if any(a <= at <= b for a, b in windows):  # the notice's own window(s)
+            # closed windows first: an open end („începând cu …”) from another sentence of the same notice
+            # (10862: the vaporetto, 19 Sep) must not stretch the notice to 31 Dec
+            closed = [(a, b) for a, b, open_end in windows if not open_end]
+            if any(a <= at <= b for a, b in (closed or [(a, b) for a, b, _ in windows])):
                 return p
         elif p.date <= at <= p.date + timedelta(days=NOTICE_DAYS):
             return p
@@ -257,10 +273,21 @@ def detect(start: datetime, end: datetime) -> dict:
     counts = Counter()
     kept = []
     spans = missing._trip_table(f).set_index("trip_id")[["first_sec", "last_sec"]]
+    times_of = {vid: np.sort(g.t.to_numpy()) for vid, g in df.groupby("vid")} if len(df) else {}
+    e_ts = end.timestamp()
     for r in runs:
         part, line = r["part"], shapes[r["shape"]]
         mid = shapely.Point(float(part.x.mean()), float(part.y.mean()))
         counts["runs"] += 1
+        # positions just before a GPS loss are extrapolated by the onboard unit (tram 7 at Piața Sfânta
+        # Maria, 14 Nov: straight on along 16 Decembrie, frozen ~10 min, then back on its own route)
+        last_t = float(part.t.iloc[-1])
+        ts = times_of.get(r["vid"])
+        nxt = ts[np.searchsorted(ts, last_t, side="right")] if ts is not None and (ts > last_t).any() else None
+        if (nxt is not None and nxt - last_t >= GPS_LOSS.total_seconds()) or (
+                nxt is None and e_ts - last_t >= GPS_LOSS.total_seconds()):
+            counts["ignoredGpsLoss"] += 1
+            continue
         if r["trip"] in spans.index:
             t0 = datetime.fromtimestamp(float(part.t.iloc[0]), tz=timezone.utc).astimezone(TZ)
             t1 = datetime.fromtimestamp(float(part.t.iloc[-1]), tz=timezone.utc).astimezone(TZ)
@@ -329,7 +356,14 @@ def detect(start: datetime, end: datetime) -> dict:
         tracks = sorted(g.pop("tracks"), key=lambda t: t["start"])
         street_key = g.pop("_street_key")
         first_at = parse_iso(tracks[0]["start"])
-        closure = _published_actions(first_at).get(g["routeId"])
+        closure = None
+        hit = _published_actions(first_at).get(g["routeId"])
+        if hit is not None:
+            cid, geom = hit
+            xy = project_lonlats(map(tuple, tracks[0]["coordinates"]))
+            where = shapely.Point(float(xy[:, 0].mean()), float(xy[:, 1].mean()))
+            if geom is None or where.distance(geom) <= CLOSURE_M:
+                closure = cid
         post = None if closure else _notice_for(g["routeId"], street_key, first_at)
         if closure or post:
             cls = "anuntata"
@@ -361,6 +395,8 @@ def detect(start: datetime, end: datetime) -> dict:
                                  f"{', '.join(files) or 'niciunul / none'}").model_dump(),
         prov.provenance("Rețeaua Vie R18, abateri de la traseu / off-route detector", real_now(), None, None,
                         f"≥ {MIN_REPORTS} poziții consecutive la > {OFF_ROUTE_M} m de orice traseu GTFS al liniei; ignorate: "
+                        f"urmate de pierderea semnalului GPS (nicio poziție nouă ≥ {int(GPS_LOSS.total_seconds() // 60)} min: "
+                        f"pozițiile de dinainte sunt extrapolate), "
                         f"în afara orei cursei (cu {int(BEFORE_TRIP.total_seconds() // 60)} min înainte, "
                         f"{int(AFTER_TRIP.total_seconds() // 60)} min după), vehicul staționat (≥ "
                         f"{int(STANDING_MIN.total_seconds() // 60)} min sub {STANDING_MPS:g} m/s), ≤ {TERMINAL_M} m de "
@@ -385,10 +421,11 @@ def detect(start: datetime, end: datetime) -> dict:
                        "beforeTripMinutes": int(BEFORE_TRIP.total_seconds() // 60),
                        "afterTripMinutes": int(AFTER_TRIP.total_seconds() // 60),
                        "standingMinutes": int(STANDING_MIN.total_seconds() // 60),
-                       "standingMetresPerSecond": STANDING_MPS},
+                       "standingMetresPerSecond": STANDING_MPS,
+                       "gpsLossMinutes": int(GPS_LOSS.total_seconds() // 60)},
         "reports": int(len(df)),
         "counts": {k: int(counts.get(k, 0)) for k in
-                   ("runs", "ignoredOffSchedule", "ignoredStanding", "ignoredTerminal", "ignoredDepot", "kept", "announced",
+                   ("runs", "ignoredGpsLoss", "ignoredOffSchedule", "ignoredStanding", "ignoredTerminal", "ignoredDepot", "kept", "announced",
                     "unannounced")},
         "groups": out_groups,
         "provenance": provenance,
