@@ -23,9 +23,11 @@ import { fmtDateTime, tr } from "../../lib/format";
 import { navigate, stepHref } from "../../lib/router";
 import { invalidate, setData, useResource } from "../../lib/store";
 import type { StepProps } from "../types";
+import { FeedsView } from "./feeds";
 import { AppsView, NoticeView, StationView } from "./outputs";
+import { S } from "./strings";
 
-type Out = "notice" | "apps" | "station";
+type Out = "notice" | "apps" | "station" | "feeds";
 
 export function PublishStep(props: StepProps) {
   if (!props.closureId) return <CasePicker step={3} />;
@@ -96,6 +98,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
     { id: "notice", label: t("publish.outNotice") },
     { id: "apps", label: t("publish.outApps") },
     { id: "station", label: t("publish.outStation") },
+    { id: "feeds", label: tr(S.feedsTab) },
   ];
   const qrHref = selected ? `/a/${encodeURIComponent(closureId)}?stop=${encodeURIComponent(selected)}` : null;
 
@@ -103,8 +106,9 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
     <>
       <section className="stage" aria-label={outs.find((o) => o.id === out)?.label}>
         {out === "notice" && (notice.data ? <NoticeView notice={notice.data} /> : <LoadState {...notice} loading />)}
-        {out !== "notice" && !published && <p className="state-msg">{t("publish.notPublished")}</p>}
-        {out !== "notice" && published && (
+        {out === "feeds" && <FeedsView />}
+        {(out === "apps" || out === "station") && !published && <p className="state-msg">{t("publish.notPublished")}</p>}
+        {(out === "apps" || out === "station") && published && (
           <>
             <StopPicker alerts={stopAlerts} value={selected} onChange={setStopId} />
             {selected && out === "apps" && (

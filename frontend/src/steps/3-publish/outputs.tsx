@@ -88,7 +88,7 @@ export function AppsView({ alert, analysis, stopId }: { closureId: string; stopI
   );
 }
 
-/** At the stop: poster, audio (AI label), simulated LED strip, validator result, downloads. */
+/** At the stop: poster, audio (AI label), simulated LED strip, validator result. The feed links live in the „Ce primește CityApp” list (feeds.tsx). */
 export function StationView({
   closureId,
   stopId,
@@ -172,13 +172,6 @@ export function StationView({
             </ul>
           </details>
         )}
-      </section>
-      <section>
-        <h2>{t("publish.downloads")}</h2>
-        <p className="small">
-          <a href="/api/feed/alerts.pb">GTFS-RT (alerts.pb)</a> · <a href="/api/feed/alerts.json">JSON</a> ·{" "}
-          <a href="/api/feed/datex.xml">DATEX II</a>
-        </p>
       </section>
     </div>
   );

@@ -1,0 +1,31 @@
+/* K1: the list of public outputs in step 3. Tokens only (tokens.css). */
+.feeds {
+  max-width: 820px;
+}
+
+.feeds > p {
+  margin: 0 0 var(--sp-4);
+  max-width: 70ch;
+}
+
+.feeds-list > li {
+  display: grid;
+  grid-template-columns: 17ch 1fr;
+  gap: var(--sp-4);
+  align-items: baseline;
+  padding: var(--sp-3) 0;
+}
+
+.feeds-name {
+  font-family: var(--font-mono);
+  font-size: var(--fs-s);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .feeds-list > li {
+    grid-template-columns: 1fr;
+    gap: var(--sp-1);
+  }
+}
