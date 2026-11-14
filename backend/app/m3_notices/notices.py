@@ -284,11 +284,18 @@ def build_notices(closure: dict, analysis: dict, published: dict | None) -> list
             by_name.setdefault(r.get("name") or str(r["stopId"]), []).append(r)
         stop_ids = list(dict.fromkeys(str(r["stopId"]) for r in rows))
         body = {}
+        paid_line = None
+        if buffer is not None:
+            from app.m6_parking import paid  # lazy: m6 reads the M3 street helpers
+
+            paid_line = paid.notice_sentence(closure, analysis, shape_)
         for lang in ("ro", "en"):
             works = "lucrări pe" if lang == "ro" else "works on"
             parts = [f"{_cap(what[lang])}: {works} {_street_phrase(streets or all_streets, lang)}."]
             parts += _lines_sentences(route_ids, actions, lang)
             parts += _stop_sentences(list(by_name.items()), lang)
+            if paid_line:
+                parts.append(paid_line[0 if lang == "ro" else 1])
             body[lang] = " ".join(parts)
         zone_name = zones.names[slug]
         zone_stops, zone_routes = set(stop_ids), set(route_ids)
