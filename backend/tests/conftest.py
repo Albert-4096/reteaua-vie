@@ -51,3 +51,27 @@ def client():
 
     with TestClient(app) as c:
         yield c
+
+
+# --- R3: the r5py JVM can crash at interpreter shutdown (exit 139 after every test passed) ---------
+#
+# When a test started the JVM (access, scenarios), leave the process with pytest's own exit status
+# right after pytest is done, before Python's shutdown tears the JVM down.
+
+_exit_status: list[int] = []
+
+
+def pytest_sessionfinish(session, exitstatus):
+    _exit_status.append(int(exitstatus))
+
+
+@pytest.hookimpl(trylast=True)
+def pytest_unconfigure(config):
+    jpype = __import__("sys").modules.get("jpype")
+    if jpype is None or not _exit_status or not jpype.isJVMStarted():
+        return
+    import sys
+
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(_exit_status[-1])
