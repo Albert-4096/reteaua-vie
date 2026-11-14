@@ -1,0 +1,198 @@
+/* N1 approval file: invisible on screen, the only thing on paper. One A4 page, black on white. */
+.approval-file {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 9mm 12mm;
+  }
+
+  html:has(> body > .approval-file),
+  body:has(> .approval-file) {
+    height: auto;
+    background: #fff;
+  }
+
+  /* Only while step 2 has the file mounted: other steps print as before. */
+  body:has(> .approval-file) > :not(.approval-file) {
+    display: none !important;
+  }
+
+  .approval-file {
+    display: block;
+    color: #000;
+    font-family: var(--font-sans);
+    font-size: 8pt;
+    line-height: 1.25;
+  }
+
+  .approval-file h1 {
+    font-size: 13pt;
+  }
+
+  .approval-file h2 {
+    font-size: 8pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.8mm;
+    padding-bottom: 0.4mm;
+    border-bottom: 0.3pt solid #000;
+  }
+
+  .approval-file section {
+    margin-top: 2mm;
+    break-inside: avoid;
+  }
+
+  .approval-file p,
+  .approval-file ul,
+  .approval-file ol,
+  .approval-file dl {
+    margin: 0;
+  }
+
+  .af-head p {
+    margin-top: 0.8mm;
+    color: #444;
+  }
+
+  .af-lead {
+    font-weight: 600;
+    font-size: 9.6pt;
+  }
+
+  .af-dl {
+    display: grid;
+    grid-template-columns: 30mm 1fr;
+    gap: 0.6mm 3mm;
+    margin-top: 1mm !important;
+  }
+
+  .af-dl dt {
+    color: #444;
+  }
+
+  .af-dl dd {
+    margin: 0;
+  }
+
+  .af-url {
+    word-break: break-all;
+    font-size: 7.6pt;
+  }
+
+  .af-warn {
+    margin-top: 2mm !important;
+    padding: 1mm 2mm;
+    border: 0.6pt solid #000;
+    font-weight: 600;
+  }
+
+  .af-figs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3mm;
+  }
+
+  .af-figs > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .af-figs .af-num {
+    font-size: 14pt;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .af-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .af-cite {
+    font-size: 7pt;
+    color: #444;
+    font-family: var(--font-sans);
+  }
+
+  .af-figs .af-cite {
+    font-size: 7pt;
+  }
+
+  .af-line + .af-line {
+    margin-top: 0.8mm;
+  }
+
+  .af-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .af-table th,
+  .af-table td {
+    text-align: left;
+    padding: 0.6mm 2mm 0.6mm 0;
+    border-bottom: 0.3pt solid #999;
+    vertical-align: top;
+  }
+
+  .af-table th {
+    font-weight: 600;
+    color: #444;
+  }
+
+  .af-table .num {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .af-list {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .af-list li + li {
+    margin-top: 0.8mm;
+  }
+
+  .af-box {
+    font-size: 10pt;
+  }
+
+  .af-sources {
+    font-size: 6.9pt;
+    color: #222;
+  }
+
+  .af-sources ol {
+    padding-left: 5mm;
+  }
+
+  .af-sources p {
+    margin-top: 1mm;
+  }
+
+  .af-verdict {
+    margin-top: 3mm;
+    padding-top: 1.6mm;
+    border-top: 0.6pt solid #000;
+    break-inside: avoid;
+  }
+
+  .af-sign {
+    display: flex;
+    gap: 10mm;
+    margin-top: 4mm !important;
+  }
+
+  .af-sign span {
+    flex: 1;
+    border-top: 0.3pt solid #000;
+    padding-top: 0.8mm;
+    color: #444;
+  }
+}

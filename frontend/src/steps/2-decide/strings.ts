@@ -24,3 +24,93 @@ export const S = {
     en: "A closed street does not move all its traffic to the streets around it. In over 70 cases from 11 countries, after road space for cars was reduced, part of the traffic did not reappear on nearby streets (Cairns, Atkins, Goodwin 2002). The works can also be a trial for a pedestrian street or a bus lane. We have no figure for Timișoara.",
   },
 };
+
+// N1: the one-page approval file for the traffic commission (printed with Ctrl+P or the print button).
+export const A = {
+  print: { ro: "Tipărește dosarul", en: "Print the file" },
+  printHint: {
+    ro: "O pagină A4 pentru Comisia de circulație, cu sursa fiecărei cifre.",
+    en: "One A4 page for the traffic commission, with the source of every number.",
+  },
+  title: { ro: "Dosar pentru Comisia de circulație", en: "File for the traffic commission" },
+  printedAt: (when: string, id: string) => ({
+    ro: `Tipărit din Rețeaua Vie la ${when} · lucrarea ${id}`,
+    en: `Printed from Rețeaua Vie on ${when} · closure ${id}`,
+  }),
+  works: { ro: "Lucrarea", en: "The works" },
+  where: { ro: "Unde", en: "Where" },
+  when: { ro: "Perioada cerută", en: "Requested window" },
+  notice: { ro: "Anunțul sursă", en: "Source notice" },
+  lines: { ro: "Ce se schimbă la linii", en: "What changes for the lines" },
+  action: {
+    suspended: { ro: "suspendată", en: "suspended" },
+    shortened: { ro: "scurtată", en: "shortened" },
+    rerouted: { ro: "deviată", en: "rerouted" },
+  } as Record<string, { ro: string; en: string }>,
+  line: (n: string) => ({ ro: `linia ${n}`, en: `line ${n}` }),
+  dir: (d: number) => ({ ro: `sensul ${d + 1}`, en: `direction ${d + 1}` }),
+  tempRoute: (n: string, streets: string) => ({
+    ro: `linie temporară ${n}: ${streets}`,
+    en: `temporary line ${n}: ${streets}`,
+  }),
+  undecided: (n: number) => ({
+    ro: `Atenție: ${n} rânduri neclare nu au încă răspuns (pasul 1). Cifrele de mai jos nu le numără.`,
+    en: `Note: ${n} unsure rows have no answer yet (step 1). The figures below do not count them.`,
+  }),
+  loss: { ro: "Ce pierd oamenii, în perioada cerută", en: "What people lose, in the requested window" },
+  departures: { ro: "Plecări pierdute", en: "Departures lost" },
+  residents: { ro: "Locuitori fără stație la 400 m", en: "Residents with no stop within 400 m" },
+  suspended: { ro: "Stații fără niciun mijloc de transport", en: "Stops with no service at all" },
+  routes: { ro: "Linii afectate", en: "Lines affected" },
+  stops: { ro: "Stațiile pierdute, pe linii", en: "Stops lost, by line" },
+  stopsNone: { ro: "Nicio stație pierdută.", en: "No stop lost." },
+  stopsLine: (n: string, count: number) => ({
+    ro: `Linia ${n} · ${count} ${count === 1 ? "stație" : "stații"}`,
+    en: `Line ${n} · ${count} ${count === 1 ? "stop" : "stops"}`,
+  }),
+  departuresShort: { ro: "plecări", en: "departures" },
+  window: { ro: "Perioada", en: "The window" },
+  windowNotice: { ro: "Din anunț", en: "From the notice" },
+  windowBest: (h: number) => ({
+    ro: `Cea mai bună perioadă de ${h} ore găsită`,
+    en: `Best ${h}-hour window found`,
+  }),
+  windowPending: { ro: "încă se calculează", en: "still being computed" },
+  conflicts: { ro: "Conflicte cu alte lucrări", en: "Conflicts with other works" },
+  conflictsNone: { ro: "Niciun conflict cu lucrările din registru.", en: "No conflict with the works in the register." },
+  kind: {
+    same_corridor: { ro: "același coridor", en: "same corridor" },
+    shared_detour: { ro: "aceeași ocolire", en: "same detour" },
+    same_stops: { ro: "aceleași stații", en: "same stops" },
+  } as Record<string, { ro: string; en: string }>,
+  linesShort: { ro: "linii", en: "lines" },
+  decisions: { ro: "Ce a decis un om (pasul 1)", en: "What a person decided (step 1)" },
+  certain: (n: number) => ({
+    ro: `${n} rânduri sigure din anunț și orar, fără întrebare.`,
+    en: `${n} certain rows from the notice and the timetable, no question asked.`,
+  }),
+  overridden: (n: number) => ({
+    ro: `${n} dintre ele schimbate de om.`,
+    en: `${n} of them changed by a person.`,
+  }),
+  answer: {
+    open: { ro: "fără răspuns", en: "no answer" },
+    lost: { ro: "răspuns: nu oprește", en: "answer: does not stop" },
+    served: { ro: "răspuns: oprește", en: "answer: stops" },
+    mixed: { ro: "răspuns pe rânduri", en: "answered row by row" },
+  } as Record<string, { ro: string; en: string }>,
+  rows: (lost: number, served: number, open: number) => ({
+    ro: `${lost} nu oprește · ${served} oprește · ${open} fără răspuns`,
+    en: `${lost} does not stop · ${served} stops · ${open} no answer`,
+  }),
+  noQuestions: { ro: "Nicio întrebare: toate rândurile erau sigure.", en: "No question: every row was certain." },
+  sources: { ro: "Surse (numerele dintre paranteze)", en: "Sources (the numbers in brackets)" },
+  method: { ro: "Cum se calculează", en: "How it is computed" },
+  fetched: (d: string) => ({ ro: `date din ${d}`, en: `data of ${d}` }),
+  verdict: { ro: "Decizia Comisiei", en: "The commission's decision" },
+  approveNotice: { ro: "Aprobat, perioada din anunț", en: "Approved, the notice's window" },
+  approveBest: { ro: "Aprobat, perioada propusă", en: "Approved, the proposed window" },
+  reject: { ro: "Respins", en: "Rejected" },
+  signature: { ro: "Semnătura", en: "Signature" },
+  date: { ro: "Data", en: "Date" },
+};

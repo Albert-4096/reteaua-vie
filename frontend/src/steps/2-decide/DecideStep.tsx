@@ -11,7 +11,8 @@ import { tr } from "../../lib/format";
 import { navigate, stepHref } from "../../lib/router";
 import { useResource } from "../../lib/store";
 import type { StepProps } from "../types";
-import { S } from "./strings";
+import { ApprovalFile } from "./ApprovalFile";
+import { A, S } from "./strings";
 
 export function DecideStep(props: StepProps) {
   if (!props.closureId) return <CasePicker step={2} />;
@@ -59,11 +60,23 @@ function Decide({ closureId, caseKey }: StepProps & { closureId: string }) {
       title={tr(S.title)}
       sentence={tr(S.sentence(hours))}
       foot={
-        <button type="button" className="btn btn-primary" onClick={() => navigate(stepHref(3, caseKey))}>
-          {tr(S.confirm)}
-        </button>
+        <div style={{ display: "flex", gap: "var(--sp-2)" }}>
+          <button type="button" className="btn btn-primary" onClick={() => navigate(stepHref(3, caseKey))}>
+            {tr(S.confirm)}
+          </button>
+          <button
+            type="button"
+            className="btn"
+            style={{ whiteSpace: "nowrap", flex: "none" }}
+            title={tr(A.printHint)}
+            onClick={() => window.print()}
+          >
+            {tr(A.print)}
+          </button>
+        </div>
       }
     >
+      <ApprovalFile closure={c} impact={impact.data} windows={w} hours={hours} />
       <section>
         <h2>{tr(S.windows)}</h2>
         {!w ? (
