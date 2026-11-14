@@ -47,10 +47,10 @@ export function Answer({ value, label, kind, tone, children }: { value: ReactNod
 }
 
 /** A smaller supporting number, next to the answer. */
-export function Stat({ value, label, kind }: { value: ReactNode; label: string; kind?: "measured" | "estimate" }) {
+export function Stat({ value, label, kind, tone }: { value: ReactNode; label: string; kind?: "measured" | "estimate"; tone?: "closure" | "green" }) {
   return (
     <div>
-      <div className="tabular text-xl font-semibold leading-none tracking-tight">{value}</div>
+      <div className={cn("tabular text-xl font-semibold leading-none tracking-tight", tone === "closure" && "text-closure-ink", tone === "green" && "text-accent-foreground")}>{value}</div>
       <div className="mt-1.5 text-sm leading-snug text-muted-foreground">{label}{kind === "estimate" && <span className="ml-1 whitespace-nowrap text-xs">(estimare)</span>}</div>
     </div>
   );

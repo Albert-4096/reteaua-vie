@@ -72,12 +72,12 @@ function WorkPicker({ step, closureId }: { step: StepId; closureId: string }) {
   const [open, setOpen] = useState(false);
   const cur = closures.data?.find((c) => c.id === closureId);
   return (
-    <div className="border-b px-3 py-3">
+    <div className="border-b px-3 py-2">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
-          <span className="size-2.5 shrink-0 rounded-full bg-closure" aria-hidden />
+          <span className="size-2 shrink-0 rounded-full bg-closure" aria-hidden />
           <span className="min-w-0 flex-1">
-            <span className="line-clamp-2 text-sm font-medium leading-snug">{cur?.title.ro ?? "Se încarcă lucrarea…"}</span>
+            <span className="line-clamp-2 text-sm leading-snug text-foreground/80">{cur?.title.ro ?? "Se încarcă lucrarea…"}</span>
             {cur && <span className="tabular mt-0.5 block text-xs text-muted-foreground">{dt(cur.window.start)} – {dt(cur.window.end)}</span>}
           </span>
           <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />

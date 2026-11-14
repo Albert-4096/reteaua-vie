@@ -7,7 +7,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineBadge } from "@/landing/LineBadge";
 import { api, fmt, hhmm, useApi, type Vehicle } from "@/lib/api";
-import { cn } from "@/lib/utils";
 import type { FeatureCollection, Point } from "geojson";
 import { app, day, dt, type AnalysisStop, type DecisionGroup } from "./data";
 import type { MapStop } from "./MapView";
@@ -19,9 +18,13 @@ const pl = (n: number, one: string, many: string) => `${fmt.format(n)} ${n === 1
 const toVehicles = (d: FeatureCollection<Point, Vehicle> | null) =>
   (d?.features ?? []).map((v) => ({ id: v.properties.vehicleId, lon: v.geometry.coordinates[0], lat: v.geometry.coordinates[1] }));
 
-function Next({ to, children }: { to: StepId; children: ReactNode }) {
-  return <Button className="h-11 w-full rounded-xl text-[0.95rem]" onClick={() => go(to)}>{children} <ArrowRight className="size-4" /></Button>;
+/** The step's way forward. Quiet (outline) while the step still waits for a decision, so one action leads at a time. */
+function Next({ to, quiet, children }: { to: StepId; quiet?: boolean; children: ReactNode }) {
+  return <Button variant={quiet ? "outline" : "default"} className="h-11 w-full rounded-xl text-[0.95rem]" onClick={() => go(to)}>{children} <ArrowRight className="size-4" /></Button>;
 }
+
+/** A fold's count: red when something waits for a person, plain grey when it is zero. */
+const alertCount = (n: number | undefined) => n == null ? "…" : n > 0 ? <Tag tone="closure">{fmt.format(n)}</Tag> : 0;
 
 function Live({ d }: { d: FeatureCollection<Point, Vehicle> | null }) {
   const at = d?.features[0]?.properties.updatedAt;
@@ -96,7 +99,7 @@ export function Overview() {
         </ul>
       )}
       <Folds>
-        <Fold id="overlaps" title="Suprapuneri între lucrări" aside={conflicts.data ? pairs.length : "…"}>
+        <Fold id="overlaps" title="Suprapuneri între lucrări" aside={alertCount(conflicts.data ? pairs.length : undefined)}>
           {pairs.length === 0 ? <p className="text-muted-foreground">Nicio suprapunere pe aceleași linii sau stații.</p> : (
             <ul className="space-y-3">
               {pairs.map((c) => (
@@ -108,7 +111,7 @@ export function Overview() {
             </ul>
           )}
         </Fold>
-        <Fold id="novehicle" title="Linii fără vehicul în datele live" aside={missing.data ? noVehicle.length : "…"}>
+        <Fold id="novehicle" title="Linii fără vehicul în datele live" aside={alertCount(missing.data ? noVehicle.length : undefined)}>
           {noVehicle.length === 0 ? <p className="text-muted-foreground">Toate liniile din orar au vehicule în datele live.</p> : (
             <ul className="space-y-2">
               {noVehicle.map((r) => (
@@ -133,6 +136,7 @@ function Question({ g, closureId, onDone }: { g: DecisionGroup; closureId: strin
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [done, setDone] = useState<string | null>(null);
+  const lost = g.suggested === "affected";
   const answer = async (affected: boolean) => {
     setBusy(true); setErr(null);
     try {
@@ -142,21 +146,19 @@ function Question({ g, closureId, onDone }: { g: DecisionGroup; closureId: strin
     } catch (e) { setErr(`Nu s-a salvat (${(e as Error).message}). Încercați din nou.`); } finally { setBusy(false); }
   };
   return (
-    <motion.li layout transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-      className={cn("rounded-xl border p-4 transition-colors", done && "border-transparent bg-accent/60")}>
+    <motion.li layout transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }} className="py-5 first:pt-1">
       <p className="font-medium leading-snug">{g.question.ro}</p>
       {done ? (
         <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-accent-foreground"><Check className="size-4" />{done}</p>
       ) : (
         <>
+          {lost && <p className="mt-1.5 text-sm text-accent-foreground">Propunerea noastră: nu oprește</p>}
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <Button disabled={busy} onClick={() => answer(true)} className="rounded-lg">Nu oprește</Button>
+            <Button disabled={busy} variant={lost ? "default" : "outline"} onClick={() => answer(true)} className="rounded-lg">Nu oprește</Button>
             <Button disabled={busy} variant="outline" onClick={() => answer(false)} className="rounded-lg">Oprește</Button>
           </div>
-          <details className="mt-3 text-sm">
-            <summary className="cursor-pointer list-none text-muted-foreground underline-offset-4 hover:underline">
-              De ce întrebăm{g.suggested === "affected" ? " · propunerea noastră: nu oprește" : ""}
-            </summary>
+          <details className="mt-2.5 text-sm">
+            <summary className="cursor-pointer list-none text-muted-foreground underline-offset-4 hover:underline">De ce întrebăm</summary>
             <p className="mt-1.5 leading-relaxed text-muted-foreground">{g.reason.ro}</p>
           </details>
         </>
@@ -194,7 +196,7 @@ export function Plan({ closureId }: { closureId: string }) {
           </div>
         </Answer>
       }
-      footer={<Next to="decizi">Alege când se face lucrarea</Next>}>
+      footer={<Next to="decizi" quiet={answered < groups.length}>Alege când se face lucrarea</Next>}>
       {groups.length > 0 && (
         <section className="mt-8">
           <div className="flex items-baseline justify-between">
@@ -204,7 +206,7 @@ export function Plan({ closureId }: { closureId: string }) {
           <div className="mt-2 h-1 overflow-hidden rounded-full bg-muted">
             <motion.div className="h-full rounded-full bg-primary" initial={false} animate={{ width: `${(Math.min(answered, groups.length) / groups.length) * 100}%` }} transition={{ duration: 0.3, ease: "easeOut" }} />
           </div>
-          <ul className="mt-4 space-y-3">{groups.map((g) => <Question key={g.id} g={g} closureId={closureId} onDone={() => setAnswered((x) => x + 1)} />)}</ul>
+          <ul className="mt-4 divide-y">{groups.map((g) => <Question key={g.id} g={g} closureId={closureId} onDone={() => setAnswered((x) => x + 1)} />)}</ul>
         </section>
       )}
       <Folds>
@@ -255,7 +257,8 @@ export function Decide({ closureId }: { closureId: string }) {
       answer={
         <Answer value={chosen != null ? <Count value={chosen} /> : "–"} tone={pick === "notice" ? "closure" : "green"} label="plecări pierdute în fereastra aleasă"
           kind={<div className="flex min-h-7 flex-wrap items-center gap-2"><Kind k="estimate" detail="orar planificat" />
-            {base != null && chosen != null && chosen < base && <span className="tabular text-sm font-medium text-accent-foreground">cu {fmt.format(base - chosen)} mai puține decât în anunț</span>}</div>} />
+            {base != null && chosen != null && chosen < base ? <span className="tabular text-sm font-medium text-accent-foreground">cu {fmt.format(base - chosen)} mai puține decât în anunț</span>
+              : base != null && rows[0] && rows[0].departuresLost < base && <span className="tabular text-sm text-muted-foreground">fereastra propusă: cu {fmt.format(base - rows[0].departuresLost)} mai puține</span>}</div>} />
       }
       footer={<Next to="publici">Pregătește anunțul</Next>}>
       {!w.data || !impact.data ? <div className="mt-7"><Loading rows={2} /></div> : (
@@ -416,7 +419,7 @@ export function Monitor({ closureId }: { closureId: string }) {
           <p className="mt-4 text-[0.95rem] leading-relaxed">La 10:23, 31 din cele 32 de linii cu curse în orar aveau vehicul în datele live. Linia 23, niciunul.</p>
         </Answer>
       ) : <p className="mt-5 text-sm text-muted-foreground">Cazul înregistrat nu e disponibil acum.</p>}
-      footer={<Next to="raportezi">Vezi ce raportăm</Next>}>
+      footer={<Next to="raportezi" quiet={rows.some((r) => !done[r.routeId])}>Vezi ce raportăm</Next>}>
       <section className="mt-8">
         <div className="flex items-baseline justify-between gap-3">
           <h3 className="font-semibold">De confirmat acum</h3>
@@ -429,9 +432,9 @@ export function Monitor({ closureId }: { closureId: string }) {
           </select>
         </label>
         {!missing.data ? <div className="mt-4"><Loading rows={2} /></div> : rows.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">Toate liniile din orar au vehicule în datele live acum.</p> : (
-          <ul className="mt-4 space-y-3">
+          <ul className="mt-4 divide-y">
             {rows.map((r) => (
-              <motion.li layout key={r.routeId} className={cn("rounded-xl border p-4", done[r.routeId] && "border-transparent bg-accent/60")}>
+              <motion.li layout key={r.routeId} className="py-4 first:pt-1">
                 <div className="flex items-center gap-3">
                   <LineBadge routeId={r.routeId} label={r.shortName} size="lg" />
                   <span className="min-w-0 flex-1"><span className="block font-medium leading-snug">{r.longName}</span>
@@ -442,7 +445,7 @@ export function Monitor({ closureId }: { closureId: string }) {
                     {done[r.routeId] === "confirmat" ? "Confirmat. Semnalul poate pleca spre CityApp." : done[r.routeId] === "respins" ? "Respins. Nu pleacă nimic." : done[r.routeId]}</p>
                 ) : (
                   <div className="mt-3 grid grid-cols-2 gap-2">
-                    <Button size="sm" className="rounded-lg" onClick={() => triage(r.routeId, "confirmat")}>Nu circulă</Button>
+                    <Button size="sm" variant="outline" className="rounded-lg" onClick={() => triage(r.routeId, "confirmat")}>Nu circulă</Button>
                     <Button size="sm" variant="outline" className="rounded-lg" onClick={() => triage(r.routeId, "respins")}>Circulă, lipsesc date</Button>
                   </div>
                 )}
@@ -471,7 +474,7 @@ export function Monitor({ closureId }: { closureId: string }) {
 }
 
 /* ---------------- 6. Raportezi ---------------- */
-const OBL = { covered: ["green", "Acoperit"], partial: ["ink", "Parțial"], missing: ["closure", "Lipsește"] } as const;
+const OBL = { covered: ["green", "Acoperit"], partial: ["neutral", "Parțial"], missing: ["closure", "Lipsește"] } as const;
 const TH = "px-4 py-3 font-medium";
 
 export function Report() {
@@ -485,7 +488,13 @@ export function Report() {
     <Step title="Ce raportăm" inner="mx-auto w-full max-w-5xl pb-24"
       answer={
         <Answer value={comp.data ? comp.data.obligations.length : "–"} label="obligații UE și naționale de informare a călătorilor, cu ce fișier al platformei răspunde fiecăreia">
-          {comp.data && <div className="mt-4 flex flex-wrap gap-2"><Tag tone="green">{pl(by("covered"), "acoperită", "acoperite")}</Tag><Tag tone="ink">{by("partial")} parțial</Tag><Tag tone="closure">{pl(by("missing"), "lipsește", "lipsesc")}</Tag></div>}
+          {comp.data && (
+            <div className="mt-6 flex gap-10">
+              <Stat value={fmt.format(by("covered"))} label={by("covered") === 1 ? "acoperită" : "acoperite"} tone="green" />
+              <Stat value={fmt.format(by("partial"))} label="parțial" />
+              <Stat value={fmt.format(by("missing"))} label={by("missing") === 1 ? "lipsește" : "lipsesc"} tone="closure" />
+            </div>
+          )}
         </Answer>
       }>
       <Tabs defaultValue="obl" className="mt-8">
