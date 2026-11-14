@@ -229,7 +229,7 @@ def test_build_cases():
     assert built["cl_20261108_16dec"].approximate and not built["cl_20261107_e3"].approximate
     moc = {(a.routeId, a.directionId): a.suspendedStopIds for a in built["cl_20261102_mocioni"].closure.routeActions}
     assert moc[("R_AB_M32", 0)] == ["356", "357", "291"]       # GTFS 4.29 normal pattern (SPEC §5.3)
-    assert moc[("R_AB_M38", 0)] == []                          # M38 keeps its stops
+    assert moc[("R_AB_M38", 0)] == ["356", "357"]              # R1: half its 4.29 trips start at Mocioni
 
 
 def test_precompute_is_idempotent_and_never_publishes_the_hero(state_dir):

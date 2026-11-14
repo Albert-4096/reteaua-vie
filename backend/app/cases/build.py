@@ -139,11 +139,10 @@ def _history_zip(version: str) -> Path:
     return hits[-1]
 
 
-@lru_cache(maxsize=2)
-def normal_patterns(version: str = "4.29") -> dict[tuple[str, int], tuple[str, ...]]:
-    """Most common trip pattern per (route, direction) of an older GTFS version."""
-    path = _history_zip(version)
-    with zipfile.ZipFile(path) as z:
+@lru_cache(maxsize=4)
+def _patterns_in(path_str: str) -> dict[tuple[str, int], list[tuple[str, ...]]]:
+    """Every trip pattern per (route, direction) of a GTFS zip, most common first."""
+    with zipfile.ZipFile(path_str) as z:
         def read(name: str) -> pd.DataFrame:
             return pd.read_csv(io.BytesIO(z.read(name)), dtype=str, keep_default_na=False)
         trips, st = read("trips.txt"), read("stop_times.txt")
@@ -153,44 +152,66 @@ def normal_patterns(version: str = "4.29") -> dict[tuple[str, int], tuple[str, .
     for (route, d), grp in trips.groupby(["route_id", "direction_id"]):
         counts = Counter(seqs[t] for t in grp["trip_id"] if t in seqs.index)
         if counts:
-            out[(route, int(d or 0))] = counts.most_common(1)[0][0]
+            out[(route, int(d or 0))] = [p for p, _ in counts.most_common()]
     return out
 
 
-def mocioni_actions(d: parser.ParseDetail) -> tuple[list[RouteAction], str]:
-    """Suspended stops of 11060 per line and direction, on the GTFS 4.29 normal pattern.
+def normal_patterns(version: str = "4.29") -> dict[tuple[str, int], tuple[str, ...]]:
+    """Most common trip pattern per (route, direction) of an older GTFS version."""
+    return {k: v[0] for k, v in _patterns_in(str(_history_zip(version))).items()}
 
-    The notice lists the stops that are still served. On the 4.29 pattern, a stop counts as
-    suspended when it lies between the listed stops, or beyond them on the side away from the
-    city limit, is not named in the list, and is not on the line's current (4.31) pattern either.
+
+def _closed_qualifier(stop_name: str, closed: set[str]) -> bool:
+    """The stop's parenthesis names a street the notice closes: „Piața Iuliu Maniu (16 Decembrie 1989)”."""
+    if "(" not in stop_name:
+        return False
+    st = parser.resolve_street(stop_name.split("(", 1)[1].rstrip(")"))
+    return st is not None and st.name in closed
+
+
+def mocioni_actions(d: parser.ParseDetail) -> tuple[list[RouteAction], str]:
+    """Suspended stops of 11060 per line and direction, on the GTFS 4.29 patterns.
+
+    The notice lists the stops that are still served. On each 4.29 pattern of the line that the
+    list touches (the most common one always), a stop counts as suspended when it lies between the
+    listed stops, or beyond them on the side away from the city limit, is not named in the list,
+    and is on no current pattern of the line either. A name the notice gives without its
+    parenthesis does not confirm a stop whose parenthesis is a street the notice closes: the notice's
+    „Piața Iuliu Maniu” is not „Piața Iuliu Maniu (16 Decembrie 1989)” on the closed boulevard.
     """
-    normal = normal_patterns("4.29")
-    current = gtfs.stop_patterns()
+    normal = _patterns_in(str(_history_zip("4.29")))
+    current = _patterns_in(str(gtfs.feed().path))
+    closed = {st.name for st in d.closure_streets}
     names = parser._stop_names()
     out: list[RouteAction] = []
     for sl in d.served_lists:
         r, dd = sl["routeId"], sl["directionId"]
         if dd is None or (r, dd) not in normal:
             continue
-        pat = list(normal[(r, dd)])
-        scored = [(parser._name_score(n, names.get(s, "")), s) for n in sl["names"] for s in pat]
-        hits = {s for sc, s in scored if sc >= 1}
-        strong = {s for sc, s in scored if sc >= 2}
-        if hits:
-            idx = sorted(pat.index(h) for h in hits)
-            lo, hi = idx[0], idx[-1]
-            region = set(pat[lo:hi + 1])
-            if sl["openSide"] == "end":
-                region |= set(pat[:lo])
-            elif sl["openSide"] == "start":
-                region |= set(pat[hi + 1:])
-        else:
-            region = set(pat)
-        now_served = set(current[(r, dd)].stop_ids) if (r, dd) in current else set()
-        susp = [s for s in pat if s in region and s not in strong and s not in now_served]
+        now_served = {s for p in current.get((r, dd), []) for s in p}
+        susp: list[str] = []
+        for k, pat in enumerate(normal[(r, dd)]):
+            pat = list(pat)
+            scored = [(parser._name_score(n, names.get(s, "")), s, "(" in n) for n in sl["names"] for s in pat]
+            hits = {s for sc, s, _ in scored if sc >= 1}
+            strong = {s for sc, s, qual in scored
+                      if sc >= 3 or (sc == 2 and (qual or not _closed_qualifier(names.get(s, ""), closed)))}
+            if hits:
+                idx = sorted(pat.index(h) for h in hits)
+                lo, hi = idx[0], idx[-1]
+                region = set(pat[lo:hi + 1])
+                if sl["openSide"] == "end":
+                    region |= set(pat[:lo])
+                elif sl["openSide"] == "start":
+                    region |= set(pat[hi + 1:])
+            elif k == 0:
+                region = set(pat)
+            else:
+                continue  # a rarer variant the list does not touch
+            susp += [s for s in pat if s in region and s not in strong and s not in now_served and s not in susp]
         out.append(RouteAction(routeId=r, directionId=dd, action="rerouted", suspendedStopIds=susp, stopNames=None))
-    note = (f"normal pattern = GTFS 4.29 ({_history_zip('4.29').name}); suspended = listed as not served "
-            "by notice 11060 and absent from the GTFS 4.31 pattern")
+    note = (f"normal patterns = GTFS 4.29 ({_history_zip('4.29').name}); suspended = listed as not served "
+            "by notice 11060 and on no current GTFS pattern of the line")
     return out, note
 
 

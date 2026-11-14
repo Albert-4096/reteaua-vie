@@ -409,7 +409,9 @@ def action_stops(action: dict, tt: Timetable | None = None) -> tuple[dict[int, l
                         if m and m not in hits and base_name(n.stop_by_id[m]["name"]) == base_name(
                                 n.stop_by_id[sid]["name"]):
                             hits.append(m)
-            out[d] = [s for s in order if s in set(hits)] + [s for s in hits if s not in order]
+            # ids given for this direction that only a rarer pattern serves (Mocioni M38, M46): keep them
+            rare = [s for s in action.get("suspendedStopIds") or [] if s not in order and s not in hits] if one_dir else []
+            out[d] = [s for s in order if s in set(hits)] + [s for s in hits if s not in order] + rare
     return out, ambiguous, unresolved
 
 

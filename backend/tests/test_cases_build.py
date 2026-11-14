@@ -32,3 +32,24 @@ def test_hero_geometry_is_the_piata_maria_junction():
     # the rows still come from the notice's route actions, not from the drawing
     rows, _ = m.match_closure(c.model_dump(mode="json"))
     assert {r["routeId"] for r in rows} == set(case.route_ids)
+
+
+def test_mocioni_rows_match_smtt_own_timetable_change():
+    """R1: Mocioni's suspended rows equal what SMTT removed from 4.29 to 4.30 (eval gold, read only here)."""
+    import json
+    from pathlib import Path
+
+    from app.cases import build
+    from app.cases.catalog import CASES_BY_CLOSURE
+
+    b = build.build_case(CASES_BY_CLOSURE["cl_20261102_mocioni"])
+    ours = {(s, a.routeId, a.directionId) for a in b.closure.routeActions for s in a.suspendedStopIds}
+    gold_file = Path(__file__).resolve().parents[2] / "eval" / "results" / "gold_gtfs_diff.json"
+    rows = json.loads(gold_file.read_text(encoding="utf-8"))["transitions"]["4.29->4.30"]
+    gold = {(s, r["routeId"], r["directionId"]) for r in rows
+            if r["shortName"] in ("M32", "M36", "M37", "M38", "M46", "M51") for s in r["removedStopIds"]}
+    assert ours == gold and len(gold) == 27
+    # the bare „Piața Iuliu Maniu” of the inbound lists is not 352 on the closed boulevard ...
+    assert {r for s, r, d in ours if s == "352" and d == 1} == {"R_AB_M36", "R_AB_M37", "R_AB_M38", "R_AB_M51"}
+    # ... but M32's list names „Piața Iuliu Maniu (16 Decembrie 1989)” itself: still served
+    assert ("352", "R_AB_M32", 1) not in ours
