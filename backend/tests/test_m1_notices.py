@@ -173,8 +173,15 @@ def _rows(closure) -> set:
                 ids = order
             elif a.action == "shortened":
                 ids = [s for s in order if s not in set(a.keepStopIds or [])]
+            elif a.suspendedStopIds:
+                ids = a.suspendedStopIds
             else:
-                ids = a.suspendedStopIds or []
+                # names only (11062: the stops named after a street): the analysis resolves them on the
+                # timetable in force before the change, so the test does the same
+                from app.m1_disruption import impact, matching
+
+                c = closure.model_dump(mode="json", by_alias=True)
+                ids = matching.action_stops(a.model_dump(mode="json"), impact.timetable_for_closure(c))[0].get(d, [])
             rows |= {(s, a.routeId, d) for s in ids}
     return rows
 

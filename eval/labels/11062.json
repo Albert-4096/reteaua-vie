@@ -7,10 +7,10 @@
   "noticeText": "Începând de mâine, linia Expres 3🚌 își reia circulația spre Elba și ContiTech, utilizând traseul de deviere: str. Ioan Slavici – str. Răscoala de la 1907, ca urmare a închiderii Podului de pe strada Polonă.\n⚠️ Din acest motiv, stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate pe traseul liniei Expres 3.\nȘtim că modificările de traseu pot crea inconveniente și vă mulțumim pentru înțelegere și adaptare. Reluarea circulației către zona ELBA reprezintă un pas important pentru asigurarea mobilității călătorilor care folosesc zilnic această legătură.\n📅 Graficul actualizat de circulație va fi încărcat pe site-ul nostru azi, la sfârșitul programului de circulație. (ora 23)",
   "labelledBy": "AI-assisted from the notice text; human review pending",
   "feed": {
-    "version": "4.31",
-    "file": "smtt_1bd0e3-65f7b81245f0f.zip",
-    "sha256": "8905216072b3fdac810173f6e212375c9aafb5d58112878ee111406469b94af0",
-    "validFrom": "20261105",
+    "version": "4.30",
+    "file": "smtt-4.30_mdb-2868-202611020102.zip",
+    "sha256": "cfeb2098580ed4dd0896f34a0db45aa7833caa18e1c384e64b659ce3d8f4f7ca",
+    "validFrom": "20261102",
     "validTo": "20261231"
   },
   "window": {
@@ -53,13 +53,16 @@
           "341",
           "342",
           "343",
-          "345",
-          "312"
+          "344",
+          "363",
+          "346"
         ],
         "action": "rerouted",
         "stopNames": null,
         "resolved": [],
-        "suspendedStopIds": [],
+        "suspendedStopIds": [
+          "344"
+        ],
         "keptStopIds": [
           "328",
           "329",
@@ -88,14 +91,16 @@
           "341",
           "342",
           "343",
-          "345",
-          "312"
+          "363",
+          "346"
         ],
         "uncertainStopIds": [],
-        "suspendedStopNames": [],
+        "suspendedStopNames": [
+          "Polonă (Pasaj Freidorf)"
+        ],
         "notes": [
-          "„stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate”: no stop is named.",
-          "GTFS 4.31 (valid from 5 Nov) already routes E3 via Răscoala din 1907 and has no Polonă stop on E3 (E7 and M36 still stop at Polonă (Pasaj Freidorf), ids 344/314). So no stop of the current E3 pattern is suspended. The pre-detour Polonă stops of E3 cannot be named from this feed."
+          "„stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate pe traseul liniei Expres 3”: no stop is named, only the street; on 4.30 E3 has one stop on Polonă per direction, Polonă (Pasaj Freidorf).",
+          "Independent check: SMTT removed exactly these ids from E3 in 4.30 -> 4.31 (eval/gold_gtfs_diff.py). E7 and M36 keep stopping there and are not in the notice."
         ]
       },
       {
@@ -104,9 +109,10 @@
         "directionId": 1,
         "headsign": "Apicultorilor",
         "patternStopIds": [
-          "312",
-          "313",
-          "1064",
+          "346",
+          "347",
+          "314",
+          "315",
           "316",
           "317",
           "318",
@@ -129,17 +135,18 @@
           "168",
           "169",
           "327",
-          "328",
-          "982"
+          "328"
         ],
         "action": "rerouted",
         "stopNames": null,
         "resolved": [],
-        "suspendedStopIds": [],
+        "suspendedStopIds": [
+          "314"
+        ],
         "keptStopIds": [
-          "312",
-          "313",
-          "1064",
+          "346",
+          "347",
+          "315",
           "316",
           "317",
           "318",
@@ -162,21 +169,22 @@
           "168",
           "169",
           "327",
-          "328",
-          "982"
+          "328"
         ],
         "uncertainStopIds": [],
-        "suspendedStopNames": [],
+        "suspendedStopNames": [
+          "Polonă (Pasaj Freidorf)"
+        ],
         "notes": [
-          "„stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate”: no stop is named.",
-          "GTFS 4.31 (valid from 5 Nov) already routes E3 via Răscoala din 1907 and has no Polonă stop on E3 (E7 and M36 still stop at Polonă (Pasaj Freidorf), ids 344/314). So no stop of the current E3 pattern is suspended. The pre-detour Polonă stops of E3 cannot be named from this feed."
+          "„stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate pe traseul liniei Expres 3”: no stop is named, only the street; on 4.30 E3 has one stop on Polonă per direction, Polonă (Pasaj Freidorf).",
+          "Independent check: SMTT removed exactly these ids from E3 in 4.30 -> 4.31 (eval/gold_gtfs_diff.py). E7 and M36 keep stopping there and are not in the notice."
         ]
       }
     ],
     "temporaryRoutes": [],
     "notes": [
       "„Începând de mâine” in a post of 3 Nov 19:00: start 4 Nov; no end date.",
-      "Expected parser behaviour: route E3 found, the stop list sent to review („neclar”), since no stop name is given."
+      "Expected parser behaviour: route E3 found; the stops are the E3 stops named after the street (Polonă), read on the feed in force before the change."
     ]
   }
 }

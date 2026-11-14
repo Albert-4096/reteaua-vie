@@ -325,15 +325,21 @@ def label_11060(feed: Feed) -> dict:
 
 
 def label_11062(feed: Feed) -> dict:
-    """E3 resumes towards Elba via Ioan Slavici – Răscoala; the Polonă bridge is closed."""
-    day = date(2026, 11, 9)
+    """E3 resumes towards Elba via Ioan Slavici – Răscoala; the Polonă bridge is closed.
+
+    Read on GTFS 4.30, the feed in force on 4 Nov when the change starts (FEED_OF): 4.31 is valid
+    from 5 Nov and already routes E3 via Răscoala, so its E3 pattern has no Polonă stop left."""
+    day = date(2026, 11, 4)
     out = []
     for d in (0, 1):
-        out.append(entry(feed, "R_AB_E3", d, day, "rerouted", suspended=[], stop_names=None, resolved=[],
-                         notes=["„stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate”: no stop is named.",
-                                "GTFS 4.31 (valid from 5 Nov) already routes E3 via Răscoala din 1907 and has no Polonă stop on E3 "
-                                "(E7 and M36 still stop at Polonă (Pasaj Freidorf), ids 344/314). So no stop of the current E3 "
-                                "pattern is suspended. The pre-detour Polonă stops of E3 cannot be named from this feed."]))
+        pat = feed.route_stops("R_AB_E3", d, day)
+        polona = [s for s in pat if base_name(feed.stop_name(s)).startswith("polona")]
+        out.append(entry(feed, "R_AB_E3", d, day, "rerouted", suspended=polona, stop_names=None, resolved=[],
+                         notes=["„stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate pe traseul "
+                                "liniei Expres 3”: no stop is named, only the street; on 4.30 E3 has one stop on Polonă per "
+                                "direction, Polonă (Pasaj Freidorf).",
+                                "Independent check: SMTT removed exactly these ids from E3 in 4.30 -> 4.31 "
+                                "(eval/gold_gtfs_diff.py). E7 and M36 keep stopping there and are not in the notice."]))
     return {
         "window": {"start": "2026-11-04T00:00:00+02:00", "end": None},
         "cause": "CONSTRUCTION",
@@ -341,7 +347,8 @@ def label_11062(feed: Feed) -> dict:
         "temporaryRoutes": [],
         "notes": [
             "„Începând de mâine” in a post of 3 Nov 19:00: start 4 Nov; no end date.",
-            "Expected parser behaviour: route E3 found, the stop list sent to review („neclar”), since no stop name is given.",
+            "Expected parser behaviour: route E3 found; the stops are the E3 stops named after the street (Polonă), "
+            "read on the feed in force before the change.",
         ],
     }
 
@@ -363,13 +370,19 @@ def label_11058(feed: Feed) -> dict:
 
 LABELLERS = {11067: label_11067, 11065: label_11065, 11060: label_11060, 11062: label_11062, 11058: label_11058}
 
+# a notice whose change starts before the feed chosen at its post date: read it on the feed in force
+# on its first day, as the backend's analysis does (impact.timetable_for)
+FEED_OF = {11062: Path("gtfs-history") / "smtt-4.30_mdb-2868-202611020102.zip"}
 
-def main() -> None:
+
+def main(only: list[int] | None = None) -> None:
     feeds: dict = {}
     for pid, fn in LABELLERS.items():
+        if only and pid not in only:
+            continue
         lab = read_post(pid)
         # the feed in force when the notice was posted (loaded once per zip)
-        path = feed_zip(at=lab["postDate"])
+        path = data_dir() / FEED_OF[pid] if pid in FEED_OF else feed_zip(at=lab["postDate"])
         if path not in feeds:
             feeds[path] = load_feed(path)
         feed = feeds[path]
@@ -390,4 +403,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    main([int(a) for a in sys.argv[1:]] or None)   # make_labels.py [post id ...]: only those labels
