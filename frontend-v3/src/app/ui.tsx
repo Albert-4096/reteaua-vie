@@ -6,70 +6,73 @@ import { fmt } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import type { MapProps } from "./MapView";
 
-/* ---------- the shared map: every step tells it what to show ---------- */
-export type Layers = Omit<MapProps, "onClosure" | "padLeft">;
+/* ---------- the shared map: the open page tells it what to show ---------- */
+export type Layers = Omit<MapProps, "onClosure" | "onVehicle">;
 export const MapCtx = createContext<(l: Layers) => void>(() => {});
 export function useMapLayers(l: Layers) {
   const set = useContext(MapCtx);
   useEffect(() => set(l), [set, l]);
 }
 
-/**
- * The one layout of every step: the question the step answers, one answer in large type,
- * the rest folded, one next action at the bottom.
- */
-export function Step({ title, answer, children, footer, inner }: { title: string; answer?: ReactNode; children?: ReactNode; footer?: ReactNode; inner?: string }) {
+/** The panel beside the map: a fixed head that says where you are, a body that scrolls, one action at the foot. */
+export function Panel({ head, children, foot }: { head?: ReactNode; children: ReactNode; foot?: ReactNode }) {
   return (
     <div className="flex h-full flex-col">
-      <div id="content" className="min-h-0 flex-1 overflow-y-auto px-6 pb-8 pt-6">
-        <div className={inner}>
-          <h2 className="text-[1.4rem] font-semibold leading-tight tracking-tight">{title}</h2>
-          {answer}
-          {children}
-        </div>
-      </div>
-      {footer && <div className="border-t bg-card px-5 py-4">{footer}</div>}
+      {head && <header className="shrink-0 border-b px-6 pb-4 pt-5">{head}</header>}
+      {/* focusable, so the keyboard can scroll it even when it holds no link or button */}
+      <div tabIndex={0} role="region" aria-label="Conținutul panoului" className="min-h-0 flex-1 overflow-y-auto px-6 pb-12 pt-5 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/60">{children}</div>
+      {foot && <footer className="shrink-0 border-t bg-card px-6 py-4">{foot}</footer>}
     </div>
   );
 }
 
-/** The step's answer: one number, what it counts, and whether we measured or estimated it. */
-export function Answer({ value, label, kind, tone, children }: { value: ReactNode; label: ReactNode; kind?: ReactNode; tone?: "closure" | "green"; children?: ReactNode }) {
-  return (
-    <div className="mt-5">
-      <div className={cn("tabular text-[3.4rem] font-semibold leading-none tracking-tight transition-colors duration-300",
-        tone === "closure" && "text-closure-ink", tone === "green" && "text-accent-foreground")}>{value}</div>
-      <div className="mt-2.5 text-[0.95rem] leading-snug text-foreground/80">{label}</div>
-      {kind && <div className="mt-3">{kind}</div>}
-      {children}
-    </div>
-  );
-}
-
-/** A smaller supporting number, next to the answer. */
-export function Stat({ value, label, kind, tone }: { value: ReactNode; label: string; kind?: "measured" | "estimate"; tone?: "closure" | "green" }) {
+export function Title({ children, sub }: { children: ReactNode; sub?: ReactNode }) {
   return (
     <div>
-      <div className={cn("tabular text-xl font-semibold leading-none tracking-tight", tone === "closure" && "text-closure-ink", tone === "green" && "text-accent-foreground")}>{value}</div>
-      <div className="mt-1.5 text-sm leading-snug text-muted-foreground">{label}{kind === "estimate" && <span className="ml-1 whitespace-nowrap text-xs">(estimare)</span>}</div>
+      <h1 className="text-xl font-semibold leading-tight tracking-tight">{children}</h1>
+      {sub && <p className="mt-1 text-sm leading-snug text-muted-foreground">{sub}</p>}
     </div>
   );
 }
 
-/** Details that wait until asked for: shadcn Accordion, closed by default. */
-export function Folds({ children, open, className }: { children: ReactNode; open?: string[]; className?: string }) {
-  return <Accordion type="multiple" defaultValue={open} className={cn("mt-7 border-t", className)}>{children}</Accordion>;
+/** A titled group inside a panel. More air above the title than below it. */
+export function Section({ title, aside, children, className }: { title: ReactNode; aside?: ReactNode; children: ReactNode; className?: string }) {
+  return (
+    <section className={cn("mt-8 first:mt-0", className)}>
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="text-sm font-semibold">{title}</h2>
+        {aside != null && <span className="tabular text-sm text-muted-foreground">{aside}</span>}
+      </div>
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
+
+/** A number with its name; an estimate says so. */
+export function Stat({ value, label, note, tone }: { value: ReactNode; label: string; note?: string; tone?: "closure" | "green" }) {
+  return (
+    <div>
+      <dd className={cn("tabular text-2xl font-semibold leading-none tracking-tight", tone === "closure" && "text-closure-ink", tone === "green" && "text-accent-foreground")}>{value}</dd>
+      <dt className="mt-1.5 text-sm leading-snug text-foreground/80">{label}</dt>
+      {note && <p className="mt-0.5 text-xs leading-snug text-muted-foreground">{note}</p>}
+    </div>
+  );
+}
+
+/** Details that wait until asked for. */
+export function Folds({ children, className }: { children: ReactNode; className?: string }) {
+  return <Accordion type="multiple" className={cn("mt-8 border-t", className)}>{children}</Accordion>;
 }
 export function Fold({ id, title, aside, children }: { id: string; title: ReactNode; aside?: ReactNode; children: ReactNode }) {
   return (
     <AccordionItem value={id}>
-      <AccordionTrigger className="items-center py-4 text-[0.95rem] hover:no-underline">
+      <AccordionTrigger className="items-center py-3.5 text-sm hover:no-underline">
         <span className="flex flex-1 items-baseline justify-between gap-3">
           <span>{title}</span>
           {aside != null && <span className="tabular text-sm font-normal text-muted-foreground">{aside}</span>}
         </span>
       </AccordionTrigger>
-      <AccordionContent className="pb-5">{children}</AccordionContent>
+      <AccordionContent className="pb-5 text-sm">{children}</AccordionContent>
     </AccordionItem>
   );
 }
@@ -84,25 +87,10 @@ export function Kind({ k, detail }: { k: "measured" | "estimate"; detail?: strin
       <CircleCheck className="size-3.5" /> Măsurat{detail ? ` · ${detail}` : ""}
     </span>
   ) : (
-    <span title="Estimare pe orarul planificat SMTT" className="inline-flex items-center whitespace-nowrap rounded-full border border-dashed border-foreground/40 px-2.5 py-[3px] text-xs text-muted-foreground">
+    <span className="inline-flex items-center rounded-full border border-dashed border-foreground/40 px-2.5 py-[3px] text-xs leading-snug text-muted-foreground">
       Estimare{detail ? ` · ${detail}` : ""}
     </span>
   );
-}
-
-/** A number that counts to its new value when it changes (anime.js on a plain object). */
-export function Count({ value }: { value: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const prev = useRef(value);
-  useEffect(() => {
-    const from = prev.current;
-    prev.current = value;
-    if (from === value || !ref.current) return;
-    const o = { v: from };
-    const a = animeAnimate(o, { v: value, duration: 800, ease: "outExpo", onUpdate: () => { if (ref.current) ref.current.textContent = fmt.format(Math.round(o.v)); } });
-    return () => { a.pause(); };
-  }, [value]);
-  return <span ref={ref}>{fmt.format(value)}</span>;
 }
 
 const TAGS = {
@@ -119,16 +107,41 @@ export function Tag({ tone = "neutral", children }: { tone?: keyof typeof TAGS; 
 
 export function Loading({ rows = 3 }: { rows?: number }) {
   return (
-    <div className="space-y-2.5" aria-busy="true">
-      {Array.from({ length: rows }, (_, i) => <div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />)}
+    <div className="space-y-2.5" aria-busy="true" aria-label="Se încarcă">
+      {Array.from({ length: rows }, (_, i) => <div key={i} className="h-11 animate-pulse rounded-lg bg-muted" />)}
     </div>
   );
 }
 
 export function Problem({ children }: { children: ReactNode }) {
-  return <p className="rounded-lg bg-closure-soft px-4 py-3 text-sm text-closure-ink">{children}</p>;
+  return <p role="alert" className="rounded-lg bg-closure-soft px-4 py-3 text-sm leading-snug text-closure-ink">{children}</p>;
 }
 
 export function Method({ children }: { children: ReactNode }) {
   return <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{children}</p>;
+}
+
+/** A dot that says the number beside it is read from the live data right now. */
+export function LiveDot() {
+  return (
+    <span className="relative flex size-2 shrink-0" aria-hidden>
+      <span className="absolute inline-flex size-full rounded-full bg-primary/50 motion-safe:animate-ping" />
+      <span className="relative inline-flex size-2 rounded-full bg-primary" />
+    </span>
+  );
+}
+
+/** A number that counts to its new value when it changes (anime.js on a plain object). Used by the landing map. */
+export function Count({ value }: { value: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const prev = useRef(value);
+  useEffect(() => {
+    const from = prev.current;
+    prev.current = value;
+    if (from === value || !ref.current) return;
+    const o = { v: from };
+    const a = animeAnimate(o, { v: value, duration: 800, ease: "outExpo", onUpdate: () => { if (ref.current) ref.current.textContent = fmt.format(Math.round(o.v)); } });
+    return () => { a.pause(); };
+  }, [value]);
+  return <span ref={ref}>{fmt.format(value)}</span>;
 }

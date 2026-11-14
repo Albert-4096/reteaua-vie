@@ -1,123 +1,116 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Check, ChevronsUpDown, Clock } from "lucide-react";
-import { AnimatePresence, MotionConfig, motion } from "motion/react";
+import { useState, type ReactNode } from "react";
+import { Clock, Construction, FileText, Inbox, Route as RouteIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { app, day, dt } from "./data";
+import { Logo } from "@/landing/Logo";
+import { app, day, hhmm } from "./data";
 import { MapView } from "./MapView";
-import { go, useRoute, type StepId } from "./router";
-import { StepBar } from "./StepBar";
-import { Overview, Plan, Decide, Publish, Monitor, Report } from "./screens";
+import { go, link, useRoute, type Route } from "./router";
+import { Lines } from "./pages/Lines";
+import { Reports } from "./pages/Reports";
+import { Today } from "./pages/Today";
+import { Work } from "./pages/Work";
+import { Works } from "./pages/Works";
 import { MapCtx, type Layers } from "./ui";
 
-const SCREENS: Record<StepId, (p: { closureId: string }) => ReactNode> = {
-  ansamblu: Overview, planifici: Plan, decizi: Decide, publici: Publish, urmaresti: Monitor, raportezi: Report,
-};
-const PICKER: StepId[] = ["planifici", "decizi", "publici", "urmaresti"];
-const PANEL = 432; // 27rem
-const EASE = [0.16, 1, 0.3, 1] as const;
-
-function useViewportWidth() {
-  const [w, setW] = useState(() => window.innerWidth);
-  useEffect(() => {
-    const on = () => setW(window.innerWidth);
-    addEventListener("resize", on);
-    return () => removeEventListener("resize", on);
-  }, []);
-  return w;
-}
+type Place = { id: "azi" | "lucrari" | "linii" | "rapoarte"; label: string; icon: LucideIcon; to: Route };
+const PLACES: Place[] = [
+  { id: "azi", label: "Azi", icon: Inbox, to: { page: "azi" } },
+  { id: "lucrari", label: "Lucrări", icon: Construction, to: { page: "lucrari" } },
+  { id: "linii", label: "Linii", icon: RouteIcon, to: { page: "linii" } },
+  { id: "rapoarte", label: "Rapoarte", icon: FileText, to: { page: "rapoarte" } },
+];
 
 /**
- * One map under everything; one floating panel on the left that holds the current step;
- * the six steps in a floating bar. Raportezi has no map, so the panel widens into a sheet.
+ * Four places in a rail, one panel, one map.
+ * Azi is where a dispatcher stays; a work (inside Lucrări) is where the City Hall decides;
+ * Linii is the reference; Rapoarte is opened once in a while. The map stays mounted between them.
  */
 export function App() {
-  const { step, closureId } = useRoute();
-  const [layers, setLayers] = useState<Layers>({ fitTo: "city" });
-  const vw = useViewportWidth();
-  const Screen = SCREENS[step];
-  const wide = step === "raportezi";
+  const route = useRoute();
+  const [layers, setLayers] = useState<Layers>({});
+  const place = route.page === "lucrare" ? "lucrari" : route.page;
+  const hasMap = route.page !== "rapoarte";
+
+  let page: ReactNode;
+  if (route.page === "azi") page = <Today />;
+  else if (route.page === "lucrari") page = <Works />;
+  else if (route.page === "lucrare") page = <Work key={route.id} id={route.id} tab={route.tab} q={route.q} />;
+  else if (route.page === "linii") page = <Lines routeId={route.routeId} />;
+  else page = <Reports />;
 
   return (
-    <MotionConfig reducedMotion="user">
-      <MapCtx.Provider value={setLayers}>
-        <div className="relative h-dvh overflow-hidden bg-background text-foreground">
-          <div className="absolute inset-0">
-            <MapView {...layers} padLeft={PANEL + 16} onClosure={(id) => go("planifici", id)} />
+    <MapCtx.Provider value={setLayers}>
+      <div className="flex h-dvh flex-col-reverse bg-background text-foreground md:flex-row">
+        <Rail place={place} />
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col-reverse md:flex-row">
+          <div className={cn("min-h-0 min-w-0 flex-1 bg-card", hasMap && "md:w-[27rem] md:flex-none md:border-r")}>{page}</div>
+          <div className={cn("relative h-[36dvh] shrink-0 border-b md:h-auto md:flex-1 md:border-b-0", !hasMap && "hidden")}>
+            <MapView {...layers} onClosure={(id) => go({ page: "lucrare", id, tab: "impact" })} onVehicle={(routeId) => go({ page: "linii", routeId })} />
+            <Legend l={layers} />
           </div>
-          <ClockChip />
-
-          <motion.aside initial={false} animate={{ width: wide ? vw - 32 : PANEL }} transition={{ duration: 0.3, ease: EASE }}
-            className="absolute bottom-4 left-4 top-4 z-30 flex flex-col overflow-hidden rounded-2xl border bg-card shadow-float">
-            {PICKER.includes(step) && <WorkPicker step={step} closureId={closureId} />}
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div key={`${step}-${closureId}`} className="min-h-0 flex-1"
-                initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.18, ease: "easeOut" }}>
-                <Screen closureId={closureId} />
-              </motion.div>
-            </AnimatePresence>
-          </motion.aside>
-
-          <StepBar step={step} wide={wide} />
-        </div>
-      </MapCtx.Provider>
-    </MotionConfig>
+        </main>
+      </div>
+    </MapCtx.Provider>
   );
 }
 
-/** Which work the steps are about. A popover list instead of a long select. */
-function WorkPicker({ step, closureId }: { step: StepId; closureId: string }) {
+function Rail({ place }: { place: Place["id"] }) {
   const closures = useApi(app.closures);
-  const [open, setOpen] = useState(false);
-  const cur = closures.data?.find((c) => c.id === closureId);
+  const missing = useApi(app.missing, 60_000);
+  const dev = useApi(app.deviations, 60_000);
+  const waiting = (closures.data ?? []).filter((c) => c.status !== "published").length
+    + (missing.data?.routes ?? []).filter((r) => r.state === "fara_vehicul" && !r.decision).length
+    + (dev.data?.groups ?? []).filter((g) => g.classification === "fara_anunt").length;
+
   return (
-    <div className="border-b px-3 py-2">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
-          <span className="size-2 shrink-0 rounded-full bg-closure" aria-hidden />
-          <span className="min-w-0 flex-1">
-            <span className="line-clamp-2 text-sm leading-snug text-foreground/80">{cur?.title.ro ?? "Se încarcă lucrarea…"}</span>
-            {cur && <span className="tabular mt-0.5 block text-xs text-muted-foreground">{dt(cur.window.start)} – {dt(cur.window.end)}</span>}
-          </span>
-          <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
-          <span className="sr-only">Schimbă lucrarea</span>
-        </PopoverTrigger>
-        <PopoverContent align="start" sideOffset={6} className="w-[25rem] p-1.5">
-          <ul>
-            {(closures.data ?? []).map((c) => (
-              <li key={c.id}>
-                <button type="button" onClick={() => { setOpen(false); go(step, c.id); }}
-                  className="flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-muted">
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-medium leading-snug">{c.title.ro}</span>
-                    <span className="tabular mt-0.5 block text-xs text-muted-foreground">
-                      {day(c.window.start)} – {day(c.window.end)} · {c.status === "published" ? "publicată" : "nepublicată"}
+    <nav aria-label="Secțiunile platformei" className="z-10 flex shrink-0 items-stretch border-t bg-card md:w-[5.25rem] md:flex-col md:items-center md:border-r md:border-t-0 md:py-4">
+      <a href="/" aria-label="Rețeaua Vie, pagina de prezentare" className="hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring md:block">
+        <Logo className="size-9" />
+      </a>
+      <ul className="flex flex-1 md:mt-6 md:flex-none md:flex-col md:gap-1">
+        {PLACES.map((p) => {
+          const on = p.id === place;
+          return (
+            <li key={p.id} className="flex-1 md:flex-none">
+              <a {...link(p.to)} aria-current={on ? "page" : undefined}
+                className={cn("group relative flex flex-col items-center gap-1 px-1 py-2 text-[0.6875rem] font-medium outline-none transition-colors md:w-[4.25rem] md:rounded-xl md:py-2.5",
+                  "focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring", on ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+                <span className={cn("relative grid h-8 w-12 place-items-center rounded-full transition-colors", on ? "bg-accent text-accent-foreground" : "group-hover:bg-muted")}>
+                  <p.icon className="size-5" strokeWidth={on ? 2.1 : 1.8} />
+                  {p.id === "azi" && waiting > 0 && (
+                    <span className="tabular absolute -right-0.5 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-closure px-1 text-[0.6875rem] font-semibold leading-none text-white ring-2 ring-card">
+                      {waiting}<span className="sr-only"> lucruri așteaptă un om</span>
                     </span>
-                  </span>
-                  <Check className={cn("mt-0.5 size-4 shrink-0 text-primary", c.id !== closureId && "invisible")} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </PopoverContent>
-      </Popover>
-    </div>
+                  )}
+                </span>
+                {p.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <ClockButton />
+    </nav>
   );
 }
 
-/** The simulated clock, small; the data sources live behind it. */
-function ClockChip() {
+/** The simulated clock, out of the way; the data sources live behind it. */
+function ClockButton() {
+  const o = useApi(app.overview);
   return (
     <Popover>
-      <PopoverTrigger className="absolute right-4 top-4 z-20 inline-flex h-10 items-center gap-2 rounded-full border bg-card/95 px-3.5 text-sm shadow-card outline-none backdrop-blur transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring">
-        <Clock className="size-4 text-muted-foreground" />
-        <span className="tabular font-medium">Dum. 8 nov, 12:00</span>
-        <span className="text-muted-foreground">simulat</span>
+      <PopoverTrigger className="hidden flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[0.6875rem] leading-tight text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring md:mt-auto md:flex md:w-[4.25rem]">
+        <Clock className="mb-0.5 size-4" strokeWidth={1.8} />
+        <span className="tabular font-semibold text-foreground">{o.data ? hhmm(o.data.at) : "–"}</span>
+        <span className="tabular">{o.data ? day(o.data.at) : ""}</span>
+        <span>simulat</span>
       </PopoverTrigger>
-      <PopoverContent align="end" sideOffset={8} className="w-80 text-sm leading-relaxed">
+      <PopoverContent side="right" align="end" sideOffset={10} className="w-80 text-sm leading-relaxed">
         <p className="font-medium">Ceas simulat</p>
-        <p className="mt-1 text-muted-foreground">Platforma arată pașii ca în duminica de 8 noiembrie, ziua lucrării de pe Bd. 16 Decembrie 1989. Vehiculele de pe hartă vin din datele live ale Primăriei, acum.</p>
+        <p className="mt-1 text-muted-foreground">Lucrările sunt arătate ca în duminica de 8 noiembrie 2026, ziua lucrării de pe Bd. 16 Decembrie 1989. Vehiculele de pe hartă vin din datele live ale Primăriei, acum.</p>
         <p className="mt-3 font-medium">Surse</p>
         <p className="mt-1 text-muted-foreground">Orarul SMTT (GTFS), endpointurile Primăriei, anunțurile STPT, pozițiile vehiculelor înregistrate de noi la 15 s. Populația: model GHSL 2020.</p>
       </PopoverContent>
@@ -125,3 +118,22 @@ function ClockChip() {
   );
 }
 
+/** Only what is on the map right now, in words. */
+function Legend({ l }: { l: Layers }) {
+  const tones = new Set((l.stops ?? []).map((s) => s.tone));
+  const items: [ReactNode, string][] = [];
+  if (l.closures?.length) items.push([<span className="h-1 w-5 rounded-full" style={{ backgroundImage: "repeating-linear-gradient(90deg, var(--closure) 0 5px, transparent 5px 8px)" }} />, "lucrare"]);
+  if (l.segment?.length) items.push([<span className="h-[7px] w-5 rounded-full border-2 border-foreground bg-white" />, "porțiunea întrebată"]);
+  if (tones.has("closed")) items.push([<span className="size-2.5 rounded-full bg-closure ring-2 ring-white" />, "nu oprește"]);
+  if (tones.has("ask")) items.push([<span className="size-2.5 rounded-full border-2 border-foreground bg-white" />, "de hotărât"]);
+  if (tones.has("served")) items.push([<span className="size-2 rounded-full border-[1.5px] border-[#5b6a64] bg-white" />, "oprește"]);
+  if (l.detour?.length) items.push([<span className="h-0.5 w-5" style={{ backgroundImage: "repeating-linear-gradient(90deg, var(--foreground) 0 5px, transparent 5px 8px)" }} />, "linie temporară"]);
+  if (l.ghost?.length) items.push([<span className="h-[3px] w-5" style={{ backgroundImage: "repeating-linear-gradient(90deg, #4d897f 0 3px, transparent 3px 7px)" }} />, "linie fără vehicul în datele live"]);
+  if (l.vehicles?.length) items.push([<span className="size-2.5 rounded-full bg-[#4d897f] ring-2 ring-white" />, "vehicul, date live"]);
+  if (!items.length) return null;
+  return (
+    <ul aria-label="Legenda hărții" className="pointer-events-none absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-x-4 gap-y-1.5 rounded-lg border bg-card/95 px-3 py-2 text-xs text-foreground/80 shadow-card">
+      {items.map(([swatch, word]) => <li key={word} className="flex items-center gap-2">{swatch}{word}</li>)}
+    </ul>
+  );
+}

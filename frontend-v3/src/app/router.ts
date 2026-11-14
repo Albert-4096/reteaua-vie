@@ -1,24 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 
-export const STEPS = [
-  { id: "ansamblu", label: "Ansamblu", hint: "Ce e închis acum" },
-  { id: "planifici", label: "Planifici", hint: "Cine pierde serviciul" },
-  { id: "decizi", label: "Decizi", hint: "Fereastra și varianta" },
-  { id: "publici", label: "Publici", hint: "Fișierele pentru toți" },
-  { id: "urmaresti", label: "Urmărești", hint: "Ce au făcut vehiculele" },
-  { id: "raportezi", label: "Raportezi", hint: "Obligațiile UE" },
-] as const;
-export type StepId = (typeof STEPS)[number]["id"];
+/**
+ * Places, not steps. Four things a person opens the platform for:
+ *   /app                       Azi: what waits for a person, and the network right now
+ *   /app/lucrari               every work
+ *   /app/lucrari/<id>/<tab>    one work, the only place with a sequence: impact → perioada → anunt → teren
+ *   /app/linii[/<routeId>]     the lines, each with its route and its vehicles
+ *   /app/rapoarte              what is reported
+ */
+export const WORK_TABS = ["impact", "perioada", "anunt", "teren"] as const;
+export type WorkTab = (typeof WORK_TABS)[number];
 
-export const DEFAULT_CLOSURE = "cl_20261108_16dec";
+export type Route =
+  | { page: "azi" }
+  | { page: "lucrari" }
+  | { page: "lucrare"; id: string; tab: WorkTab; q?: string }
+  | { page: "linii"; routeId?: string }
+  | { page: "rapoarte" };
 
-function read() {
-  const [, , step] = location.pathname.split("/");
-  const c = new URLSearchParams(location.search).get("c") ?? DEFAULT_CLOSURE;
-  return { step: (STEPS.some((s) => s.id === step) ? step : "ansamblu") as StepId, closureId: c };
+export const HERO = "cl_20261108_16dec";
+
+/** The first version of /app had six global steps; their links keep working. */
+const OLD_STEP: Record<string, WorkTab> = { planifici: "impact", decizi: "perioada", publici: "anunt", urmaresti: "teren" };
+
+function read(): Route {
+  const [, , a, b, c] = location.pathname.split("/").map(decodeURIComponent);
+  const qs = new URLSearchParams(location.search);
+  if (a === "lucrari") return b ? { page: "lucrare", id: b, tab: (WORK_TABS as readonly string[]).includes(c) ? (c as WorkTab) : "impact", q: qs.get("q") ?? undefined } : { page: "lucrari" };
+  if (a === "linii") return { page: "linii", routeId: b || undefined };
+  if (a === "rapoarte" || a === "raportezi") return { page: "rapoarte" };
+  if (a in OLD_STEP) return { page: "lucrare", id: qs.get("c") ?? HERO, tab: OLD_STEP[a] };
+  return { page: "azi" };
 }
 
-/** Path router: /app/<step>?c=<closureId>. */
+const enc = encodeURIComponent;
+export function href(r: Route): string {
+  switch (r.page) {
+    case "azi": return "/app";
+    case "lucrari": return "/app/lucrari";
+    case "lucrare": return `/app/lucrari/${enc(r.id)}/${r.tab}${r.q ? `?q=${enc(r.q)}` : ""}`;
+    case "linii": return r.routeId ? `/app/linii/${enc(r.routeId)}` : "/app/linii";
+    case "rapoarte": return "/app/rapoarte";
+  }
+}
+
 export function useRoute() {
   const [r, setR] = useState(read);
   useEffect(() => {
@@ -29,9 +54,21 @@ export function useRoute() {
   return r;
 }
 
-export function go(step: StepId, closureId?: string) {
-  const c = closureId ?? new URLSearchParams(location.search).get("c") ?? DEFAULT_CLOSURE;
-  history.pushState(null, "", `/app/${step}?c=${encodeURIComponent(c)}`);
+export function go(r: Route, opts: { replace?: boolean } = {}) {
+  const url = href(r);
+  if (url === location.pathname + location.search) return;
+  history[opts.replace ? "replaceState" : "pushState"](null, "", url);
   dispatchEvent(new PopStateEvent("popstate"));
-  document.getElementById("content")?.scrollTo({ top: 0 });
+}
+
+/** Props for a real link that navigates without a page load (new tab and middle click still work). */
+export function link(r: Route) {
+  return {
+    href: href(r),
+    onClick: (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      go(r);
+    },
+  };
 }
