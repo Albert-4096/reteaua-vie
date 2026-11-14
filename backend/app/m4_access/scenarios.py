@@ -97,6 +97,10 @@ def _check_mitigations(inp: ScenarioInput, closure: dict) -> None:
                 raise invalid(f"Unknown route {m.routeId}.")
             if not 1 <= m.headwayMinutes <= MAX_HEADWAY:
                 raise invalid("headwayMinutes must be 1 to 120.")
+        elif m.kind == "transit_through":
+            for rid in m.routeIds:
+                if rid not in n.route_by_id:
+                    raise invalid(f"Unknown route {rid}.")
         elif m.kind == "window":
             if parse_iso(m.end) <= parse_iso(m.start):
                 raise invalid("The window must end after it starts.")
@@ -107,6 +111,8 @@ def _check_mitigations(inp: ScenarioInput, closure: dict) -> None:
                 raise invalid(f"Unknown Timpark lot {m.lotId}.")
     if sum(1 for m in inp.mitigations if m.kind == "window") > 1:
         raise invalid("At most one window mitigation per scenario.")
+    if sum(1 for m in inp.mitigations if m.kind == "transit_through") > 1:
+        raise invalid("At most one transit_through mitigation per scenario.")
     if sum(1 for m in inp.mitigations if m.kind == "segment") > 1:
         raise invalid("At most one segment mitigation per scenario.")
 
@@ -260,7 +266,7 @@ def apply_mitigations(closure: dict, rows: list[dict], mitigations: list) -> tup
                    f"({num_en(c.get('bufferMeters') or 30)} m buffer), without the notice's actions.")))
             rematch = True
     if not rematch:
-        return c, rows, notes
+        return _transit(c, rows, notes, mitigations)
     decided = {imp.row_key(r): r["confirmed"] for r in rows if r.get("confirmed") is not None}
     new_rows, _ = matching.match_closure(c)
     for r in new_rows:
@@ -271,7 +277,18 @@ def apply_mitigations(closure: dict, rows: list[dict], mitigations: list) -> tup
                                   text=I18n(ro=f"{open_rows} rânduri neclare nu sunt numărate până la o decizie.",
                                             en=f"{open_rows} unsure rows are not counted until a person decides."),
                                   value=float(open_rows), unit="rânduri"))
-    return c, new_rows, notes
+    return _transit(c, new_rows, notes, mitigations)
+
+
+def _transit(c: dict, rows: list[dict], notes: list[ScenarioNote], mitigations: list) -> tuple[dict, list[dict], list[ScenarioNote]]:
+    """R10: the `transit_through` mitigations, after the window and segment ones."""
+    from app.m4_access import transit_through as tt
+
+    for m in mitigations:
+        if m.kind == "transit_through":
+            c, rows, note = tt.apply(c, rows, m)
+            notes.append(note)
+    return c, rows, notes
 
 
 def frequency_note(closure: dict, m) -> tuple[ScenarioNote, dict]:

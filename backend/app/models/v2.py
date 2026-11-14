@@ -364,8 +364,17 @@ class MitigationSegment(Model):
     geometry: LineString
 
 
+class MitigationTransitThrough(Model):
+    """v2.36 (R10): one lane stays open for the chosen bus and trolleybus lines (empty = all of them in the closure)."""
+
+    kind: Literal["transit_through"]
+    routeIds: list[str] = []
+    lanesConfirmed: bool = False  # a person confirms the lane (e.g. with the builder): skip the OSM lanes/width judgement
+
+
 Mitigation = Annotated[
-    Union[MitigationFrequency, MitigationWindow, MitigationBikeLane, MitigationParkAndRide, MitigationSegment],
+    Union[MitigationFrequency, MitigationWindow, MitigationBikeLane, MitigationParkAndRide, MitigationSegment,
+          MitigationTransitThrough],
     Field(discriminator="kind"),
 ]
 
@@ -390,7 +399,7 @@ class ScenarioSummary(Model):
 class ScenarioNote(Model):
     """v2.3: one plain-words note on a scenario (e.g. „+N plecări (simulare)”)."""
 
-    kind: Literal["frequency", "window", "bike_lane", "park_and_ride", "segment", "none"]
+    kind: Literal["frequency", "window", "bike_lane", "park_and_ride", "segment", "transit_through", "none"]
     text: I18n
     value: float | None = None
     unit: str | None = None
@@ -488,6 +497,7 @@ class HistoryEntry(Model):
     note: I18n | None = None  # v2.3: e.g. „reconstituit din anunț STPT, nu publicat prin platformă”
     sourceUrl: str | None = None  # v2.3: the STPT post a back-filled row comes from
     provenance: list[Provenance] | None = None  # v2.3
+    leadHours: float | None = None  # v2.37: STPT post → works start, hours; null when no post is known
 
 
 class Indicator(Model):
@@ -637,5 +647,45 @@ class PaidParking(Model):
     uncheckedFeatures: int  # affected features the City Hall file does not mark as checked
     parkAndRide: list[ParkAndRide]
     noticeLine: I18n
+    note: I18n
+    provenance: list[Provenance]
+
+
+class TransitThroughStreet(Model):
+    osmId: str
+    name: str | None
+    lanes: int | None
+    width: float | None
+    oneway: bool
+    enough: bool | None  # null = OSM has neither lanes nor width: not judged
+
+
+class TransitThroughExcluded(Model):
+    routeId: str
+    reason: I18n
+
+
+class TransitThroughTotals(Model):
+    stopsSuspended: int
+    departuresLost: int | None
+    residentsLosingStop: int | None
+
+
+class TransitThroughKept(Model):
+    stops: int
+    departures: int | None
+    residentsKeepingStop: int | None
+
+
+class TransitThrough(Model):
+    closureId: str
+    verdict: Literal["applied", "cannot_judge"]
+    reasons: list[I18n]
+    streets: list[TransitThroughStreet]
+    keptRoutes: list[str]
+    excludedRoutes: list[TransitThroughExcluded]
+    full: TransitThroughTotals
+    variant: TransitThroughTotals
+    kept: TransitThroughKept
     note: I18n
     provenance: list[Provenance]
