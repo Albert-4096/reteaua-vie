@@ -1,0 +1,125 @@
+{
+  "entries": [
+    {
+      "date": "2026-11-13",
+      "recording": {
+        "firstAt": "2026-11-13T13:47:57+02:00",
+        "lastAt": "2026-11-13T23:59:49+02:00",
+        "healthyShare": 0.9951,
+        "files": [
+          "20261113-11.jsonl.gz",
+          "20261113-12.jsonl.gz",
+          "…"
+        ],
+        "l0Complete": true,
+        "comparedUntil": "2026-11-13T23:59:49+02:00"
+      },
+      "lines": [
+        {
+          "routeId": "R_AB_23",
+          "shortName": "23",
+          "mode": "autobuz",
+          "tripsScheduled": 68,
+          "tripsScheduledInRecording": 35,
+          "tripsSeen": 32,
+          "share": 0.9143,
+          "kmEstimated": 118.8,
+          "kmNote": "estimare: curse văzute × lungimea traseului GTFS"
+        },
+        {
+          "routeId": "R_AB_E3",
+          "shortName": "E3",
+          "mode": "autobuz",
+          "tripsScheduled": 46,
+          "tripsScheduledInRecording": 21,
+          "tripsSeen": 25,
+          "share": 1.1905,
+          "kmEstimated": 337.3,
+          "kmNote": "estimare: curse văzute × lungimea traseului GTFS"
+        },
+        {
+          "routeId": "R_TV_4",
+          "shortName": "4",
+          "mode": "tramvai",
+          "tripsScheduled": 149,
+          "tripsScheduledInRecording": 77,
+          "tripsSeen": 79,
+          "share": 1.026,
+          "kmEstimated": 691.4,
+          "kmNote": "estimare: curse văzute × lungimea traseului GTFS"
+        }
+      ],
+      "feedVersion": "4.31",
+      "rawSha256": "9f9fb9465bd7ede6152f56d2de3481a56bcdc6d88666f2f33a31d5334772de37",
+      "rollupSha256": "e3655b811214ed7a963ff487d478d631ce945e233f4532da8d0a4de505446fd5",
+      "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "chainHash": "034ae75947e65d7dad7d08c45a8fff0288060f4175819c6c2e9fbf0a067cbea9",
+      "final": true
+    },
+    {
+      "date": "2026-11-14",
+      "recording": {
+        "firstAt": "2026-11-14T00:00:04+02:00",
+        "lastAt": "2026-11-14T13:57:03+02:00",
+        "healthyShare": 0.7622,
+        "files": [
+          "20261113-22.jsonl.gz",
+          "20261113-23.jsonl.gz",
+          "…"
+        ],
+        "l0Complete": false,
+        "comparedUntil": "2026-11-14T13:00:00+02:00"
+      },
+      "lines": [
+        {
+          "routeId": "R_AB_23",
+          "shortName": "23",
+          "mode": "autobuz",
+          "tripsScheduled": 68,
+          "tripsScheduledInRecording": 30,
+          "tripsSeen": 0,
+          "share": 0.0,
+          "kmEstimated": 0.0,
+          "kmNote": "estimare: curse văzute × lungimea traseului GTFS"
+        },
+        {
+          "routeId": "R_AB_E3",
+          "shortName": "E3",
+          "mode": "autobuz",
+          "tripsScheduled": 34,
+          "tripsScheduledInRecording": 16,
+          "tripsSeen": 15,
+          "share": 0.9375,
+          "kmEstimated": 201.6,
+          "kmNote": "estimare: curse văzute × lungimea traseului GTFS"
+        },
+        {
+          "routeId": "R_TV_4",
+          "shortName": "4",
+          "mode": "tramvai",
+          "tripsScheduled": 121,
+          "tripsScheduledInRecording": 52,
+          "tripsSeen": 32,
+          "share": 0.6154,
+          "kmEstimated": 280.1,
+          "kmNote": "estimare: curse văzute × lungimea traseului GTFS"
+        }
+      ],
+      "feedVersion": "4.31",
+      "rawSha256": "9048e84b6af8dc963a2090726180b4de3e316a24db06a3f94212228df1a0946f",
+      "rollupSha256": "8f48090357c7d554e5df8cf02b16b3f449d2d1cacd7fa7e0c3d0c91d84d2ecfe",
+      "prevHash": "034ae75947e65d7dad7d08c45a8fff0288060f4175819c6c2e9fbf0a067cbea9",
+      "chainHash": "c97c526aa3cd09f2cd60339b827d7d992424924bcde4c9036f8c9ddf2f28740d",
+      "final": false
+    }
+  ],
+  "provenance": [
+    {
+      "source": "Rețeaua Vie, registrul curselor / trips registry",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-08T12:00:00+02:00",
+      "note": "Registrul zilnic al curselor văzute în datele live ale Primăriei, înregistrate de noi. „Văzute” = apar în înregistrare, nu „efectuate”: clasificarea cursei o face SMTT. Zilele trecute se scriu o dată și nu se mai rescriu; fiecare zi poartă hash-ul zilei dinainte. Înregistrarea a început pe 13 nov (zile parțiale, vezi `recording`). Retenția (fișiere brute până pe 20 a lunii următoare, agregate 13 luni) este o propunere, nu o afirmație juridică. `kmEstimated` este estimare."
+    }
+  ]
+}

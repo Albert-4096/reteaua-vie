@@ -77,6 +77,8 @@ MODELS: dict[str, object] = {
     "v2/timetable-check.json": dict,  # v2.13 (R27)
     "v2/checkin.json": CheckinAck,  # v2.22 (C1)
     "v2/checkins.json": CheckinCounts,  # v2.22 (C1, real response, test sticker = simulare)
+    "v2/journal.json": dict,  # v2.30 (R13)
+    "v2/registry.json": dict,  # v2.30 (R14, lines cut to 3, files cut to 2)
     "v2/tools.json": dict,  # v2.9 (static declarations; the test below checks the shape)
     "v2/live-missing.json": MissingLines,  # v2.13 (O2, real response of ?case=case_l23)
     "v2/observed-summary.json": ObservedSummary,  # v2.14 (L0, real response)
