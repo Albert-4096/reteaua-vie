@@ -243,7 +243,8 @@ def window_from(sentence: str, ref: datetime) -> WindowFound | None:
         if end <= start:   # „între 20:30 și 01:00”: the end is on the next day
             end = _at(d.day + timedelta(days=1), t2, default_end=True)
         return WindowFound(start, end, False, True)
-    if re.search(r"\b(incepand|incepind|de la data|din data)\b", f):
+    if re.search(r"\b(incepand|incepind|de la data|din data)\b", f) or re.search(
+            r"\b(?:de la|din)\s+\d{1,2}\s+(?:" + "|".join(MONTHS) + r")\b", f):
         return WindowFound(_at(d.day, d.time), open_end_default(), True, d.time is not None)
     return WindowFound(_at(d.day, d.time), _at(d.day, None, default_end=True), False, d.time is not None)
 
@@ -271,6 +272,7 @@ def line_tokens(sentence: str) -> list[str]:
     for m in _LINE_RE.finditer(f):
         for t in _LINE_TOK_RE.findall(m.group(1)):
             t = t.strip()
+            t = re.sub(r"^si\s+(?=\d)", "", t)    # „32 și 46”: the „și” is not part of „46”
             t = re.sub(r"^expres\s*", "e", t).replace(" ", "")
             if re.fullmatch(r"(19|20)\d\d", t):
                 continue
@@ -788,7 +790,7 @@ _NOT_A_CLOSURE = re.compile(r"\b(prelungit\w*|programul|programele|programe|graf
 _SUSPENDED_LIST = re.compile(
     r"\b(?:vor|va)\s+fi\s+suspendat\w*(?:\s+temporar)?\s+statii\w*\s*:?\s*(?P<a>.+)$"   # Vor fi suspendate temporar stațiile[:] A, B
     r"|\bstatii\w*\s+suspendat\w*(?:\s+temporar)?\s*:\s*(?P<b>.+)$"                     # Stații suspendate temporar: A, B
-    r"|\bstatii\w*\s+(?!(?:de\s+pe|amplasate|situate|aflate)\b)(?P<c>.+?)\s+(?:vor|va)\s+fi\s+suspendat\w*")  # stațiile A și B vor fi suspendate
+    r"|\bstati\w*\s+(?!(?:de\s+pe|amplasate|situate|aflate)\b)(?P<c>.+?)\s+(?:vor|va)\s+fi\s+suspendat\w*")  # stațiile A și B vor fi suspendate
 # „stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate” (11062): no stop named,
 # only the street; the stops are the line's stops named after that street
 _STOPS_ON_STREET = re.compile(r"\bstatii\w*\s+(?:amplasate|situate|aflate|de)\s+pe\s+(.+?)(?:,|\s+(?:nu\s+)?(?:vor|va)\b|$)")
@@ -1070,6 +1072,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
     tram = False
     whole = fold(text)
     timed: list[WindowFound] = []   # hours given later for a whole-day window (10851, 10878)
+    named_unknown: list[tuple[str, list[str]]] = []
 
     for sent in sentences:
         f = fold(sent)
@@ -1085,7 +1088,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             w = window_from(sent, ref)
             if w is not None and window.start <= w.start < window.end:
                 used = True        # the same days again („Modificările sunt valabile duminică, …”)
-                if not window.timed and w.timed:
+                if not window.timed and w.timed and not w.open_end:
                     timed.append(w)
 
         # lines named here; a sentence that names lines sets the current lines
@@ -1229,6 +1232,16 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             used = False   # „vor întoarce în Piața Mocioni”: the stops it loses are not named
         if (partial or (not used and not _COURTESY.search(f))) and sent not in unread:
             unread.append(sent)
+        if unknown:
+            named_unknown.append((sent, unknown))
+
+    # a line the notice names that is not in the GTFS and is not a temporary line (school lines S7, S13,
+    # 33B): nothing of it reaches the analysis, so its sentences are listed for the person
+    for sent, toks in named_unknown:
+        if any(t not in temp for t in toks) and sent not in unread:
+            unread.append(sent)
+    pos = {s_: i for i, s_ in enumerate(sentences)}
+    unread.sort(key=lambda s_: pos.get(s_, len(pos)))
 
     # temporary routes: resolve and chain the streets
     temps: list[TemporaryRoute] = []

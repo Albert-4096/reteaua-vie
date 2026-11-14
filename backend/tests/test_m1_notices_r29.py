@@ -181,3 +181,46 @@ def test_free_text_is_not_taken_for_a_recorded_notice():
     from app.m1_disruption.api_notices import recorded_post
 
     assert recorded_post("Strada Ardealului închisă între Rahovei și Gogu Opre de mâine, linia E3 deviată.") is None
+
+
+def test_10872_both_legs_of_the_parcului_loop_are_suspended():
+    """„vor fi suspendate temporar stațiile Calistrat Hogaș și Parcului”, only „pe sensul spre Școala Generală Plopi”.
+
+    Line 21 towards Plopi drives out along Martir Cornel Popescu past the closed section (Calistrat Hogaș –
+    N. Tincu Velea) to Parcului, turns and comes back the same street: Calistrat Hogaș 1044 -> Parcului 1045
+    -> Parcului 512 -> Calistrat Hogaș 514 -> Plopi, all in direction 0. The detour (Tincu Velea – Tata Oancea
+    – Plopi) skips the whole spur, so each name is two platforms and all four rows are right; the return
+    direction („Traseul retur rămâne neschimbat”) has none."""
+    m = _matched(_parse(10872))
+    assert _keys(m) == {("R_AB_21", 0)}
+    assert m[("R_AB_21", 0)] == {"1044", "1045", "512", "514"}
+
+
+# --- V1: fixes found on the held-out notices (eval/heldout-notices.md; these are no longer held out) ----
+
+
+@pytest.mark.parametrize("pid", [10876, 10874])
+def test_de_la_1_octombrie_opens_a_window_with_no_end(pid):
+    """Title „…, de la 1 octombrie” (pasted with the text): from 1 Oct, open end; not 1 Oct only."""
+    from app.m1_disruption.parser import parse_detail
+
+    p = _post(pid)
+    w = parse_detail(p.title + "\n" + p.text, reference=p.date).window
+    assert w.start.isoformat() == "2026-10-01T00:00:00+03:00" and w.open_end
+
+
+def test_10862_window_ignores_an_open_ended_sentence_and_reads_the_singular_stop():
+    d = _parse(10862)
+    w = d.window
+    assert (w.start.isoformat(), w.end.isoformat()) == ("2026-09-19T05:00:00+03:00", "2026-09-20T05:00:00+03:00")
+    assert "R_AB_33B" in d.closure.routeIds                 # „32, 33 și 33B”: the „și” is not part of the name
+    m = _matched(d)
+    for rid in ("R_AB_32", "R_AB_33", "R_AB_33B"):     # „Stația Catedrala Mitropolitană va fi suspendată temporar”
+        assert m[(rid, 0)] == {"326"} and m[(rid, 1)] == {"326"}
+
+
+def test_lines_not_in_the_gtfs_are_listed_not_dropped():
+    """10899 names S13 and S14b (school lines, not in the GTFS): their sentences go to `unread`."""
+    d = _parse(10899)
+    assert d.closure.routeIds == ["R_AB_32", "R_AB_46"]
+    assert any(u.startswith("Linia S14b") for u in d.unread) and any(u.startswith("Linia S13") for u in d.unread)

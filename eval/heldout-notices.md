@@ -35,10 +35,10 @@ What was left out:
 
 | Field | First pass (held-out) | After fix, not held-out |
 |---|---|---|
-| Lines | 2/5 ok, 3 greșit | |
-| Direction | 5/5 ok (3 of them: no direction in the text, none invented) | |
-| Window | 2/5 ok, 3 greșit | |
-| Stops | 3/5 ok, 2 neclar, 0 greșit | |
+| Lines | 2/5 ok, 3 greșit | 3/5 ok, 2 neclar, 0 greșit |
+| Direction | 5/5 ok (3 of them: no direction in the text, none invented) | 5/5 ok |
+| Window | 2/5 ok, 3 greșit | 5/5 ok |
+| Stops | 3/5 ok, 2 neclar, 0 greșit | 3/5 ok, 2 neclar, 0 greșit |
 
 ## Per notice (first pass)
 
@@ -86,3 +86,27 @@ What was left out:
 | Direction | ok | every „Pe sensul spre …” / „Pe sensul de întoarcere” list lands on the direction with that headsign |
 | Window | ok | „duminică, 13 septembrie 2026, în intervalul orar 05:00–20:00”: 13 Sep 05:00–20:00 |
 | Stops | neclar | 21 rows, all named in the text; 3 names not found and their sentences listed as unread: „bulevardul I.C. Brătianu”, „Piața Iancu Huniade”, „Complexul Studențesc (strada Cluj)” |
+
+## After the fix (not held-out)
+
+What changed in the parser, then the same five notices again. These scores are not held-out: the
+notices were read to make the fixes, and they are now parser tests (`backend/tests/test_m1_notices_r29.py`).
+
+- **Window.** „de la 1 octombrie” opens a window with no end, like „începând cu” (10876, 10874). A sentence
+  that itself has no end („începând cu ora 17:11”) is no longer taken as part of a whole-day window
+  (10862: now 19 Sep 05:00 – 20 Sep 05:00).
+- **Lines.** „32, 33 și 33B” no longer reads „și 33B” as one token: 33B is in the GTFS (`R_AB_33B`) and is now
+  found. The first-pass note for 10862 was wrong on the cause: 33B was lost to that token, not because it is
+  missing from the GTFS. The first-pass score stays greșit. A line that really is not in the GTFS (S7, S13,
+  S14 B) now puts its sentences in `unread` instead of being dropped; that is `neclar` for 10899 and 10876.
+- **Stops.** The singular „Stația Catedrala Mitropolitană va fi suspendată temporar” is read (10862: +6 rows,
+  stop 326 on 32, 33 and 33B, both directions). Still `neclar`: „vor întoarce la …” and the names the GTFS
+  spells otherwise.
+
+| Notice | Lines | Direction | Window | Stops |
+|---|---|---|---|---|
+| 10899 | neclar (32, 46; S13 and S14b sentences listed) | ok | ok (12 Oct, open end) | ok (0) |
+| 10876 | neclar (S7, S14 B sentences listed) | ok | ok (1 Oct, open end) | ok (0) |
+| 10874 | ok | ok | ok (1 Oct, open end) | ok (0) |
+| 10862 | ok (32, 33, 33B, 16, E3) | ok | ok (19 Sep 05:00 – 20 Sep 05:00) | neclar (17 rows) |
+| 10853 | ok | ok | ok | neclar (21 rows) |
