@@ -21,7 +21,9 @@ export type FilmData = {
 export function useFilmData() {
   const [data, setData] = useState<FilmData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
+    setError(null);
     Promise.all([
       api.zones(), api.streets(), api.vehicles(), api.missing(),
       api.closure(FILM_CLOSURE), api.impact(FILM_CLOSURE), api.windows(FILM_CLOSURE), loadNetwork(),
@@ -29,8 +31,8 @@ export function useFilmData() {
       .then(([zones, streets, vehicles, missing, closure, impact, windows, net]) =>
         setData({ zones, streets, vehicles, missing: missing.routes, closure, impact, windows, net }))
       .catch((e: Error) => setError(e.message));
-  }, []);
-  return { data, error };
+  }, [attempt]);
+  return { data, error, retry: () => setAttempt((n) => n + 1) };
 }
 
 export type Geo = {

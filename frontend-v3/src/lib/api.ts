@@ -25,6 +25,7 @@ export type Closure = {
   status: string;
   geometry?: LineString | MultiLineString;
   routeIds: string[];
+  sourceText?: string;
 };
 export type Impact = {
   totals: { stopsSuspended: number; departuresLost: number; routesAffected: number; residentsLosingStop: number };

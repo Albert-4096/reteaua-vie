@@ -5,7 +5,7 @@ import { Logo } from "@/landing/Logo";
 import { LineBadge } from "@/landing/LineBadge";
 import { fmt, hhmm } from "@/lib/api";
 import type { FilmData, Geo } from "./data";
-import { AppWindow, Cursor, Typed, Words, count, inOut, lerp, out, prog, reveal } from "./kit";
+import { AppWindow, Cursor, Words, count, inOut, lerp, out, prog, reveal } from "./kit";
 
 export type SceneProps = { t: number; d: FilmData; g: Geo };
 export type Scene = { id: string; dur: number; render: (p: SceneProps) => ReactNode };
@@ -17,40 +17,46 @@ const title: CSSProperties = { position: "absolute", top: 46, left: 0, right: 0,
 const dayTime = (iso: string) =>
   new Date(iso).toLocaleString("ro-RO", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Bucharest" });
 
-/* ---------- 1. Hook ---------- */
-function Fragment({ t, x, y, r, children }: { t: number; x: number; y: number; r: number; children: ReactNode }) {
-  const drift = Math.sin(t * 0.6 + x) * 6;
+/* ---------- 1. Hook: the evidence ---------- */
+/** The opening lines of the real STPT notice, sharp. Also the film's still frame before the data arrives (text = null: placeholder lines). */
+export function Notice({ text, style }: { text: string | null; style?: CSSProperties }) {
+  const lines = (text ?? "").split("\n").filter(Boolean).slice(0, 3);
   return (
-    <div style={{ position: "absolute", left: x, top: y + drift, transform: `rotate(${r}deg)`, filter: "blur(3.5px)", opacity: 0.3 + 0.25 * out(prog(t, 0, 1.2)),
-      background: "white", border: "1px solid var(--border)", borderRadius: 16, padding: 16, boxShadow: "var(--shadow-card)" }}>
-      {children}
+    <div style={{ position: "absolute", left: 80, top: 96, width: 540, background: "white", border: "1px solid var(--border)", borderRadius: 18, padding: "26px 30px", boxShadow: "var(--shadow-float)", textAlign: "left", ...style }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 16, color: "var(--muted-foreground)" }}>
+        <FileText size={18} strokeWidth={1.8} /> Anunțul STPT, de pe stpt.ro
+      </div>
+      {text
+        ? lines.map((l, i) => (
+            <p key={i} style={{ marginTop: i ? 12 : 16, fontSize: i ? 16 : 19, lineHeight: 1.45, color: i ? "var(--muted-foreground)" : "var(--foreground)", fontWeight: i ? 400 : 500,
+              display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: i ? 3 : 8, overflow: "hidden" }}>{l}</p>
+          ))
+        : [470, 440, 478, 300, 450, 380].map((w, i) => <div key={i} style={{ height: 12, width: w, borderRadius: 9, background: "var(--muted)", marginTop: i ? 14 : 22 }} />)}
     </div>
   );
 }
-const bars = (ws: number[]) => ws.map((w, i) => <div key={i} style={{ height: 8, width: w, borderRadius: 9, background: "var(--muted)", marginTop: 8 }} />);
 
-function Hook({ t, d }: SceneProps) {
+function Hook({ t, d, g }: SceneProps) {
+  const base = d.impact.totals.departuresLost;
+  const best = d.windows.candidates[0];
+  const dropAt = 7.4;
+  const picked = !!best && t >= dropAt;
+  const n = picked ? count(t, dropAt, best.departuresLost, base, 1.2) : count(t, 4.4, base, 0, 1.8);
+  const mapScale = 520 / WIN.mapW;
   return (
     <>
-      <Fragment t={t} x={70} y={90} r={-5}>
-        <div style={{ fontSize: 15, fontWeight: 600, width: 250 }}>Închiderea temporară a circulației…</div>{bars([240, 220, 180, 230])}
-      </Fragment>
-      <Fragment t={t} x={930} y={110} r={4}>
-        <div style={{ display: "flex", gap: 6 }}>{(d.closure.routeIds ?? []).map((r) => <LineBadge key={r} routeId={r} />)}</div>{bars([200, 160, 190])}
-      </Fragment>
-      <Fragment t={t} x={140} y={500} r={3}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 22px)", gap: 6 }}>
-          {Array.from({ length: 24 }, (_, i) => <div key={i} style={{ height: 10, borderRadius: 4, background: i % 7 === 3 ? "var(--closure)" : "var(--muted)" }} />)}
-        </div>
-      </Fragment>
-      <Fragment t={t} x={900} y={470} r={-4}>
-        <div style={{ width: 230, height: 120, backgroundImage: "radial-gradient(var(--dot-strong) 1.4px, transparent 1.4px)", backgroundSize: "12px 12px" }} />
-      </Fragment>
-      <div style={center}>
-        <div style={headline}><Typed t={t} at={0.5} text="O stradă se închide." /></div>
-        <div style={{ ...headline, color: "var(--muted-foreground)", minHeight: 70 }}>
-          <Words t={t} at={2.5} text="Cine află la timp?" />
-        </div>
+      <Notice text={d.closure.sourceText ?? d.closure.title.ro} style={{ opacity: out(prog(t, 0, 0.5)) }} />
+      <div style={{ position: "absolute", left: 680, top: 96, width: 520, height: WIN.mapH * mapScale, borderRadius: 18, overflow: "hidden", border: "1px solid var(--border)", boxShadow: "var(--shadow-card)", ...reveal(t, 2.2) }}>
+        <div style={{ transform: `scale(${mapScale})`, transformOrigin: "0 0" }}><PlanMap t={t} g={g} drawAt={2.8} /></div>
+      </div>
+      <div style={{ position: "absolute", left: 680, top: 96 + WIN.mapH * mapScale + 30, width: 520, textAlign: "left", ...reveal(t, 4.2) }}>
+        <div className="tabular" style={{ fontSize: 96, fontWeight: 680, letterSpacing: "-0.04em", lineHeight: 1, color: picked ? "var(--primary)" : "var(--closure-ink)" }}>{fmt.format(n)}</div>
+        <div style={{ marginTop: 10, fontSize: 21, color: "var(--muted-foreground)" }}>plecări pierdute, estimare pe orarul SMTT</div>
+        {best && (
+          <div className="tabular" style={{ marginTop: 14, fontSize: 19, fontWeight: 550, ...reveal(t, dropAt - 0.6) }}>
+            Fereastra propusă: {dayTime(best.window.start)} – {dayTime(best.window.end)}
+          </div>
+        )}
       </div>
     </>
   );
@@ -138,6 +144,15 @@ function Stat({ label, value, tone }: { label: string; value: string; tone: "clo
       <div className="tabular" style={{ fontSize: 30, fontWeight: 650, letterSpacing: "-0.03em" }}>{value}</div>
     </div>
   );
+}
+
+/** The plan shot keeps its own 20 s clock; on screen its two holds (4.6–7.4 and 10–13) run faster, so it takes 17 s. */
+function planTime(t: number) {
+  if (t < 4.6) return t;
+  if (t < 5.4) return lerp(4.6, 7.4, (t - 4.6) / 0.8);
+  if (t < 8) return t + 2;
+  if (t < 10) return lerp(10, 13, (t - 8) / 2);
+  return t + 3;
 }
 
 function Plan({ t, d, g }: SceneProps) {
@@ -354,11 +369,11 @@ function Outro({ t }: SceneProps) {
 }
 
 export const SCENES: Scene[] = [
-  { id: "hook", dur: 5, render: Hook },
-  { id: "reveal", dur: 3.5, render: Reveal },
-  { id: "plan", dur: 20, render: Plan },
-  { id: "publish", dur: 7.5, render: Publish },
-  { id: "monitor", dur: 6, render: Monitor },
-  { id: "outro", dur: 6, render: Outro },
+  { id: "hook", dur: 10, render: Hook },
+  { id: "reveal", dur: 3, render: Reveal },
+  { id: "plan", dur: 17, render: (p) => Plan({ ...p, t: planTime(p.t) }) },
+  { id: "publish", dur: 7, render: Publish },
+  { id: "monitor", dur: 5.5, render: Monitor },
+  { id: "outro", dur: 5.5, render: Outro },
 ];
 export const TOTAL = SCENES.reduce((s, x) => s + x.dur, 0);

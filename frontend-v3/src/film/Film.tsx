@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
-import { useFilmData, useGeo } from "./data";
-import { SCENES, TOTAL } from "./scenes";
+import { api, useApi } from "@/lib/api";
+import { FILM_CLOSURE, useFilmData, useGeo } from "./data";
+import { Notice, SCENES, TOTAL } from "./scenes";
 import { prog } from "./kit";
 
 declare global {
@@ -10,15 +11,19 @@ declare global {
 
 const STARTS = SCENES.reduce<number[]>((a, s, i) => (a.push(i ? a[i - 1] + SCENES[i - 1].dur : 0), a), []);
 const still = new URLSearchParams(location.search).get("film");
+const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** The frame shown while paused at the start: the notice in focus. */
+const POSTER_T = 1.6;
 
 /** The product film: a 1280×720 stage scaled to its container, every frame a function of t. */
 export function Film({ className }: { className?: string }) {
-  const { data, error } = useFilmData();
+  const { data, error, retry } = useFilmData();
+  const notice = useApi(() => api.closure(FILM_CLOSURE)); // light call: fills the still frame before the film data arrives
   const g = useGeo(data);
   const box = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
-  const [t, setT] = useState(still ? Number(still) : 0);
-  const [playing, setPlaying] = useState(!still);
+  const [t, setT] = useState(still ? Number(still) : calm ? POSTER_T : 0);
+  const [playing, setPlaying] = useState(!still && !calm);
   const [visible, setVisible] = useState(false);
 
   useLayoutEffect(() => {
@@ -62,12 +67,18 @@ export function Film({ className }: { className?: string }) {
               {scene.render({ t: local, d: data, g })}
             </div>
           ) : (
-            <div className="grid h-full place-items-center text-2xl text-muted-foreground">{error ? "Filmul are nevoie de API. Încercați din nou." : "Se pregătește filmul…"}</div>
+            <Notice text={notice.data?.sourceText ?? null} />
           )}
         </div>
 
-        {!still && (
-          <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 bg-gradient-to-t from-black/25 to-transparent px-4 pb-3 pt-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+        {error && !(data && g) && (
+          <button type="button" onClick={retry} className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-sm font-medium shadow-card">
+            <RotateCcw className="size-4" /> Reîncearcă
+          </button>
+        )}
+
+        {!still && data && g && (
+          <div className={`absolute inset-x-0 bottom-0 flex items-center gap-3 bg-gradient-to-t from-black/25 to-transparent px-4 pb-3 pt-10 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100 ${playing ? "opacity-0" : "opacity-100"}`}>
             <button type="button" onClick={() => setPlaying((p) => !p)} aria-label={playing ? "Pauză" : "Redă"}
               className="grid size-9 place-items-center rounded-full bg-white/95 text-foreground shadow-card">
               {playing ? <Pause className="size-4" /> : <Play className="size-4" />}
