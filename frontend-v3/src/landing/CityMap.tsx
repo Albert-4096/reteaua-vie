@@ -142,7 +142,7 @@ export function CityMap({ closures = [], className }: Props) {
 
   return (
     <div ref={wrap} className={cn("grid items-start gap-8 lg:grid-cols-[17.5rem_1fr] lg:gap-10", className)}>
-      <aside className="flex flex-col gap-7 lg:sticky lg:top-24">
+      <aside className="flex flex-col gap-7">
         <div>
           <div className="flex items-center gap-2 text-sm font-medium text-accent-foreground">
             <span className="relative flex size-2.5" aria-hidden>
@@ -203,7 +203,7 @@ export function CityMap({ closures = [], className }: Props) {
           </div>
         )}
 
-        <p className="min-h-12 text-sm leading-relaxed" aria-live="polite">
+        <p className="h-[4.5rem] overflow-hidden text-sm leading-relaxed" aria-live="polite">
           {hc ? <span>Liniile afectate de lucrare rămân colorate pe hartă.</span>
             : hl ? <span className="font-medium">{modeName(hl)} {hl.shortName} · {hl.longName}</span>
             : hz ? <span><span className="font-medium">{hz.name}</span>{hz.residents ? ` · ${fmt.format(Math.round(hz.residents / 100) * 100)} locuitori (model GHSL 2020)` : ""}</span>
@@ -257,15 +257,13 @@ export function CityMap({ closures = [], className }: Props) {
             const [lon, lat] = pts[Math.floor(pts.length / 2)];
             const x = p.x(lon), y = p.y(lat);
             return (
-              <motion.g key={c.id} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", bounce: 0.5, duration: 0.6, delay: i * 0.12 }}
-                style={{ originX: `${x}px`, originY: `${y}px` }} className="cursor-pointer"
+              <motion.g key={c.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+                className="cursor-pointer"
                 onPointerEnter={() => setHoverClosure(c.id)} onPointerLeave={() => setHoverClosure(null)}
                 onClick={() => location.assign(`/app/planifici?c=${encodeURIComponent(c.id)}`)}>
-                {[0, 1].map((k) => (
-                  <motion.circle key={k} cx={x} cy={y} fill="none" stroke="var(--closure)" strokeWidth={2}
-                    initial={{ r: 7, opacity: 0.7 }} animate={{ r: 30, opacity: 0 }}
-                    transition={{ duration: 2.4, repeat: Infinity, ease: [0.16, 1, 0.3, 1], delay: k * 1.2 }} />
-                ))}
+                <motion.circle cx={x} cy={y} fill="none" stroke="var(--closure)" strokeWidth={1.5}
+                  initial={{ r: 7, opacity: 0.4 }} animate={{ r: 20, opacity: 0 }}
+                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 1.5, ease: "easeOut" }} />
                 <circle cx={x} cy={y} r={14} fill="transparent" />
                 <circle cx={x} cy={y} r={7.5} fill="var(--closure)" stroke="white" strokeWidth={2.6} />
               </motion.g>
@@ -280,14 +278,10 @@ export function CityMap({ closures = [], className }: Props) {
               const dim = focus && !focus.has(v.properties.routeId);
               return (
                 <g key={v.properties.vehicleId} opacity={dim ? 0.15 : 1} style={{ transition: "opacity 260ms" }}>
-                  {/* the group glides to each new 15 s position; the ping starts from where the dot is when the data arrives */}
-                  <motion.g initial={{ x, y }} animate={{ x, y }} transition={{ duration: 14, ease: "linear" }}>
-                    <motion.circle key={v.properties.updatedAt} cx={0} cy={0} fill="none" stroke={col} strokeWidth={1.5}
-                      initial={{ r: 4, opacity: 0 }} animate={{ r: [4, 17], opacity: [0.7, 0] }}
-                      transition={{ duration: 1.5, ease: "easeOut", delay: (i % 24) * 0.05 }} />
-                    <motion.circle cx={0} cy={0} r={4.4} fill={col} stroke="white" strokeWidth={1.8}
-                      initial={{ scale: 0 }} animate={{ scale: 1 }}
-                      transition={{ type: "spring", bounce: 0.45, duration: 0.5, delay: (i % 40) * 0.012 }} />
+                  {/* each dot glides to its new position over the 15 s until the next one */}
+                  <motion.g initial={{ x, y, opacity: 0 }} animate={{ x, y, opacity: 1 }}
+                    transition={{ x: { duration: 14, ease: "linear" }, y: { duration: 14, ease: "linear" }, opacity: { duration: 0.8, delay: (i % 30) * 0.02 } }}>
+                    <circle cx={0} cy={0} r={3.4} fill={col} stroke="white" strokeWidth={1.2} />
                   </motion.g>
                 </g>
               );
