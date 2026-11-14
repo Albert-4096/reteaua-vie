@@ -1,0 +1,139 @@
+{
+  "window": {
+    "start": "2026-11-14T06:00:00+02:00",
+    "end": "2026-11-14T10:41:00+02:00"
+  },
+  "status": "ok",
+  "case": {
+    "id": "case_l23",
+    "label": {
+      "ro": "înregistrat 14 nov",
+      "en": "recorded 14 Nov"
+    }
+  },
+  "recording": {
+    "snapshots": 1111,
+    "healthySnapshots": 1111,
+    "healthyShare": 1.0,
+    "files": [
+      "20261114-04.jsonl.gz",
+      "20261114-05.jsonl.gz",
+      "20261114-06.jsonl.gz",
+      "20261114-07.jsonl.gz",
+      "20261114-08.jsonl.gz"
+    ]
+  },
+  "routes": [
+    {
+      "routeId": "R_AB_23",
+      "shortName": "23",
+      "longName": "Banatim (Garaj STPT) - Gara de Est",
+      "mode": "autobuz",
+      "state": "fara_vehicul",
+      "tripsInService": 19,
+      "tripsObserved": 0,
+      "since": "2026-11-14T06:00:00+02:00",
+      "lastSeenAt": null,
+      "firstMissedTrip": {
+        "tripId": "23.1_WESB_T_01_02",
+        "stopId": "122",
+        "stopName": "Piața Badea Cârțan",
+        "scheduledTime": "2026-11-14T06:03:00+02:00"
+      }
+    },
+    {
+      "routeId": "R_TB_11",
+      "shortName": "11",
+      "longName": "Gheorghe Barițiu - Arena Aquasport (Ștrandul Tineretului)",
+      "mode": "troleibuz",
+      "state": "partial",
+      "tripsInService": 19,
+      "tripsObserved": 18,
+      "since": "2026-11-14T08:56:00+02:00",
+      "lastSeenAt": "2026-11-14T10:40:51+02:00",
+      "firstMissedTrip": {
+        "tripId": "11.1_WESB_R_02_03",
+        "stopId": "150",
+        "stopName": "Arena Aqua (Bucla)",
+        "scheduledTime": "2026-11-14T08:56:00+02:00"
+      }
+    },
+    {
+      "routeId": "R_TB_15",
+      "shortName": "15",
+      "longName": "Traian Grozăvescu (Poșta Mare) - Bulevardul Sudului",
+      "mode": "troleibuz",
+      "state": "partial",
+      "tripsInService": 29,
+      "tripsObserved": 28,
+      "since": "2026-11-14T06:00:00+02:00",
+      "lastSeenAt": "2026-11-14T10:40:51+02:00",
+      "firstMissedTrip": {
+        "tripId": "15.1_WESB_T_01_01",
+        "stopId": "171",
+        "stopName": "Girație Bulevardul Sudului",
+        "scheduledTime": "2026-11-14T06:00:00+02:00"
+      }
+    },
+    {
+      "routeId": "R_AB_M41",
+      "shortName": "M41",
+      "longName": "Timișoara - Sânandrei/Carani",
+      "mode": "autobuz",
+      "state": "partial",
+      "tripsInService": 2,
+      "tripsObserved": 1,
+      "since": "2026-11-14T07:00:00+02:00",
+      "lastSeenAt": "2026-11-14T07:00:04+02:00",
+      "firstMissedTrip": {
+        "tripId": "M41.2_WESB_R_01_01",
+        "stopId": "724",
+        "stopName": "Darson (Carani)",
+        "scheduledTime": "2026-11-14T07:00:00+02:00"
+      }
+    }
+  ],
+  "byMode": [
+    {
+      "mode": "autobuz",
+      "tripsScheduled": 392,
+      "tripsWithNoVehicle": 20,
+      "share": 0.051
+    },
+    {
+      "mode": "troleibuz",
+      "tripsScheduled": 169,
+      "tripsWithNoVehicle": 2,
+      "share": 0.0118
+    },
+    {
+      "mode": "tramvai",
+      "tripsScheduled": 197,
+      "tripsWithNoVehicle": 0,
+      "share": 0.0
+    }
+  ],
+  "provenance": [
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    },
+    {
+      "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+      "version": null,
+      "fetchedAt": "2026-11-14T10:40:51+02:00",
+      "note": "Fereastra / window 2026-11-14T06:00:00+02:00 – 2026-11-14T10:41:00+02:00; 1111 instantanee / snapshots, 1111 bune (realtimeAgeSec ≤ 120 s); 100% din minute acoperite / of minutes covered; fișiere / files: 20261114-04.jsonl.gz, 20261114-05.jsonl.gz, 20261114-06.jsonl.gz, 20261114-07.jsonl.gz, 20261114-08.jsonl.gz"
+    },
+    {
+      "source": "Rețeaua Vie O2, detectorul de linii fără vehicul / no-vehicle detector",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-14T12:58:11+02:00",
+      "note": "„Fără vehicul în datele live”: niciun vehicul al liniei în instantaneele bune (realtimeAgeSec ≤ 120 s) cât linia avea curse în orar, cel puțin un interval întreg dintre curse (min. 20 min). Deducem din datele live ale Primăriei, înregistrate de noi; nu e „cursă neefectuată” (încadrarea o face SMTT). / No vehicle of the line in any healthy snapshot while it had scheduled trips; inferred, not confirmed."
+    }
+  ]
+}

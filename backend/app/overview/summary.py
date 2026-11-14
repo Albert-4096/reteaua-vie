@@ -8,6 +8,8 @@
 - vehiclesLive / vehiclesAt: the newest recorded snapshot. On the demo clock it
   is shown with its real time; on the real clock it is null once older than 60 s.
 - compliance: the counts of M7's ComplianceReport; null while M7 serves none.
+- missingLines (O2): lines with no vehicle in our recording, the last 60 min of the
+  real clock (`live`) and the prepared case_l23 (`prepared`); never the demo clock.
 """
 
 from __future__ import annotations
@@ -78,6 +80,25 @@ def _compliance() -> dict | None:
     return None
 
 
+def _missing_lines(provenance: list) -> dict:
+    """O2 counts and top rows; a part that fails is null, the overview never fails for it."""
+    from app.live import missing
+
+    out: dict = {"live": None, "prepared": None}
+    for key, run in (("live", lambda: missing.detect(*missing.live_window())),
+                     ("prepared", lambda: missing.prepared("case_l23"))):
+        try:
+            result = run()
+        except Exception:  # noqa: BLE001
+            log.exception("O2 missing lines (%s) failed", key)
+            continue
+        out[key] = missing.brief(result)
+        provenance.append(result["provenance"][1])  # the recording window read (the GTFS entry is [0])
+        if key == "live":
+            provenance.append(result["provenance"][2])  # the method
+    return out
+
+
 def overview(at: datetime | None = None) -> dict:
     at = (at or now()).astimezone(TZ)
     published = _published()
@@ -109,6 +130,7 @@ def overview(at: datetime | None = None) -> dict:
         else:
             provenance.append(prov.vehicles_provenance(
                 t, f"Ultimul instantaneu are {int(age)} s (> {LIVE_MAX_AGE_SEC} s): necunoscut / stale"))
+    missing_lines = _missing_lines(provenance)
     compliance = _compliance()
     if compliance is None:
         provenance.append(prov.provenance("Rețeaua Vie M7, conformitate / compliance", real_now(), None, None,
@@ -122,5 +144,6 @@ def overview(at: datetime | None = None) -> dict:
         "vehiclesLive": vehicles_live,
         "vehiclesAt": vehicles_at,
         "compliance": compliance,
+        "missingLines": missing_lines,
         "provenance": [p.model_dump() if hasattr(p, "model_dump") else p for p in provenance],
     }

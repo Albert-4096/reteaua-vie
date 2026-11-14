@@ -17,6 +17,7 @@ from app.models.base import (
     Window,
 )
 from app.models.v1 import ClosureStatus, Impact
+from app.models.live_missing import MissingOverview
 
 LtsValue = Literal[1, 2, 3, 4]
 
@@ -50,6 +51,7 @@ class Overview(Model):
     vehiclesAt: IsoTime | None
     compliance: ComplianceCounts | None  # v2.3: null until M7 serves counts
     provenance: list[Provenance]
+    missingLines: MissingOverview | None = None  # v2.13 (O2): lines with no vehicle in our live recording
 
 
 # --- layers -----------------------------------------------------------------------
