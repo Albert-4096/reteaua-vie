@@ -7,6 +7,7 @@ from typing import Literal
 from pydantic import Field
 
 from app.models.base import I18n, IsoTime, Model, Provenance
+from app.models.service_confirmation import ServiceConfirmation  # noqa: F401  (re-export)
 
 
 class CheckinInput(Model):
@@ -64,14 +65,3 @@ class CheckinCounts(Model):
     simulated: int
     note: I18n
     provenance: list[Provenance]
-
-
-class ServiceConfirmation(Model):
-    """C2: „în serviciu, fără date GPS (confirmat de N călători)”."""
-    state: Literal["in_serviciu_fara_gps"] = "in_serviciu_fara_gps"
-    travelers: int                                  # distinct phones within 10 min on one trip
-    trips: list[str]                                # the trips that reached the threshold
-    firstAt: IsoTime
-    lastAt: IsoTime
-    simulated: bool                                 # at least one check-in came through a „simulare” sticker
-    label: I18n

@@ -19,7 +19,7 @@ and `at`, so CityApp can notify the people who saved a line; we keep no subscrip
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from app.common import gtfs, state, stpt_posts
 from app.common import provenance as prov
@@ -156,6 +156,14 @@ def statuses(at: datetime) -> tuple[list[dict], list]:
                           "since": None, "until": None, "closureId": None, "closureTitle": None,
                           "notice": None, "replacedBy": [],
                           "source": f"Orarul SMTT GTFS {f.version or ''}, fără lucrare publicată / timetable".strip()})
+    try:   # C2 (v2.29): additive; state is not changed
+        from app.checkin import confirm
+        conf = confirm.confirmations(at - timedelta(minutes=30), at + timedelta(minutes=1))
+    except Exception:
+        conf = {}
+    for ln in lines:
+        c = conf.get(ln["routeId"])
+        ln["serviceConfirmation"] = c.model_dump() if c else None
     lines.sort(key=lambda x: (SEVERITY.get(x["state"], 0) == 0, x["shortName"] or ""))
     return lines + temp_rows, provenance
 

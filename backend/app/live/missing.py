@@ -26,6 +26,7 @@ SMTT classifies trips) and we never put a sum of money on it.
 from __future__ import annotations
 
 import bisect
+import logging
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from functools import lru_cache
@@ -37,6 +38,8 @@ from app.common import gtfs, vehicles
 from app.common import provenance as prov
 from app.common.timeutil import gtfs_service_start, iso, parse_iso
 from app.config import TZ, real_now
+
+log = logging.getLogger("reteaua_vie.live.missing")
 
 HEALTHY_AGE_SEC = 120
 MIN_HEALTHY_SHARE = 0.8
@@ -346,6 +349,11 @@ def with_decisions(result: dict) -> dict:
     decided = triage.latest()
     win = result["window"]
     rows = [{**r, "decision": decided.get((r["routeId"], win["start"], win["end"]))} for r in result["routes"]]
+    try:   # C2 (v2.29): additive `serviceConfirmation`; a failure there never breaks O2
+        from app.checkin import confirm
+        rows = confirm.annotate(rows, win)
+    except Exception:
+        log.exception("C2 service confirmation failed; rows without it")
     return {**result, "routes": rows}
 
 

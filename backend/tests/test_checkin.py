@@ -132,3 +132,19 @@ def test_pinned_trips_group_only_when_neighbours():
     assert confirm._same_group(a, {"tripId": "t2", "method": "position", "tripStart": 200})
     assert not confirm._same_group(a, {"tripId": "t3", "method": "position", "tripStart": 300})
     assert confirm._same_group(a, {"tripId": "t3", "method": "time", "tripStart": 300})
+
+
+@needs_data
+def test_confirmation_shows_in_live_missing_rows_and_in_lines_status(monkeypatch):
+    from app.lines import status as lines_status
+    _fake_recording(monkeypatch)
+    service.accept(body("phone-aaaaaaaa1", "2026-11-14T08:30:00+02:00"))
+    service.accept(body("phone-bbbbbbbb2", "2026-11-14T08:33:00+02:00"))
+    win = {"start": "2026-11-14T06:00:00+02:00", "end": "2026-11-14T10:41:00+02:00"}
+    rows = missing_rows = confirm.annotate([{"routeId": "R_AB_23"}], win)
+    assert rows[0]["serviceConfirmation"]["travelers"] == 2
+    res = lines_status.lines_status(datetime(2026, 11, 14, 8, 40, tzinfo=TZ), "R_AB_23")
+    ln = res["lines"][0]
+    assert ln["serviceConfirmation"]["travelers"] == 2 and ln["state"] == "normala"
+    from app.models.lines_status import LinesStatus
+    LinesStatus.model_validate(res)

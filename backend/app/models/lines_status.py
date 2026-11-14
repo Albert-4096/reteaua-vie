@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Literal
 
+from app.models.service_confirmation import ServiceConfirmation
 from app.models.base import I18n, IsoTime, Model, Provenance
 
 LineState = Literal["normala", "deviata", "scurtata", "suspendata", "linie_temporara", "fara_vehicul"]
@@ -29,6 +30,7 @@ class LineStatus(Model):
     notice: LineNotice | None
     replacedBy: list[str]       # short names of the closure's temporary lines that stand in for it (4 -> 4b)
     source: str                 # where the state comes from, in words
+    serviceConfirmation: ServiceConfirmation | None = None   # v2.29 (C2): phones checked in in the last 30 min, no vehicle in the recording
     previousState: LineState | None = None   # set only in a ?since= answer: the state at `since`
 
 
