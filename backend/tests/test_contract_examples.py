@@ -9,6 +9,7 @@ import pytest
 from pydantic import TypeAdapter
 
 from app import models as m
+from app.dataquality.models import DataQuality
 from app.feedcheck.models import FeedCheck, FeedDiff
 from app.cityapp.models import StopStatus
 from app.models.live_missing import MissingLines
@@ -32,6 +33,7 @@ MODELS: dict[str, object] = {
     "cases.json": list[m.CaseSummary],
     "v2/health.json": m.Health,
     "v2/scans.json": m.ScanCounts,
+    "v2/data-quality.json": DataQuality,
     "v2/feed-diff.json": FeedDiff,
     "v2/feed-check.json": FeedCheck,
     "v2/closure-summary.json": list[m.ClosureSummary],

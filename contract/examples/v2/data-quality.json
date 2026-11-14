@@ -1,0 +1,307 @@
+{
+    "generatedAt": "2026-11-14T13:11:36+02:00",
+    "rows": [
+        {
+            "id": "gtfs_wheelchair",
+            "title": {
+                "ro": "Stații GTFS fără informație de accesibilitate (wheelchair_boarding)",
+                "en": "GTFS stops with no wheelchair_boarding value"
+            },
+            "status": "de_verificat",
+            "basis": "calculat",
+            "found": 890,
+            "of": 890,
+            "detail": [
+                "890 din 890 stații din feed-ul 4.31 nu au valoare (câmpul lipsește din stops.txt)"
+            ],
+            "owner": "SMTT",
+            "unlocks": {
+                "ro": "Ruta „fără bariere” pe stație, în loc de „date necunoscute”.",
+                "en": "A step-free route per stop instead of „unknown”."
+            },
+            "request": {
+                "ro": "Bună ziua. În feed-ul GTFS 4.31 publicat de SMTT, fișierul stops.txt nu conține câmpul wheelchair_boarding (890 din 890 stații). Este de verificat dacă SMTT poate publica accesibilitatea fiecărei stații, ca aplicațiile să poată indica rute fără bariere. Mulțumim.",
+                "en": "GTFS 4.31 stops.txt has no wheelchair_boarding for 890 of 890 stops. Could SMTT publish it?"
+            },
+            "provenance": [
+                {
+                    "source": "SMTT GTFS (orar planificat / planned timetable)",
+                    "url": "https://smtt.ro",
+                    "version": "4.31",
+                    "fetchedAt": "2026-11-13T13:52:51+02:00",
+                    "note": "sha256 8905216072b3"
+                }
+            ]
+        },
+        {
+            "id": "osm_wheelchair",
+            "title": {
+                "ro": "Stații OSM fără etichetă wheelchair",
+                "en": "OSM stops with no wheelchair tag"
+            },
+            "status": "de_verificat",
+            "basis": "calculat",
+            "found": 681,
+            "of": 681,
+            "detail": [
+                "0 din 681 stații (highway=bus_stop) au eticheta wheelchair"
+            ],
+            "owner": "Primăria",
+            "unlocks": {
+                "ro": "Accesibilitatea pe stație, verificabilă pe hartă.",
+                "en": "Per-stop accessibility, checkable on the map."
+            },
+            "request": {
+                "ro": "Bună ziua. În OpenStreetMap, stațiile de autobuz din Timișoara nu au eticheta wheelchair. Este de verificat dacă SMTT sau Primăria poate transmite lista stațiilor accesibile, ca să fie adăugată în hartă și în aplicații.",
+                "en": "Bus stops in OpenStreetMap carry no wheelchair tag. Could SMTT or the City Hall share the accessible-stop list?"
+            },
+            "provenance": [
+                {
+                    "source": "OpenStreetMap (extras Geofabrik, local) / OSM extract",
+                    "url": null,
+                    "version": null,
+                    "fetchedAt": "2026-11-13T18:31:01+02:00",
+                    "note": "highway=bus_stop, cheia wheelchair"
+                }
+            ]
+        },
+        {
+            "id": "live_delay",
+            "title": {
+                "ro": "Vehicule live fără delaySec",
+                "en": "Live vehicles with no delaySec"
+            },
+            "status": "de_verificat",
+            "basis": "calculat",
+            "found": 11,
+            "of": 78,
+            "detail": [
+                "11 din 78 vehicule fără delaySec în ultimul instantaneu (2026-11-14T13:11:33+02:00); linii: R_AB_46, R_AB_5C, R_AB_E7, R_AB_M32, R_TB_16, R_TB_M11, R_TB_M14, R_TV_1, R_TV_7, R_TV_9"
+            ],
+            "owner": "Primăria",
+            "unlocks": {
+                "ro": "Punctualitatea și întârzierea pe linie, pentru toate vehiculele.",
+                "en": "Punctuality per line for every vehicle."
+            },
+            "request": {
+                "ro": "Bună ziua. În API-ul de vehicule al Primăriei, câmpul delaySec lipsește pentru 11 din 78 vehicule în instantaneul din 2026-11-14T13:11:33+02:00. Este de verificat dacă lipsește din sursa GPS sau din API. Mulțumim.",
+                "en": "delaySec is missing for 11 of 78 vehicles."
+            },
+            "provenance": [
+                {
+                    "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+                    "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+                    "version": null,
+                    "fetchedAt": "2026-11-14T13:11:33+02:00",
+                    "note": "ultimul instantaneu înregistrat"
+                }
+            ]
+        },
+        {
+            "id": "timpark_unchecked",
+            "title": {
+                "ro": "Elemente Timpark nemarcate ca verificate de Primărie",
+                "en": "Timpark features not marked as checked"
+            },
+            "status": "de_verificat",
+            "basis": "calculat",
+            "found": 54,
+            "of": 795,
+            "detail": [
+                "lot: 1, street: 18, zone: 35"
+            ],
+            "owner": "Timpark",
+            "unlocks": {
+                "ro": "Tarifele și locurile de parcare din analiza de impact, fără rezerve.",
+                "en": "Parking tariffs and lots in the impact analysis without caveats."
+            },
+            "request": {
+                "ro": "Bună ziua. În datele de parcare ale Primăriei, 54 din 795 elemente au câmpul checked=false (lot: 1, street: 18, zone: 35). Este de verificat dacă tarifele și geometria lor sunt confirmate.",
+                "en": "Parking features with checked=false."
+            },
+            "provenance": [
+                {
+                    "source": "Primăria Timișoara, parcări (API CityApp) / City Hall parking",
+                    "url": "https://cont.primariatm.ro/api/mobile/parking",
+                    "version": null,
+                    "fetchedAt": "2026-11-13T13:29:14+02:00",
+                    "note": null
+                }
+            ]
+        },
+        {
+            "id": "notice_lines_not_in_gtfs",
+            "title": {
+                "ro": "Linii numite în anunțurile STPT, absente din GTFS",
+                "en": "Lines named in STPT notices but absent from GTFS"
+            },
+            "status": "de_verificat",
+            "basis": "calculat",
+            "found": 6,
+            "of": null,
+            "detail": [
+                "linia 4B: apare în anunțurile STPT 11067, dar nu în GTFS 4.31",
+                "linia S13: apare în anunțurile STPT 10899, dar nu în GTFS 4.31",
+                "linia S14: apare în anunțurile STPT 10876, dar nu în GTFS 4.31",
+                "linia S14B: apare în anunțurile STPT 10899, dar nu în GTFS 4.31",
+                "linia S7: apare în anunțurile STPT 10876, 11058, dar nu în GTFS 4.31",
+                "linia S8: apare în anunțurile STPT 11060, dar nu în GTFS 4.31"
+            ],
+            "owner": "SMTT",
+            "unlocks": {
+                "ro": "Anunțurile pot fi legate automat de linie, inclusiv pentru liniile temporare sau școlare.",
+                "en": "Notices can be linked to their line automatically."
+            },
+            "request": {
+                "ro": "Bună ziua. Anunțurile STPT menționează liniile 4B, S13, S14, S14B, S7, S8, care nu apar în route_short_name din feed-ul GTFS 4.31. Este de verificat dacă sunt linii temporare, școlare sau dacă lipsesc din feed.",
+                "en": "STPT notices name lines 4B, S13, S14, S14B, S7, S8 that are not in GTFS 4.31."
+            },
+            "provenance": [
+                {
+                    "source": "SMTT GTFS (orar planificat / planned timetable)",
+                    "url": "https://smtt.ro",
+                    "version": "4.31",
+                    "fetchedAt": "2026-11-13T13:52:51+02:00",
+                    "note": "sha256 8905216072b3"
+                },
+                {
+                    "source": "STPT, anunț / notice (stpt.ro)",
+                    "url": "https://stpt.ro/modificari-in-circulatia-mijloacelor-de-transport-public-in-zona-catedralei-mitropolitane/",
+                    "version": "10851",
+                    "fetchedAt": "2026-11-13T13:49:58+02:00",
+                    "note": null
+                }
+            ]
+        },
+        {
+            "id": "smtt_menu_missing",
+            "title": {
+                "ro": "Linii cu pagină la SMTT, dar fără intrare în meniul de orare",
+                "en": "Lines with a SMTT page but no timetable-menu entry"
+            },
+            "status": "de_verificat",
+            "basis": "manual",
+            "found": 1,
+            "of": null,
+            "detail": [
+                "linia 23 (Banatim (Garaj STPT) – Gara de Est): pagina există, meniul de orare al autobuzelor urbane nu o listează (verificat 14 nov 2026)"
+            ],
+            "owner": "SMTT",
+            "unlocks": {
+                "ro": "Orarul liniei 23 găsit de cetățeni în meniul oficial.",
+                "en": "Line 23's timetable findable in the official menu."
+            },
+            "request": {
+                "ro": "Bună ziua. Pagina smtt.ro/linie-transport-public-23 există, dar meniul de orare al autobuzelor urbane nu listează linia 23 (verificat la 14 nov 2026). Este de verificat dacă omisiunea este intenționată.",
+                "en": "Line 23 has a page on smtt.ro but is not listed in the urban bus timetable menu (checked 14 Nov 2026)."
+            },
+            "provenance": [
+                {
+                    "source": "smtt.ro, pagina liniei și meniul de orare (verificat manual de echipă)",
+                    "url": "https://smtt.ro/linie-transport-public-23",
+                    "version": null,
+                    "fetchedAt": "2026-11-14T10:45:00+02:00",
+                    "note": "Observație manuală, nu calculată: nu avem meniul SMTT pe disc și nu îl citim automat."
+                }
+            ]
+        },
+        {
+            "id": "gtfs_structure",
+            "title": {
+                "ro": "Verificări simple de structură pe GTFS (ale noastre, nu MobilityData)",
+                "en": "Simple GTFS structure checks (ours, not MobilityData)"
+            },
+            "status": "in_regula",
+            "basis": "calculat",
+            "found": 0,
+            "of": null,
+            "detail": [],
+            "owner": "SMTT",
+            "unlocks": {
+                "ro": "Un feed fără stații sau curse orfane pentru Google, CityApp și Punctul Național de Acces.",
+                "en": "A feed free of orphan stops and trips."
+            },
+            "request": {
+                "ro": "Bună ziua. La o verificare simplă a feed-ului GTFS 4.31: nimic de semnalat. Este de verificat dacă sunt intenționate.",
+                "en": "Simple structure checks on GTFS 4.31."
+            },
+            "provenance": [
+                {
+                    "source": "SMTT GTFS (orar planificat / planned timetable)",
+                    "url": "https://smtt.ro",
+                    "version": "4.31",
+                    "fetchedAt": "2026-11-13T13:52:51+02:00",
+                    "note": "sha256 8905216072b3"
+                }
+            ]
+        },
+        {
+            "id": "mobilitydata_validator",
+            "title": {
+                "ro": "Raportul validatorului MobilityData pentru GTFS static",
+                "en": "MobilityData static GTFS validator report"
+            },
+            "status": "indisponibil",
+            "basis": "calculat",
+            "found": null,
+            "of": null,
+            "detail": [
+                "Validatorul GTFS static nu este pe disc (doar cel pentru GTFS Realtime, în data/tools); nu l-am descărcat."
+            ],
+            "owner": "SMTT",
+            "unlocks": {
+                "ro": "Lista de erori și avertismente a unui validator recunoscut, atașată cererii către SMTT.",
+                "en": "A recognised validator's error list for the SMTT request."
+            },
+            "request": {
+                "ro": "Raport indisponibil: rulați validatorul MobilityData pe feed-ul GTFS 4.31 și atașați-l cererii.",
+                "en": null
+            },
+            "provenance": []
+        }
+    ],
+    "provenance": [
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        },
+        {
+            "source": "OpenStreetMap (extras Geofabrik, local) / OSM extract",
+            "url": null,
+            "version": null,
+            "fetchedAt": "2026-11-13T18:31:01+02:00",
+            "note": "highway=bus_stop, cheia wheelchair"
+        },
+        {
+            "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+            "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+            "version": null,
+            "fetchedAt": "2026-11-14T13:11:33+02:00",
+            "note": "ultimul instantaneu înregistrat"
+        },
+        {
+            "source": "Primăria Timișoara, parcări (API CityApp) / City Hall parking",
+            "url": "https://cont.primariatm.ro/api/mobile/parking",
+            "version": null,
+            "fetchedAt": "2026-11-13T13:29:14+02:00",
+            "note": null
+        },
+        {
+            "source": "STPT, anunț / notice (stpt.ro)",
+            "url": "https://stpt.ro/modificari-in-circulatia-mijloacelor-de-transport-public-in-zona-catedralei-mitropolitane/",
+            "version": "10851",
+            "fetchedAt": "2026-11-13T13:49:58+02:00",
+            "note": null
+        },
+        {
+            "source": "smtt.ro, pagina liniei și meniul de orare (verificat manual de echipă)",
+            "url": "https://smtt.ro/linie-transport-public-23",
+            "version": null,
+            "fetchedAt": "2026-11-14T10:45:00+02:00",
+            "note": "Observație manuală, nu calculată: nu avem meniul SMTT pe disc și nu îl citim automat."
+        }
+    ]
+}
