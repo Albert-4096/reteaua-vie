@@ -33,6 +33,16 @@ class LiveCheck(Model):
     note: I18n
 
 
+class NextStepFree(Model):
+    """R6 on a stop (v2.21, additive): typical wait for a vehicle the City Hall feed flags step-free."""
+
+    waitMin: float | None                    # typical wait of a random arrival, minutes; null = under 3 events
+    events: int                              # step-free stop events the wait is measured on
+    lines: list[str]                         # short names of the lines whose step-free vehicles stopped here
+    recordingLabel: I18n | None              # „din N ore înregistrate (…)”
+    caveat: I18n                             # „vehicul marcat accesibil în fluxul Primăriei; stația nu e verificată”
+
+
 class StopStatus(Model):
     stopId: str
     name: str
@@ -43,6 +53,7 @@ class StopStatus(Model):
     nearestServed: NearestServed | None      # null when the stop itself is still served or none within 1,500 m
     sentence: I18n                           # one template sentence, no LLM
     liveFeed: LiveCheck                       # "niciun vehicul în datele live" waits for O2
+    nextStepFree: NextStepFree | None = None  # v2.21 (R6); null when the recording has no figure for the stop
     provenance: list[Provenance]
 
 

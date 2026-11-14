@@ -5,9 +5,10 @@ the GTFS timetable of the day, and one template sentence in RO and EN (no LLM)."
 from __future__ import annotations
 
 import importlib
+import logging
 from datetime import datetime, timedelta
 
-from app.cityapp.models import LineReason, LiveCheck, StopLine, StopStatus
+from app.cityapp.models import LineReason, LiveCheck, NextStepFree, StopLine, StopStatus
 from app.common import gtfs, state
 from app.common import provenance as prov
 from app.common.city import load_network
@@ -15,6 +16,8 @@ from app.common.errors import not_found
 from app.common.timeutil import from_unix, iso, local_midnight, parse_iso
 from app.m1_disruption import impact as imp
 from app.models.base import I18n, Provenance
+
+log = logging.getLogger("reteaua_vie.cityapp")
 
 MAX_NAMED = 6
 RO_MONTHS = ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie", "august",
@@ -142,6 +145,22 @@ def build_sentence(name: str, state_: str, lines: list[StopLine], nearest: dict 
 # --- the answer --------------------------------------------------------------------------------
 
 
+def _next_step_free(stop_id: str) -> NextStepFree | None:
+    """R6: the typical wait for a step-free vehicle at this stop, from the recording (never raises)."""
+    try:
+        from app.analytics import accessibility
+
+        r = accessibility.stop_report(stop_id)
+    except Exception:
+        log.exception("nextStepFree failed for stop %s", stop_id)
+        return None
+    if r is None or not r["stepFreeEvents"]:
+        return None
+    lbl = r["recording"]["label"]
+    return NextStepFree(waitMin=r["stepFreeWaitMin"], events=r["stepFreeEvents"], lines=r["nextStepFreeLines"],
+                        recordingLabel=I18n(**lbl) if lbl else None, caveat=I18n(**r["caveat"]))
+
+
 def stop_status(stop_id: str, at: datetime) -> StopStatus:
     net = load_network()
     stop = net.stop_by_id.get(str(stop_id))
@@ -215,4 +234,5 @@ def stop_status(stop_id: str, at: datetime) -> StopStatus:
     sentence = build_sentence(stop["name"], state_, ordered, near, max(ends) if ends else None)
     sources = [load_network().provenance, imp.current_timetable().provenance, *sources]
     return StopStatus(stopId=sid, name=stop["name"], location=stop["location"], at=iso(at), state=state_, lines=ordered,
-                      nearestServed=near, sentence=sentence, liveFeed=live_feed_check(), provenance=sources)
+                      nearestServed=near, sentence=sentence, liveFeed=live_feed_check(),
+                      nextStepFree=_next_step_free(sid), provenance=sources)

@@ -26,7 +26,7 @@ from app.observed import store
 
 MAX_GAP_MIN = 90.0
 MIN_EVENTS = 3
-TTL_SEC = 120
+TTL_SEC = 600
 
 METHOD = I18n(
     ro=("Ponderea curselor înregistrate al căror vehicul are în fluxul Primăriei wheelchair=true, pe linie și oră "

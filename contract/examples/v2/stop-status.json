@@ -1,145 +1,163 @@
 {
-  "stopId": "356",
-  "name": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
-  "location": [
-    21.21503,
-    45.7454
-  ],
-  "at": "2026-11-08T12:00:00+02:00",
-  "state": "partial",
+ "stopId": "356",
+ "name": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+ "location": [
+  21.21503,
+  45.7454
+ ],
+ "at": "2026-11-08T12:00:00+02:00",
+ "state": "partial",
+ "lines": [
+  {
+   "routeId": "R_AB_M32",
+   "shortName": "M32",
+   "directionId": 0,
+   "headsign": "Giroc (Goya)",
+   "stops": "no",
+   "reason": {
+    "kind": "works",
+    "closureId": "cl_20261102_mocioni",
+    "title": {
+     "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+     "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+    },
+    "action": "rerouted",
+    "since": "2026-11-02T00:00:00+02:00",
+    "until": "2026-12-31T23:59:59+02:00",
+    "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
+   },
+   "nextDepartureAt": null
+  },
+  {
+   "routeId": "R_AB_M32",
+   "shortName": "M32",
+   "directionId": 1,
+   "headsign": "Timișoara (Mocioni)",
+   "stops": "no",
+   "reason": {
+    "kind": "works",
+    "closureId": "cl_20261102_mocioni",
+    "title": {
+     "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+     "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+    },
+    "action": "rerouted",
+    "since": "2026-11-02T00:00:00+02:00",
+    "until": "2026-12-31T23:59:59+02:00",
+    "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
+   },
+   "nextDepartureAt": null
+  },
+  {
+   "routeId": "R_AB_M36",
+   "shortName": "M36",
+   "directionId": 0,
+   "headsign": "Sânmihaiul German",
+   "stops": "no",
+   "reason": {
+    "kind": "works",
+    "closureId": "cl_20261102_mocioni",
+    "title": {
+     "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+     "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+    },
+    "action": "rerouted",
+    "since": "2026-11-02T00:00:00+02:00",
+    "until": "2026-12-31T23:59:59+02:00",
+    "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
+   },
+   "nextDepartureAt": null
+  },
+  {
+   "routeId": "R_AB_M36",
+   "shortName": "M36",
+   "directionId": 1,
+   "headsign": "Timișoara (Mocioni)",
+   "stops": "no",
+   "reason": {
+    "kind": "works",
+    "closureId": "cl_20261102_mocioni",
+    "title": {
+     "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+     "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+    },
+    "action": "rerouted",
+    "since": "2026-11-02T00:00:00+02:00",
+    "until": "2026-12-31T23:59:59+02:00",
+    "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
+   },
+   "nextDepartureAt": null
+  },
+  {
+   "routeId": "R_AB_32",
+   "shortName": "32",
+   "directionId": 0,
+   "headsign": "Gara de Sud",
+   "stops": "yes",
+   "reason": null,
+   "nextDepartureAt": "2026-11-08T12:12:00+02:00"
+  },
+  {
+   "routeId": "R_AB_E7",
+   "shortName": "E7",
+   "directionId": 0,
+   "headsign": "Comtim",
+   "stops": "yes",
+   "reason": null,
+   "nextDepartureAt": "2026-11-08T12:07:00+02:00"
+  }
+ ],
+ "nearestServed": null,
+ "sentence": {
+  "ro": "La stația Piața A. Mocioni (Sinaia - 16 Decembrie 1989), liniile M32, M36, M37, M38, M46, M51 nu opresc până pe 31 decembrie, din cauza lucrărilor (anunț STPT). Opresc: 32, 33, 33b, E7.",
+  "en": "At Piața A. Mocioni (Sinaia - 16 Decembrie 1989), lines M32, M36, M37, M38, M46, M51 do not stop until December 31 because of road works (STPT notice). Still stopping: 32, 33, 33b, E7."
+ },
+ "liveFeed": {
+  "status": "pending",
+  "note": {
+   "ro": "în lucru: verificarea „niciun vehicul al liniei în datele live” nu e încă disponibilă",
+   "en": "in progress: the „no vehicle of the line in the live data” check is not available yet"
+  }
+ },
+ "provenance": [
+  {
+   "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+   "version": "4.31-4",
+   "fetchedAt": "2026-11-13T13:29:14+02:00",
+   "note": null
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  },
+  {
+   "source": "Anunț STPT, citit de noi",
+   "url": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/",
+   "version": null,
+   "fetchedAt": "2026-11-08T12:00:00+02:00",
+   "note": "lucrări: Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate; analiză cu deciziile oamenilor aplicate"
+  }
+ ],
+ "nextStepFree": {
+  "waitMin": 5.7,
+  "events": 152,
   "lines": [
-    {
-      "routeId": "R_AB_M32",
-      "shortName": "M32",
-      "directionId": 0,
-      "headsign": "Giroc (Goya)",
-      "stops": "no",
-      "reason": {
-        "kind": "works",
-        "closureId": "cl_20261102_mocioni",
-        "title": {
-          "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
-          "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
-        },
-        "action": "rerouted",
-        "since": "2026-11-02T00:00:00+02:00",
-        "until": "2026-12-31T23:59:59+02:00",
-        "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
-      },
-      "nextDepartureAt": null
-    },
-    {
-      "routeId": "R_AB_M32",
-      "shortName": "M32",
-      "directionId": 1,
-      "headsign": "Timișoara (Mocioni)",
-      "stops": "no",
-      "reason": {
-        "kind": "works",
-        "closureId": "cl_20261102_mocioni",
-        "title": {
-          "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
-          "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
-        },
-        "action": "rerouted",
-        "since": "2026-11-02T00:00:00+02:00",
-        "until": "2026-12-31T23:59:59+02:00",
-        "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
-      },
-      "nextDepartureAt": null
-    },
-    {
-      "routeId": "R_AB_M36",
-      "shortName": "M36",
-      "directionId": 0,
-      "headsign": "Sânmihaiul German",
-      "stops": "no",
-      "reason": {
-        "kind": "works",
-        "closureId": "cl_20261102_mocioni",
-        "title": {
-          "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
-          "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
-        },
-        "action": "rerouted",
-        "since": "2026-11-02T00:00:00+02:00",
-        "until": "2026-12-31T23:59:59+02:00",
-        "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
-      },
-      "nextDepartureAt": null
-    },
-    {
-      "routeId": "R_AB_M36",
-      "shortName": "M36",
-      "directionId": 1,
-      "headsign": "Timișoara (Mocioni)",
-      "stops": "no",
-      "reason": {
-        "kind": "works",
-        "closureId": "cl_20261102_mocioni",
-        "title": {
-          "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
-          "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
-        },
-        "action": "rerouted",
-        "since": "2026-11-02T00:00:00+02:00",
-        "until": "2026-12-31T23:59:59+02:00",
-        "noticeUrl": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/"
-      },
-      "nextDepartureAt": null
-    },
-    {
-      "routeId": "R_AB_32",
-      "shortName": "32",
-      "directionId": 0,
-      "headsign": "Gara de Sud",
-      "stops": "yes",
-      "reason": null,
-      "nextDepartureAt": "2026-11-08T12:12:00+02:00"
-    },
-    {
-      "routeId": "R_AB_E7",
-      "shortName": "E7",
-      "directionId": 0,
-      "headsign": "Comtim",
-      "stops": "yes",
-      "reason": null,
-      "nextDepartureAt": "2026-11-08T12:07:00+02:00"
-    }
+   "32",
+   "33",
+   "33b",
+   "E7"
   ],
-  "nearestServed": null,
-  "sentence": {
-    "ro": "La stația Piața A. Mocioni (Sinaia - 16 Decembrie 1989), liniile M32, M36, M37, M38, M46, M51 nu opresc până pe 31 decembrie, din cauza lucrărilor (anunț STPT). Opresc: 32, 33, 33b, E7.",
-    "en": "At Piața A. Mocioni (Sinaia - 16 Decembrie 1989), lines M32, M36, M37, M38, M46, M51 do not stop until December 31 because of road works (STPT notice). Still stopping: 32, 33, 33b, E7."
+  "recordingLabel": {
+   "ro": "din 24 ore înregistrate (vin. 13:47 → sâm. 13:21)",
+   "en": "from 24 recorded hours (Fri 13:47 → Sat 13:21)"
   },
-  "liveFeed": {
-    "status": "pending",
-    "note": {
-      "ro": "în lucru: verificarea „niciun vehicul al liniei în datele live” nu e încă disponibilă",
-      "en": "in progress: the „no vehicle of the line in the live data” check is not available yet"
-    }
-  },
-  "provenance": [
-    {
-      "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
-      "url": "https://cont.primariatm.ro/api/mobile/transit/network",
-      "version": "4.31-4",
-      "fetchedAt": "2026-11-13T13:29:14+02:00",
-      "note": null
-    },
-    {
-      "source": "SMTT GTFS (orar planificat / planned timetable)",
-      "url": "https://smtt.ro",
-      "version": "4.31",
-      "fetchedAt": "2026-11-13T13:52:51+02:00",
-      "note": "sha256 8905216072b3"
-    },
-    {
-      "source": "Anunț STPT, citit de noi",
-      "url": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/",
-      "version": null,
-      "fetchedAt": "2026-11-08T12:00:00+02:00",
-      "note": "lucrări: Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate; analiză cu deciziile oamenilor aplicate"
-    }
-  ]
+  "caveat": {
+   "ro": "Vehicul marcat accesibil în fluxul Primăriei; stația nu e verificată (GTFS nu are câmpuri de accesibilitate). Doar vineri după-amiază și weekend: fără extrapolare la zilele lucrătoare.",
+   "en": "Vehicle flagged step-free in the City Hall feed; the stop itself is not verified (the GTFS has no accessibility fields). Friday afternoon and weekend only: no extrapolation to weekdays."
+  }
+ }
 }
