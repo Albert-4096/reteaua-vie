@@ -9,6 +9,19 @@ import { nearestFor } from "../steps/3-publish/outputs";
 
 type Props = { closureId: string; stopId: string | null };
 
+// One poster scan per page load (R7): a module-level guard, so React StrictMode's double effect
+// or a re-render never counts twice. No cookie, no stored id, no retry; any error (429 too) is ignored.
+let scanSent = false;
+function sendScan(closureId: string, stopId: string) {
+  if (scanSent) return;
+  scanSent = true;
+  fetch(`/api/closures/${encodeURIComponent(closureId)}/scans?stop=${encodeURIComponent(stopId)}`, {
+    method: "POST",
+    keepalive: true,
+    credentials: "omit",
+  }).catch(() => {});
+}
+
 export function QrPage({ closureId, stopId }: Props) {
   const { t } = useTranslation();
   const health = useResource<Health>("health", () => api.health());
@@ -21,6 +34,10 @@ export function QrPage({ closureId, stopId }: Props) {
   useEffect(() => {
     document.title = "Rețeaua Vie: alertă";
   }, []);
+
+  useEffect(() => {
+    if (stopId) sendScan(closureId, stopId);
+  }, [closureId, stopId]);
 
   const c = closure.data;
   const alert =

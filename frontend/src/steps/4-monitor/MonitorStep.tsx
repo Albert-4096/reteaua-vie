@@ -3,7 +3,7 @@
 // opens it unless the URL names a closure directly (`?closure=`).
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { api, type Closure, type Network } from "../../api/client";
+import { api, apiGet, type Closure, type Network, type Provenance } from "../../api/client";
 import { v2, type LayerCollection, type LiveCheck } from "../../api/v2";
 import { Figure } from "../../components/Figure";
 import { useMapOverlay, type MapStop } from "../../components/MapView";
@@ -17,6 +17,15 @@ import { S } from "./strings";
 
 const LIVE_CASE = "case_mocioni";
 
+// CONTRACT v2.11 ScanCounts (not in the generated schema yet).
+type ScanCounts = {
+  closureId: string;
+  total: number;
+  bucket: "hour";
+  stops: { stopId: string; count: number; firstBucket: string; lastBucket: string }[];
+  provenance: Provenance[];
+};
+
 type StopRow = { stopId: string; name: string; skipped: number; served: number; unknown: number };
 
 export function MonitorStep({ caseKey, closureId }: StepProps) {
@@ -27,6 +36,9 @@ export function MonitorStep({ caseKey, closureId }: StepProps) {
   const live = useResource<LiveCheck>(id ? `live:${id}` : null, () => v2.live(id!));
   const network = useResource<Network>("network", () => api.network());
   const vehicles = useResource<LayerCollection>("vehicles", () => v2.vehicles());
+  const scans = useResource<ScanCounts>(id ? `scans:${id}` : null, () =>
+    apiGet<ScanCounts>(`/api/closures/${encodeURIComponent(id!)}/scans`),
+  );
 
   const c = closure.data;
   const l = live.data;
@@ -84,6 +96,7 @@ export function MonitorStep({ caseKey, closureId }: StepProps) {
     );
   }
 
+  const stopName = new Map((network.data?.stops ?? []).map((s) => [s.id, s.name]));
   const recorded = l.source !== null && l.recordedFrom && l.recordedTo;
   const vAt = vehicles.data?.provenance[0]?.fetchedAt;
   return (
@@ -138,8 +151,26 @@ export function MonitorStep({ caseKey, closureId }: StepProps) {
         </section>
       )}
 
+      {!scans.loading && (
+        <p className="small">
+          {tr(S.scans)}{" "}
+          <Figure inline value={scans.error ? null : scans.data?.total} provenance={scans.data?.provenance} method={tr(S.scansHint)} />
+        </p>
+      )}
+
       <details>
         <summary>{t("details")}</summary>
+        {scans.data && scans.data.stops.length > 0 && (
+          <p className="small">
+            {tr(S.scansByStop)}:{" "}
+            {scans.data.stops.map((s, i) => (
+              <span key={s.stopId}>
+                {i > 0 && " · "}
+                {stopName.get(s.stopId) ?? s.stopId} <Figure inline value={s.count} provenance={scans.data?.provenance} />
+              </span>
+            ))}
+          </p>
+        )}
         <p className="small">
           <Figure inline value={l.summary.vehiclesSeen} provenance={l.provenance} /> {tr(S.seen)}
         </p>

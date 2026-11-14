@@ -27,4 +27,10 @@ export const S = {
   next: { ro: "Mergi la raportare", en: "Go to reporting" },
   method: { ro: "Cum verificăm", en: "How we check" },
   seen: { ro: "vehicule văzute", en: "vehicles seen" },
+  scans: { ro: "Afișe deschise:", en: "Posters opened:" },
+  scansHint: {
+    ro: "deschideri ale paginii QR de pe afișe, nu persoane unice",
+    en: "openings of the posters' QR page, not unique people",
+  },
+  scansByStop: { ro: "Deschideri pe stație", en: "Openings per stop" },
 };
