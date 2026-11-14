@@ -90,7 +90,7 @@ export function Reports() {
                 </table>
               </div>
             )}
-            <Method>Curse din orar văzute în datele live ale Primăriei, pe zi. O zi închisă e scrisă o singură dată și legată de cea dinainte printr-un lanț de sume de control, deci nu poate fi schimbată fără să se vadă. Estimare din datele live, nu raportul oficial: cursele le încadrează SMTT.</Method>
+            <Method>Curse din orar văzute în datele live ale Primăriei, pe zi. O zi închisă e scrisă o singură dată și legată de cea dinainte printr-un lanț de sume de control, deci nu poate fi schimbată fără să se vadă. Zilele de 13 și 14 nov. au fost rescrise o singură dată, pe 15 nov., după ce am corectat numărarea (cursele pornite înainte de începutul înregistrării nu se mai numără); sumele vechi și cele noi sunt păstrate. Estimare din datele live, nu raportul oficial: cursele le încadrează SMTT.</Method>
           </TabsContent>
           <TabsContent value="hist" className="mt-4">
             {!hist.data ? <Loading /> : (

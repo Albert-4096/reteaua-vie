@@ -37,6 +37,8 @@ const line = (coordinates: Position[] | null | undefined): Feature[] =>
   coordinates && coordinates.length > 1 ? [{ type: "Feature", geometry: { type: "LineString", coordinates }, properties: {} }] : [];
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+type Side = NonNullable<MapLabel["place"]>;
+type Box = [number, number, number, number];
 type State = Required<Omit<MapProps, "onClosure" | "onVehicle" | "fit">> & { fit?: MapProps["fit"] };
 
 /** One map for the whole app: the city's lines in STPT's colours, works in barrier red, stops, vehicles, and names. */
@@ -49,11 +51,57 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
   const markers = useRef(new Map<string, maplibregl.Marker>());
   const shown = useRef(new Map<string, [number, number]>()); // where each vehicle is drawn right now
   const glide = useRef(0);
+  const moved = useRef(new Map<string, Side>()); // a work's name that left its side to stay off a stop's name
   const state: State = { closures, highlight, ghost, dim, segment, detour, stops, vehicles, recorded, labels, fit };
   const latest = useRef(state);
   latest.current = state;
   const cb = useRef({ onClosure, onVehicle });
   cb.current = { onClosure, onVehicle };
+
+  /**
+   * A work's name must not sit on a stop or on a stop's name. Once the camera rests, each work label
+   * keeps its side if that side is free, and otherwise takes the freest of the four.
+   */
+  const settle = () => {
+    const m = map.current;
+    if (!m || !ready.current) return;
+    const p = latest.current;
+    const works = p.labels.filter((l) => l.tone === "work");
+    if (!works.length || !p.stops.length) return;
+    const frame = m.getContainer().getBoundingClientRect();
+    const names = m.getZoom() >= 13.4; // the zoom from which the stops carry their names
+    const taken: [Box, number][] = []; // what must stay readable, and how much it weighs
+    for (const s of p.stops) {
+      const q = m.project([s.lon, s.lat]);
+      taken.push([[q.x - 7, q.y - 7, q.x + 7, q.y + 7], 4]);
+      if (names) taken.push([[q.x - 52, q.y + 8, q.x + 52, q.y + 36], 1]);
+    }
+    for (const l of p.labels) {
+      const r = l.tone === "work" ? null : markers.current.get(l.id)?.getElement().getBoundingClientRect();
+      if (r) taken.push([[r.left - frame.left, r.top - frame.top, r.right - frame.left, r.bottom - frame.top], 2]);
+    }
+    const shared = (a: Box, b: Box) => Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0])) * Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
+    let changed = false;
+    for (const l of works) {
+      const el = markers.current.get(l.id)?.getElement();
+      if (!el || !el.offsetWidth) continue;
+      const w = el.offsetWidth, h = el.offsetHeight, at = m.project([l.lon, l.lat]);
+      const box: Record<Side, Box> = {
+        top: [at.x - w / 2, at.y - 11 - h, at.x + w / 2, at.y - 11], bottom: [at.x - w / 2, at.y + 11, at.x + w / 2, at.y + 11 + h],
+        left: [at.x - 11 - w, at.y - h / 2, at.x - 11, at.y + h / 2], right: [at.x + 11, at.y - h / 2, at.x + 11 + w, at.y + h / 2],
+      };
+      const own = l.place ?? "top";
+      // covered area, in px²; a side that leaves the map is never chosen
+      const cost = (k: Side) => taken.reduce((n, [b, weight]) => n + shared(box[k], b) * weight, 0) + (box[k][0] < 8 || box[k][1] < 8 || box[k][2] > frame.width - 8 || box[k][3] > frame.height - 8 ? 1e6 : 0);
+      // its own side unless another one covers clearly less
+      const best = (["top", "bottom", "left", "right"] as Side[]).reduce((a, k) => (cost(k) < cost(a) - 60 ? k : a), own);
+      if (best !== (moved.current.get(l.id) ?? own)) {
+        if (best === own) moved.current.delete(l.id); else moved.current.set(l.id, best);
+        changed = true;
+      }
+    }
+    if (changed) sync(false);
+  };
 
   /** Vehicles glide to their new place instead of jumping. A replay moves them at its own pace, in a straight line. */
   const move = (first: boolean) => {
@@ -113,9 +161,9 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
 
     // names on the map
     const want = new Map(p.labels.map((l) => [l.id, l] as const));
-    for (const [id, mk] of markers.current) if (!want.has(id)) { mk.remove(); markers.current.delete(id); }
+    for (const [id, mk] of markers.current) if (!want.has(id)) { mk.remove(); markers.current.delete(id); moved.current.delete(id); }
     for (const l of want.values()) {
-      const place = l.place ?? "top";
+      const place = moved.current.get(l.id) ?? l.place ?? "top";
       let mk = markers.current.get(l.id);
       if (mk && mk.getElement().dataset.place !== place) { mk.remove(); markers.current.delete(l.id); mk = undefined; }
       if (!mk) {
@@ -142,6 +190,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
       } else m.fitBounds(TM, { padding: 24, duration });
       lastFit.current = p.fit.key;
     }
+    if (!m.isMoving()) settle();
   };
 
   useEffect(() => {
@@ -205,6 +254,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
       });
       m.on("mouseleave", "vehicles", () => popup.remove());
       ready.current = true;
+      m.on("moveend", settle);
       sync(true);
     });
     return () => {

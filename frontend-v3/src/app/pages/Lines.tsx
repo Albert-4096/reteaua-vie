@@ -322,6 +322,9 @@ function Line({ routeId }: { routeId: string }) {
               )}
             </div>
           )}
+          {!trusted(m.punctuality) && m.punctuality.reason && (
+            <p className="mt-5 text-sm leading-relaxed text-foreground/80">Punctualitatea nu e arătată: {m.punctuality.reason}.</p>
+          )}
           <Method>{rel.data.recording.label.ro[0].toUpperCase() + rel.data.recording.label.ro.slice(1)}. {rel.data.caveat.ro}</Method>
         </Section>
       )}
