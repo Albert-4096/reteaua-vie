@@ -213,8 +213,8 @@ def _route_info(f: gtfs.Feed) -> dict[str, dict]:
             for row in r.itertuples(index=False)}
 
 
-def detect(start: datetime, end: datetime, case: dict | None = None) -> dict:
-    """MissingLines for [start, end) (see app/models/live_missing.py)."""
+def detect(start: datetime, end: datetime, case: dict | None = None, repeat: bool = True) -> dict:
+    """MissingLines for [start, end) (see app/models/live_missing.py); `repeat` fills repeatedDays."""
     start, end = start.astimezone(TZ), end.astimezone(TZ)
     s_ts, e_ts = start.timestamp(), end.timestamp()
     snaps, files = recorded(start, end)
@@ -266,7 +266,12 @@ def detect(start: datetime, end: datetime, case: dict | None = None) -> dict:
                 "lastSeenAt": (iso(datetime.fromtimestamp(last_seen[route], tz=timezone.utc))
                                if route in last_seen else None),
                 "firstMissedTrip": first,
+                "repeatedDays": None,
             })
+        if repeat:
+            other_days = _flags_other_days(start, end)
+            for r in routes_out:
+                r["repeatedDays"] = 1 + sum(1 for flags in other_days if (r["routeId"], r["state"]) in flags)
         routes_out.sort(key=lambda r: (r["state"] != "fara_vehicul", -(r["tripsInService"] - r["tripsObserved"]),
                                        r["shortName"] or r["routeId"]))
         modes = trips.assign(mode=trips.route_id.map(lambda r: info.get(r, {}).get("mode")))
@@ -302,6 +307,53 @@ def detect(start: datetime, end: datetime, case: dict | None = None) -> dict:
         "byMode": by_mode,
         "provenance": provenance,
     }
+
+
+REPEAT_DAYS = 7  # look this many days back and forward for the same window
+
+
+@lru_cache(maxsize=128)
+def _past_flags(s_ts: float, e_ts: float) -> frozenset[tuple[str, str]]:
+    """(route, state) flagged in a past window; empty when the recording there is incomplete."""
+    r = detect(datetime.fromtimestamp(s_ts, tz=timezone.utc), datetime.fromtimestamp(e_ts, tz=timezone.utc),
+               repeat=False)
+    return frozenset((x["routeId"], x["state"]) for x in r["routes"]) if r["status"] == "ok" else frozenset()
+
+
+def _flags_other_days(start: datetime, end: datetime) -> list[frozenset]:
+    """The flags of the same clock-time window on every other recorded day (R4 „repetat {n} zile”)."""
+    files = vehicles.recording_files()
+    if not files:
+        return []
+    first, last = files[0][1].timestamp(), files[-1][1].timestamp() + 3600
+    now_ts = real_now().timestamp()
+    out = []
+    for k in range(-REPEAT_DAYS, REPEAT_DAYS + 1):
+        if k == 0:
+            continue
+        s, e = start + timedelta(days=k), end + timedelta(days=k)  # wall-clock shift (Bucharest)
+        s_ts, e_ts = s.timestamp(), e.timestamp()
+        if e_ts <= first or s_ts >= last or e_ts > now_ts:
+            continue
+        out.append(_past_flags(s_ts, e_ts))
+    return out
+
+
+def with_decisions(result: dict) -> dict:
+    """A copy of a MissingLines result whose rows carry the decision in force (R4)."""
+    from app.live import triage
+
+    decided = triage.latest()
+    win = result["window"]
+    rows = [{**r, "decision": decided.get((r["routeId"], win["start"], win["end"]))} for r in result["routes"]]
+    return {**result, "routes": rows}
+
+
+def confirmed_gap(route_id: str, at: datetime) -> dict | None:
+    """S1 hook (app/cityapp/status.py): {"since", "note"} when a person confirmed no vehicle, else None."""
+    from app.live import triage
+
+    return triage.confirmed_gap(route_id, at)
 
 
 def live_window(minutes: timedelta = DEFAULT_WINDOW) -> tuple[datetime, datetime]:

@@ -9,8 +9,9 @@ is „normală”. A closure with no `routeActions` (drawn by hand) sets no stat
 the notice did not say what happens to each line.
 
 „Fără vehicul în datele live (neconfirmat de STPT)” (O2) goes out only after a
-person confirms it in the platform (R4); there is no confirmation store yet, so
-this module never emits it.
+person confirms it in the platform (R4, app/live/triage.py): a confirmed row sets it
+during its window, and after it while no vehicle of the line shows. It outranks
+„deviată” and „scurtată” (no vehicle at all), not „suspendată” (none is expected).
 
 `changes(at, since)` returns only the lines whose state differs between `since`
 and `at`, so CityApp can notify the people who saved a line; we keep no subscriptions.
@@ -24,9 +25,10 @@ from app.common import gtfs, state, stpt_posts
 from app.common import provenance as prov
 from app.common.timeutil import iso, parse_iso
 from app.config import TZ, real_now
+from app.live import triage
 from app.live.missing import MODES
 
-SEVERITY = {"normala": 0, "deviata": 1, "scurtata": 2, "suspendata": 3}
+SEVERITY = {"normala": 0, "deviata": 1, "scurtata": 2, "fara_vehicul": 3, "suspendata": 4}
 ACTION_STATE = {"rerouted": "deviata", "shortened": "scurtata", "suspended": "suspendata"}
 TEMP_MODES = {"bus": "autobuz", "tram": "tramvai", "trolleybus": "troleibuz"}
 LABELS = {
@@ -130,6 +132,19 @@ def statuses(at: datetime) -> tuple[list[dict], list]:
                 "closureId": c["id"], "closureTitle": c.get("title"), "notice": notice,
                 "replacedBy": [], "source": source,
             })
+    gaps = triage.confirmed_gaps(at)
+    if gaps:
+        provenance.append(prov.provenance(
+            "Rețeaua Vie R4, decizii în platformă / decisions in the platform", real_now(), None, None,
+            f"„Fără vehicul” confirmat de un om pentru {len(gaps)} linii; din datele live ale Primăriei, "
+            f"înregistrate de noi; neconfirmat de STPT").model_dump())
+    for rid, gap in gaps.items():
+        if rid not in routes or SEVERITY[affected.get(rid, {}).get("state", "normala")] >= SEVERITY["fara_vehicul"]:
+            continue
+        affected[rid] = {
+            "state": "fara_vehicul", "directionIds": None, "since": gap["since"], "until": None,
+            "closureId": None, "closureTitle": None, "notice": None, "replacedBy": [], "source": gap["note"],
+        }
     lines = []
     for rid, r in routes.items():
         base = {"routeId": rid, "shortName": r.route_short_name or None, "mode": MODES.get(str(r.route_type))}

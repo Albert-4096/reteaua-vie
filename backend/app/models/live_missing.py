@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Literal
 
+from pydantic import Field
+
 from app.models.base import I18n, IsoTime, Model, Provenance, Window
 
 MissingStatus = Literal["ok", "inregistrare_incompleta"]
@@ -29,6 +31,38 @@ class MissingRoute(Model):
     since: IsoTime                  # fara_vehicul: first time in the window a trip was due; partial: first missed trip
     lastSeenAt: IsoTime | None      # last healthy snapshot in the window with a vehicle of the route
     firstMissedTrip: MissedTrip | None
+    decision: TriageDecision | None = None   # v2.23 (R4): the latest decision of a person on this row
+    repeatedDays: int | None = None          # v2.23 (R4): recorded days with the route in the same state, same hours
+
+
+Decision = Literal["confirmat", "respins", "nu_stiu"]
+Reason = Literal["dispozitiv_bord", "linie_neoperata", "trafic_lucrari_vreme", "gol_date"]
+
+
+class TriageInput(Model):
+    """PATCH /api/live/missing/{routeId}: a person's decision on one row (R4)."""
+    window: Window                  # the row's window, as /api/live/missing returned it
+    decision: Decision              # „Confirm” | „Resping” | „Nu știu”
+    reason: Reason | None = None    # null = „motiv necunoscut”
+    who: str = Field(min_length=2, max_length=60)    # a role („dispecer STPT”), never a person's name
+    note: str | None = Field(None, max_length=300)
+
+
+class TriageDecision(Model):
+    id: str
+    routeId: str
+    shortName: str | None
+    window: Window
+    caseId: str | None
+    decision: Decision
+    reason: Reason | None
+    who: str
+    note: str | None
+    decidedAt: IsoTime
+    rowState: RouteState            # the row as the person saw it
+    tripsInService: int
+    tripsObserved: int
+    since: IsoTime
 
 
 class ModeCount(Model):

@@ -92,7 +92,7 @@ def _missing_lines(provenance: list) -> dict:
         except Exception:  # noqa: BLE001
             log.exception("O2 missing lines (%s) failed", key)
             continue
-        out[key] = missing.brief(result)
+        out[key] = missing.brief(missing.with_decisions(result))
         provenance.append(result["provenance"][1])  # the recording window read (the GTFS entry is [0])
         if key == "live":
             provenance.append(result["provenance"][2])  # the method

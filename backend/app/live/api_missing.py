@@ -32,7 +32,7 @@ def live_missing(
     if case:
         if case not in missing.CASES:
             raise invalid(f"`case` must be one of {', '.join(missing.CASES)}")
-        return missing.prepared(case)
+        return missing.with_decisions(missing.prepared(case))
     start, end = missing.live_window()
     if to:
         end = _time(to, "to")
@@ -43,4 +43,4 @@ def live_missing(
         raise invalid("`from` must be before `to`")
     if end - start > missing.MAX_WINDOW:
         raise invalid("the window may be at most 24 h")
-    return missing.detect(start, end)
+    return missing.with_decisions(missing.detect(start, end))
