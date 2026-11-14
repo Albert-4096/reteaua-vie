@@ -1,5 +1,13 @@
 // Step 3 text, Romanian first. Rendered with tr() so the language switch applies.
 export const S = {
+  qrAlt: { ro: "Codul QR de pe afișul stației", en: "The QR code on the stop poster" },
+  qrHint: {
+    ro: "Scanați cu camera telefonului. Se deschide alerta acestei stații, cu text și audio.",
+    en: "Scan with your phone camera. It opens this stop's alert, with text and audio.",
+  },
+  qrPhoneOpen: { ro: "Arată pagina de pe telefon", en: "Show the phone page" },
+  qrPhoneTitle: { ro: "Pagina din codul QR, pe telefon", en: "The page behind the QR code, on a phone" },
+  qrPhoneClose: { ro: "Închide", en: "Close" },
   feedsTab: { ro: "Ce primește CityApp", en: "What CityApp gets" },
   feedsTitle: { ro: "Ce primește CityApp", en: "What CityApp gets" },
   feedsSentence: {

@@ -28,6 +28,7 @@ import { JournalFold } from "./JournalFold";
 import { FeedCheckRow } from "./feedCheck";
 import { FeedsView } from "./feeds";
 import { AppsView, NoticeView, StationView } from "./outputs";
+import { PhoneFrame } from "./QrMoment";
 import { S } from "./strings";
 
 type Out = "notice" | "apps" | "station" | "feeds";
@@ -53,6 +54,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
   const [error, setError] = useState<string | null>(null);
   const [out, setOut] = useState<Out>("notice");
   const [stopId, setStopId] = useState<string | null>(null);
+  const [phone, setPhone] = useState(false);
 
   const c = closure.data;
   useMapOverlay({ closure: (c?.geometry as GeoJSON.Geometry | null) ?? null, fitKey: c ? closureId : undefined }, [c, closureId]);
@@ -85,6 +87,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
       const res = await api.publish(closureId);
       setResult(res);
       setData(`alerts:${closureId}`, res.alerts);
+      setOut("station"); // straight to the poster and its QR: the next thing shown after Publish (D-028)
       invalidate(`closure:${closureId}`, `notice:${closureId}`, `validation:${closureId}`, "closures", "linesStatus", "lineStatusRow:", "stopStatus:");
     } catch (e) {
       setError(e instanceof ApiError && e.code === "UNCONFIRMED" ? t("publish.blocked", { count: left }) : errorText(e, t));
@@ -135,9 +138,12 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
         foot={
           published ? (
             qrHref && (
-              <a className="btn btn-primary" style={{ display: "block", textAlign: "center", textDecoration: "none" }} href={qrHref} target="_blank" rel="noreferrer">
-                {t("publish.qrPage")}
-              </a>
+              <>
+                <button type="button" className="btn btn-primary" onClick={() => setPhone(true)}>
+                  {tr(S.qrPhoneOpen)}
+                </button>
+                <PhoneFrame href={qrHref} open={phone} onClose={() => setPhone(false)} />
+              </>
             )
           ) : (
             <>

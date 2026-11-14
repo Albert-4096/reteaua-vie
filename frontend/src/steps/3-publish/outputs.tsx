@@ -8,6 +8,7 @@ import { fmtDate, fmtMeters, fmtTime, tr } from "../../lib/format";
 import type { Resource } from "../../lib/store";
 import { LineStatusRow } from "./LineStatusRow";
 import { StopStatusTap } from "./stopStatus";
+import { ScreenQr } from "./QrMoment";
 
 /** D-013: today's STPT text next to the notice the platform generates. */
 export function NoticeView({ notice }: { notice: GeneratedNotice }) {
@@ -70,7 +71,7 @@ export function AppsView({ alert, analysis, stopId }: { closureId: string; stopI
           ))}
         </p>
         <h3>{tr(alert.headerText)}</h3>
-        <p className="phone-until st-lost">{/finalizarea lucrărilor/.test(alert.descriptionText.ro) ? untilText(alert, (k) => t(k)) : t("publish.until", { until: untilText(alert, (k) => t(k)) })}</p>
+        <p className="phone-until st-lost">{/finalizarea lucrărilor/.test(alert.descriptionText.ro) ? untilText(alert, (k) => t(k)) : t("publish.until", { until: untilText(alert, (k) => t(k)).replace(/^(până la|until) /, "") })}</p>
         <LineStatusRow untilEnd={/finalizarea lucrărilor/.test(alert.descriptionText.ro)} routeIds={[...new Set(alert.informedEntity.map((e) => e.routeId).filter((r): r is string => !!r))]} />
         <div className="phone-near">
           <p className="small muted">{t("publish.nearest")}</p>
@@ -125,6 +126,7 @@ export function StationView({
     <div className="station">
       <section>
         <h2>{t("publish.poster")}</h2>
+        {alert?.url && <ScreenQr url={alert.url} />}
         <p>
           <a href={api.posterUrl(closureId, stopId)} target="_blank" rel="noreferrer">
             {t("publish.posterOpen")}
@@ -145,7 +147,7 @@ export function StationView({
         <h2>{t("publish.ledTitle")}</h2>
         {alert && (
           <p className="led" aria-label={t("publish.led")}>
-            {t("publish.ledText", { lines: lines.join(", "), until: untilText(alert, (k) => t(k)) })}
+            {t("publish.ledText", { lines: lines.join(", "), until: untilText(alert, (k) => t(k)).replace(/^(până la|until) /, "") })}
           </p>
         )}
         <p className="small muted">{t("publish.led")}</p>

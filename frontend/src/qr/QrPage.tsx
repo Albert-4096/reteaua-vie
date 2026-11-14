@@ -36,7 +36,8 @@ export function QrPage({ closureId, stopId }: Props) {
   }, []);
 
   useEffect(() => {
-    if (stopId) sendScan(closureId, stopId);
+    // preview=1: the phone frame in step 3 of the back office. It is not a poster scan.
+    if (stopId && !new URLSearchParams(window.location.search).has("preview")) sendScan(closureId, stopId);
   }, [closureId, stopId]);
 
   const c = closure.data;
