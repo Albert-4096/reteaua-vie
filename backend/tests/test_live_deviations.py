@@ -130,3 +130,15 @@ def test_a_gps_gap_is_never_a_deviation():
     df = pd.DataFrame({"t": times, "vid": "v1", "trip": trip.trip_id, "route": "R_TV_7", "dir": int(trip.direction_id),
                        "x": [p.x for p in pts], "y": [p.y for p in pts]})
     assert deviations.find_runs(df, f) == []
+
+
+@needs_data
+def test_depot_pull_out_is_not_an_unannounced_diversion():
+    """14 Nov 23:57-00:00 (21:57-22:00 UTC): tram vehicle 1012 left the depot off Regele Carol, tagged with a
+    tram 8 trip, and ran on to Dâmbovița where it started line 2. The tram depot has no GTFS stop, so the
+    garage-stop test missed it and it showed as a „fara_anunt” deviation on tram 8."""
+    if not (VEH / "20261114-21.jsonl.gz").is_file():
+        pytest.skip("no 14 Nov 21:00 UTC recording")
+    r = _detect("2026-11-14T23:50:00+02:00", "2026-11-15T00:10:00+02:00")
+    assert not [t for g in r["groups"] for t in g["tracks"] if t["vehicleId"] == "1012"]
+    assert r["counts"]["ignoredDepot"] >= 1

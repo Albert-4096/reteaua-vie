@@ -12,7 +12,9 @@ so it was not a wrong shape); runs whose middle is outside the reported trip's t
 AFTER_TRIP: positioning, a wrong trip id); a vehicle standing (>= STANDING_MIN under
 STANDING_MPS: layover); runs around either end of the trip's shape, leaving its last
 stop or reaching its first (turning loops; trams run on 90-350 m past the last stop to
-their loop); runs near a garage stop. The rest are grouped by line, direction and the named OSM street the
+their loop); runs near a garage stop; runs that are the pull-out leg of a vehicle that appeared
+after >= PULL_OUT_SILENCE of silence (the tram depot has no GTFS stop: tram 8 vehicle 1012 left it at Regele Carol
+at 23:57 on 14 Nov and ran to Dâmbovița as line 2). The rest are grouped by line, direction and the named OSM street the
 positions are nearest to, then classified:
 
 - „anuntata”: a published closure active at that time acts on the line and lies within
@@ -51,6 +53,10 @@ OFF_ROUTE_M = 80
 MIN_REPORTS = 3
 TERMINAL_M = 250
 DEPOT_M = 300
+PULL_OUT_SILENCE = timedelta(minutes=3)  # a vehicle unseen this long, then back on screen: it left a yard that reports no GPS
+PULL_OUT_LINK = timedelta(seconds=120)   # positions this close in time are one continuous episode
+PULL_OUT_MAX = timedelta(minutes=5)      # a run starting within this of the episode's first position is the pull-out leg
+PULL_OUT_M = 600                         # ... and within this distance of it
 MAX_REPORT_AGE_SEC = 120
 BEFORE_TRIP = timedelta(minutes=20)   # a run this long before the trip's first departure is positioning
 AFTER_TRIP = timedelta(minutes=60)    # ... or this long after its last one (a late vehicle keeps its trip id)
@@ -264,6 +270,24 @@ def _ts(x: float) -> str:
     return iso(datetime.fromtimestamp(x, tz=timezone.utc))
 
 
+def _pull_out(df: pd.DataFrame, vid: str, part: pd.DataFrame) -> bool:
+    """True when the run is the first leg after the vehicle appeared out of >= PULL_OUT_SILENCE of silence
+    (any trip: a tram leaving the depot is tagged with a line's trip) and it started within PULL_OUT_MAX and
+    PULL_OUT_M of that first position. A yard without GPS is invisible to the GTFS garage-stop test."""
+    g = df[df.vid == vid].sort_values("t")
+    t = g.t.to_numpy()
+    t0 = float(part.t.iloc[0])
+    i = int(np.searchsorted(t, t0, side="right")) - 1   # last position at or before the run's first
+    while i > 0 and t[i] - t[i - 1] < PULL_OUT_LINK.total_seconds():
+        i -= 1
+    if i == 0 or t[i] - t[i - 1] < PULL_OUT_SILENCE.total_seconds():
+        return False
+    if t0 - t[i] > PULL_OUT_MAX.total_seconds():
+        return False
+    x, y = float(g.x.iloc[i]), float(g.y.iloc[i])
+    return bool(np.hypot(float(part.x.iloc[0]) - x, float(part.y.iloc[0]) - y) <= PULL_OUT_M)
+
+
 def detect(start: datetime, end: datetime) -> dict:
     """Deviations for [start, end) (app/models/live_deviations.py)."""
     start, end = start.astimezone(TZ), end.astimezone(TZ)
@@ -318,6 +342,9 @@ def detect(start: datetime, end: datetime) -> dict:
             counts["ignoredTerminal"] += 1
             continue
         if garage_union is not None and mid.distance(garage_union) <= DEPOT_M:
+            counts["ignoredDepot"] += 1
+            continue
+        if str(r["route"]).startswith("R_TV") and _pull_out(df, r["vid"], part):  # trams only: buses' labelled real detours also follow silences
             counts["ignoredDepot"] += 1
             continue
         kept.append((r, mid))
@@ -419,7 +446,7 @@ def detect(start: datetime, end: datetime) -> dict:
                         f"în afara orei cursei (cu {int(BEFORE_TRIP.total_seconds() // 60)} min înainte, "
                         f"{int(AFTER_TRIP.total_seconds() // 60)} min după), vehicul staționat (≥ "
                         f"{int(STANDING_MIN.total_seconds() // 60)} min sub {STANDING_MPS:g} m/s), ≤ {TERMINAL_M} m de "
-                        f"capetele traseului (bucle, plecare spre buclă), ≤ {DEPOT_M} m de un garaj. Străzi: OpenStreetMap. "
+                        f"capetele traseului (bucle, plecare spre buclă), ≤ {DEPOT_M} m de un garaj, prima parte a unui vehicul apărut după ≥ {int(PULL_OUT_SILENCE.total_seconds() // 60)} min fără semnal (ieșire din depou). Străzi: OpenStreetMap. "
                         f"„Anunțată” = lucrare publicată în platformă sau anunț STPT care numește linia și strada. "
                         f"Deducem din datele live; nu e o constatare a STPT.").model_dump(),
     ]
