@@ -113,9 +113,9 @@ def _short(route_ids: list[str]) -> str:
 def notice_sentence(closure: dict, analysis: dict | None, area) -> tuple[str, str] | None:
     """The sentence for a zone notice: closed paid streets inside `area` (WGS84) and the nearest P&R. None if nothing."""
     streets, _lots = pk.features_in(area.intersection(pk.closure_buffer(closure)) if area is not None else pk.closure_buffer(closure))
+    if not streets:
+        return None  # the P&R line goes with closed paid streets, not on every notice
     pr = _nearest_pr(closure, pk.options_for(closure, analysis))
-    if not streets and pr is None:
-        return None
     ro, en = [], []
     if streets:
         names = list(dict.fromkeys(s.name for s in streets if s.name))[:3]

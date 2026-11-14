@@ -145,12 +145,50 @@ class BikeDetour(Model):
     geometry: LineString
 
 
+class BikeDetourSummary(Model):
+    """v2.32 (R16): the bike detour split by stress, surface and tram-rail crossings; unknown stays unknown."""
+
+    lengthMeters: float
+    byLts: dict[str, float]  # "1".."4" and "unknown", metres
+    highStressMeters: float  # LTS 3-4
+    roughMeters: float  # OSM surface sett/cobblestone/gravel/dirt/... or smoothness bad or worse
+    surfaceUnknownMeters: float  # neither surface nor smoothness is tagged
+    tramCrossings: int  # the detour crosses a GTFS tram shape (points within 15 m counted once)
+    unknownSharePct: int  # share of the length whose LTS is unknown
+    tooLittleData: bool  # unknown share above 50 %
+    sentence: I18n
+
+
+class ShareStation(Model):
+    osmId: str
+    name: str | None
+    meters: int  # straight line from the stop
+
+
+class ShareAlternative(Model):
+    """v2.32 (R17): bike-share stations near the two ends of a suspended section, and the bike route between them."""
+
+    fromStopId: str
+    fromStopName: str
+    toStopId: str
+    toStopName: str
+    routeIds: list[str]
+    stationFrom: ShareStation | None
+    stationTo: ShareStation | None
+    routeLengthMeters: float | None
+    highStressMeters: float | None
+    line: I18n | None  # null unless both stations, distinct, and a route exist
+
+
 class BikeImpact(Model):
     closureId: str
     lanesAffected: list[BikeLane]
     parkingAffected: list[BikeParking]
     detourStress: list[BikeDetour]
     provenance: list[Provenance]
+    detourSummary: BikeDetourSummary | None = None
+    shareAlternative: list[ShareAlternative] = []
+    shareNote: I18n | None = None
 
 
 class ParkingFeatureRef(Model):

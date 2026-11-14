@@ -247,6 +247,19 @@ def _signature(closure: dict, analysis: dict, published: dict | None) -> str:
 _memo: dict[str, tuple[str, list[ZoneNotice]]] = {}
 
 
+def _share_rows(closure: dict) -> list:
+    """R17: the bike-share alternatives that have a full line (stations at both ends and a route)."""
+    try:
+        from app.m5_bike.bike import bike_impact_for
+
+        return [r for r in bike_impact_for(closure).shareAlternative if r.line is not None]
+    except Exception:  # noqa: BLE001 - an optional line must never stop the notice
+        import logging
+
+        logging.getLogger(__name__).warning("bike-share line skipped for %s", closure.get("id"), exc_info=True)
+        return []
+
+
 def build_notices(closure: dict, analysis: dict, published: dict | None) -> list[ZoneNotice]:
     zones = load_zones()
     net = load_network()
@@ -269,6 +282,7 @@ def build_notices(closure: dict, analysis: dict, published: dict | None) -> list
 
     line_m = to_metric(from_geojson(closure["geometry"])).length if buffer is not None else None
     all_streets = streets_in(buffer, buffer_meters, closure_meters=line_m) if buffer is not None else []
+    share_rows = _share_rows(closure) if buffer is not None else []
     what = {lang: window_phrase(start, end, lang, open_end) for lang in ("ro", "en")}
     title = closure.get("title") or {}
     alerts = (published or {}).get("alerts") or []
@@ -296,6 +310,9 @@ def build_notices(closure: dict, analysis: dict, published: dict | None) -> list
             parts += _stop_sentences(list(by_name.items()), lang)
             if paid_line:
                 parts.append(paid_line[0 if lang == "ro" else 1])
+            share = next((r for r in share_rows if r.fromStopId in stop_ids or r.toStopId in stop_ids), None)
+            if share is not None:
+                parts.append(getattr(share.line, lang) or share.line.ro)
             body[lang] = " ".join(parts)
         zone_name = zones.names[slug]
         zone_stops, zone_routes = set(stop_ids), set(route_ids)

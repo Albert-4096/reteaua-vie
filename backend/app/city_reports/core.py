@@ -203,7 +203,7 @@ def to_csv(a: AreaReports) -> str:
 
 
 @lru_cache(maxsize=2)
-def _shapes(sha: str) -> dict[str, LineString]:
+def gtfs_shapes(sha: str) -> dict[str, LineString]:
     f = gtfs._FEEDS[sha]
     with zipfile.ZipFile(f.path) as z:
         df = pd.read_csv(io.BytesIO(z.read("shapes.txt")), dtype=str)
@@ -220,7 +220,7 @@ def _shapes(sha: str) -> dict[str, LineString]:
 def _segments(sha: str, day: date) -> list[dict]:
     """Bus and trolleybus segments between consecutive stops: geometry (metric), routes, departures per day."""
     f = gtfs.feed()
-    shapes = _shapes(sha)
+    shapes = gtfs_shapes(sha)
     deps = gtfs.count_by_key(local_midnight(day), local_midnight(day) + timedelta(days=1))
     rtype = dict(zip(f.routes.route_id, f.routes.route_type))
     names = dict(zip(f.stops.stop_id, f.stops.stop_name))

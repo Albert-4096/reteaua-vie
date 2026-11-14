@@ -25,10 +25,10 @@ from app.m5_bike.lts import in_network, is_bike_way, lts
 
 log = logging.getLogger(__name__)
 
-CACHE_VERSION = 2
+CACHE_VERSION = 3
 OSM_FILE = "osm/timisoara.osm.pbf"
 TAG_COLUMNS = ("highway", "bicycle", "cycleway", "cycleway:left", "cycleway:right", "cycleway:both",
-               "maxspeed", "oneway", "oneway:bicycle", "junction")
+               "maxspeed", "oneway", "oneway:bicycle", "junction", "surface", "smoothness")
 
 
 @dataclass
@@ -55,6 +55,8 @@ class BikeData:
     poi_capacity: list[int | None]
     poi_lonlat: np.ndarray              # (N, 2)
     pbf_name: str = ""
+    way_surface: list = field(default_factory=list)   # OSM `surface` per way (None when untagged)
+    way_smooth: list = field(default_factory=list)    # OSM `smoothness` per way (None when untagged)
     _trees: dict = field(default_factory=dict, repr=False)
 
     def seg_tree(self) -> STRtree:
@@ -106,10 +108,11 @@ def _build(pbf: Path) -> BikeData:
     osm = OSM(str(pbf))
     _nodes, edges = osm.get_network(network_type="cycling", nodes=True,
                                     extra_attributes=["cycleway:left", "cycleway:right", "cycleway:both",
-                                                      "oneway:bicycle"])
+                                                      "oneway:bicycle", "surface", "smoothness"])
     cols = [c for c in TAG_COLUMNS if c in edges.columns]
     way_pos: dict[int, int] = {}
     way_id, way_name, way_hw, way_lts, way_bike, way_ride = [], [], [], [], [], []
+    way_surface, way_smooth = [], []
     seg_way, seg_oneway = [], []
     for rec in edges[["id", "name", *cols]].to_dict("records"):
         wid = int(rec["id"])
@@ -122,6 +125,8 @@ def _build(pbf: Path) -> BikeData:
             way_lts.append(lts(tags))
             way_bike.append(is_bike_way(tags))
             way_ride.append(in_network(tags))
+            way_surface.append(tags.get("surface"))
+            way_smooth.append(tags.get("smoothness"))
         seg_way.append(way_pos[wid])
         seg_oneway.append(_oneway(tags))
     coords = [np.asarray(g.coords, dtype=float)[:, :2] for g in edges.geometry]
@@ -149,6 +154,7 @@ def _build(pbf: Path) -> BikeData:
         way_bike=np.asarray(way_bike, dtype=bool), way_ride=np.asarray(way_ride, dtype=bool),
         poi_kind=kinds, poi_osm=osm_ids, poi_name=names, poi_capacity=caps,
         poi_lonlat=np.asarray(pts, dtype=float).reshape(-1, 2),
+        way_surface=way_surface, way_smooth=way_smooth,
     )
 
 
