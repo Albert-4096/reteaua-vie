@@ -41,8 +41,10 @@ def live_gap_hook(route_id: str, at: datetime) -> dict | None:
 
 def live_feed_check() -> LiveCheck:
     try:
-        importlib.import_module("app.live.missing")
+        ready = hasattr(importlib.import_module("app.live.missing"), "confirmed_gap")
     except ImportError:
+        ready = False
+    if not ready:
         return LiveCheck(status="pending", note=I18n(
             ro="în lucru: verificarea „niciun vehicul al liniei în datele live” nu e încă disponibilă",
             en="in progress: the „no vehicle of the line in the live data” check is not available yet"))
