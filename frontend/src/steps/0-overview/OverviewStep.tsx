@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { api, apiGet, type Closure } from "../../api/client";
 import { v2, type ClosureSummary, type LayerCollection } from "../../api/v2";
+import { roadIssues, roadIssueLayer, type RoadIssues as Issues } from "../../api/roadIssues";
 import { Figure } from "../../components/Figure";
 import { useMapOverlay, type ExtraLayerId } from "../../components/MapView";
 import { LoadState, Panel } from "../../components/Panel";
@@ -18,10 +19,11 @@ import {
 } from "../4-monitor/missing";
 import type { StepProps } from "../types";
 import { LinesStatus } from "./LinesStatus";
+import { RoadIssues } from "./RoadIssues";
 import { S } from "./strings";
 
-type Toggle = "network" | "closures" | "bike" | "parking" | "population";
-const TOGGLES: Toggle[] = ["network", "closures", "bike", "parking", "population"];
+type Toggle = "network" | "closures" | "bike" | "parking" | "population" | "road_issues";
+const TOGGLES: Toggle[] = ["network", "closures", "bike", "parking", "population", "road_issues"];
 
 export function OverviewStep({ caseKey }: StepProps) {
   const { t } = useTranslation();
@@ -35,6 +37,7 @@ export function OverviewStep({ caseKey }: StepProps) {
     bike: false,
     parking: false,
     population: false,
+    road_issues: false,
   });
 
   const active = overview.data?.activeClosures ?? [];
@@ -48,10 +51,14 @@ export function OverviewStep({ caseKey }: StepProps) {
     v2.layer("population"),
   );
 
+  const roads = useResource<Issues>(on.road_issues ? "roadIssues" : null, roadIssues);
+  const roadLayer = useResource<LayerCollection>(on.road_issues ? "layer:road_issues" : null, roadIssueLayer);
+
   const closureGeom = useMemo(() => mergeLines((geoms.data ?? []).map((c) => c.geometry)), [geoms.data]);
   const routeIds = useMemo(() => [...new Set(active.flatMap((c) => c.routeIds))], [ids]); // eslint-disable-line react-hooks/exhaustive-deps
   const layers: { id: ExtraLayerId; data: GeoJSON.FeatureCollection; label?: string }[] = [];
   if (accessible && access.data) layers.push({ id: "accessibility", data: access.data as unknown as GeoJSON.FeatureCollection, label: tr(S.accessibility.legend) });
+  if (on.road_issues && roadLayer.data) layers.push({ id: "road_issues", data: roadLayer.data as unknown as GeoJSON.FeatureCollection, label: tr(S.layer.road_issues) });
   for (const [k, r] of [["bike", bike], ["parking", parking], ["population", population]] as const)
     if (on[k] && r.data) layers.push({ id: k, data: r.data as unknown as GeoJSON.FeatureCollection });
 
@@ -63,7 +70,7 @@ export function OverviewStep({ caseKey }: StepProps) {
       hideNetwork: !on.network,
       fitKey: closureGeom ? `overview:${ids}` : undefined,
     },
-    [closureGeom, routeIds, on, bike.data, parking.data, population.data, accessible, access.data, ids],
+    [closureGeom, routeIds, on, bike.data, parking.data, population.data, accessible, access.data, roadLayer.data, ids],
   );
 
   const o = overview.data;
@@ -79,7 +86,7 @@ export function OverviewStep({ caseKey }: StepProps) {
     const hit = cases.data?.find((k) => k.closureId === c.id);
     return hit ? stepHref(1, hit.id.replace(/^case_/, "")) : `/step/1?closure=${encodeURIComponent(c.id)}`;
   };
-  const layerState = (k: Toggle) => (k === "bike" ? bike : k === "parking" ? parking : k === "population" ? population : null);
+  const layerState = (k: Toggle) => (k === "bike" ? bike : k === "parking" ? parking : k === "population" ? population : k === "road_issues" ? roadLayer : null);
 
   return (
     <Panel
@@ -157,6 +164,7 @@ export function OverviewStep({ caseKey }: StepProps) {
         <label>
           <input type="checkbox" checked={accessible} onChange={(e) => setAccessible(e.target.checked)} /> {tr(S.accessibility.title)}
         </label>
+        {on.road_issues && <RoadIssues result={roads} />}
         {accessible && (
           <section>
             <p className="small muted">{tr(S.accessibility.legend)}</p>

@@ -36,10 +36,12 @@ export type MapOverlay = {
   hideNetwork?: boolean;
   /** Replaces the stop counts in the map's text equivalent when the colours mean something else (step 4). */
   stopsText?: string;
+  /** A click on the map, as [lon, lat]. Step 1 uses it to cut a street section. */
+  onMapClick?: (point: [number, number]) => void;
 };
 
-export type ExtraLayerId = "bike" | "parking" | "population" | "vehicles" | "detour" | "accessibility";
-const EXTRA_IDS: ExtraLayerId[] = ["bike", "parking", "population", "vehicles", "detour", "accessibility"];
+export type ExtraLayerId = "bike" | "parking" | "population" | "vehicles" | "detour" | "deviations" | "accessibility" | "road_issues";
+const EXTRA_IDS: ExtraLayerId[] = ["bike", "parking", "population", "vehicles", "detour", "deviations", "accessibility", "road_issues"];
 
 function extraData(o: MapOverlay, id: ExtraLayerId): GeoJSON.FeatureCollection {
   return o.layers?.find((l) => l.id === id)?.data ?? empty;
@@ -231,7 +233,15 @@ export function MapView({ network, zones, overlay }: Props) {
         .addTo(map);
     });
     map.on("mouseenter", "rv-stops", () => (map.getCanvas().style.cursor = "pointer"));
-    map.on("mouseleave", "rv-stops", () => (map.getCanvas().style.cursor = ""));
+    map.on("mouseleave", "rv-stops", () => {
+      map.getCanvas().style.cursor = latest.current.overlay.onMapClick ? "crosshair" : "";
+    });
+    map.on("click", (e) => {
+      const pick = latest.current.overlay.onMapClick;
+      if (!pick || !map.isStyleLoaded()) return;
+      if (map.getLayer("rv-stops") && map.queryRenderedFeatures(e.point, { layers: ["rv-stops"] }).length) return;
+      pick([e.lngLat.lng, e.lngLat.lat]);
+    });
 
     return () => {
       window.clearTimeout(timer);
@@ -260,6 +270,9 @@ export function MapView({ network, zones, overlay }: Props) {
     if (map.getLayer("rv-network")) map.setLayoutProperty("rv-network", "visibility", overlay.hideNetwork ? "none" : "visible");
     const hi = overlay.highlightRouteIds ?? [];
     if (map.getLayer("rv-network-hi")) map.setFilter("rv-network-hi", ["in", ["get", "routeId"], ["literal", hi]]);
+    const canvas = map.getCanvas();
+    if (overlay.onMapClick) canvas.style.cursor = "crosshair";
+    else if (canvas.style.cursor === "crosshair") canvas.style.cursor = "";
   }, [overlay, ready]);
 
   useEffect(() => {
@@ -311,7 +324,7 @@ export function MapView({ network, zones, overlay }: Props) {
       layout: { "line-join": "round", "line-cap": "round" },
       paint: { "line-color": cssVar("--map-route-hi"), "line-width": 2.2 },
     });
-    for (const id of ["bike", "detour"] as const)
+    for (const id of ["bike", "detour", "deviations"] as const)
       map.addLayer({
         id: `rv-x-${id}`,
         type: "line",
@@ -319,6 +332,13 @@ export function MapView({ network, zones, overlay }: Props) {
         layout: { "line-join": "round" },
         paint: { "line-color": cssVar("--map-temp-route"), "line-width": 2 },
       });
+    map.addLayer({
+      id: "rv-x-road_issues",
+      type: "line",
+      source: "rv-x-road_issues",
+      layout: { "line-join": "round", "line-cap": "round" },
+      paint: { "line-color": cssVar("--c-unsure"), "line-width": 3 },
+    });
     map.addLayer({
       id: "rv-x-parking",
       type: "line",

@@ -82,10 +82,9 @@ function DiversionCheck({ caseKey, closureId }: StepProps) {
   const layers = useMemo(() => {
     const next: { id: ExtraLayerId; data: GeoJSON.FeatureCollection; label?: string }[] = [];
     if (ownVehicles) next.push({ id: "vehicles", data: ownVehicles });
-    // MapView has no "deviations" layer yet, so these LineStrings use the existing "detour" line layer.
     if (deviationLines.features.length > 0) {
       next.push({
-        id: "detour",
+        id: "deviations",
         data: deviationLines,
         label: tr({
           ro: `trasee deviate înregistrate: ${deviationLines.features.length}`,
