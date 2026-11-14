@@ -1,31 +1,76 @@
-import { useEffect, useRef, type ReactNode } from "react";
-import { animate } from "motion";
+import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
+import { animate as animeAnimate } from "animejs";
 import { CircleCheck } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { fmt } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import type { MapProps } from "./MapView";
 
-/** A titled block in the side panel. Sections are separated by space and a rule, never boxed. */
-export function Section({ title, aside, children, className }: { title: string; aside?: ReactNode; children: ReactNode; className?: string }) {
+/* ---------- the shared map: every step tells it what to show ---------- */
+export type Layers = Omit<MapProps, "onClosure" | "padLeft">;
+export const MapCtx = createContext<(l: Layers) => void>(() => {});
+export function useMapLayers(l: Layers) {
+  const set = useContext(MapCtx);
+  useEffect(() => set(l), [set, l]);
+}
+
+/**
+ * The one layout of every step: the question the step answers, one answer in large type,
+ * the rest folded, one next action at the bottom.
+ */
+export function Step({ title, answer, children, footer, inner }: { title: string; answer?: ReactNode; children?: ReactNode; footer?: ReactNode; inner?: string }) {
   return (
-    <section className={cn("border-t px-6 py-6 first:border-t-0", className)}>
-      <div className="mb-4 flex items-baseline justify-between gap-4">
-        <h2 className="text-[1.05rem] font-semibold tracking-tight">{title}</h2>
-        {aside && <div className="text-sm text-muted-foreground">{aside}</div>}
+    <div className="flex h-full flex-col">
+      <div id="content" className="min-h-0 flex-1 overflow-y-auto px-6 pb-8 pt-6">
+        <div className={inner}>
+          <h2 className="text-[1.4rem] font-semibold leading-tight tracking-tight">{title}</h2>
+          {answer}
+          {children}
+        </div>
       </div>
-      {children}
-    </section>
+      {footer && <div className="border-t bg-card px-5 py-4">{footer}</div>}
+    </div>
   );
 }
 
-/** A number with its label underneath and, when it is not a count we observed, the method in words. */
-export function Figure({ value, label, note, tone, kind }: { value: ReactNode; label: string; note?: string; tone?: "closure" | "green"; kind?: "measured" | "estimate" }) {
+/** The step's answer: one number, what it counts, and whether we measured or estimated it. */
+export function Answer({ value, label, kind, tone, children }: { value: ReactNode; label: ReactNode; kind?: ReactNode; tone?: "closure" | "green"; children?: ReactNode }) {
+  return (
+    <div className="mt-5">
+      <div className={cn("tabular text-[3.4rem] font-semibold leading-none tracking-tight transition-colors duration-300",
+        tone === "closure" && "text-closure-ink", tone === "green" && "text-accent-foreground")}>{value}</div>
+      <div className="mt-2.5 text-[0.95rem] leading-snug text-foreground/80">{label}</div>
+      {kind && <div className="mt-3">{kind}</div>}
+      {children}
+    </div>
+  );
+}
+
+/** A smaller supporting number, next to the answer. */
+export function Stat({ value, label, kind }: { value: ReactNode; label: string; kind?: "measured" | "estimate" }) {
   return (
     <div>
-      <div className={cn("tabular text-[1.9rem] font-semibold leading-none tracking-tight", tone === "closure" && "text-closure-ink", tone === "green" && "text-accent-foreground")}>{value}</div>
-      <div className="mt-1.5 text-sm text-foreground/80">{label}</div>
-      {note && <div className="text-xs text-muted-foreground">{note}</div>}
-      {kind && <div className="mt-2"><Kind k={kind} /></div>}
+      <div className="tabular text-xl font-semibold leading-none tracking-tight">{value}</div>
+      <div className="mt-1.5 text-sm leading-snug text-muted-foreground">{label}{kind === "estimate" && <span className="ml-1 whitespace-nowrap text-xs">(estimare)</span>}</div>
     </div>
+  );
+}
+
+/** Details that wait until asked for: shadcn Accordion, closed by default. */
+export function Folds({ children, open, className }: { children: ReactNode; open?: string[]; className?: string }) {
+  return <Accordion type="multiple" defaultValue={open} className={cn("mt-7 border-t", className)}>{children}</Accordion>;
+}
+export function Fold({ id, title, aside, children }: { id: string; title: ReactNode; aside?: ReactNode; children: ReactNode }) {
+  return (
+    <AccordionItem value={id}>
+      <AccordionTrigger className="items-center py-4 text-[0.95rem] hover:no-underline">
+        <span className="flex flex-1 items-baseline justify-between gap-3">
+          <span>{title}</span>
+          {aside != null && <span className="tabular text-sm font-normal text-muted-foreground">{aside}</span>}
+        </span>
+      </AccordionTrigger>
+      <AccordionContent className="pb-5">{children}</AccordionContent>
+    </AccordionItem>
   );
 }
 
@@ -45,16 +90,17 @@ export function Kind({ k, detail }: { k: "measured" | "estimate"; detail?: strin
   );
 }
 
-/** A number that counts to its new value when it changes. */
+/** A number that counts to its new value when it changes (anime.js on a plain object). */
 export function Count({ value }: { value: number }) {
   const ref = useRef<HTMLSpanElement>(null);
   const prev = useRef(value);
   useEffect(() => {
     const from = prev.current;
     prev.current = value;
-    if (from === value) return;
-    const c = animate(from, value, { duration: 0.9, ease: [0.16, 1, 0.3, 1], onUpdate: (v) => { if (ref.current) ref.current.textContent = fmt.format(Math.round(v)); } });
-    return () => c.stop();
+    if (from === value || !ref.current) return;
+    const o = { v: from };
+    const a = animeAnimate(o, { v: value, duration: 800, ease: "outExpo", onUpdate: () => { if (ref.current) ref.current.textContent = fmt.format(Math.round(o.v)); } });
+    return () => { a.pause(); };
   }, [value]);
   return <span ref={ref}>{fmt.format(value)}</span>;
 }

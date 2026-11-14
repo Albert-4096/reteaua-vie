@@ -12,7 +12,8 @@ export type MapProps = {
   highlight?: string[]; // routeIds drawn in colour; the rest stay grey
   stops?: MapStop[];
   vehicles?: { id: string; lon: number; lat: number }[];
-  fitTo?: string; // closure id to frame
+  fitTo?: string; // closure id to frame, or "city"
+  padLeft?: number; // px covered by the floating panel
   onClosure?: (id: string) => void;
 };
 
@@ -23,19 +24,19 @@ const TM: LngLatBoundsLike = [[21.15, 45.71], [21.3, 45.8]];
 const fc = (features: Feature[]): FeatureCollection => ({ type: "FeatureCollection", features });
 
 /** One map for every step: the city's lines (grey, affected ones in their own colour), works in barrier red, stops, vehicles. */
-export function MapView({ closures = [], highlight = [], stops = [], vehicles = [], fitTo, onClosure }: MapProps) {
+export function MapView({ closures = [], highlight = [], stops = [], vehicles = [], fitTo, padLeft = 0, onClosure }: MapProps) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const ready = useRef(false);
-  const latest = useRef({ closures, highlight, stops, vehicles, fitTo });
-  latest.current = { closures, highlight, stops, vehicles, fitTo };
+  const latest = useRef({ closures, highlight, stops, vehicles, fitTo, padLeft });
+  latest.current = { closures, highlight, stops, vehicles, fitTo, padLeft };
   const onClosureRef = useRef(onClosure);
   onClosureRef.current = onClosure;
 
   useEffect(() => {
     const m = new maplibregl.Map({ container: el.current!, style: STYLE, bounds: TM, attributionControl: { compact: true } });
     map.current = m;
-    m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+    m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
     m.on("load", async () => {
       const net = await loadNetwork().catch(() => null);
       const lines = fc((net?.paths ?? []).filter((p) => p.directionId === 0).map((p) => {
@@ -68,26 +69,30 @@ export function MapView({ closures = [], highlight = [], stops = [], vehicles = 
   }, []);
 
   useEffect(() => {
-    if (map.current && ready.current) sync(map.current, { closures, highlight, stops, vehicles, fitTo }, false);
-  }, [closures, highlight, stops, vehicles, fitTo]);
+    if (map.current && ready.current) sync(map.current, { closures, highlight, stops, vehicles, fitTo, padLeft }, false);
+  }, [closures, highlight, stops, vehicles, fitTo, padLeft]);
 
   return <div ref={el} className="h-full w-full" />;
 }
 
 let lastFit: string | undefined;
 function sync(m: maplibregl.Map, p: Required<Omit<MapProps, "onClosure" | "fitTo">> & { fitTo?: string }, first: boolean) {
+  const padding = { top: 60, right: 60, bottom: 110, left: p.padLeft + 50 };
   (m.getSource("closures") as GeoJSONSource).setData(fc(p.closures.filter((c) => c.geometry).map((c) => ({ type: "Feature", geometry: c.geometry!, properties: { id: c.id, selected: !!c.selected } }))));
   (m.getSource("stops") as GeoJSONSource).setData(fc(p.stops.map((s) => ({ type: "Feature", geometry: { type: "Point", coordinates: [s.lon, s.lat] }, properties: { name: s.name, tone: s.tone } }))));
   (m.getSource("vehicles") as GeoJSONSource).setData(fc(p.vehicles.map((v) => ({ type: "Feature", geometry: { type: "Point", coordinates: [v.lon, v.lat] }, properties: { id: v.id } }))));
   m.setFilter("lines-hi", ["in", ["get", "routeId"], ["literal", p.highlight]]);
-  if (p.fitTo && (first || p.fitTo !== lastFit)) {
+  if (p.fitTo === "city" && (first || lastFit !== "city")) {
+    m.fitBounds(TM, { padding, duration: first ? 0 : 900 });
+    lastFit = "city";
+  } else if (p.fitTo && p.fitTo !== "city" && (first || p.fitTo !== lastFit)) {
     const c = p.closures.find((x) => x.id === p.fitTo)?.geometry;
     const pts: number[][] = !c ? [] : c.type === "LineString" ? c.coordinates : c.type === "MultiLineString" ? c.coordinates.flat() : [];
     const near = p.stops.length ? p.stops.map((s) => [s.lon, s.lat]) : pts;
     const all = [...pts, ...near];
     if (all.length) {
       const b = all.reduce((acc, [x, y]) => acc.extend([x, y]), new maplibregl.LngLatBounds(all[0] as [number, number], all[0] as [number, number]));
-      m.fitBounds(b, { padding: { top: 60, left: 60, right: 60, bottom: 110 }, maxZoom: 15.5, duration: first ? 0 : 900 });
+      m.fitBounds(b, { padding, maxZoom: 15.5, duration: first ? 0 : 900 });
       lastFit = p.fitTo;
     }
   }

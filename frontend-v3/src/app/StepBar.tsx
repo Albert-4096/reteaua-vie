@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Kbd } from "@/components/ui/kbd";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/landing/Logo";
 import { STEPS, go, type StepId } from "./router";
 
 const PILL = { type: "spring", bounce: 0.18, duration: 0.5 } as const;
@@ -27,7 +28,7 @@ export function StepBar({ step, wide = false }: { step: StepId; wide?: boolean }
 
   return (
     <TooltipProvider delayDuration={250}>
-      <nav aria-label="Pașii lucrării" className={cn("pointer-events-none fixed bottom-5 right-0 z-40 flex justify-center px-4", wide ? "left-0" : "left-[30rem]")}>
+      <nav aria-label="Pașii lucrării" className={cn("pointer-events-none fixed bottom-5 right-0 z-40 flex justify-center px-4", wide ? "left-0" : "left-[28rem]")}>
         <motion.ol
           layout="position"
           initial={{ y: 28, opacity: 0, filter: "blur(6px)" }}
@@ -35,6 +36,12 @@ export function StepBar({ step, wide = false }: { step: StepId; wide?: boolean }
           transition={{ type: "spring", bounce: 0.2, duration: 0.7, delay: 0.15, layout: { type: "spring", bounce: 0.15, duration: 0.55 } }}
           className="pointer-events-auto flex items-center gap-0.5 rounded-full border bg-card/92 p-1.5 shadow-[0_18px_40px_-16px_oklch(0.25_0.02_165/0.45),0_2px_6px_oklch(0.25_0.02_165/0.08)] backdrop-blur-md"
         >
+          <li className="flex items-center pl-1 pr-1.5">
+            <a href="/" aria-label="Rețeaua Vie, pagina principală" className="grid size-9 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <Logo className="size-7" />
+            </a>
+            <span aria-hidden className="ml-2.5 h-6 w-px bg-border" />
+          </li>
           {STEPS.map((s, i) => {
             const on = s.id === step;
             return (
@@ -53,7 +60,7 @@ export function StepBar({ step, wide = false }: { step: StepId; wide?: boolean }
                     >
                       {on && <motion.span layoutId="step-pill" transition={PILL} className="absolute inset-0 rounded-full bg-primary shadow-[0_4px_12px_-4px_oklch(0.5_0.095_166/0.6)]" />}
                       <span className={cn("tabular relative grid size-7 place-items-center rounded-full text-xs font-semibold transition-colors duration-200",
-                        on ? "bg-primary-foreground/18 text-primary-foreground" : "bg-muted text-muted-foreground")}>{i + 1}</span>
+                        on ? "bg-black/20 text-primary-foreground" : "bg-muted text-muted-foreground")}>{i + 1}</span>
                       <span className="relative hidden whitespace-nowrap sm:inline">{s.label}</span>
                     </button>
                   </TooltipTrigger>
