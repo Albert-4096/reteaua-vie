@@ -102,6 +102,10 @@ def _timetable_day(stop_id: str, at: datetime):
 
 def _date(dt: datetime, months: list[str], en: bool) -> str:
     """„18:00, 8 noiembrie” / „18:00, November 8”; the time is left out for an end at the end of a day."""
+    if (dt.hour, dt.minute) == (0, 0):  # an end at midnight reads as 24:00 of the day before, as the notice does
+        dt = dt - timedelta(days=1)
+        day = f"{months[dt.month - 1]} {dt.day}" if en else f"{dt.day} {months[dt.month - 1]}"
+        return f"24:00, {day}"
     day = f"{months[dt.month - 1]} {dt.day}" if en else f"{dt.day} {months[dt.month - 1]}"
     return day if (dt.hour, dt.minute) == (23, 59) else f"{dt:%H:%M}, {day}"
 

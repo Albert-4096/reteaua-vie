@@ -115,3 +115,12 @@ def test_a_confirmed_gap_shows_as_novehicle_on_the_stop(monkeypatch, client):
     assert gap and gap[0]["reason"]["kind"] == "noVehicle" and gap[0]["reason"]["closureId"] is None
     assert "Linia 33: niciun vehicul în datele live" in d["sentence"]["ro"] and "neconfirmată de STPT" in d["sentence"]["ro"]
     assert d["liveFeed"]["status"] == "ok"
+
+
+def test_an_end_at_midnight_reads_as_24_00_like_the_notice():
+    """E3 stop page showed „00:00, 13 noiembrie” while the notice said „12 noiembrie, 24:00”: one instant, two spellings."""
+    from datetime import datetime
+
+    from app.config import TZ
+    s = status.build_sentence("Baba Novac", "suspended", [_line("E3", "no")], None, datetime(2026, 11, 13, 0, 0, tzinfo=TZ))
+    assert "până la 24:00, 12 noiembrie" in s.ro and "until 24:00, November 12" in s.en
