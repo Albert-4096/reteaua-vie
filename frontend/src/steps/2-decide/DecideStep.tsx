@@ -15,6 +15,7 @@ import type { StepProps } from "../types";
 import { ApprovalFile } from "./ApprovalFile";
 import { EventConflicts } from "./EventConflicts";
 import { KmRows } from "./KmRows";
+import { MeasuredWindows } from "./MeasuredWindows";
 import { A, S } from "./strings";
 
 export function DecideStep(props: StepProps) {
@@ -131,6 +132,7 @@ function Decide({ closureId, caseKey }: StepProps & { closureId: string }) {
 
       <EventConflicts closureId={closureId} />
       <KmRows closureId={closureId} />
+      <MeasuredWindows closureId={closureId} />
       <DetourCost closureId={closureId} />
 
       <details>

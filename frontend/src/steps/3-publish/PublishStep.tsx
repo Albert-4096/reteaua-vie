@@ -24,6 +24,7 @@ import { navigate, stepHref } from "../../lib/router";
 import { invalidate, setData, useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { CityAppCheck } from "./CityAppCheck";
+import { JournalFold } from "./JournalFold";
 import { FeedCheckRow } from "./feedCheck";
 import { FeedsView } from "./feeds";
 import { AppsView, NoticeView, StationView } from "./outputs";
@@ -184,6 +185,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
           </ul>
         </nav>
         {error && <p className="error-msg">{error}</p>}
+        <JournalFold closureId={closureId} />
         <p className="small muted">{tr(c.title)}</p>
       </Panel>
     </>
