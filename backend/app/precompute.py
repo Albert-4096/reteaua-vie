@@ -286,8 +286,8 @@ def warm_modules() -> list[str]:
 # status, publish record), the app's code and templates, the GTFS feed in force and the demo clock.
 # After a step succeeds, its stamp of those inputs is written to $DATA_DIR/cache/precompute/; the
 # next run skips the step while the stamp is the same. --force runs everything.
-# The live warm-up always runs: the vehicle recording grows every 15 s.
-ALWAYS_RUN = {"app.live.warm"}
+# The live and observed-timetable warm-ups always run: the vehicle recording grows every 15 s.
+ALWAYS_RUN = {"app.live.warm", "app.observed.warm"}
 
 
 def warm_stamp() -> str:
