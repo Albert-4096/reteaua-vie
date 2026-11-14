@@ -1,8 +1,10 @@
 """The generated public notice (D-013) on the three prepared cases, real data.
 
-The stored cases are only read: the "final" hero notice applies the D-012 clerk
-decisions (eval label 11067: tick the certain line 7 rows, untick the ring) to an
-in-memory copy, or to a copy in a temp state dir for the API test.
+The stored cases are only read. Since 14 Nov the stored hero carries the D-012 clerk
+decisions (the decided demo state, D-024), so both notices are built on an in-memory
+copy: the "draft" clears the decisions on the unsure rows, the "final" applies D-012
+(eval label 11067: tick the certain line 7 rows, untick the ring). The API test uses
+a copy in a temp state dir. No test depends on whether the stored hero is decided.
 """
 
 from __future__ import annotations
@@ -60,13 +62,20 @@ def _case(cid: str, decisions: list[dict] | None = None):
 
     closure, analysis = _read(cid), copy.deepcopy(_read(cid, "analysis"))
     rows = analysis["stops"]
+    stored = cid == HERO and any(r["state"] == "unsure" and r["confirmed"] is not None for r in rows)
+    if stored:  # the hero as it was before a person answered: the unsure rows carry no decision
+        for r in rows:
+            if r["state"] == "unsure":
+                r["confirmed"] = None
     if decisions:
         by_key = {(d["stopId"], d["routeId"], d["directionId"]): d["confirmed"] for d in decisions}
         for r in rows:
             k = (r["stopId"], r["routeId"], r["directionId"])
             if k in by_key:
                 r["confirmed"] = by_key[k]
+    if decisions or stored:
         rows, _ = an.enrich(closure, rows)  # nearest served stops change with the decisions
+        analysis["stops"] = rows
         analysis["unsureCount"] = sum(1 for r in rows if r["state"] == "unsure" and r["confirmed"] is None)
     return closure, Analysis.model_validate(analysis), imp.build_impact(closure, rows)
 
@@ -153,6 +162,10 @@ def _fresh(cid: str) -> tuple[dict, list[dict]]:
     from app.m1_disruption import analysis as an
 
     closure, analysis = _read(cid), copy.deepcopy(_read(cid, "analysis"))
+    if cid == HERO:  # precompute stores the hero undecided; the stored copy may carry D-012 since D-024
+        for r in analysis["stops"]:
+            if r["state"] == "unsure":
+                r["confirmed"] = None
     rows, _ = an.enrich(closure, analysis["stops"])
     return closure, rows
 
@@ -162,7 +175,8 @@ def _built(closure: dict, rows: list[dict]):
     from app.m1_disruption.notice_text import build_notice
     from app.models.v1 import Analysis
 
-    analysis = dict(_read(closure["id"], "analysis"), stops=rows)
+    unsure = sum(1 for r in rows if r["state"] == "unsure" and r["confirmed"] is None)
+    analysis = dict(_read(closure["id"], "analysis"), stops=rows, unsureCount=unsure)
     return build_notice(closure, Analysis.model_validate(analysis), imp.build_impact(closure, rows))
 
 
@@ -379,11 +393,13 @@ def test_api_notice_draft_and_timing(client):
         assert r.status_code == 200, r.text
         assert took < 1.0, f"{cid}: {took:.2f} s"
     body = client.get(f"/api/closures/{HERO}/notice").json()
-    assert body["status"] == "draft" and body["unsureCount"] == 50
+    # the API answers for the stored state, whichever it is: undecided (draft, 50 to confirm) or decided (D-024)
+    open_rows = sum(1 for r in _read(HERO, "analysis")["stops"] if r["state"] == "unsure" and r["confirmed"] is None)
+    assert open_rows in (0, 50)
+    assert body["status"] == ("draft" if open_rows else "final") and body["unsureCount"] == open_rows
     assert client.get("/api/closures/nope/notice").json()["error"]["code"] == "NOT_FOUND"
-    # the hero stays `analyzed` with no decisions (D-011); E3 and Mocioni may be pre-published (T4)
+    # the hero is never pre-published: publishing stays a person's act in the demo; E3 and Mocioni may be (T4)
     assert _read(HERO)["status"] == "analyzed"
-    assert not (REAL_STATE / f"{HERO}.decisions.json").exists()
 
 
 def test_api_notice_final_after_decisions(client, isolated_state):
