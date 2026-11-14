@@ -3,7 +3,9 @@
 // liveFeed („în lucru” until O2) is left out: in a 300 px phone it takes three lines for a check that does not run yet.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { accessibility, type StopAccessibility } from "../../api/accessibility";
 import { apiGet, type I18n, type Provenance } from "../../api/client";
+import { Figure } from "../../components/Figure";
 import { fmtDate, tr } from "../../lib/format";
 import { useResource } from "../../lib/store";
 import { S } from "./strings";
@@ -12,8 +14,8 @@ import "./stopStatus.css";
 type Action = "suspended" | "shortened" | "rerouted";
 type StopLine = {
   shortName: string;
-  stops: "yes" | "no" | "unconfirmed";
-  reason: { title: I18n; action: Action | null; noticeUrl: string | null } | null;
+  stops: "yes" | "no" | "unconfirmed" | "novehicle";
+  reason: { title: I18n | null; action: Action | null; noticeUrl: string | null } | null;
 };
 type StopStatus = {
   stopId: string;
@@ -29,6 +31,8 @@ export function StopStatusTap({ stopId, name }: { stopId: string; name: string }
   const status = useResource<StopStatus>(open ? `stopStatus:${stopId}` : null, () =>
     apiGet<StopStatus>(`/api/stops/${encodeURIComponent(stopId)}/status`),
   );
+  // R6: the typical wait for a step-free vehicle, from our recording; the line is left out when the API has none.
+  const acc = useResource<StopAccessibility>(open ? `accessibility:stop:${stopId}` : null, () => accessibility.stop(stopId));
   const answerId = `stop-answer-${stopId}`;
   return (
     <div className="stop-tap">
@@ -42,7 +46,7 @@ export function StopStatusTap({ stopId, name }: { stopId: string; name: string }
       {open && (
         <div id={answerId} className="stop-answer" aria-live="polite">
           {status.data ? (
-            <Answer s={status.data} />
+            <Answer s={status.data} acc={acc.data} />
           ) : status.error ? (
             <p className="small">{status.error.message || t("unknown")}</p>
           ) : (
@@ -56,7 +60,7 @@ export function StopStatusTap({ stopId, name }: { stopId: string; name: string }
   );
 }
 
-function Answer({ s }: { s: StopStatus }) {
+function Answer({ s, acc }: { s: StopStatus; acc?: StopAccessibility }) {
   // One entry per line that does not stop here (the API lists each direction).
   const notStopping = new Map<string, StopLine>();
   for (const l of s.lines) if (l.stops !== "yes" && !notStopping.has(l.shortName)) notStopping.set(l.shortName, l);
@@ -67,6 +71,12 @@ function Answer({ s }: { s: StopStatus }) {
   return (
     <>
       <p>{tr(s.sentence)}</p>
+      {acc && (
+        <div className="small muted">
+          <p>{tr(S.stopStatus.stepFree)}: <Figure inline value={acc.stepFreeWaitMin} unit="min" digits={1} provenance={acc.provenance} method={tr(acc.method)} /></p>
+          <p>{tr(acc.recording.label)} · {tr(acc.caveat)}</p>
+        </div>
+      )}
       {notStopping.size > 0 && (
         <ul className="stop-answer-lines">
           {[...notStopping.values()].map((l) => (
@@ -101,6 +111,7 @@ function Answer({ s }: { s: StopStatus }) {
 }
 
 function actionText(l: StopLine): I18n {
+  if (l.stops === "novehicle") return S.stopStatus.noVehicle;
   if (l.stops === "unconfirmed") return S.stopStatus.unconfirmed;
   const a = l.reason?.action;
   return a ? S.stopStatus.action[a] : S.stopStatus.noStop;

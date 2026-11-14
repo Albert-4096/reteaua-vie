@@ -24,6 +24,14 @@ export const S = {
   partial: { ro: "parțial", en: "partly" },
   missing: { ro: "lipsă", en: "missing" },
   upcoming: { ro: "Încep în următoarele 7 zile", en: "Starting in the next 7 days" },
+  accessibility: {
+    title: { ro: "Accesibilitate", en: "Accessibility" },
+    legend: { ro: "Stații: colorat = așteptare măsurată pentru vehicul accesibil; gri = necunoscut. Vehicul marcat accesibil în flux; stația nu e verificată.", en: "Stops: colour = measured wait for a step-free vehicle; grey = unknown. Vehicle flagged step-free in the feed; the stop is not verified." },
+    stops: { ro: "Stații și treceri de pietoni", en: "Stops and pedestrian crossings" },
+    wait: { ro: "Așteptare tipică, după înregistrare", en: "Typical wait, from the recording" },
+    sound: { ro: "Semafor sonor la trecerea apropiată", en: "Audible signal at the nearest crossing" },
+    yes: { ro: "da", en: "yes" }, no: { ro: "nu", en: "no" },
+  },
   // O2: lines with no vehicle in our live recording. Ticket wording; never „cursă neefectuată”.
   noVehicle: {
     title: { ro: "Linii fără vehicul", en: "Lines with no vehicle" },

@@ -1,7 +1,7 @@
 // Step 0 Ansamblu: „Cum stă rețeaua azi?” Three figures, the active closures, map layers under „Detalii”.
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { api, type Closure } from "../../api/client";
+import { api, apiGet, type Closure } from "../../api/client";
 import { v2, type ClosureSummary, type LayerCollection } from "../../api/v2";
 import { Figure } from "../../components/Figure";
 import { useMapOverlay, type ExtraLayerId } from "../../components/MapView";
@@ -26,6 +26,8 @@ export function OverviewStep({ caseKey }: StepProps) {
   const { t } = useTranslation();
   const overview = useResource<OverviewWithMissing>("overview", () => v2.overview());
   const cases = useCases();
+  const [accessible, setAccessible] = useState(false);
+  const access = useResource<LayerCollection>(accessible ? "layer:accessibility" : null, () => apiGet<LayerCollection>("/api/layers/accessibility"));
   const [on, setOn] = useState<Record<Toggle, boolean>>({
     network: true,
     closures: true,
@@ -47,7 +49,8 @@ export function OverviewStep({ caseKey }: StepProps) {
 
   const closureGeom = useMemo(() => mergeLines((geoms.data ?? []).map((c) => c.geometry)), [geoms.data]);
   const routeIds = useMemo(() => [...new Set(active.flatMap((c) => c.routeIds))], [ids]); // eslint-disable-line react-hooks/exhaustive-deps
-  const layers: { id: ExtraLayerId; data: GeoJSON.FeatureCollection }[] = [];
+  const layers: { id: ExtraLayerId; data: GeoJSON.FeatureCollection; label?: string }[] = [];
+  if (accessible && access.data) layers.push({ id: "accessibility", data: access.data as unknown as GeoJSON.FeatureCollection, label: tr(S.accessibility.legend) });
   for (const [k, r] of [["bike", bike], ["parking", parking], ["population", population]] as const)
     if (on[k] && r.data) layers.push({ id: k, data: r.data as unknown as GeoJSON.FeatureCollection });
 
@@ -59,7 +62,7 @@ export function OverviewStep({ caseKey }: StepProps) {
       hideNetwork: !on.network,
       fitKey: closureGeom ? `overview:${ids}` : undefined,
     },
-    [closureGeom, routeIds, on, bike.data, parking.data, population.data, ids],
+    [closureGeom, routeIds, on, bike.data, parking.data, population.data, accessible, access.data, ids],
   );
 
   const o = overview.data;
@@ -148,6 +151,29 @@ export function OverviewStep({ caseKey }: StepProps) {
             );
           })}
         </fieldset>
+        <label>
+          <input type="checkbox" checked={accessible} onChange={(e) => setAccessible(e.target.checked)} /> {tr(S.accessibility.title)}
+        </label>
+        {accessible && (
+          <section>
+            <p className="small muted">{tr(S.accessibility.legend)}</p>
+            <LoadState loading={access.loading} error={access.error} />
+            {access.data && <details>
+              <summary>{tr(S.accessibility.stops)}</summary>
+              <ul className="list small">
+                {access.data.features.map((f, index) => {
+                  const p = f.properties as Record<string, unknown>;
+                  const crossing = p.crossing as { sound: string | null } | null;
+                  return <li key={String(p.stopId ?? index)}>
+                    <strong>{String(p.name ?? p.stopId)}</strong><br />
+                    {tr(S.accessibility.wait)}: <Figure inline value={p.stepFreeWaitMin as number | null} unit="min" digits={1} provenance={access.data?.provenance} /><br />
+                    {tr(S.accessibility.sound)}: {crossing?.sound === "yes" ? tr(S.accessibility.yes) : crossing?.sound === "no" ? tr(S.accessibility.no) : t("unknown")}
+                  </li>;
+                })}
+              </ul>
+            </details>}
+          </section>
+        )}
         {o.compliance && (
           <p className="small" style={{ marginTop: "var(--sp-3)" }}>
             {tr(S.compliance)}: <Figure inline value={o.compliance.covered} provenance={o.provenance} /> {tr(S.covered)},{" "}

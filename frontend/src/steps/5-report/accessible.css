@@ -1,0 +1,31 @@
+/* R6-F: step 5 table of step-free trips per line. */
+.acc {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.acc-table td {
+  vertical-align: middle;
+}
+
+.acc-strip {
+  display: inline-grid;
+  grid-template-columns: repeat(24, 5px);
+  gap: 1px;
+  vertical-align: middle;
+}
+
+.acc-cell {
+  height: 12px;
+  border: var(--rule-w) solid var(--c-rule);
+}
+
+.acc-none {
+  border-color: transparent;
+}
+
+.acc-more {
+  justify-self: start;
+}
+
+.acc-unknown { background: var(--c-text-muted); }

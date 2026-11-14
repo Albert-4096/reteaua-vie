@@ -53,7 +53,12 @@ export const S = {
     label: { ro: "Starea stației", en: "Stop status" },
     source: { ro: "Sursa", en: "Source" },
     noStop: { ro: "nu oprește", en: "does not stop" },
+    noVehicle: { ro: "niciun vehicul în datele live (neconfirmat de STPT)", en: "no vehicle in live data (not confirmed by STPT)" },
     unconfirmed: { ro: "de confirmat", en: "to be confirmed" },
+    stepFree: {
+      ro: "Vehicul accesibil: așteptare tipică după înregistrare",
+      en: "Step-free vehicle: typical wait from our recording",
+    },
     action: {
       suspended: { ro: "suspendată", en: "suspended" },
       shortened: { ro: "scurtată", en: "shortened" },

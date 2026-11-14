@@ -32,14 +32,14 @@ export type MapOverlay = {
   /** Change it to refit the view to the overlay. */
   fitKey?: string;
   /** Extra thematic layers (steps 0 and 4). One source and layer per id; colours from tokens. */
-  layers?: { id: ExtraLayerId; data: GeoJSON.FeatureCollection }[];
+  layers?: { id: ExtraLayerId; data: GeoJSON.FeatureCollection; label?: string }[];
   hideNetwork?: boolean;
   /** Replaces the stop counts in the map's text equivalent when the colours mean something else (step 4). */
   stopsText?: string;
 };
 
-export type ExtraLayerId = "bike" | "parking" | "population" | "vehicles" | "detour";
-const EXTRA_IDS: ExtraLayerId[] = ["bike", "parking", "population", "vehicles", "detour"];
+export type ExtraLayerId = "bike" | "parking" | "population" | "vehicles" | "detour" | "accessibility";
+const EXTRA_IDS: ExtraLayerId[] = ["bike", "parking", "population", "vehicles", "detour", "accessibility"];
 
 function extraData(o: MapOverlay, id: ExtraLayerId): GeoJSON.FeatureCollection {
   return o.layers?.find((l) => l.id === id)?.data ?? empty;
@@ -326,6 +326,17 @@ export function MapView({ network, zones, overlay }: Props) {
       paint: { "line-color": cssVar("--c-text-muted"), "line-width": 1.5 },
     });
     map.addLayer({
+      id: "rv-x-accessibility",
+      type: "circle",
+      source: "rv-x-accessibility",
+      paint: {
+        "circle-radius": 4,
+        "circle-color": ["case", ["==", ["get", "stepFreeWaitMin"], null], cssVar("--c-text-muted"), cssVar("--c-accent")],
+        "circle-stroke-color": cssVar("--c-bg"),
+        "circle-stroke-width": 1,
+      },
+    });
+    map.addLayer({
       id: "rv-x-vehicles",
       type: "circle",
       source: "rv-x-vehicles",
@@ -421,7 +432,7 @@ function mapText(o: MapOverlay, net: Network | undefined, t: TFunction) {
     for (const s of o.stops) n[s.status] += 1;
     parts.push(t("mapText.stops", n));
   }
-  for (const l of o.layers ?? []) parts.push(t(`mapText.layer.${l.id}`, { count: l.data.features.length }));
+  for (const l of o.layers ?? []) parts.push(l.label ?? t(`mapText.layer.${l.id}`, { count: l.data.features.length }));
   if (!parts.length) parts.push(t("mapText.network", { count: net?.routes.length ?? 0 }));
   return `${t("mapText.prefix")} ${parts.join("; ")}.`;
 }
