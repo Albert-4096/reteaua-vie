@@ -1,7 +1,7 @@
 // N3: the state of the data in one row of the top bar. A click opens the sources (a popover, not a screen).
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { api, type Health } from "../api/client";
+import { api, apiGet, type Health, type I18n } from "../api/client";
 import { fmtDateTime } from "../lib/format";
 import { load, useResource } from "../lib/store";
 
@@ -12,6 +12,10 @@ type Source = { id: string; lastOkAt?: string | null; version?: string | null; s
 type HealthWithSources = Health & { sources?: Source[] | null };
 
 const fetchHealth = () => api.health();
+
+/** L0: what the observed timetable holds. Fetched only when the popover opens (the first call may build pending hours). */
+type ObservedSummary = { label?: I18n | null };
+const fetchObserved = () => apiGet<ObservedSummary>("/api/observed/summary");
 
 /** „app.m6_parking.api_parking” → the module's plain name; unknown paths stay as they are. */
 function moduleName(path: string, names: Record<string, string>): string {
@@ -26,9 +30,11 @@ function minutesSince(iso: string, now: number): number {
 }
 
 export function DataStatus() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const health = useResource<HealthWithSources>("health", fetchHealth);
   const [checkedAt, setCheckedAt] = useState(() => Date.now());
+  const [opened, setOpened] = useState(false);
+  const observed = useResource<ObservedSummary>(opened ? "observed-summary" : null, fetchObserved);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -77,15 +83,28 @@ export function DataStatus() {
         </span>
         {warnings.length > 0 && <span className="data-status-warn">{warnings.join(" · ")}</span>}
       </button>
-      <div id="data-status-pop" popover="auto" className="data-status-pop" role="dialog" aria-label={t("data.title")}>
+      <div
+        id="data-status-pop"
+        popover="auto"
+        className="data-status-pop"
+        role="dialog"
+        aria-label={t("data.title")}
+        onToggle={(e) => {
+          if ((e as unknown as ToggleEvent).newState === "open") setOpened(true);
+        }}
+      >
         <h2>{t("data.title")}</h2>
         {down && <p className="data-status-down">{t("data.serverDownBody")}</p>}
         {h && (
           <dl>
-            <dt>{t("data.gtfsLabel")}</dt>
-            <dd>{h.feedVersion ?? t("unknown")}</dd>
-            <dt>{t("data.fetchedLabel")}</dt>
-            <dd>{h.dataFetchedAt ? fmtDateTime(h.dataFetchedAt) : t("unknown")}</dd>
+            {!h.sources?.length && (
+              <>
+                <dt>{t("data.gtfsLabel")}</dt>
+                <dd>{h.feedVersion ?? t("unknown")}</dd>
+                <dt>{t("data.fetchedLabel")}</dt>
+                <dd>{h.dataFetchedAt ? fmtDateTime(h.dataFetchedAt) : t("unknown")}</dd>
+              </>
+            )}
             {h.dataFrozenAt && (
               <>
                 <dt>{t("data.frozenLabel")}</dt>
@@ -95,6 +114,18 @@ export function DataStatus() {
             {(h.sources ?? []).map((s) => (
               <SourceRow key={s.id} s={s} name={names[s.id] ?? s.id} now={checkedAt} />
             ))}
+            {opened && (
+              <>
+                <dt>{t("data.observedLabel")}</dt>
+                <dd>
+                  {observed.data?.label
+                    ? (i18n.language === "en" ? observed.data.label.en : observed.data.label.ro) ?? t("unknown")
+                    : observed.error
+                      ? t("unknown")
+                      : t("loading")}
+                </dd>
+              </>
+            )}
             <dt>{t("data.modulesLabel")}</dt>
             <dd className={failed.length ? "data-status-bad" : undefined}>
               {failed.length ? t("data.failedList", { list: failed.join(", ") }) : t("data.allOk")}
@@ -114,7 +145,8 @@ function SourceRow({ s, name, now }: { s: Source; name: string; now: number }) {
     <>
       <dt>{name}</dt>
       <dd className={s.stale ? "data-status-bad" : undefined}>
-        {s.version ? `${s.version} · ` : ""}
+        {/* Only the timetable version means something to a clerk; the other ids are file stamps. */}
+        {s.id === "gtfs" && s.version ? `${s.version} · ` : ""}
         {s.stale
           ? s.lastOkAt
             ? t("data.staleRow", { min: minutesSince(s.lastOkAt, now) })
