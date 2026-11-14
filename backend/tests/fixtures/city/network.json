@@ -1,0 +1,7 @@
+{"feedVersion": "9.99-1",
+ "routes": [{"id": "R_TV_1", "shortName": "1", "longName": "Stația A - Stația C", "type": 0, "color": "e3001b", "textColor": "ffffff"}],
+ "stops": [
+  {"id": "1", "name": "Stația A", "code": "1", "lat": 45.75, "lon": 21.22, "routeIds": ["R_TV_1"]},
+  {"id": "2", "name": "Stația B", "code": "2", "lat": 45.755, "lon": 21.225, "routeIds": ["R_TV_1"]},
+  {"id": "3", "name": "Stația C", "code": "3", "lat": 45.76, "lon": 21.23, "routeIds": ["R_TV_1"]}],
+ "paths": [{"routeId": "R_TV_1", "directionId": 0, "polyline": "opfvG_po`Cg^g^g^g^"}]}

@@ -1,0 +1,3 @@
+{"type": "FeatureCollection", "features": [
+ {"type": "Feature", "properties": {"id": "z-1", "slug": "zona-test", "name": "Zona test"},
+  "geometry": {"type": "MultiPolygon", "coordinates": [[[[21.21, 45.74], [21.24, 45.74], [21.24, 45.77], [21.21, 45.77], [21.21, 45.74]]]]}}]}

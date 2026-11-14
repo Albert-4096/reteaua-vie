@@ -8,9 +8,9 @@
 fetch_all.sh. `fetchedAt` is the mtime of the downloaded file (the upstream
 file when given), so a rerun that downloads nothing keeps the same value.
 
-`merge` writes $DATA_DIR/provenance/sources.json: the fetched sources plus an
-inventory (size, sha256, mtime) of the files the recorder and the city-API
-cache already hold. Those are listed, never downloaded here.
+`merge` writes $DATA_DIR/provenance/sources.json: the fetched sources (the
+parts written here and by fetch_city.py) plus an inventory (size, sha256,
+mtime) of every GTFS zip and city-API file on disk.
 
 Each record carries the CONTRACT Provenance fields (source, url, version,
 fetchedAt, note) plus id, license, file, bytes, sha256.
@@ -79,17 +79,17 @@ def gtfs_version(path: Path) -> str | None:
 
 
 def local_inventory(data_dir: Path) -> list[dict]:
-    """Files fetched by other tools (recorder, city-API cache): listed, not fetched."""
+    """Every GTFS zip and city-API file on disk (fetch_city.py fetches the newest ones)."""
     records = []
     gtfs = sorted(data_dir.glob("smtt-*.zip")) + sorted((data_dir / "live" / "gtfs").glob("*.zip"))
     for path in gtfs:
         records.append({
             "id": f"gtfs:{path.name}",
-            "source": "SMTT GTFS via cont.primariatm.ro",
+            "source": "SMTT GTFS",
             "url": None,
             "version": gtfs_version(path),
             "fetchedAt": mtime_iso(path),
-            "note": "not fetched by fetch_all.sh (recorder / cache); fetchedAt = file mtime",
+            "note": "inventory of the local file; fetchedAt = file mtime",
             "license": None,
             **file_record(data_dir, path),
         })
@@ -101,7 +101,7 @@ def local_inventory(data_dir: Path) -> list[dict]:
                 "url": None,
                 "version": path.parent.name.removeprefix("city-api-"),
                 "fetchedAt": mtime_iso(path),
-                "note": "not fetched by fetch_all.sh (cache); fetchedAt = file mtime",
+                "note": "inventory of the local file; fetchedAt = file mtime",
                 "license": None,
                 **file_record(data_dir, path),
             })
@@ -109,17 +109,21 @@ def local_inventory(data_dir: Path) -> list[dict]:
 
 
 def cmd_merge(args: argparse.Namespace) -> None:
-    data_dir = Path(args.data_dir)
+    merge(Path(args.data_dir), "backend/scripts/data/fetch_all.sh")
+
+
+def merge(data_dir: Path, generated_by: str) -> None:
     parts = sorted((data_dir / "provenance" / "parts").glob("*.json"))
     fetched = [json.loads(p.read_text()) for p in parts]
     out = {
         "generatedAt": datetime.now(tz=UTC).isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "generatedBy": "backend/scripts/data/fetch_all.sh",
+        "generatedBy": generated_by,
         "dataFreeze": os.environ.get("DATA_FREEZE") == "1",
         "fetched": fetched,
         "local": local_inventory(data_dir),
     }
     target = data_dir / "provenance" / "sources.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
     tmp = target.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n")
     tmp.replace(target)

@@ -1,0 +1,5 @@
+{"version": "test-1",
+ "features": [
+  {"kind": "zone", "id": "z1", "name": "Zona 1", "tariff": "t1", "coordinates": [[21.21, 45.74], [21.24, 45.74], [21.24, 45.77], [21.21, 45.74]]},
+  {"kind": "street", "id": "s1", "name": "Strada Test", "tariff": "t1", "coordinates": [[21.22, 45.75], [21.23, 45.76]]}],
+ "tariffs": {"t1": {"name": "Tarif test"}}}

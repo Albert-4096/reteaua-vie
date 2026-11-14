@@ -1,0 +1,4 @@
+{"strazi": [
+  {"id": 1, "codGis": "1", "stare": "Existenta", "denumireCompleta": "Strada Test", "denumireCompletaFaraDiacritice": "Strada Test", "numeAnterior": "Test", "cartier": "Zona test"},
+  {"id": 2, "codGis": "2", "stare": "Desfiintata", "denumireCompleta": "Strada Veche", "denumireCompletaFaraDiacritice": "Strada Veche", "numeAnterior": "Veche", "cartier": "Zona test"}],
+ "activeCount": 1}

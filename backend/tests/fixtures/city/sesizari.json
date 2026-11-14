@@ -1,0 +1,7 @@
+[{"id": "s-1", "webconInstanceNr": "SZN-T-1", "createdAt": "2026-11-12T10:00:00+00:00", "status": "Inregistrata",
+  "descriere": "text liber care nu se păstrează", "poze": ["https://example.invalid/p.jpg"],
+  "categorii": {"nume": "Iluminat public"}, "subcategorii": {"nume": "Test"},
+  "locatie": {"type": "Point", "coordinates": [21.225, 45.755]}},
+ {"id": "s-2", "webconInstanceNr": "SZN-T-2", "createdAt": "2026-11-12T11:00:00+00:00", "status": "Finalizata",
+  "descriere": "alt text", "categorii": {"nume": "Drumuri"}, "subcategorii": {"nume": "Test"},
+  "locatie": {"type": "Point", "coordinates": [21.23, 45.76]}}]

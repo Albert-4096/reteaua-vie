@@ -1,0 +1,6 @@
+[{"id": 902, "date": "2026-11-12T09:00:00", "modified": "2026-11-12T09:30:00", "link": "https://stpt.ro/test-902/",
+  "title": {"rendered": "Linia 1 deviată (test)"},
+  "content": {"rendered": "<p>Linia 1 nu circulă între <strong>Stația A</strong> și Stația C, 10<sup>00</sup>–12<sup>00</sup>.</p>"},
+  "categories": [28]},
+ {"id": 901, "date": "2026-11-10T08:00:00", "modified": "2026-11-10T08:00:00", "link": "https://stpt.ro/test-901/",
+  "title": {"rendered": "Anunț test"}, "content": {"rendered": "<p>Text.</p>"}, "categories": [13]}]
