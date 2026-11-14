@@ -63,6 +63,7 @@ _ABBREV = {
     "int": "intrarea", "intr": "intrarea",
     "spl": "splaiul", "splaiului": "splaiul",
     "dr": "doctor",
+    "pasajul": "pasaj",
 }
 STREET_TYPES = ("strada", "bulevardul", "calea", "piata", "aleea", "intrarea", "splaiul", "scuarul")
 
@@ -106,8 +107,10 @@ def split_sentences(text: str) -> list[str]:
         for m in re.finditer(r"[.!?](?=\s+[A-ZĂÂÎȘŞȚŢ⚠📅])", line):
             word = re.search(r"([\w\-.]+)$", line[start:m.start()])
             w = word.group(1) if word else ""
-            acronym = re.fullmatch(r"(?:\w\.){1,}\w", w) is not None    # „B.A.T.M.” ends a sentence, „C.” does not
-            if not acronym and (len(w) <= 2 or fold(w) in _SHORT_ABBR):
+            # „B.A.T.M.” ends a sentence; „C.” and two initials („I.C. Brătianu”, „J.L. Calderon”) do not
+            acronym = re.fullmatch(r"(?:\w\.){2,}\w", w) is not None
+            initials = re.fullmatch(r"\w\.\w", w) is not None
+            if initials or (not acronym and (len(w) <= 2 or fold(w) in _SHORT_ABBR)):
                 continue
             out.append(line[start:m.end()].strip())
             start = m.end()
@@ -128,6 +131,9 @@ MONTHS = {
 }
 _DATE_RE = re.compile(r"\b(\d{1,2})\s+(" + "|".join(sorted(MONTHS, key=len, reverse=True)) + r")\b\.?(?:\s+(\d{4}))?")
 _DATE_NUM_RE = re.compile(r"\b(\d{1,2})[./](\d{1,2})[./](\d{4})\b")
+# a day range in one month: "în perioada 3–4 octombrie 2026" (the first day; _DATE_RE reads the second)
+_DATE_RANGE_RE = re.compile(r"\b(\d{1,2})\s*[-–]\s*(?=\d{1,2}\s+(" + "|".join(sorted(MONTHS, key=len, reverse=True))
+                            + r")\b\.?(?:\s+(\d{4}))?)")
 _TIME_RE = re.compile(r"\b([01]?\d|2[0-4])\s?[:.]\s?([0-5]\d)\b")
 _TIME_SPACED_RE = re.compile(r"\b(?:ora|orele|intre|între)?\s*\b([01]?\d|2[0-4]) ([0-5]\d)\b")
 # HHMM only right after "ora/orele/orar", so a year (2026) is never read as a time.
@@ -156,6 +162,12 @@ def _dates_in(sentence: str, ref: datetime) -> list[_Stamp]:
     for m in _DATE_NUM_RE.finditer(f):
         try:
             out.append(_Stamp(m.start(), date(int(m.group(3)), int(m.group(2)), int(m.group(1)))))
+        except ValueError:
+            continue
+    for m in _DATE_RANGE_RE.finditer(f):
+        year = int(m.group(3)) if m.group(3) else ref.year
+        try:
+            out.append(_Stamp(m.start(), date(year, MONTHS[m.group(2)], int(m.group(1)))))
         except ValueError:
             continue
     if re.search(r"\b(de )?maine\b", f):
@@ -206,6 +218,7 @@ class WindowFound:
     start: datetime
     end: datetime
     open_end: bool
+    timed: bool = False     # an hour was given (not a whole-day window)
 
 
 def window_from(sentence: str, ref: datetime) -> WindowFound | None:
@@ -221,14 +234,18 @@ def window_from(sentence: str, ref: datetime) -> WindowFound | None:
     f = fold(sentence)
     if len(dates) >= 2:
         a, b = dates[0], dates[1]
-        return WindowFound(_at(a.day, a.time), _at(b.day, b.time, default_end=True), False)
+        return WindowFound(_at(a.day, a.time), _at(b.day, b.time, default_end=True), False,
+                           a.time is not None or b.time is not None)
     d = dates[0]
     if len(times) >= 2:
         t1, t2 = times[0][1], times[1][1]
-        return WindowFound(_at(d.day, t1), _at(d.day, t2, default_end=True), False)
+        start, end = _at(d.day, t1), _at(d.day, t2, default_end=True)
+        if end <= start:   # „între 20:30 și 01:00”: the end is on the next day
+            end = _at(d.day + timedelta(days=1), t2, default_end=True)
+        return WindowFound(start, end, False, True)
     if re.search(r"\b(incepand|incepind|de la data|din data)\b", f):
-        return WindowFound(_at(d.day, d.time), open_end_default(), True)
-    return WindowFound(_at(d.day, d.time), _at(d.day, None, default_end=True), False)
+        return WindowFound(_at(d.day, d.time), open_end_default(), True, d.time is not None)
+    return WindowFound(_at(d.day, d.time), _at(d.day, None, default_end=True), False, d.time is not None)
 
 
 # ---------------------------------------------------------------------------
@@ -757,16 +774,31 @@ _SUSPEND_LINE = re.compile(r"\b(va fi suspendat\w*|vor fi suspendat\w*|se suspen
 _SUSPEND_STOPS = re.compile(r"\bse suspenda\w*\b[^:]*\bstati\w*[^:]*:\s*(.+)$")
 _SERVED_STOPS = re.compile(r"\bstati\w*\s+(?:deservite|traseu\s+(?:tur|retur))[^:]*:\s*(.+)$")
 _ROUTE_LIST = re.compile(r"\bpe traseul\s*:?\s*(?!obisnuit|normal|existent)(.+)$")
-_DIRECTION_TO = re.compile(r"\bsens\w*(?: de (?:deplasare|mers|circulatie))?\s+(?:catre|spre)\s+(.+?)(?:\s+[-–]\s+|$)")
+_DIRECTION_TO = re.compile(r"\bsens\w*(?: de (?:deplasare|mers|circulatie))?\s+(?:catre|spre)\s+(.+?)(?:\s+[-–]\s+|,|$)")
 _INBOUND = re.compile(r"\bsens\w*\s+de\s+intrare\b")
 _OUTBOUND = re.compile(r"\bsens\w*\s+de\s+iesire\b")
-_TUR = re.compile(r"\btraseu\w*\s+tur\b|\bstatii traseu tur\b")
-_RETUR = re.compile(r"\btraseu\w*\s+retur\b")
+_TUR = re.compile(r"\btraseu\w*\s+tur\b|\bstatii traseu tur\b|\bsens\w*\s+tur\b|^tur\s*:")
+_RETUR = re.compile(r"\btraseu\w*\s+retur\b|\bsens\w*\s+(?:retur|de intoarcere)\b|^retur\s*:")
 _BOTH_DIRS = re.compile(r"\btur\s*[-–]\s*retur\b|\bambele sensuri\b")
 _INTRODUCE = re.compile(r"\bintrodu\w*\s+(?:temporar\s+)?(?:o\s+)?(?:noua\s+)?linia\b")
 _REROUTE = re.compile(r"\b(vor fi deviat\w*|va fi deviat\w*|modificat\w* temporar|traseu\w* de deviere|"
                       r"nu vor mai fi utilizate|(?:traseul|traseele)\b[^.]*\b(?:vor|va) fi modificat\w*)\b")
 _NOT_A_CLOSURE = re.compile(r"\b(prelungit\w*|programul|programele|programe|graficul)\b")
+# the other wordings of a suspended-stop list (event notices 10851, 10868, 10878, 11033)
+_SUSPENDED_LIST = re.compile(
+    r"\b(?:vor|va)\s+fi\s+suspendat\w*(?:\s+temporar)?\s+statii\w*\s*:?\s*(?P<a>.+)$"   # Vor fi suspendate temporar stațiile[:] A, B
+    r"|\bstatii\w*\s+suspendat\w*(?:\s+temporar)?\s*:\s*(?P<b>.+)$"                     # Stații suspendate temporar: A, B
+    r"|\bstatii\w*\s+(?!(?:de\s+pe|amplasate|situate|aflate)\b)(?P<c>.+?)\s+(?:vor|va)\s+fi\s+suspendat\w*")  # stațiile A și B vor fi suspendate
+# „stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate” (11062): no stop named,
+# only the street; the stops are the line's stops named after that street
+_STOPS_ON_STREET = re.compile(r"\bstatii\w*\s+(?:amplasate|situate|aflate|de)\s+pe\s+(.+?)(?:,|\s+(?:nu\s+)?(?:vor|va)\b|$)")
+_STOPS_DROPPED = re.compile(r"\b(nu vor mai fi (?:utilizate|deservite)|nu vor fi deservite|(?:vor|va) fi suspendat\w*)\b")
+# „apoi deviat pe traseul liniei 15”: another line's route, not a line the sentence is about
+_OTHER_LINE_ROUTE = re.compile(r"\bpe traseul (?:liniei|liniilor)\s+")
+_MOVING = re.compile(r"\b(deviat\w*|deviere|circul\w*)\b")
+# „autobuzele liniilor 32, 33 și 33B vor întoarce în Piața Mocioni”: where the line turns back is named,
+# which stops it loses is not, so the sentence stays in `unread` for the person to read
+_TURN_BACK = re.compile(r"\b(?:vor|va)\s+intoarce\b")
 _MODE_WORD = {"autobuz": "bus", "tramvai": "tram", "troleibuz": "trolleybus"}
 
 
@@ -828,6 +860,7 @@ class _State:
     unknown_lines: list[str] = field(default_factory=list)    # named but not in the GTFS (S8, 4b)
     direction: dict[str, int | None] = field(default_factory=dict)
     dir_phrase: str | None = None
+    last_dir: dict[str, int] = field(default_factory=dict)    # direction of the last stop list, per line
     inbound: bool | None = None
 
 
@@ -862,12 +895,31 @@ def _expand(a: _Action) -> list[RouteAction]:
                                    suspendedStopIds=susp, stopNames=None))
         else:
             susp = [s for s in order if s in set(hits)]
+            if a.direction_id is not None:
+                # a stop only a rarer trip of this direction serves („Rudolf Otto” on E3, 10868)
+                # (a stop the other direction serves is not taken: that is the other side of the street)
+                other = {s for d2, p2 in pats.items() if d2 != d for s in p2.stop_ids}
+                missing = [n for n in a.names or [] if not match_stop(n, order)]
+                susp += [h for n in missing for h in match_stop(n, _route_stop_ids(a.route_id))
+                         if h not in susp and h not in other]
             out.append(RouteAction(routeId=a.route_id, directionId=d, action="rerouted",
                                    suspendedStopIds=susp, stopNames=a.names))
     if not out and a.action == "rerouted" and a.direction_id is not None:
         out.append(RouteAction(routeId=a.route_id, directionId=a.direction_id, action="rerouted",
                                suspendedStopIds=[], stopNames=a.names))
     return out
+
+
+def _route_stop_ids(route_id: str) -> list[str]:
+    return [s["id"] for s in load_network().stops if route_id in (s.get("routeIds") or [])]
+
+
+def _partly_read(a: "_Action") -> bool:
+    """Some names of a stop list became stop ids and some did not (the analysis has only the found ones)."""
+    names = a.names or []
+    found = [s for ra in _expand(a) for s in ra.suspendedStopIds or []]
+    missing = [n for n in names if not match_stop(n, found)]
+    return 0 < len(missing) < len(names)
 
 
 @lru_cache(maxsize=1)
@@ -924,6 +976,12 @@ def _merge_actions(actions: list[_Action]) -> list[_Action]:
     for a in actions:
         key = (a.route_id, a.direction_id)
         old = merged.get(key)
+        if (old is not None and old.action == a.action == "rerouted" and old.names and a.names
+                and not old.served and not a.served):
+            # one list per day of the event (10878): every stop suspended on any day
+            merged[key] = _Action(a.route_id, a.direction_id, "rerouted",
+                                  names=list(dict.fromkeys(old.names + a.names)))
+            continue
         if old is None or a.names or old.action == "rerouted" and not old.names:
             if old is not None and old.action == "suspended" and a.action != "suspended":
                 continue
@@ -1011,6 +1069,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
     section = None
     tram = False
     whole = fold(text)
+    timed: list[WindowFound] = []   # hours given later for a whole-day window (10851, 10878)
 
     for sent in sentences:
         f = fold(sent)
@@ -1022,9 +1081,17 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             w = window_from(sent, ref)
             if w is not None:
                 window, used = w, True
+        elif not window.open_end:
+            w = window_from(sent, ref)
+            if w is not None and window.start <= w.start < window.end:
+                used = True        # the same days again („Modificările sunt valabile duminică, …”)
+                if not window.timed and w.timed:
+                    timed.append(w)
 
         # lines named here; a sentence that names lines sets the current lines
-        toks = line_tokens(sent)
+        # („deviat pe traseul liniei 15” names line 15's route, not a line the sentence is about)
+        m_other = _OTHER_LINE_ROUTE.search(f) if _MOVING.search(f) else None
+        toks = line_tokens(sent[:m_other.start()] if m_other and len(sent) == len(f) else sent)
         rids = [r for r in (_route_for(t) for t in toks) if r]
         unknown = [t for t in toks if _route_for(t) is None]
         for r in rids:
@@ -1037,6 +1104,8 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             st.lines, st.unknown_lines = rids, unknown
             st.direction = {}
             st.inbound = None
+            st.dir_phrase = None
+            st.last_dir = {}
             used = True
 
         # temporary line: "introduce temporar linia de autobuz 4b"
@@ -1051,6 +1120,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
         if dm and st.lines:
             for r in st.lines:
                 st.direction[r] = _headsign_dir(r, dm.group(1))
+            st.dir_phrase = "spre"
             used = True
         elif _INBOUND.search(f) or _OUTBOUND.search(f):
             for r in st.lines:
@@ -1058,13 +1128,17 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             st.inbound = bool(_INBOUND.search(f))
             used = True
         elif _TUR.search(f) or _RETUR.search(f):
+            side = "retur" if _RETUR.search(f) else "tur"
             for r in st.lines:
-                st.direction[r] = None   # resolved from the stop names below
-            st.dir_phrase = "retur" if _RETUR.search(f) else "tur"
+                # the other side of a line whose first side is known („Tur: …” then „Retur: …”);
+                # else resolved from the stop names below
+                prev = st.last_dir.get(r)
+                st.direction[r] = 1 - prev if prev is not None and st.dir_phrase not in (None, side) else None
+            st.dir_phrase = side
             used = True
 
         # suspended whole line(s)
-        if _SUSPEND_LINE.search(f) and rids and not _SUSPEND_STOPS.search(f):
+        if _SUSPEND_LINE.search(f) and rids and not _SUSPEND_STOPS.search(f) and not _SUSPENDED_LIST.search(f):
             for r in rids:
                 actions.append(_Action(r, None, "suspended"))
             used = True
@@ -1072,15 +1146,35 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
         # list of stops suspended / served
         sm = _SUSPEND_STOPS.search(f)
         vm = _SERVED_STOPS.search(f)
-        if (sm or vm) and st.lines:
+        lm = _SUSPENDED_LIST.search(f) if not (sm or vm) else None
+        om = _STOPS_ON_STREET.search(f) if not (sm or vm or lm) and _STOPS_DROPPED.search(f) else None
+        on_street = [s_ for _i, s_ in streets_in(om.group(0))] if om else []
+        if lm and st.lines:
+            g = next(k for k in ("a", "b", "c") if lm.group(k))
+            raw = sent[lm.start(g):lm.end(g)] if len(sent) == len(f) else lm.group(g)
+            names = _split_list(raw)
+            sm = lm
+        elif on_street and st.lines:
+            # the stops named after the street („Polonă (Pasaj Freidorf)”), resolved on the line's
+            # timetable in force before the change (matching.resolve_name)
+            names = [" ".join(sn.name.split()[1:]) if fold(sn.name.split()[0]) in STREET_TYPES else sn.name
+                     for sn in on_street]
+            sm = om
+        elif (sm or vm) and st.lines:
             # take the list from the original text (keeps diacritics for display)
             raw = sent.split(":", 1)[1] if ":" in sent else sent
             names = _split_list(raw)
+        partial = False
+        if (sm or vm) and st.lines:
             for r in st.lines:
                 d = st.direction.get(r)
                 if d is None:
                     d = _best_dir_by_names(r, names)
+                if d is not None:
+                    st.last_dir[r] = d
                 actions.append(_Action(r, d, "rerouted", names=names, served=bool(vm)))
+                if sm is not om and not vm and _partly_read(actions[-1]):
+                    partial = True   # the person reads the sentence: some of its stops are not in the analysis
                 if vm:
                     served_lists.append({"routeId": r, "directionId": d, "names": names,
                                          "openSide": _open_side(names, st.inbound)})
@@ -1131,7 +1225,9 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             used = True
         if used and rids and _NOT_A_CLOSURE.search(f) and len(actions) == n_actions:
             used = False   # „Linia M30 – Traseul va fi prelungit …”: named, but nothing we can map
-        if not used and not _COURTESY.search(f):
+        if used and _TURN_BACK.search(f) and len(actions) == n_actions:
+            used = False   # „vor întoarce în Piața Mocioni”: the stops it loses are not named
+        if (partial or (not used and not _COURTESY.search(f))) and sent not in unread:
             unread.append(sent)
 
     # temporary routes: resolve and chain the streets
@@ -1155,6 +1251,8 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
     if window is None:
         start = local_midnight(ref.date())
         window = WindowFound(start, open_end_default(), True)
+    elif timed:
+        window = WindowFound(min(w.start for w in timed), max(w.end for w in timed), False, True)
 
     cause = infer_cause(text)
     title = _title(closure_streets, route_ids, temps, window)

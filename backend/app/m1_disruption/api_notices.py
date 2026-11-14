@@ -6,10 +6,12 @@ frontend continues with POST /api/closures/{id}/analyze.
 
 from __future__ import annotations
 
+from difflib import SequenceMatcher
+
 from fastapi import APIRouter
 from pydantic import Field
 
-from app.common import state
+from app.common import state, stpt_posts
 from app.common.errors import invalid
 from app.config import now
 from app.common.timeutil import iso
@@ -26,9 +28,35 @@ class ParseInput(Model):
     text: str = Field(description="The notice as pasted (Romanian plain text).")
 
 
+SAME_NOTICE = 0.9   # share of words in common with a recorded notice (copy from the web page vs the API text)
+
+
+def recorded_post(text: str) -> stpt_posts.StptPost | None:
+    """The recorded STPT notice the pasted text is a copy of, or None.
+
+    A pasted notice says „de mâine” or „luni”: those are read from the day it was posted, not from
+    today, so a notice from September is not read as a closure starting tomorrow."""
+    words = parser.norm(text).split()
+    if len(words) < 12:
+        return None
+    best, best_ratio = None, SAME_NOTICE
+    for post in stpt_posts.load_posts().values():
+        other = parser.norm(post.text).split()
+        sm = SequenceMatcher(None, words, other, autojunk=False)
+        if sm.real_quick_ratio() < best_ratio or sm.quick_ratio() < best_ratio:
+            continue
+        r = sm.ratio()
+        if r >= best_ratio:
+            best, best_ratio = post, r
+    return best
+
+
 def parse_and_save(text: str) -> ParseResult:
-    result = parser.parse_notice(text)
+    post = recorded_post(text)
+    result = parser.parse_notice(text, reference=post.date if post else None)
     data = result.closure.model_dump(mode="json", by_alias=True)
+    if post is not None and not data.get("sourceUrl"):
+        data["sourceUrl"] = post.link or None
     if data.get("geometry") is None and data.get("routeActions"):
         # same fallback as input by line: the route path along the suspended stops
         from app.m1_disruption import matching
