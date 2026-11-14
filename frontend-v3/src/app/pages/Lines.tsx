@@ -222,6 +222,7 @@ function Line({ routeId }: { routeId: string }) {
             Între {hhmm(missing.data.window.start)} și {hhmm(missing.data.window.end)} orarul are {count(flag.tripsInService, "cursă", "curse")}. În datele live ale Primăriei am văzut {flag.tripsObserved}.
             {flag.firstMissedTrip ? ` Prima: ${hhmm(flag.firstMissedTrip.scheduledTime)}, ${flag.firstMissedTrip.stopName}.` : ""}
           </p>
+          <p className="mt-1.5 text-sm font-medium leading-relaxed">Fie linia nu circulă, fie vehiculele nu trimit date. Din date nu se poate ști; hotărăște un om.</p>
           {done === "confirmat" || done === "respins" ? (
             <p className="mt-3 flex items-center gap-1.5 text-sm font-medium text-accent-foreground"><Check className="size-4" />{done === "confirmat" ? "Confirmat. Semnalul poate pleca spre CityApp." : "Respins. Nu pleacă nimic."}</p>
           ) : (
@@ -239,7 +240,7 @@ function Line({ routeId }: { routeId: string }) {
               {done && <p role="alert" className="mt-2.5 text-sm text-closure-ink">{done}</p>}
             </>
           )}
-          <Method>„Fără vehicul în datele live” nu înseamnă că o cursă nu a avut loc. De aceea hotărăște un om, iar CityApp primește semnalul doar după confirmare.</Method>
+          <Method>CityApp primește semnalul doar după confirmare.</Method>
         </section>
       )}
 

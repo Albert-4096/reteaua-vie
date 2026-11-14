@@ -51,7 +51,7 @@ export function Today() {
     ...noVehicle.map((r): Task => ({
       key: r.routeId, lead: <LineBadge routeId={r.routeId} label={r.shortName} size="lg" />,
       title: `Linia ${r.shortName} nu are vehicul în datele live`,
-      detail: `${r.tripsObserved} din ${count(r.tripsInService, "cursă", "curse")} din orar, ${missing.data ? `${hhmm(missing.data.window.start)}–${hhmm(missing.data.window.end)}` : "ultima oră"}`,
+      detail: `${r.tripsObserved} din ${count(r.tripsInService, "cursă", "curse")} din orar, ${missing.data ? `${hhmm(missing.data.window.start)}–${hhmm(missing.data.window.end)}` : "ultima oră"}: nu circulă, sau lipsesc date`,
       owner: "STPT · dispecerat", action: "Verifică", to: { page: "linii", routeId: r.routeId },
     })),
     ...offRoute.map((g): Task => ({
@@ -101,7 +101,7 @@ export function Today() {
                   {t.lead}
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-medium leading-snug">{t.title}</span>
-                    <span className="tabular block truncate text-sm text-muted-foreground">{t.detail}</span>
+                    <span className="tabular line-clamp-2 text-sm leading-snug text-muted-foreground">{t.detail}</span>
                     <span className="block text-xs text-muted-foreground">{t.check && <span className="font-medium text-foreground/80">de verificat · </span>}{t.owner}</span>
                   </span>
                   <span className="inline-flex h-8 shrink-0 items-center gap-1 rounded-md border bg-card px-2.5 text-sm font-medium transition-colors group-hover:border-foreground/30">{t.action} <ArrowRight className="size-3.5" /></span>

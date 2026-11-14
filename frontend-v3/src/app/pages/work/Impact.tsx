@@ -186,7 +186,9 @@ function Question({ g, answer, open, onToggle, onAnswer, onHover }: { g: Decisio
             : <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-2 border-foreground"><span className="size-1.5 rounded-full bg-foreground" /></span>}
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-medium leading-snug">{g.question.ro}</span>
-            <span className={cn("mt-0.5 block text-sm", answer ? "text-muted-foreground" : "text-foreground")}>{said ?? "Așteaptă un răspuns."}</span>
+            <span className={cn("mt-0.5 block text-sm", answer ? "text-muted-foreground" : "text-foreground")}>
+              {said ? <><span className="font-medium text-foreground">Răspuns dat:</span> {said[0].toLowerCase() + said.slice(1)}</> : "Așteaptă un răspuns."}
+            </span>
           </span>
           <ChevronDown className="mt-1 size-4 shrink-0 text-muted-foreground" />
         </button>
