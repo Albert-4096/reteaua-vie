@@ -47,9 +47,10 @@ DEFAULT_VOICE_ID = "onwK4e9ZLuTAKqWW03F9"
 DEFAULT_VOICE_NAME = "Daniel"
 OUTPUT_FORMAT = "mp3_44100_128"
 MAX_CHARS = 200
-# The header alone may be longer: a long stop name with four lines (Mocioni 356, 206 characters)
-# must still get its MP3 rather than none.
-MAX_HEADER_CHARS = 240
+# The header alone may be longer: a long stop name with six lines (Mocioni 356: 246 characters)
+# must still get its MP3 rather than none. Beyond this, the header is shortened deterministically
+# (compact_header), so a long header never drops the audio.
+MAX_HEADER_CHARS = 320
 CHAR_CEILING = 8000  # never let the month's character_count go above this
 LABEL = {"ro": "Voce generată automat (AI), ElevenLabs", "en": "AI-generated voice, ElevenLabs"}
 
@@ -105,7 +106,32 @@ def short_text(alert: Alert, closure: dict) -> str | None:
         text = " ".join(p for p in parts if p)
         if len(text) <= MAX_CHARS:
             return text
-    return header if len(header) <= MAX_HEADER_CHARS else None
+    if len(header) <= MAX_HEADER_CHARS:
+        return header
+    text = compact_header(header, len({e.routeId for e in alert.informedEntity if e.routeId}))
+    return text if text and len(text) <= MAX_HEADER_CHARS else None
+
+
+_HEADER = re.compile(r"^(?P<lead>.*?Stația )(?P<name>.+?)(?P<rest> nu (?:mai )?este deservită de (?P<lines>.+?)\.)$")
+
+
+def compact_header(header: str, n_lines: int) -> str | None:
+    """A header longer than MAX_HEADER_CHARS, shortened without changing what it says.
+
+    First the stop name loses its street qualifier („Piața A. Mocioni, Sinaia, …” -> „Piața A.
+    Mocioni”); if that is still too long, the lines are counted instead of named („de șase linii;
+    liniile sunt pe afiș”). None when the header is not in the usual form.
+    """
+    from app.m1_disruption.alerts import ro_words
+
+    m = _HEADER.match(header)
+    if m is None:
+        return None
+    short = f"{m['lead']}{m['name'].split(',')[0]}{m['rest']}"
+    if len(short) <= MAX_HEADER_CHARS or n_lines < 2:
+        return short
+    rest = m["rest"][:m["rest"].index(" de ") + 4]
+    return f"{m['lead']}{m['name'].split(',')[0]}{rest}{ro_words(n_lines, feminine=True)} linii; liniile sunt pe afiș."
 
 
 def text_hash(text: str, voice: str | None = None, model: str = MODEL_ID) -> str:

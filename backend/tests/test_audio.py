@@ -105,6 +105,27 @@ def test_short_text_drops_parts_to_stay_under_the_limit():
     assert too_long is None
 
 
+def test_a_long_header_never_drops_the_audio():
+    # Mocioni stop 356 after R1: six lines, 246 characters: spoken whole
+    name = "Piața A. Mocioni, Sinaia, șaisprezece Decembrie o mie nouă sute optzeci și nouă"
+    six = ("M treizeci și doi, M treizeci și șase, M treizeci și șapte, M treizeci și opt, "
+           "M patruzeci și șase și M cincizeci și unu")
+    alert = _alert("356", name)
+    alert.ttsHeaderText.ro = f"Atenție. Stația {name} nu este deservită de liniile {six}."
+    assert len(alert.ttsHeaderText.ro) == 246
+    assert audio.short_text(alert, CLOSURE) == alert.ttsHeaderText.ro
+    # longer still: the street qualifier goes first, then the lines are counted, never None
+    many = ", ".join([six] * 2)
+    alert.ttsHeaderText.ro = f"Atenție. Stația {name} nu este deservită de liniile {six}, {six}."
+    text = audio.short_text(alert, CLOSURE)
+    assert text.startswith("Atenție. Stația Piața A. Mocioni nu este deservită de liniile M treizeci")
+    assert len(text) <= audio.MAX_HEADER_CHARS
+    alert.ttsHeaderText.ro = f"Atenție. Stația {name} nu este deservită de liniile {many}, {many}."
+    alert.informedEntity = [alert.informedEntity[0].model_copy(update={"routeId": f"R_AB_M{i}"}) for i in range(6)]
+    text = audio.short_text(alert, CLOSURE)
+    assert text == "Atenție. Stația Piața A. Mocioni nu este deservită de șase linii; liniile sunt pe afiș."
+
+
 def test_short_text_keeps_a_long_header_alone():
     # Mocioni stop 356: the stop name and four lines make a 206-character header
     name = "Piața A. Mocioni, Sinaia, șaisprezece Decembrie o mie nouă sute optzeci și nouă"
