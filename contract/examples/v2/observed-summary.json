@@ -1,0 +1,63 @@
+{
+  "hours": {
+    "from": "2026-11-13T13:47:57+02:00",
+    "to": "2026-11-14T11:59:46+02:00",
+    "recordedHours": 22,
+    "built": 23,
+    "pending": 1
+  },
+  "snapshots": 5249,
+  "reports": 319939,
+  "vehicles": 183,
+  "routes": 58,
+  "trips": 3101,
+  "stopEvents": 40359,
+  "interpolatedEvents": 3475,
+  "interpolatedShare": 0.086,
+  "dwellEvents": 32675,
+  "medianDwellSec": 42.0,
+  "segments": 35813,
+  "quality": {
+    "tripsObserved": 3023,
+    "tripsWith80PctStops": 2557,
+    "shareWith80PctStops": 0.846,
+    "tripsInsideRecording": 2824,
+    "shareWith80PctStopsInside": 0.886,
+    "delayPairs": 35098,
+    "medianAbsDelayDiffSec": 9.0,
+    "medianDelayDiffSec": -8.5,
+    "medianAbsDelayDiffSecInterpolated": 10.9,
+    "tripsAfterMidnight": 4,
+    "maxGapSec": 180,
+    "gaps": [
+      {
+        "from": "2026-11-13T13:47:57+02:00",
+        "seconds": 292
+      }
+    ]
+  },
+  "label": {
+    "ro": "din 22 ore înregistrate (vin. 13:47 → sâm. 11:59)",
+    "en": "from 22 recorded hours (Fri 13:47 → Sat 11:59)"
+  },
+  "method": {
+    "ro": "Orar observat: sosirea și plecarea din stație din rapoartele „oprit în stație” (STOPPED_AT) ale vehiculelor, la mijlocul intervalului dintre două rapoarte; o stație trecută între două rapoarte primește o oră interpolată pe traseul GTFS. Nicio oră când rapoartele sunt la peste 180 s distanță. Rapoartele repetate (același vehicul, același updatedAt) contează o dată.",
+    "en": "Observed timetable: stop arrival and departure from the vehicles' STOPPED_AT reports, at the midpoint between two reports; a stop passed between two reports gets a time interpolated along the GTFS shape. No time when the reports are more than 180 s apart. Repeated reports (same vehicle, same updatedAt) count once."
+  },
+  "provenance": [
+    {
+      "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+      "version": null,
+      "fetchedAt": "2026-11-14T11:59:46+02:00",
+      "note": "din 22 ore înregistrate (vin. 13:47 → sâm. 11:59); 23 ore construite în orarul observat / hours built into L0"
+    },
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    }
+  ]
+}
