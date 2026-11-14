@@ -67,9 +67,9 @@ MODELS: dict[str, object] = {
     "v2/accessibility-lines.json": AccessibilityLines,  # v2.16 (R6, real response, lines cut to 4)
     "v2/accessibility-stop.json": StopAccessibility,  # v2.16 (R6, real response)
     "v2/layer-accessibility.json": m.LayerCollection,  # v2.16 (R6, real response, features cut to 6)
-    "v2/coverage-zones.json": CoverageSummary,  # v2.17 (A10, real response, zones cut to 5)
-    "v2/layer-coverage.json": m.LayerCollection,  # v2.17 (A10, real response, features cut to 4)
-    "v2/corridors.json": CorridorsResponse,  # v2.18 (A8, real response, 2 corridors, 4 hours each)
+    "v2/coverage-zones.json": CoverageSummary,  # v2.20 (A10, real response, zones cut to 5)
+    "v2/layer-coverage.json": m.LayerCollection,  # v2.20 (A10, real response, features cut to 4)
+    "v2/corridors.json": CorridorsResponse,  # v2.20 (A8, real response, 2 corridors, 4 hours each)
     "v2/lines-status.json": LinesStatus,  # v2.18 (R2, real response of ?since=: hero closure published)
 }
 
