@@ -6,6 +6,7 @@ import type { GeoJSONSource, StyleSpecification } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import type { Network } from "../api/client";
 import { bounds } from "../lib/geo";
 
@@ -33,6 +34,8 @@ export type MapOverlay = {
   /** Extra thematic layers (steps 0 and 4). One source and layer per id; colours from tokens. */
   layers?: { id: ExtraLayerId; data: GeoJSON.FeatureCollection }[];
   hideNetwork?: boolean;
+  /** Replaces the stop counts in the map's text equivalent when the colours mean something else (step 4). */
+  stopsText?: string;
 };
 
 export type ExtraLayerId = "bike" | "parking" | "population" | "vehicles" | "detour";
@@ -383,7 +386,16 @@ export function MapView({ network, zones, overlay }: Props) {
 
   return (
     <div className="map">
-      <div ref={el} style={{ position: "absolute", inset: 0 }} aria-label="Hartă" role="region" />
+      <div
+        ref={el}
+        style={{ position: "absolute", inset: 0 }}
+        aria-label={t("mapText.label")}
+        aria-describedby="map-text"
+        role="region"
+      />
+      <p id="map-text" className="visually-hidden">
+        {mapText(overlay, network, t)}
+      </p>
       {(fallback || overlay.note) && (
         <p className="map-note">
           {overlay.note}
@@ -393,6 +405,25 @@ export function MapView({ network, zones, overlay }: Props) {
       )}
     </div>
   );
+}
+
+/** The map in one sentence, for screen readers (R22): only counts of what is drawn, from data already loaded. */
+function mapText(o: MapOverlay, net: Network | undefined, t: TFunction) {
+  const parts: string[] = [];
+  if (o.closure) parts.push(t("mapText.closure"));
+  if (o.tempRoutes?.length) parts.push(t("mapText.temp"));
+  const short = new Map((net?.routes ?? []).map((r) => [r.id, r.shortName]));
+  const names = [...new Set((o.highlightRouteIds ?? []).map((id) => short.get(id) ?? id))];
+  if (names.length) parts.push(t("mapText.lines", { count: names.length, names: names.join(", ") }));
+  if (o.stopsText) parts.push(o.stopsText);
+  else if (o.stops?.length) {
+    const n = { lost: 0, unsure: 0, served: 0 };
+    for (const s of o.stops) n[s.status] += 1;
+    parts.push(t("mapText.stops", n));
+  }
+  for (const l of o.layers ?? []) parts.push(t(`mapText.layer.${l.id}`, { count: l.data.features.length }));
+  if (!parts.length) parts.push(t("mapText.network", { count: net?.routes.length ?? 0 }));
+  return `${t("mapText.prefix")} ${parts.join("; ")}.`;
 }
 
 function escapeHtml(s: string) {

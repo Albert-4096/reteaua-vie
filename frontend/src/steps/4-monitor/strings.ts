@@ -20,6 +20,10 @@ export const S = {
     ro: `vehicule ale acestor linii pe hartă, înregistrare ${at}`,
     en: `vehicles of these lines on the map, recording ${at}`,
   }),
+  mapStops: (n: { skipped: number; served: number; unknown: number }) => ({
+    ro: `stații suspendate: ${n.skipped} sărite de vehicule, ${n.served} unde un vehicul a oprit, ${n.unknown} fără treceri văzute`,
+    en: `suspended stops: ${n.skipped} skipped by vehicles, ${n.served} where a vehicle stopped, ${n.unknown} with no pass seen`,
+  }),
   next: { ro: "Mergi la raportare", en: "Go to reporting" },
   method: { ro: "Cum verificăm", en: "How we check" },
   seen: { ro: "vehicule văzute", en: "vehicles seen" },

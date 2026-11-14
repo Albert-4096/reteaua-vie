@@ -59,6 +59,14 @@ export function MonitorStep({ caseKey, closureId }: StepProps) {
       closure: (c?.geometry as GeoJSON.Geometry | null) ?? null,
       highlightRouteIds: routeIds,
       stops: mapStops,
+      // The colours mean skipped / served / unknown here, so the map's text equivalent says so.
+      stopsText: tr(
+        S.mapStops({
+          skipped: mapStops.filter((s) => s.status === "lost").length,
+          served: mapStops.filter((s) => s.status === "unsure").length,
+          unknown: mapStops.filter((s) => s.status === "served").length,
+        }),
+      ),
       layers: ownVehicles ? [{ id: "vehicles", data: ownVehicles }] : [],
       fitKey: c && mapStops.length ? `monitor:${id}` : undefined,
     },
