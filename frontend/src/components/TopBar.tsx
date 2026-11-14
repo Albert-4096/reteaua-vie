@@ -3,6 +3,7 @@ import { api, type Health } from "../api/client";
 import { fmtDateTime } from "../lib/format";
 import { navigate, stepHref } from "../lib/router";
 import { useResource } from "../lib/store";
+import { DataStatus } from "./DataStatus";
 
 export function TopBar({ step, caseKey }: { step: number; caseKey: string | null }) {
   const { t, i18n } = useTranslation();
@@ -30,11 +31,11 @@ export function TopBar({ step, caseKey }: { step: number; caseKey: string | null
           );
         })}
       </nav>
+      <DataStatus />
       {demoNow && <span className="topbar-clock">{t("clock", { time: fmtDateTime(demoNow) })}</span>}
       <button
         type="button"
         className="topbar-lang"
-        style={demoNow ? undefined : { marginLeft: "auto" }}
         aria-label={t("langName")}
         onClick={() => void i18n.changeLanguage(i18n.language === "en" ? "ro" : "en")}
       >

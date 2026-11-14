@@ -167,8 +167,85 @@ button {
 }
 
 .topbar-clock {
-  margin-left: auto;
   color: var(--c-text-muted);
+}
+
+/* N3: data status row; a click opens the sources in a popover */
+.data-status {
+  margin-left: auto;
+  display: inline-flex;
+  gap: var(--sp-2);
+  border: 0;
+  background: none;
+  padding: var(--sp-1) 0;
+  font: inherit;
+  color: var(--c-text-muted);
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .data-status-date {
+    display: none;
+  }
+}
+
+.data-status-warn,
+.data-status[data-state="down"] {
+  color: var(--c-unsure);
+  font-weight: 600;
+}
+
+.data-status-pop {
+  position: fixed;
+  inset: auto;
+  top: calc(var(--topbar-h) + var(--sp-1));
+  right: var(--sp-4);
+  margin: 0;
+  width: min(360px, calc(100vw - 2 * var(--sp-4)));
+  padding: var(--sp-4);
+  border: var(--rule-w) solid var(--c-rule);
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-size: var(--fs-s);
+  line-height: var(--lh);
+  white-space: normal;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.08);
+}
+
+.data-status-pop h2 {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-m);
+}
+
+.data-status-pop dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: var(--sp-1) var(--sp-3);
+  margin: 0;
+}
+
+.data-status-pop dt {
+  color: var(--c-text-muted);
+}
+
+.data-status-pop dd {
+  margin: 0;
+  max-width: 200px;
+  white-space: normal;
+}
+
+.data-status-bad,
+.data-status-down {
+  color: var(--c-unsure);
+  font-weight: 600;
+}
+
+.data-status-foot {
+  margin: var(--sp-3) 0 0;
+  color: var(--c-text-muted);
+  font-size: var(--fs-xs);
 }
 
 .topbar-lang {
