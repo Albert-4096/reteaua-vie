@@ -1,0 +1,30 @@
+{
+    "query": "ardealului",
+    "streets": [
+        {
+            "streetId": "11068",
+            "name": "Strada Ardealului",
+            "codGis": "38",
+            "type": "Strada",
+            "neighbourhood": "Andreescu-Slavici",
+            "formerName": null,
+            "hasGeometry": true
+        }
+    ],
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, nomenclatorul stradal / street register",
+            "url": "https://servicii.primariatm.ro/api/nomenclator/strazi",
+            "version": null,
+            "fetchedAt": "2026-11-13T13:29:14+02:00",
+            "note": null
+        },
+        {
+            "source": "OpenStreetMap via Geofabrik",
+            "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+            "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+            "fetchedAt": "2026-11-13T18:30:52+02:00",
+            "note": "osmium extract -b 21.10,45.68,21.35,45.83"
+        }
+    ]
+}

@@ -1,0 +1,84 @@
+{
+    "streetId": "11068",
+    "name": "Strada Ardealului",
+    "codGis": "38",
+    "geometry": {
+        "type": "LineString",
+        "coordinates": [
+            [
+                21.1923964,
+                45.7389167
+            ],
+            [
+                21.192265,
+                45.7388407
+            ],
+            [
+                21.192008,
+                45.7386734
+            ],
+            [
+                21.1913091,
+                45.738214
+            ],
+            [
+                21.1908172,
+                45.7379089
+            ],
+            [
+                21.1900552,
+                45.7374276
+            ],
+            [
+                21.1898559,
+                45.7373016
+            ],
+            [
+                21.1892513,
+                45.7369048
+            ],
+            [
+                21.1886691,
+                45.736535
+            ],
+            [
+                21.1885168,
+                45.7364389
+            ],
+            [
+                21.1880041,
+                45.7361147
+            ],
+            [
+                21.1879502,
+                45.7360798
+            ]
+        ]
+    },
+    "lengthMeters": 468,
+    "whole": false,
+    "fromPoint": [
+        21.1923964,
+        45.7389167
+    ],
+    "toPoint": [
+        21.1879501,
+        45.7360798
+    ],
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, nomenclatorul stradal / street register",
+            "url": "https://servicii.primariatm.ro/api/nomenclator/strazi",
+            "version": null,
+            "fetchedAt": "2026-11-13T13:29:14+02:00",
+            "note": null
+        },
+        {
+            "source": "OpenStreetMap via Geofabrik",
+            "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+            "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+            "fetchedAt": "2026-11-13T18:30:52+02:00",
+            "note": "osmium extract -b 21.10,45.68,21.35,45.83"
+        }
+    ]
+}
