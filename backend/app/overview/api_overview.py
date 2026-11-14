@@ -26,17 +26,17 @@ STATUSES = ("draft", "analyzed", "published")
 @router.get("/health", response_model=Health)
 def health() -> Health:
     s = get_settings()
-    feed_version = None
     fetched: list[datetime] = []
     ok = True
     try:
         net = load_network()
-        feed_version = net.feed_version
         fetched.append(parse_iso(net.provenance.fetchedAt))
         fetched.append(parse_iso(load_zones().provenance.fetchedAt))
         fetched.append(parse_iso(load_parking().provenance.fetchedAt))
     except Exception:
         ok = False
+    # the GTFS in force at the app clock (gtfs.feed_path), not the newest file
+    feed_version = gtfs.feed_version()
     g = gtfs.feed_file_time()
     if g is not None:
         fetched.append(g)

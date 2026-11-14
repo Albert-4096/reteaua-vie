@@ -83,3 +83,12 @@ def test_no_feed_info_start_uses_the_calendar_and_early_dates_take_the_first_fee
     assert gtfs.feed_path(date(2026, 11, 30)) == new
     assert gtfs.feed_path(date(2026, 12, 1)) == third
     assert gtfs.feed_path(date(2026, 11, 1)) == old            # before every feed: the earliest one
+
+
+def test_health_names_the_feed_in_force(feeds, monkeypatch):
+    from app.overview import api_overview
+
+    monkeypatch.setattr(api_overview, "get_settings", config.get_settings)
+    assert api_overview.health().feedVersion == "4.31"         # not 4.32, the newest file
+    assert gtfs.feed_version(date(2026, 11, 20)) == "4.32"
+    assert gtfs.choose_feed(list(feeds), date(2026, 11, 8)) == feeds[0]

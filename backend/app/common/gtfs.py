@@ -19,6 +19,8 @@ keyed by the feed's sha256.
 
 Public API (used by M1 and later modules):
     feed_path(at=None) -> Path          the zip in force at `at` (default: the app clock)
+    choose_feed(paths, at=None) -> Path the same rule over any list of zips
+    feed_version(at=None) -> str        its feed_version (feed_info only)
     feed(at=None) -> Feed               tables + version + hash + provenance
     service_ids_on(day) -> set[str]
     stop_order(route_id, direction_id) -> list[str]
@@ -107,16 +109,16 @@ def _day(at: datetime | date | None) -> date:
     return at.astimezone(TZ).date() if isinstance(at, datetime) else at
 
 
-def feed_path(at: datetime | date | None = None) -> Path | None:
-    """The GTFS zip in force at `at` (default: the app clock, DEMO_NOW or real time).
+def choose_feed(paths: Iterable[Path], at: datetime | date | None = None) -> Path | None:
+    """The zip in force at `at` (default: the app clock) among `paths`.
 
-    Among the candidates whose first service date is on or before that day,
-    the highest feed_version (ties: the newest file). If every feed starts
-    later, the one that starts first.
+    Among the zips whose first service date is on or before that day, the
+    highest feed_version (ties: the newest file). If every feed starts later,
+    the one that starts first. The eval (eval/gtfs_small.py) uses this rule too.
     """
     day = _day(at)
     metas = []
-    for p in _candidates():
+    for p in paths:
         st = p.stat()
         version, start = _zip_meta(str(p), st.st_mtime, st.st_size)
         metas.append((p, version, start, st.st_mtime))
@@ -126,6 +128,20 @@ def feed_path(at: datetime | date | None = None) -> Path | None:
     if started:
         return max(started, key=lambda m: (_version_key(m[1]), m[3]))[0]
     return min(metas, key=lambda m: (m[2], [-n for n in _version_key(m[1])]))[0]
+
+
+def feed_path(at: datetime | date | None = None) -> Path | None:
+    """The GTFS zip in force at `at` (default: the app clock, DEMO_NOW or real time)."""
+    return choose_feed(_candidates(), at)
+
+
+def feed_version(at: datetime | date | None = None) -> str | None:
+    """feed_version of the zip in force at `at`, from feed_info only (cheap)."""
+    p = feed_path(at)
+    if p is None:
+        return None
+    st = p.stat()
+    return _zip_meta(str(p), st.st_mtime, st.st_size)[0]
 
 
 def feed_file_time(at: datetime | date | None = None) -> datetime | None:
