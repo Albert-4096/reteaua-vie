@@ -13,6 +13,7 @@ import { navigate, stepHref } from "../../lib/router";
 import { useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { ApprovalFile } from "./ApprovalFile";
+import { EventConflicts } from "./EventConflicts";
 import { KmRows } from "./KmRows";
 import { A, S } from "./strings";
 
@@ -128,6 +129,7 @@ function Decide({ closureId, caseKey }: StepProps & { closureId: string }) {
         )}
       </section>
 
+      <EventConflicts closureId={closureId} />
       <KmRows closureId={closureId} />
       <DetourCost closureId={closureId} />
 
