@@ -40,7 +40,7 @@ function Hook({ t, d }: SceneProps) {
       </Fragment>
       <Fragment t={t} x={140} y={500} r={3}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 22px)", gap: 6 }}>
-          {Array.from({ length: 24 }, (_, i) => <div key={i} style={{ height: 10, borderRadius: 4, background: i % 7 === 3 ? "var(--amber)" : "var(--muted)" }} />)}
+          {Array.from({ length: 24 }, (_, i) => <div key={i} style={{ height: 10, borderRadius: 4, background: i % 7 === 3 ? "var(--closure)" : "var(--muted)" }} />)}
         </div>
       </Fragment>
       <Fragment t={t} x={900} y={470} r={-4}>
@@ -102,9 +102,14 @@ function PlanMap({ t, g, drawAt }: { t: number; g: Geo; drawAt: number }) {
   return (
     <svg width={WIN.mapW} height={WIN.mapH} viewBox={`${vx} ${vy} ${vb.w} ${vb.h}`} style={{ display: "block", background: "white" }}>
       <path d={g.cropDots} fill="var(--dot)" />
-      <path d={g.streets} fill="none" stroke="oklch(0.875 0.008 165)" strokeWidth={0.7} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={seg} fill="none" stroke="var(--amber)" strokeOpacity={0.25} strokeWidth={4.5 * k} strokeLinecap="round" />
-      <path d={seg} fill="none" stroke="var(--amber)" strokeWidth={1.8} strokeLinecap="round" pathLength={1} strokeDasharray={`${k} 1`} />
+      <path d={g.streets} fill="none" stroke="oklch(0.9 0.006 165)" strokeWidth={0.6} strokeLinecap="round" strokeLinejoin="round" />
+      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+        {g.lines.map((l) => (
+          <path key={l.id} d={l.d} stroke={l.affected ? l.color : "oklch(0.8 0.01 165)"} strokeWidth={l.affected ? 1.1 : 0.55} opacity={l.affected ? 0.95 : 0.7} />
+        ))}
+      </g>
+      <path d={seg} fill="none" stroke="var(--closure)" strokeOpacity={0.25} strokeWidth={4.5 * k} strokeLinecap="round" />
+      <path d={seg} fill="none" stroke="var(--closure)" strokeWidth={1.8} strokeLinecap="round" pathLength={1} strokeDasharray={`${k} 1`} />
     </svg>
   );
 }
@@ -124,9 +129,9 @@ function Panel({ t, at, children, width = 330 }: { t: number; at: number; childr
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone: "amber" | "muted" | "green" }) {
-  const bg = tone === "amber" ? "var(--amber-soft)" : tone === "green" ? "var(--green-soft)" : "var(--muted)";
-  const fg = tone === "amber" ? "var(--amber-ink)" : tone === "green" ? "var(--accent-foreground)" : "var(--muted-foreground)";
+function Stat({ label, value, tone }: { label: string; value: string; tone: "closure" | "muted" | "green" }) {
+  const bg = tone === "closure" ? "var(--closure-soft)" : tone === "green" ? "var(--green-soft)" : "var(--muted)";
+  const fg = tone === "closure" ? "var(--closure-ink)" : tone === "green" ? "var(--accent-foreground)" : "var(--muted-foreground)";
   return (
     <div style={{ background: bg, borderRadius: 12, padding: "10px 14px" }}>
       <div style={{ fontSize: 15, color: fg }}>{label}</div>
@@ -169,7 +174,7 @@ function Plan({ t, d, g }: SceneProps) {
                   <div style={{ display: "flex", gap: 6 }}>{d.closure.routeIds.map((r) => <LineBadge key={r} routeId={r} size="lg" />)}</div>
                   <div style={{ fontSize: 14, fontWeight: 550, margin: "12px 0 14px", lineHeight: 1.35 }}>{d.closure.title.ro}</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                    <Stat label="Plecări pierdute" value={fmt.format(lost)} tone="amber" />
+                    <Stat label="Plecări pierdute" value={fmt.format(lost)} tone="closure" />
                     <Stat label="Stații suspendate" value={fmt.format(count(t, 8.6, d.impact.totals.stopsSuspended, 0, 0.8))} tone="muted" />
                   </div>
                   <div style={{ fontSize: 15, color: "var(--muted-foreground)", marginTop: 12 }}>Estimare pe orarul planificat SMTT</div>
@@ -177,7 +182,7 @@ function Plan({ t, d, g }: SceneProps) {
               )}
               {t >= 14 && (
                 <Panel t={t} at={14.2} width={380}>
-                  <Stat label="Plecări pierdute" value={fmt.format(t < 17.2 ? base : lost)} tone={picked ? "green" : "amber"} />
+                  <Stat label="Plecări pierdute" value={fmt.format(t < 17.2 ? base : lost)} tone={picked ? "green" : "closure"} />
                   {[
                     { label: "Fereastra din anunț", when: `${dayTime(d.impact.window.start)} – ${hhmm(d.impact.window.end)}`, n: base, on: !picked },
                     { label: "Fereastra propusă", when: `${dayTime(best.window.start)} – ${hhmm(best.window.end)}`, n: best.departuresLost, on: picked },
@@ -285,9 +290,12 @@ function Monitor({ t, d, g }: SceneProps) {
       <div style={{ ...title, ...reveal(t, 0.2) }}><Words t={t} at={0.2} text="Urmărești ce s-a întâmplat de fapt." /></div>
       <div style={{ position: "absolute", left: 90, top: 140, ...reveal(t, 0.3) }}>
         <svg width={600} height={g.p.height * s} viewBox={`0 0 ${g.p.width} ${g.p.height}`}>
-          <path d={g.cityDots} fill="var(--dot-strong)" opacity={0.5} />
+          <path d={g.cityDots} fill="var(--dot-strong)" opacity={0.42} />
+          <g fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={out(prog(t, 0.3, 0.8)) * 0.65}>
+            {g.lines.map((l) => <path key={l.id} d={l.d} stroke={l.color} strokeWidth={l.tram ? 3 : 2} />)}
+          </g>
           {g.vehicles.map((v, i) => (
-            <circle key={v.id} cx={v.x} cy={v.y} r={4.6} fill="var(--green)" stroke="white" strokeWidth={1.6} opacity={out(prog(t, 0.6 + (i % 20) * 0.04, 0.5))} />
+            <circle key={v.id} cx={v.x} cy={v.y} r={4.6} fill="var(--foreground)" stroke="white" strokeWidth={1.8} opacity={out(prog(t, 0.6 + (i % 20) * 0.04, 0.5))} />
           ))}
         </svg>
         <div className="tabular" style={{ fontSize: 15, color: "var(--muted-foreground)", marginTop: 6 }}>

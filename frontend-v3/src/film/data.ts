@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Feature, FeatureCollection, LineString, MultiPolygon, Point } from "geojson";
 import { api, closurePoints, type Closure, type Impact, type MissingRoute, type Vehicle, type Windows, type Zone } from "@/lib/api";
 import { dotGrid, fitProjection, type Projector } from "@/lib/geo";
+import { loadNetwork, type Network } from "@/lib/network";
 
 export const FILM_CLOSURE = "cl_20261108_16dec";
 export const W = 1100;
@@ -14,6 +15,7 @@ export type FilmData = {
   closure: Closure;
   impact: Impact;
   windows: Windows;
+  net: Network;
 };
 
 export function useFilmData() {
@@ -22,10 +24,10 @@ export function useFilmData() {
   useEffect(() => {
     Promise.all([
       api.zones(), api.streets(), api.vehicles(), api.missing(),
-      api.closure(FILM_CLOSURE), api.impact(FILM_CLOSURE), api.windows(FILM_CLOSURE),
+      api.closure(FILM_CLOSURE), api.impact(FILM_CLOSURE), api.windows(FILM_CLOSURE), loadNetwork(),
     ])
-      .then(([zones, streets, vehicles, missing, closure, impact, windows]) =>
-        setData({ zones, streets, vehicles, missing: missing.routes, closure, impact, windows }))
+      .then(([zones, streets, vehicles, missing, closure, impact, windows, net]) =>
+        setData({ zones, streets, vehicles, missing: missing.routes, closure, impact, windows, net }))
       .catch((e: Error) => setError(e.message));
   }, []);
   return { data, error };
@@ -39,6 +41,7 @@ export type Geo = {
   cropDots: string;
   seg: [number, number][];
   vehicles: { id: string; x: number; y: number }[];
+  lines: { id: string; d: string; color: string; tram: boolean; affected: boolean }[];
 };
 
 const dotsPath = (dots: { x: number; y: number }[], r: number) =>
@@ -75,6 +78,15 @@ export function useGeo(d: FilmData | null): Geo | null {
     const cropDots = dotsPath(dotGrid(feats, p, 2.4, { x0: crop.x - 4, y0: crop.y - 4, x1: crop.x + w + 4, y1: crop.y + h + 4 }), 0.55);
 
     const vehicles = d.vehicles.features.map((v) => ({ id: v.properties.vehicleId, x: p.x(v.geometry.coordinates[0]), y: p.y(v.geometry.coordinates[1]) }));
-    return { p, cityDots, streets, crop, cropDots, seg, vehicles };
+    const affected = new Set(d.closure.routeIds);
+    const lines = d.net.paths
+      .filter((x) => x.directionId === 0 && d.net.byId.has(x.routeId))
+      .map((x) => {
+        const r = d.net.byId.get(x.routeId)!;
+        return { id: x.routeId, color: `#${r.color}`, tram: r.type === 0, affected: affected.has(x.routeId),
+          d: "M" + x.geometry.coordinates.map(([lon, lat]) => `${p.x(lon).toFixed(1)} ${p.y(lat).toFixed(1)}`).join("L") };
+      })
+      .sort((a, b) => Number(a.affected) - Number(b.affected));
+    return { p, cityDots, streets, crop, cropDots, seg, vehicles, lines };
   }, [d]);
 }

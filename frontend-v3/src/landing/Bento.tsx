@@ -33,8 +33,8 @@ function ImpactVisual() {
       </div>
       <p className="mt-3 text-sm font-medium leading-snug">{c.data?.title.ro ?? "Se încarcă lucrarea…"}</p>
       <dl className="mt-4 grid grid-cols-2 gap-3">
-        <div className="rounded-md bg-amber-soft px-3 py-2.5">
-          <dt className="text-xs text-amber-ink">Plecări pierdute</dt>
+        <div className="rounded-md bg-closure-soft px-3 py-2.5">
+          <dt className="text-xs text-closure-ink">Plecări pierdute</dt>
           <dd className="tabular text-2xl font-semibold tracking-tight">{t ? fmt.format(t.departuresLost) : "–"}</dd>
         </div>
         <div className="rounded-md bg-muted px-3 py-2.5">
@@ -53,7 +53,7 @@ function WindowVisual() {
   const base = w.data?.baselineDeparturesLost;
   const best = w.data?.candidates[0];
   const rows = [
-    { label: "Fereastra din anunț", when: im.data ? `${dayTime(im.data.window.start)} – ${hhmm(im.data.window.end)}` : "", n: base, tone: "bg-amber" },
+    { label: "Fereastra din anunț", when: im.data ? `${dayTime(im.data.window.start)} – ${hhmm(im.data.window.end)}` : "", n: base, tone: "bg-closure" },
     { label: "Fereastra propusă", when: best ? `${dayTime(best.window.start)} – ${hhmm(best.window.end)}` : "", n: best?.departuresLost, tone: "bg-green" },
   ];
   return (
@@ -83,6 +83,8 @@ function VehiclesVisual() {
   const rows = (m.data?.routes ?? []).filter((r) => r.state === "fara_vehicul").slice(0, 3);
   return (
     <div className="w-full max-w-md space-y-2.5">
+      {!m.data && !m.error && [0, 1].map((i) => <div key={i} className="h-16 animate-pulse rounded-lg bg-muted" />)}
+      {m.error && <div className="rounded-lg border bg-card p-4 text-sm shadow-card">Datele live nu răspund acum. Reîncercăm în 60 de secunde.</div>}
       {m.data && rows.length === 0 && (
         <div className="rounded-lg border bg-card p-4 text-sm shadow-card">Toate liniile din orar au vehicule în datele live acum.</div>
       )}
@@ -116,7 +118,7 @@ function CitizenVisual() {
     <div className="relative h-56 w-full max-w-sm">
       <figure className="absolute left-0 top-0 w-44 rotate-[-6deg]">
         <div className="rounded-md border bg-card p-3.5 shadow-float">
-          <div className="h-1.5 w-10 rounded-full bg-amber" />
+          <div className="h-1.5 w-10 rounded-full bg-closure" />
           <p className="mt-2.5 text-sm font-semibold leading-tight">Linia E3 deviată</p>
           <p className="mt-1 text-xs leading-snug text-muted-foreground">Str. Ardealului închisă. 11 stații nu sunt deservite.</p>
           <div className="mt-3 flex items-end justify-between">
@@ -126,7 +128,7 @@ function CitizenVisual() {
         </div>
         <figcaption className="mt-2 text-xs text-muted-foreground">Afișul A4 din stație</figcaption>
       </figure>
-      <div className="absolute right-0 top-14 w-60 rotate-[3deg] rounded-lg border bg-card p-3.5 shadow-float">
+      <div className="absolute -right-2 top-24 w-60 rotate-[3deg] rounded-lg border bg-card p-3.5 shadow-float">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <BellRing className="size-3.5 text-green" /> Alertă în aplicația de hărți
         </div>

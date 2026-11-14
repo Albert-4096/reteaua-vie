@@ -8,6 +8,7 @@ import { Bento } from "./Bento";
 import { CityMap } from "./CityMap";
 import { Integration } from "./Integration";
 import { Logo } from "./Logo";
+import { LogoMarquee } from "./LogoMarquee";
 
 const APP = "/app";
 const CLOSURE_IDS = ["cl_20261102_mocioni", "cl_20261107_e3", "cl_20261108_16dec"];
@@ -87,13 +88,15 @@ export function Landing() {
           </motion.div>
         </section>
 
+        <LogoMarquee />
+
         <Section id="pentru-cine" title="Aceeași lucrare. Trei câștiguri."
           sub="Primăria decide pe cifre, STPT publică o singură dată, iar călătorii află din aplicațiile și stațiile pe care le folosesc deja.">
           <Bento />
         </Section>
 
         <Section id="harta" title="Timișoara, acum."
-          sub="Vehiculele din datele live ale Primăriei, înregistrate de noi la 15 secunde, peste cele 40 de cartiere. Treceți cu mouse-ul peste un cartier.">
+          sub="Cele 58 de linii în culorile STPT și vehiculele din datele live ale Primăriei, înregistrate de noi la 15 secunde, peste cele 40 de cartiere.">
           <div className="rounded-xl border bg-card p-6 shadow-card md:p-10">
             <CityMap closures={closures.data ?? []} />
           </div>
