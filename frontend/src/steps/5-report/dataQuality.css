@@ -1,0 +1,9 @@
+.data-quality { min-width: 0; }
+.data-quality > * + * { margin-top: var(--sp-2); }
+.data-quality-rows h3 { font-size: var(--fs-s); overflow-wrap: anywhere; }
+.data-quality-rows p { margin: var(--sp-1) 0; }
+.data-quality-rows details { margin-top: var(--sp-2); }
+.data-quality-rows details > * + * { margin-top: var(--sp-2); }
+.data-quality-rows h4 { font-size: var(--fs-s); margin-top: var(--sp-3); }
+.data-quality-detail { padding-inline-start: var(--sp-4); }
+.data-quality-request { white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; }

@@ -8,6 +8,7 @@ import { fmtDate, fmtWindow, tr } from "../../lib/format";
 import { useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { AccessibleLines } from "./AccessibleLines";
+import { DataQuality } from "./DataQuality";
 import { S } from "./strings";
 
 const NAP = "/api/exports/nap-metadata.json";
@@ -85,6 +86,7 @@ export function ReportStep(_props: StepProps) {
       )}
 
       <AccessibleLines />
+      <DataQuality />
 
       <details>
         <summary>{t("details")}</summary>
