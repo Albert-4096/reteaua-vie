@@ -176,7 +176,7 @@ function Line({ routeId }: { routeId: string }) {
     if (hover) labels.push({ id: "hover", lon: hover.lon, lat: hover.lat, text: hover.name, tone: "stop", place: "top" });
     return {
       fit: { key: `line:${routeId}`, points: shape.path },
-      highlight: flag ? [] : [routeId], ghost: flag ? [routeId] : [],
+      highlight: flag ? [] : [routeId], ghost: flag ? [routeId] : [], dim: true,
       detour: track ?? null,
       stops: shape.stations.map((s) => ({ id: s.ids[0], name: s.name, lon: s.lon, lat: s.lat, tone: "served" as const })),
       vehicles: mine.map((v) => ({ id: v.properties.vehicleId, lon: v.geometry.coordinates[0], lat: v.geometry.coordinates[1], routeId })),
@@ -245,9 +245,9 @@ function Line({ routeId }: { routeId: string }) {
 
       {off.map((g) => (
         <section key={g.firstAt} className="mb-8 rounded-xl border border-foreground/25 px-4 py-3.5 shadow-card">
-          <p className="text-base font-semibold leading-snug">Abatere de la traseu, fără anunț găsit</p>
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-base font-semibold leading-snug">Posibilă abatere de la traseu <Tag>de verificat</Tag></p>
           <p className="tabular mt-1.5 text-sm leading-relaxed text-muted-foreground">
-            La {hhmm(g.firstAt)}, {count(g.trips, "cursă", "curse")} din {g.tripsSeen} văzute {g.trips === 1 ? "a mers" : "au mers"} până la {fmt.format(g.maxDistanceM)} m de traseu{g.street ? `, pe ${g.street}` : ""}{g.nearStop ? `, lângă ${g.nearStop}` : ""}. De verificat: e pe hartă, cu linie întreruptă.
+            La {hhmm(g.firstAt)}, {count(g.trips, "cursă", "curse")} din {g.tripsSeen} văzute {g.trips === 1 ? "a mers" : "au mers"} până la {fmt.format(g.maxDistanceM)} m de traseu{g.street ? `, pe ${g.street}` : ""}{g.nearStop ? `, lângă ${g.nearStop}` : ""}. Nu am găsit un anunț; poate fi și o cursă spre depou. Urma e pe hartă, cu linie întreruptă.
           </p>
         </section>
       ))}

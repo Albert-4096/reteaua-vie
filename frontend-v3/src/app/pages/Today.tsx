@@ -12,7 +12,8 @@ import { answerOf } from "./Work";
 
 const coords = (c: ClosureSummary): Position[] => (!c.geometry ? [] : c.geometry.type === "LineString" ? c.geometry.coordinates : c.geometry.coordinates.flat());
 
-type Task = { key: string; lead: React.ReactNode; title: string; detail: string; owner: string; action: string; to: Route; closureId?: string };
+/** `check`: a signal a person should look at, not yet a confirmed task (an off-route run may be a depot run). */
+type Task = { key: string; lead: React.ReactNode; title: string; detail: string; owner: string; action: string; to: Route; closureId?: string; check?: boolean };
 
 /**
  * The first screen of the day: what waits for a person, then the network as it is right now.
@@ -55,9 +56,9 @@ export function Today() {
     })),
     ...offRoute.map((g): Task => ({
       key: `off-${g.routeId}-${g.firstAt}`, lead: <LineBadge routeId={g.routeId} label={g.shortName} size="lg" />,
-      title: `Linia ${g.shortName} a ieșit de pe traseu`,
-      detail: `fără anunț · ${hhmm(g.firstAt)}${g.street ? `, ${g.street}` : ""}`,
-      owner: "STPT · dispecerat", action: "Verifică", to: { page: "linii", routeId: g.routeId },
+      title: `Linia ${g.shortName}: posibilă abatere de la traseu`,
+      detail: `${hhmm(g.firstAt)}${g.street ? `, ${g.street}` : ""} · fără anunț găsit`,
+      owner: "STPT · dispecerat", action: "Verifică", to: { page: "linii", routeId: g.routeId }, check: true,
     })),
   ];
 
@@ -88,7 +89,7 @@ export function Today() {
 
   return (
     <Panel head={<Title sub={now ? <>{weekday(now)}, {hhmm(now)} <span className="text-foreground/60">· ceas simulat</span></> : "Se citește ceasul…"}>Azi</Title>}>
-      <Section title="Așteaptă un om" aside={ready ? tasks.length : undefined}>
+      <Section title="Așteaptă un om" aside={ready ? tasks.filter((t) => !t.check).length : undefined}>
         {closures.error ? <Problem>Lista nu s-a încărcat ({closures.error}). Reîncărcați pagina.</Problem> : !ready ? <Loading rows={3} /> : tasks.length === 0 ? (
           <p className="text-sm leading-relaxed text-muted-foreground">Nimic de făcut acum: toate lucrările sunt publicate și fiecare linie din orar are vehicul în datele live.</p>
         ) : (
@@ -101,7 +102,7 @@ export function Today() {
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-medium leading-snug">{t.title}</span>
                     <span className="tabular block truncate text-sm text-muted-foreground">{t.detail}</span>
-                    <span className="block text-xs text-muted-foreground">{t.owner}</span>
+                    <span className="block text-xs text-muted-foreground">{t.check && <span className="font-medium text-foreground/80">de verificat · </span>}{t.owner}</span>
                   </span>
                   <span className="inline-flex h-8 shrink-0 items-center gap-1 rounded-md border bg-card px-2.5 text-sm font-medium transition-colors group-hover:border-foreground/30">{t.action} <ArrowRight className="size-3.5" /></span>
                 </a>

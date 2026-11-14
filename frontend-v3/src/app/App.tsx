@@ -60,10 +60,9 @@ export function App() {
 function Rail({ place }: { place: Place["id"] }) {
   const closures = useApi(app.closures);
   const missing = useApi(app.missing, 60_000);
-  const dev = useApi(app.deviations, 60_000);
+  // off-route runs are "de verificat" on Azi and stay out of this count until a person confirms one
   const waiting = (closures.data ?? []).filter((c) => c.status !== "published").length
-    + (missing.data?.routes ?? []).filter((r) => r.state === "fara_vehicul" && !r.decision).length
-    + (dev.data?.groups ?? []).filter((g) => g.classification === "fara_anunt").length;
+    + (missing.data?.routes ?? []).filter((r) => r.state === "fara_vehicul" && !r.decision).length;
 
   return (
     <nav aria-label="Secțiunile platformei" className="z-10 flex shrink-0 items-stretch border-t bg-card md:w-[5.25rem] md:flex-col md:items-center md:border-r md:border-t-0 md:py-4">

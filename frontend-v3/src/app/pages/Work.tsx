@@ -56,7 +56,7 @@ export function Work({ id, tab, q }: { id: string; tab: WorkTab; q?: string }) {
   const [published, setPublished] = useState(false);
 
   const c = closure.data, a = analysis.data;
-  const groups = a?.decisionGroups ?? [];
+  const groups = useMemo(() => a?.decisionGroups ?? [], [a]); // one array while the analysis loads, or the map would be re-set on every render
   const answers = useMemo(() => new Map(groups.map((g) => [g.id, a ? answerOf(g, a) : null] as const)), [groups, a]);
   const open = groups.filter((g) => !answers.get(g.id)).length;
   const isPublished = c?.status === "published" || published;

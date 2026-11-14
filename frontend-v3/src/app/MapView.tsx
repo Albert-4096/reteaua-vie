@@ -14,6 +14,7 @@ export type MapProps = {
   closures?: { id: string; geometry?: Feature["geometry"]; selected?: boolean }[];
   highlight?: string[]; // lines drawn in full colour; the rest of the network steps back to grey
   ghost?: string[]; // lines the timetable lists but the live data does not show: dashed, in their own colour
+  dim?: boolean; // step the rest of the network back to grey even when no line is highlighted
   segment?: Position[] | null; // the stretch a question is about
   detour?: Position[] | null; // a temporary route (the replacement bus)
   stops?: MapStop[];
@@ -38,7 +39,7 @@ const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 type State = Required<Omit<MapProps, "onClosure" | "onVehicle" | "fit">> & { fit?: MapProps["fit"] };
 
 /** One map for the whole app: the city's lines in STPT's colours, works in barrier red, stops, vehicles, and names. */
-export function MapView({ closures = [], highlight = [], ghost = [], segment = null, detour = null, stops = [], vehicles = [], labels = [], fit, onClosure, onVehicle }: MapProps) {
+export function MapView({ closures = [], highlight = [], ghost = [], dim = false, segment = null, detour = null, stops = [], vehicles = [], labels = [], fit, onClosure, onVehicle }: MapProps) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const net = useRef<Network | null>(null);
@@ -47,7 +48,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], segment = n
   const markers = useRef(new Map<string, maplibregl.Marker>());
   const shown = useRef(new Map<string, [number, number]>()); // where each vehicle is drawn right now
   const glide = useRef(0);
-  const state: State = { closures, highlight, ghost, segment, detour, stops, vehicles, labels, fit };
+  const state: State = { closures, highlight, ghost, dim, segment, detour, stops, vehicles, labels, fit };
   const latest = useRef(state);
   latest.current = state;
   const cb = useRef({ onClosure, onVehicle });
@@ -58,7 +59,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], segment = n
     if (!m || !ready.current) return;
     const p = latest.current;
     const src = (id: string) => m.getSource(id) as GeoJSONSource;
-    const focused = p.highlight.length > 0 || !!p.segment;
+    const focused = p.dim || p.highlight.length > 0 || !!p.segment;
 
     src("closures").setData(fc(p.closures.filter((c) => c.geometry).map((c) => ({ type: "Feature", geometry: c.geometry!, properties: { id: c.id, selected: !!c.selected } }))));
     src("segment").setData(fc(line(p.segment)));
@@ -209,7 +210,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], segment = n
   }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => sync(false), [closures, highlight, ghost, segment, detour, stops, vehicles, labels, fit]);
+  useEffect(() => sync(false), [closures, highlight, ghost, dim, segment, detour, stops, vehicles, labels, fit]);
 
   return <div ref={el} className="h-full w-full" role="application" aria-label="Harta rețelei" />;
 }
