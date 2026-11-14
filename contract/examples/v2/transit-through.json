@@ -1,0 +1,73 @@
+{
+    "closureId": "cl_20261102_mocioni",
+    "verdict": "applied",
+    "reasons": [],
+    "streets": [
+        {
+            "osmId": "way/31139760",
+            "name": "Bulevardul 16 Decembrie 1989",
+            "lanes": 2,
+            "width": null,
+            "oneway": true,
+            "enough": true
+        }
+    ],
+    "keptRoutes": [
+        "R_AB_M32",
+        "R_AB_M36",
+        "R_AB_M37",
+        "R_AB_M38",
+        "R_AB_M46",
+        "R_AB_M51"
+    ],
+    "excludedRoutes": [],
+    "full": {
+        "stopsSuspended": 0,
+        "departuresLost": 12243,
+        "residentsLosingStop": 0
+    },
+    "variant": {
+        "stopsSuspended": 0,
+        "departuresLost": 0,
+        "residentsLosingStop": 0
+    },
+    "kept": {
+        "stops": 0,
+        "departures": 12243,
+        "residentsKeepingStop": 0
+    },
+    "note": {
+        "ro": "Linia M32, M36, M37, M38, M46, M51 trece pe banda rămasă (bandă judecată din OSM): +12243 plecări păstrate · 0 km de ocolire (de confirmat cu constructorul: lățimea benzii).",
+        "en": "Line M32, M36, M37, M38, M46, M51 uses the remaining lane (lane judged from OSM): +12243 departures kept · 0 km of detour (to confirm with the builder: lane width)."
+    },
+    "provenance": [
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.29",
+            "fetchedAt": "2026-11-13T18:51:10+02:00",
+            "note": "Orarul în vigoare înainte de lucrări (GTFS 4.29, smtt-4.29_mdb-2868-202610240049.zip); orarul curent rulează deja ocolirea / timetable in force before the works"
+        },
+        {
+            "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+            "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+            "version": "4.31-4",
+            "fetchedAt": "2026-11-13T13:29:14+02:00",
+            "note": null
+        },
+        {
+            "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+            "url": "https://cont.primariatm.ro/api/zones",
+            "version": null,
+            "fetchedAt": "2026-11-13T13:29:14+02:00",
+            "note": null
+        },
+        {
+            "source": "GHSL population grid (JRC)",
+            "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+            "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+            "fetchedAt": "2026-11-13T18:31:11+02:00",
+            "note": "model GHSL 2020, 100 m (nu recensământ)"
+        }
+    ]
+}

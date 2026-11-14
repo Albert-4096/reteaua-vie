@@ -72,6 +72,7 @@ MODELS: dict[str, object] = {
     "v2/zone-notice.json": list[m.ZoneNotice],
     "v2/route-plan.json": m.RoutePlan,
     "v2/compliance.json": m.ComplianceReport,
+    "v2/transit-through.json": m.TransitThrough,  # v2.42 (R10, real response on Mocioni)
     "v2/history.json": list[m.HistoryEntry],
     "v2/indicators.json": m.IndicatorSet,
     "v2/exports.json": list[m.ExportFile],
