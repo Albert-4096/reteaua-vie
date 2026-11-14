@@ -183,7 +183,9 @@ class Punctuality(Model):
     late: float | None                  # +300 s .. +600 s
     veryLate: float | None              # over +600 s
     ci: list[float] | None              # 95 % interval of `onTime`, bootstrap with one trip as a block
-    conclusive: bool                    # false = „neconcludent” (under MIN_TRIPS trips or MIN_EVENTS events)
+    conclusive: bool                    # false = „neconcludent” (under MIN_TRIPS trips or MIN_EVENTS events, or one vehicle)
+    vehicles: int | None = None         # distinct vehicles behind the events
+    reason: str | None = None           # why `conclusive` is false when it is not a matter of size
 
 
 class HeadwayStats(Model):

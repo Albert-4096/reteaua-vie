@@ -56,3 +56,17 @@ def test_silent_gap_mid_trip_and_frozen_position():
 def test_a_new_trip_resets_the_gap():
     r = _rep([("a", 0, "t1", 0, 0, False), ("a", 3000, "t2", 0, 0, False)])
     assert gps_health._episodes(r, False).empty
+
+
+def test_a_single_vehicle_is_never_a_conclusive_punctuality():
+    """Line 23 on 14 Nov: one bus, trips labelled in sequence, delay growing -157 s to +2,600 s. Hand check of its
+    trips against GTFS stop_times: it left the terminal 4 to 35 min after the labelled trip's departure and
+    matched the next scheduled trip better, so the label may be offset. One vehicle cannot give a line's punctuality."""
+    d = [100.0, 900.0, 1500.0, 2000.0, 2600.0] * 8
+    e = _ev(d, n_trips=20)
+    e["vehicle_id"] = "GOB"
+    p = reliability._punct(e, np.random.default_rng(1))
+    assert p["conclusive"] is False and p["vehicles"] == 1 and "singur vehicul" in p["reason"]
+    e["vehicle_id"] = [f"V{i % 3}" for i in range(len(e))]
+    q = reliability._punct(e, np.random.default_rng(1))
+    assert q["conclusive"] is True and q["reason"] is None

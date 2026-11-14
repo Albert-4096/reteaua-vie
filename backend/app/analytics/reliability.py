@@ -32,7 +32,7 @@ BUNCH_SEC = 120
 MIN_TRIPS, MIN_EVENTS = 10, 30
 BOOT_N = 300
 TTL_SEC = 300
-CACHE_VERSION = 1
+CACHE_VERSION = 2
 
 WORDING = I18n(ro="Estimare din datele live, nu raportul oficial.", en="Estimate from the live data, not the official report.")
 METHOD = I18n(
@@ -53,6 +53,10 @@ CAVEAT = I18n(
         "lucrătoare. Nu arată nicio vină a cuiva și nu e o clasificare a curselor: doar SMTT le încadrează."),
     en=("Estimate from the live data, not the official report; Friday afternoon and weekend only. It assigns no "
         "blame and does not classify trips: only SMTT does."))
+# Line 23 (14 Nov): one bus in the feed, trips labelled in sequence while its delay grew from -157 s to +2,600 s
+# over 4 h (its cycle took ~36 min against the timetable's ~29). Which scheduled trip it really served is not
+# established: the median delay of one vehicle is not the line's punctuality.
+SOLO_REASON = "un singur vehicul în datele live; eticheta cursei poate fi decalată, întârzierea nu descrie linia"
 _memo: dict = {}
 
 
@@ -64,7 +68,7 @@ def _punct(g: pd.DataFrame, rng: np.random.Generator) -> dict:
     n = int(len(g))
     if not n:
         return {"n": 0, "trips": 0, "medianSec": None, "p90Sec": None, "early": None, "onTime": None, "late": None,
-                "veryLate": None, "ci": None, "conclusive": False}
+                "veryLate": None, "ci": None, "conclusive": False, "vehicles": 0, "reason": None}
     d = g["delay_sec"].to_numpy(float)
     cls = {"early": d < EARLY_SEC, "onTime": (d >= EARLY_SEC) & (d <= ON_TIME_MAX_SEC),
            "late": (d > ON_TIME_MAX_SEC) & (d <= LATE_MAX_SEC), "veryLate": d > LATE_MAX_SEC}
@@ -76,9 +80,12 @@ def _punct(g: pd.DataFrame, rng: np.random.Generator) -> dict:
         pick = rng.integers(0, k, (BOOT_N, k))
         r = s[pick].sum(1) / c[pick].sum(1)
         ci = [round(float(np.percentile(r, 2.5)), 3), round(float(np.percentile(r, 97.5)), 3)]
-    return {"n": n, "trips": k, "medianSec": round(float(np.median(d)), 1), "p90Sec": round(float(np.percentile(d, 90)), 1),
+    veh = int(g["vehicle_id"].nunique()) if "vehicle_id" in g else None
+    solo = veh == 1
+    return {"n": n, "trips": k, "vehicles": veh,
+            "reason": SOLO_REASON if solo else None, "medianSec": round(float(np.median(d)), 1), "p90Sec": round(float(np.percentile(d, 90)), 1),
             **{key: _share(v.sum(), n) for key, v in cls.items()}, "ci": ci,
-            "conclusive": bool(k >= MIN_TRIPS and n >= MIN_EVENTS)}
+            "conclusive": bool(k >= MIN_TRIPS and n >= MIN_EVENTS and not solo)}
 
 
 def _awt(h: np.ndarray) -> float | None:
