@@ -22,6 +22,7 @@ from app.m1_disruption.notice_text import GeneratedNotice
 from app.m1_disruption.streets import StreetSearch, StreetSection
 from app.observed.models import DetourCost, MeasuredWindows, ObservedSummary
 from app.analytics.models import (
+    EtaBacktest, EtaDebug,
     CutThrough, WorksBalance,
     AccessibilityLines, CorridorsResponse, CoverageSummary, CriticalStreetsResponse, ReliabilityResponse,
     StandingResponse, StopAccessibility, VehicleHealthResponse)
@@ -94,6 +95,8 @@ MODELS: dict[str, object] = {
     "v2/balance.json": WorksBalance,  # v2.30 (R24, real response of Mocioni)
     "v2/waze-cifs.json": dict,  # v2.30 (R23, real response; checked by test_analytics_cutthrough)
     "v2/avoid-streets.json": dict,  # v2.30 (R23, real response)
+    "v2/eta-backtest.json": EtaBacktest,  # v2.33 (A13, real response)
+    "v2/tripupdates.json": EtaDebug,  # v2.33 (A13, real response, 2 trips of 3 stops)
     "v2/standing.json": StandingResponse,  # v2.27 (L4, real response, 3 points)
     "v2/corridors.json": CorridorsResponse,  # v2.20 (A8, real response, 2 corridors, 4 hours each)
     "v2/lines-status.json": LinesStatus,  # v2.18 (R2, real response of ?since=: hero closure published)

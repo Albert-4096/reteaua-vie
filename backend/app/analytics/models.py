@@ -394,3 +394,54 @@ class WorksBalance(Model):
     wording: I18n
     caveat: I18n
     provenance: list[Provenance]
+
+
+# --- A13: ETA feed and its back-test -----------------------------------------------------------
+
+
+class EtaCell(Model):
+    horizonMin: int                     # how far ahead the prediction looks
+    n: int                              # predictions scored
+    timetableMedianAbsSec: float | None
+    persistMedianAbsSec: float | None   # timetable + the delay the vehicle reports now
+    timetableMeanAbsSec: float | None
+    persistMeanAbsSec: float | None
+
+
+class EtaBacktest(Model):
+    recording: Recording
+    cells: list[EtaCell]
+    chosen: Literal["timetable", "persist"]
+    beatsTimetable: bool                # true only if `chosen` has a smaller median AND mean error than the timetable at every horizon
+    verdict: I18n
+    method: I18n
+    provenance: list[Provenance]
+
+
+class EtaStopUpdate(Model):
+    stopId: str
+    stopSequence: int
+    scheduledAt: IsoTime
+    arrivalAt: IsoTime
+    delaySec: int
+
+
+class EtaTrip(Model):
+    tripId: str
+    routeId: str
+    shortName: str
+    directionId: int | None
+    vehicleId: str
+    reportAgeSec: int
+    updates: list[EtaStopUpdate]
+
+
+class EtaDebug(Model):
+    at: IsoTime | None                  # time of the snapshot the feed is built from
+    label: I18n | None                  # „estimare, din N ore înregistrate (…)”
+    predictor: Literal["timetable", "persist"]
+    maxReportAgeSec: int
+    skippedNoRecentReport: int
+    trips: list[EtaTrip]
+    backtest: EtaBacktest | None
+    note: I18n

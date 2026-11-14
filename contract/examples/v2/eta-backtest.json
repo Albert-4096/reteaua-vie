@@ -1,0 +1,63 @@
+{
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T12:59:56+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+  }
+ },
+ "cells": [
+  {
+   "horizonMin": 5,
+   "n": 26624,
+   "timetableMedianAbsSec": 150.0,
+   "persistMedianAbsSec": 68.0,
+   "timetableMeanAbsSec": 307.3,
+   "persistMeanAbsSec": 87.7
+  },
+  {
+   "horizonMin": 10,
+   "n": 19631,
+   "timetableMedianAbsSec": 158.5,
+   "persistMedianAbsSec": 93.0,
+   "timetableMeanAbsSec": 305.8,
+   "persistMeanAbsSec": 121.3
+  },
+  {
+   "horizonMin": 15,
+   "n": 13934,
+   "timetableMedianAbsSec": 164.0,
+   "persistMedianAbsSec": 117.0,
+   "timetableMeanAbsSec": 298.8,
+   "persistMeanAbsSec": 150.6
+  }
+ ],
+ "chosen": "persist",
+ "beatsTimetable": true,
+ "verdict": {
+  "ro": "Pe înregistrare (din 23 ore înregistrate (vin. 13:47 → sâm. 12:59), 60189 predicții), orarul mutat cu întârzierea raportată are eroarea mediană și medie mai mică decât orarul singur la 5, 10 și 15 min.",
+  "en": "On the recording (from 23 recorded hours (Fri 13:47 → Sat 12:59), 60189 predictions) the timetable moved by the reported delay has a smaller median and mean error than the timetable alone at 5, 10 and 15 min."
+ },
+ "method": {
+  "ro": "Pe înregistrare (orarul observat L0): „acum” = o oprire observată cu întârzierea raportată de flux; ținta = prima oprire observată ulterior al cărei orar e la cel puțin 5, 10 sau 15 min după „acum” (cel mult 4 min în plus); eroarea = ora prezisă minus ora observată. „Doar orarul” față de „orar + întârzierea de acum”.",
+  "en": "Back-test on the recording (L0 stop events) against the observed arrival: timetable alone vs timetable + the delay reported now."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T12:59:56+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); orar observat L0"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}
