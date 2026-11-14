@@ -1,0 +1,185 @@
+{
+ "day": "weekday",
+ "date": "2026-11-09",
+ "hours": [
+  7,
+  19
+ ],
+ "walkMeters": 400,
+ "classes": [
+  {
+   "id": "none",
+   "label": {
+    "ro": "fără stație la 400 m",
+    "en": "no stop within 400 m"
+   },
+   "minPerHour": 0.0,
+   "maxPerHour": 0.0
+  },
+  {
+   "id": "lt2",
+   "label": {
+    "ro": "sub 2 plecări pe oră",
+    "en": "under 2 departures an hour"
+   },
+   "minPerHour": 0.0,
+   "maxPerHour": 2.0
+  },
+  {
+   "id": "2to4",
+   "label": {
+    "ro": "2–4 plecări pe oră",
+    "en": "2–4 departures an hour"
+   },
+   "minPerHour": 2.0,
+   "maxPerHour": 4.0
+  },
+  {
+   "id": "4to8",
+   "label": {
+    "ro": "4–8 plecări pe oră",
+    "en": "4–8 departures an hour"
+   },
+   "minPerHour": 4.0,
+   "maxPerHour": 8.0
+  },
+  {
+   "id": "ge8",
+   "label": {
+    "ro": "8 sau mai multe pe oră",
+    "en": "8 or more an hour"
+   },
+   "minPerHour": 8.0,
+   "maxPerHour": null
+  }
+ ],
+ "city": {
+  "slug": "_city",
+  "name": "Toată grila GHSL / whole GHSL grid",
+  "residents": 366817,
+  "byClass": [
+   41105,
+   30493,
+   27885,
+   74898,
+   192436
+  ],
+  "weakResidents": 71598,
+  "weakShare": 0.195,
+  "medianPerHour": 8.3,
+  "rank": null
+ },
+ "zones": [
+  {
+   "slug": "ronat",
+   "name": "Ronaț",
+   "residents": 9654,
+   "byClass": [
+    4168,
+    0,
+    2998,
+    2489,
+    0
+   ],
+   "weakResidents": 4168,
+   "weakShare": 0.432,
+   "medianPerHour": 2.3,
+   "rank": 1
+  },
+  {
+   "slug": "fratelia",
+   "name": "Fratelia",
+   "residents": 13672,
+   "byClass": [
+    511,
+    3007,
+    1281,
+    7790,
+    1083
+   ],
+   "weakResidents": 3518,
+   "weakShare": 0.257,
+   "medianPerHour": 4.3,
+   "rank": 2
+  },
+  {
+   "slug": "aradului-est",
+   "name": "Aradului Est",
+   "residents": 12954,
+   "byClass": [
+    2192,
+    917,
+    229,
+    3446,
+    6170
+   ],
+   "weakResidents": 3109,
+   "weakShare": 0.24,
+   "medianPerHour": 7.3,
+   "rank": 3
+  },
+  {
+   "slug": "freidorf",
+   "name": "Freidorf",
+   "residents": 10036,
+   "byClass": [
+    1264,
+    1582,
+    3,
+    6617,
+    570
+   ],
+   "weakResidents": 2846,
+   "weakShare": 0.284,
+   "medianPerHour": 5.4,
+   "rank": 4
+  },
+  {
+   "slug": "_outside",
+   "name": "În afara celor 40 de cartiere / outside the 40 neighbourhoods",
+   "residents": 42942,
+   "byClass": [
+    14377,
+    16625,
+    5576,
+    3318,
+    3046
+   ],
+   "weakResidents": 31003,
+   "weakShare": 0.722,
+   "medianPerHour": 0.7,
+   "rank": null
+  }
+ ],
+ "method": {
+  "ro": "Locuitori din celule GHSL 2020 de 100 m (model, nu recensământ), pe clase de frecvență la cel mult 400 m în linie dreaptă de o stație (aceeași rază ca M4). Frecvența unei celule = suma, peste liniile din rază, a plecărilor pe oră ale liniei (direcția și stația cu cele mai multe) în fereastra orară dintr-o zi de serviciu a orarului GTFS SMTT. „Acoperire slabă cu transport public” = sub 2 plecări pe oră sau nicio stație în rază. Distanța e în linie dreaptă, nu pe trotuar; orarul e planificat, nu observat.",
+  "en": "Residents of GHSL 2020 100 m cells (a model, not a census), by frequency class within 400 m straight-line of a stop (same radius as M4). A cell's frequency = sum over the lines in reach of the line's departures per hour (best direction, best stop) in the hour window of one GTFS service day. Weak coverage = under 2 departures an hour or no stop in reach. Straight-line distance, planned timetable."
+ },
+ "caveat": {
+  "ro": "Descriem acoperirea cu transport public a unei zone, nu oamenii din ea. Locuitorii sunt estimați din grila GHSL (nu recensământ); orarul e cel planificat în GTFS, nu cel observat.",
+  "en": "This describes how well public transport covers an area, not the people in it. Residents come from the GHSL grid (not a census); the timetable is the planned GTFS one, not the observed one."
+ },
+ "provenance": [
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  },
+  {
+   "source": "GHSL population grid (JRC)",
+   "url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_4326_3ss/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_4326_3ss_V1_0_R5_C21.zip",
+   "version": "GHS-POP R2023A V1-0, epoch 2020, 3 arcsec, EPSG:4326, tile R5_C21",
+   "fetchedAt": "2026-11-13T18:31:11+02:00",
+   "note": "model GHSL 2020, 100 m (nu recensământ)"
+  },
+  {
+   "source": "Primăria Timișoara, cartiere / neighbourhoods (/api/zones)",
+   "url": "https://cont.primariatm.ro/api/zones",
+   "version": null,
+   "fetchedAt": "2026-11-13T13:29:14+02:00",
+   "note": null
+  }
+ ]
+}

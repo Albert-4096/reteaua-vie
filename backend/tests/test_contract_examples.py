@@ -16,7 +16,7 @@ from app.models.lines_status import LinesStatus
 from app.models.live_missing import MissingLines
 from app.m1_disruption.notice_text import GeneratedNotice
 from app.observed.models import ObservedSummary
-from app.analytics.models import AccessibilityLines, StopAccessibility
+from app.analytics.models import AccessibilityLines, CorridorsResponse, CoverageSummary, StopAccessibility
 
 EXAMPLES = Path(__file__).resolve().parents[2] / "contract" / "examples"
 
@@ -59,12 +59,17 @@ MODELS: dict[str, object] = {
     "v2/feed-validation.json": m.FeedValidation,  # v2.3
     "v2/generated-notice.json": GeneratedNotice,  # v2.4
     "v2/stop-status.json": StopStatus,  # v2.9
+    "v2/km.json": dict,  # v2.13 (R5)
+    "v2/timetable-check.json": dict,  # v2.13 (R27)
     "v2/tools.json": dict,  # v2.9 (static declarations; the test below checks the shape)
     "v2/live-missing.json": MissingLines,  # v2.13 (O2, real response of ?case=case_l23)
     "v2/observed-summary.json": ObservedSummary,  # v2.14 (L0, real response)
     "v2/accessibility-lines.json": AccessibilityLines,  # v2.16 (R6, real response, lines cut to 4)
     "v2/accessibility-stop.json": StopAccessibility,  # v2.16 (R6, real response)
     "v2/layer-accessibility.json": m.LayerCollection,  # v2.16 (R6, real response, features cut to 6)
+    "v2/coverage-zones.json": CoverageSummary,  # v2.17 (A10, real response, zones cut to 5)
+    "v2/layer-coverage.json": m.LayerCollection,  # v2.17 (A10, real response, features cut to 4)
+    "v2/corridors.json": CorridorsResponse,  # v2.18 (A8, real response, 2 corridors, 4 hours each)
     "v2/lines-status.json": LinesStatus,  # v2.18 (R2, real response of ?since=: hero closure published)
 }
 

@@ -1,0 +1,362 @@
+{
+ "day": "weekday",
+ "date": "2026-11-09",
+ "minStops": 3,
+ "count": 61,
+ "corridors": [
+  {
+   "id": "11-5-R_TV_2+R_TV_7",
+   "lines": [
+    {
+     "routeId": "R_TV_2",
+     "shortName": "2",
+     "mode": "tram"
+    },
+    {
+     "routeId": "R_TV_7",
+     "shortName": "7",
+     "mode": "tram"
+    }
+   ],
+   "stops": [
+    {
+     "stopId": "11",
+     "name": "Piața Veteranilor (Turist)"
+    },
+    {
+     "stopId": "7",
+     "name": "Transilvania (Ana Ipătescu)"
+    },
+    {
+     "stopId": "5",
+     "name": "Banatul"
+    }
+   ],
+   "lengthMeters": 1070,
+   "hours": [
+    {
+     "hour": 8,
+     "departures": 8,
+     "perLine": {
+      "R_TV_2": 4,
+      "R_TV_7": 4
+     },
+     "meanGapMin": 6.0,
+     "minGapMin": 0.0,
+     "maxGapMin": 13.0,
+     "closeGaps": 4,
+     "cv": 0.97,
+     "pattern": "în pluton",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "shiftMin": 6
+       }
+      ],
+      "cvAfter": 0.15,
+      "maxGapAfterMin": 8.0
+     }
+    },
+    {
+     "hour": 9,
+     "departures": 8,
+     "perLine": {
+      "R_TV_2": 4,
+      "R_TV_7": 4
+     },
+     "meanGapMin": 6.0,
+     "minGapMin": 0.0,
+     "maxGapMin": 14.0,
+     "closeGaps": 4,
+     "cv": 1.11,
+     "pattern": "în pluton",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "shiftMin": -7
+       }
+      ],
+      "cvAfter": 0.08,
+      "maxGapAfterMin": 8.0
+     }
+    },
+    {
+     "hour": 10,
+     "departures": 10,
+     "perLine": {
+      "R_TV_2": 5,
+      "R_TV_7": 5
+     },
+     "meanGapMin": 6.1,
+     "minGapMin": 0.0,
+     "maxGapMin": 14.0,
+     "closeGaps": 5,
+     "cv": 1.02,
+     "pattern": "în pluton",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "shiftMin": -6
+       }
+      ],
+      "cvAfter": 0.12,
+      "maxGapAfterMin": 8.0
+     }
+    },
+    {
+     "hour": 22,
+     "departures": 7,
+     "perLine": {
+      "R_TV_2": 3,
+      "R_TV_7": 4
+     },
+     "meanGapMin": 9.3,
+     "minGapMin": 1.0,
+     "maxGapMin": 15.0,
+     "closeGaps": 2,
+     "cv": 0.61,
+     "pattern": "mixt",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_2",
+        "shortName": "2",
+        "shiftMin": 5
+       }
+      ],
+      "cvAfter": 0.4,
+      "maxGapAfterMin": 14.0
+     }
+    }
+   ],
+   "bunchedHours": 16,
+   "shiftableHours": 18
+  },
+  {
+   "id": "903-907-R_TV_2+R_TV_4+R_TV_7",
+   "lines": [
+    {
+     "routeId": "R_TV_2",
+     "shortName": "2",
+     "mode": "tram"
+    },
+    {
+     "routeId": "R_TV_4",
+     "shortName": "4",
+     "mode": "tram"
+    },
+    {
+     "routeId": "R_TV_7",
+     "shortName": "7",
+     "mode": "tram"
+    }
+   ],
+   "stops": [
+    {
+     "stopId": "903",
+     "name": "Balta Verde (Cetății)"
+    },
+    {
+     "stopId": "904",
+     "name": "Gheorghe Lazăr (Cetății)"
+    },
+    {
+     "stopId": "905",
+     "name": "Amforei (Cetății)"
+    },
+    {
+     "stopId": "906",
+     "name": "Matei Basarab (Cetății)"
+    },
+    {
+     "stopId": "907",
+     "name": "Calea Torontalului (Ciocanul)"
+    }
+   ],
+   "lengthMeters": 1580,
+   "hours": [
+    {
+     "hour": 8,
+     "departures": 12,
+     "perLine": {
+      "R_TV_2": 4,
+      "R_TV_4": 4,
+      "R_TV_7": 4
+     },
+     "meanGapMin": 4.0,
+     "minGapMin": 0.0,
+     "maxGapMin": 13.0,
+     "closeGaps": 7,
+     "cv": 1.25,
+     "pattern": "în pluton",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_4",
+        "shortName": "4",
+        "shiftMin": -7
+       },
+       {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "shiftMin": -2
+       }
+      ],
+      "cvAfter": 0.29,
+      "maxGapAfterMin": 7.0
+     }
+    },
+    {
+     "hour": 9,
+     "departures": 14,
+     "perLine": {
+      "R_TV_2": 5,
+      "R_TV_4": 4,
+      "R_TV_7": 5
+     },
+     "meanGapMin": 4.3,
+     "minGapMin": 1.0,
+     "maxGapMin": 12.0,
+     "closeGaps": 7,
+     "cv": 0.94,
+     "pattern": "în pluton",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "shiftMin": -4
+       },
+       {
+        "routeId": "R_TV_4",
+        "shortName": "4",
+        "shiftMin": 1
+       }
+      ],
+      "cvAfter": 0.29,
+      "maxGapAfterMin": 7.0
+     }
+    },
+    {
+     "hour": 10,
+     "departures": 12,
+     "perLine": {
+      "R_TV_2": 4,
+      "R_TV_4": 4,
+      "R_TV_7": 4
+     },
+     "meanGapMin": 4.5,
+     "minGapMin": 1.0,
+     "maxGapMin": 8.0,
+     "closeGaps": 4,
+     "cv": 0.61,
+     "pattern": "mixt",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_4",
+        "shortName": "4",
+        "shiftMin": -1
+       },
+       {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "shiftMin": -3
+       }
+      ],
+      "cvAfter": 0.23,
+      "maxGapAfterMin": 7.0
+     }
+    },
+    {
+     "hour": 22,
+     "departures": 10,
+     "perLine": {
+      "R_TV_2": 4,
+      "R_TV_4": 4,
+      "R_TV_7": 2
+     },
+     "meanGapMin": 5.0,
+     "minGapMin": 1.0,
+     "maxGapMin": 14.0,
+     "closeGaps": 6,
+     "cv": 0.97,
+     "pattern": "în pluton",
+     "proposal": {
+      "label": {
+       "ro": "propunere de decalaj, de verificat de SMTT",
+       "en": "offset proposal, to be checked by SMTT"
+      },
+      "shifts": [
+       {
+        "routeId": "R_TV_4",
+        "shortName": "4",
+        "shiftMin": 6
+       },
+       {
+        "routeId": "R_TV_7",
+        "shortName": "7",
+        "shiftMin": -2
+       }
+      ],
+      "cvAfter": 0.33,
+      "maxGapAfterMin": 8.0
+     }
+    }
+   ],
+   "bunchedHours": 13,
+   "shiftableHours": 19
+  }
+ ],
+ "method": {
+  "ro": "Orarul GTFS SMTT al unei zile de serviciu. Un tronson comun = cel puțin 3 stații consecutive deservite, în același sens, de aceleași linii (tiparul cel mai frecvent al fiecărei linii și direcții). Plecările liniilor din prima stație a tronsonului se unesc pe ore locale: interval mediu = ora / plecări; abaterea = împrăștierea intervalelor raportată la medie (0 = uniform); „în pluton” = peste 0,8, „alternează” = sub 0,4. O propunere mută linii întregi cu cel mult 8 min, cu aceleași plecări și aceiași km, și se păstrează doar dacă uniformizează clar intervalele fără să lungească pauza cea mai mare.",
+  "en": "The GTFS timetable of one service day. A shared stretch = at least 3 consecutive stops served in the same direction by the same lines (each line's most common trip pattern). Departures at the stretch's first stop are merged per local hour. A proposal moves whole lines by at most 8 min, same departures and km."
+ },
+ "caveat": {
+  "ro": "Orar planificat, nu observat: nu spune ce se întâmplă pe drum. Propunerile de decalaj sunt de verificat de SMTT; nu sunt o decizie. Variantele rare de traseu nu sunt incluse.",
+  "en": "Planned timetable, not observed. Offset proposals are for SMTT to check; they are not a decision. Rare route variants are left out."
+ },
+ "provenance": [
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}
