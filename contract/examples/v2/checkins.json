@@ -1,0 +1,47 @@
+{
+    "window": {
+        "start": "2026-11-14T06:00:00+02:00",
+        "end": "2026-11-14T10:41:00+02:00"
+    },
+    "lines": [
+        {
+            "routeId": "R_AB_23",
+            "shortName": "23",
+            "total": 2,
+            "simulated": 2,
+            "trips": [
+                {
+                    "tripId": "23.1_WESB_T_01_07",
+                    "count": 2,
+                    "distinctDevices": 2,
+                    "simulated": 2,
+                    "firstAt": "2026-11-14T08:30:00+02:00",
+                    "lastAt": "2026-11-14T08:31:00+02:00"
+                }
+            ],
+            "stops": [
+                {
+                    "stopId": "536",
+                    "stopName": "Gara de Est",
+                    "count": 2,
+                    "simulated": 2
+                }
+            ]
+        }
+    ],
+    "total": 2,
+    "simulated": 2,
+    "note": {
+        "ro": "Numărătoare paralelă a check-in-urilor din vehicul, nu validare oficială. Prezența dovedește, absența nu. Includ atingeri printr-un autocolant de test: simulare.",
+        "en": "A parallel count of on-board check-ins, not the official validation. Presence proves, absence does not. Includes taps through a test sticker: simulation."
+    },
+    "provenance": [
+        {
+            "source": "Rețeaua Vie, check-in la bord (numărătoare paralelă, nu validare oficială)",
+            "url": null,
+            "version": null,
+            "fetchedAt": "2026-11-14T13:27:39+02:00",
+            "note": "fără IP, agent, cont sau nume; poziția folosită doar la momentul check-in-ului și nepăstrată; telefonul = hash cu sare zilnică; rânduri păstrate 48 h, apoi doar numere; pragurile (300 m de traseu, 2 telefoane în 10 min) sunt propuneri, nemăsurate; autocolant de test: simulare, atingerile sunt reale"
+        }
+    ]
+}

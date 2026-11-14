@@ -1,0 +1,25 @@
+{
+    "routeId": "R_AB_23",
+    "shortName": "23",
+    "directionId": 0,
+    "tripId": "23.1_WESB_T_01_07",
+    "stopId": "536",
+    "stopName": "Gara de Est",
+    "method": "time",
+    "distanceToRouteMeters": null,
+    "at": "2026-11-14T08:30:00+02:00",
+    "simulated": true,
+    "label": {
+        "ro": "simulare",
+        "en": "simulation"
+    },
+    "provenance": [
+        {
+            "source": "Rețeaua Vie, check-in la bord (numărătoare paralelă, nu validare oficială)",
+            "url": null,
+            "version": null,
+            "fetchedAt": "2026-11-14T13:27:39+02:00",
+            "note": "fără IP, agent, cont sau nume; poziția folosită doar la momentul check-in-ului și nepăstrată; telefonul = hash cu sare zilnică; rânduri păstrate 48 h, apoi doar numere; pragurile (300 m de traseu, 2 telefoane în 10 min) sunt propuneri, nemăsurate; autocolant de test: simulare, atingerile sunt reale"
+        }
+    ]
+}

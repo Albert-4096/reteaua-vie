@@ -13,6 +13,7 @@ from app.city_reports.models import AreaReports, RoadIssues
 from app.dataquality.models import DataQuality
 from app.m1_disruption.events import EventConflicts
 from app.feedcheck.models import FeedCheck, FeedDiff
+from app.checkin.models import CheckinAck, CheckinCounts
 from app.cityapp.models import StopStatus
 from app.models.lines_status import LinesStatus
 from app.models.live_missing import MissingLines, TriageDecision
@@ -69,6 +70,8 @@ MODELS: dict[str, object] = {
     "v2/stop-status.json": StopStatus,  # v2.9
     "v2/km.json": dict,  # v2.13 (R5)
     "v2/timetable-check.json": dict,  # v2.13 (R27)
+    "v2/checkin.json": CheckinAck,  # v2.22 (C1)
+    "v2/checkins.json": CheckinCounts,  # v2.22 (C1, real response, test sticker = simulare)
     "v2/tools.json": dict,  # v2.9 (static declarations; the test below checks the shape)
     "v2/live-missing.json": MissingLines,  # v2.13 (O2, real response of ?case=case_l23)
     "v2/observed-summary.json": ObservedSummary,  # v2.14 (L0, real response)
