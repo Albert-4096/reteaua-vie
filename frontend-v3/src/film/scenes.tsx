@@ -331,7 +331,7 @@ function Monitor({ t, d, g }: SceneProps) {
             </div>
             <div style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontSize: 15, maxWidth: 300, color: done ? "var(--accent-foreground)" : "var(--muted-foreground)" }}>
-                {done ? "Confirmat de dispecer. Semnalul pleacă spre CityApp." : "Un om confirmă înainte de CityApp."}
+                {done ? "Confirmat de dispecer. Semnalul e gata pentru CityApp." : "Un om confirmă înainte de CityApp."}
               </span>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 14px", borderRadius: 10, fontSize: 14, fontWeight: 600,
                 background: done ? "var(--green-soft)" : "var(--primary)", color: done ? "var(--accent-foreground)" : "white" }}>

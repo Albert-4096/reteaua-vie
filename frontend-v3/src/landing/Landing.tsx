@@ -99,7 +99,7 @@ export function Landing() {
         </Section>
 
         <Section id="integrare" title="Datele orașului intră. Informația corectă iese."
-          sub="Rețeaua Vie citește ce are deja orașul și scrie în formatele standard pe care le citesc CityApp, Google, Punctul Național de Acces și stațiile.">
+          sub="Rețeaua Vie citește ce are deja orașul și scrie în formatele standard pe care CityApp și Google le pot citi.">
           <Integration />
         </Section>
 

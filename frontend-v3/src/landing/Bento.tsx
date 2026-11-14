@@ -100,7 +100,7 @@ function CitizenVisual() {
           <BellRing className="size-3.5 text-green" /> Alertă în aplicația de hărți
         </div>
         <p className="mt-1.5 text-sm font-medium leading-snug">Str. Ardealului închisă, linia E3 deviată</p>
-        <p className="mt-1 text-xs text-muted-foreground">Previzualizare GTFS-RT, așa cum o citesc CityApp și Google</p>
+        <p className="mt-1 text-xs text-muted-foreground">Previzualizare GTFS-RT, așa cum o pot citi CityApp și Google</p>
       </div>
     </div>
   );

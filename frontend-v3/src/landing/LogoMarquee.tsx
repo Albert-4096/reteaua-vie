@@ -34,6 +34,7 @@ export function LogoStrip() {
       <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
         {ORGS.map((o) => <Item key={o.name} o={o} />)}
       </ul>
+      <p className="mt-6 text-center text-xs text-muted-foreground">Nu sunt parteneri și nu sunt clienți: sunt cei pentru care e gândită platforma.</p>
     </section>
   );
 }
