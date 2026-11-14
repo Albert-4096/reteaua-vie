@@ -299,7 +299,51 @@ def indicators_key(at: datetime | None = None) -> str:
     return "m7:indicators:" + hashlib.sha256(blob.encode()).hexdigest()[:16]
 
 
+def notice_lead() -> tuple[list[Indicator], Provenance | None]:
+    """R15: median lead time from STPT notice to works start, over the notices in /api/history.
+
+    Computed on every call (not job-cached): a new publish changes it. One value per STPT notice
+    (the platform row replaces the back-filled one, as in /api/history)."""
+    from statistics import median
+
+    from app.common import provenance as prov
+    from app.m7_compliance.history import history
+
+    leads = {}
+    for r in history():
+        if r.leadHours is not None:
+            leads.setdefault(r.sourceUrl or r.closureId, r.leadHours)
+    n = len(leads)
+    value = round(median(leads.values()), 1) if n else None
+    late = sum(1 for v in leads.values() if v < 24)
+    out = [
+        _ind("NOTICE_LEAD_MEDIAN", "Preaviz median al anunțurilor STPT", "Median lead time of STPT notices",
+             value, "h",
+             f"Mediana orelor dintre publicarea anunțului STPT pe stpt.ro și începutul lucrării, pe cele {n} anunțuri "
+             f"din istoric (/api/history) cu fereastra citită din text; {late} {'a venit' if late == 1 else 'au venit'} "
+             "cu mai puțin de 24 h înainte.",
+             f"Median of the hours between the STPT notice going up on stpt.ro and the works start, over the {n} "
+             f"notices in the history (/api/history) whose window is read from the text; {late} came less than "
+             "24 h ahead.",
+             SCOPE_NETWORK),
+        _ind("NOTICE_LEAD_N", "Anunțuri STPT cu preaviz măsurat", "STPT notices with a measured lead time",
+             n, "anunțuri",
+             "Câte anunțuri intră în mediana de mai sus.", "How many notices the median above counts.",
+             SCOPE_NETWORK),
+    ]
+    p = prov.provenance("STPT, anunțuri / notices (stpt.ro), înregistrarea noastră", config.real_now(),
+                        prov.STPT_POSTS_URL, None, f"{n} anunțuri / notices") if n else None
+    return out, p
+
+
 def indicators(at: datetime | None = None) -> IndicatorSet:
     from app.common.jobs import compute_and_cache
 
-    return compute_and_cache(indicators_key(at), lambda: build_indicators(at))
+    base = compute_and_cache(indicators_key(at), lambda: build_indicators(at))
+    try:
+        lead, p = notice_lead()
+    except Exception:   # noqa: BLE001 - the other indicators never fail with this one
+        log.exception("notice lead time indicator failed")
+        return base
+    return base.model_copy(update={"indicators": list(base.indicators) + lead,
+                                   "provenance": list(base.provenance) + ([p] if p else [])})

@@ -11,6 +11,7 @@ We say nothing about the stop itself: the GTFS has no wheelchair field.
 from __future__ import annotations
 
 import time
+from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -26,7 +27,7 @@ from app.observed import store
 
 MAX_GAP_MIN = 90.0
 MIN_EVENTS = 3
-TTL_SEC = 600
+TTL_SEC = 1800
 
 METHOD = I18n(
     ro=("Ponderea curselor înregistrate al căror vehicul are în fluxul Primăriei wheelchair=true, pe linie și oră "
@@ -85,11 +86,15 @@ def _hour_shares(df: pd.DataFrame) -> list[dict]:
     return out
 
 
-def _route_names() -> dict[str, tuple[str, str]]:
-    f = gtfs.feed()
-    r = f.routes
+@lru_cache(maxsize=4)
+def _names_for(sha: str) -> dict[str, tuple[str, str]]:
+    r = gtfs.feed().routes
     return {row.route_id: (row.route_short_name or row.route_id, _MODE.get(str(row.route_type), "other"))
             for row in r.itertuples(index=False)}
+
+
+def _route_names() -> dict[str, tuple[str, str]]:
+    return _names_for(gtfs.feed().sha256)
 
 
 def provenances(first, last, extra_note: str | None = None) -> list:
@@ -166,8 +171,8 @@ def stops_table() -> tuple[pd.DataFrame, object, object]:
     return st, first, last
 
 
-def stop_record(r, first, last) -> dict:
-    names = _route_names()
+def stop_record(r, first, last, names=None) -> dict:
+    names = names or _route_names()
     acc = r["acc"] or {}
     return {"stopId": r["stop_id"], "name": r["stop_name"], "location": [r["lon"], r["lat"]],
             "stepFreeWaitMin": acc.get("stepFreeWaitMin"), "anyWaitMin": acc.get("anyWaitMin"),
@@ -189,11 +194,12 @@ def stop_report(stop_id: str) -> dict | None:
 
 def layer(bbox=None) -> dict:
     st, first, last = stops_table()
+    names = _route_names()
     feats = []
     for _, r in st.iterrows():
         if bbox and not (bbox[0] <= r["lon"] <= bbox[2] and bbox[1] <= r["lat"] <= bbox[3]):
             continue
-        p = stop_record(r, first, last)
+        p = stop_record(r, first, last, names)
         feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": p.pop("location")},
                       "properties": {k: p[k] for k in ("stopId", "name", "stepFreeWaitMin", "anyWaitMin",
                                                        "stepFreeEvents", "allEvents", "crossing")}})

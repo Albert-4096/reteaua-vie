@@ -1,0 +1,47 @@
+{
+    "window": {
+        "start": "2026-11-13T14:12:44+02:00",
+        "end": "2026-11-14T14:12:44+02:00"
+    },
+    "stops": [
+        {
+            "stopId": "356",
+            "stopName": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+            "travellers": 2,
+            "byCategory": [
+                {
+                    "category": "bus_did_not_come",
+                    "label": {
+                        "ro": "autobuzul nu a venit",
+                        "en": "the bus did not come"
+                    },
+                    "travellers": 2,
+                    "reports": 2
+                },
+                {
+                    "category": "poster_wrong",
+                    "label": {
+                        "ro": "afișul nu e corect",
+                        "en": "the poster is wrong"
+                    },
+                    "travellers": 1,
+                    "reports": 1
+                }
+            ]
+        }
+    ],
+    "travellers": 2,
+    "note": {
+        "ro": "Semnale de la călători, în categorii fixe: neconfirmate. Prezența arată o problemă posibilă, absența nu dovedește nimic.",
+        "en": "Traveller signals in fixed categories: unconfirmed. Presence points to a possible problem, absence proves nothing."
+    },
+    "provenance": [
+        {
+            "source": "Rețeaua Vie, semnale de la călători (categorii fixe) / traveller signals",
+            "url": null,
+            "version": null,
+            "fetchedAt": "2026-11-14T14:12:44+02:00",
+            "note": "un semnal, nu un fapt: neconfirmat de STPT sau Primărie; fără text liber, IP, agent, cont sau nume; telefon = hash cu sare zilnică; poziția (doar la apăsare) se folosește o dată și nu se păstrează; rânduri 48 h, apoi doar numere; nu trimitem nimic către Sesizări"
+        }
+    ]
+}

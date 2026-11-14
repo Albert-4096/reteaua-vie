@@ -1,0 +1,68 @@
+{
+  "closureId": "cl_20261108_16dec",
+  "status": "ok",
+  "signals": [
+    {
+      "signalId": "sig_45.74937_21.22015",
+      "location": [
+        21.220149,
+        45.749365
+      ],
+      "nearStop": "Piața Sfânta Maria (16 Decembrie 1989)",
+      "lines": [
+        "32",
+        "33",
+        "33b"
+      ],
+      "departuresInWindow": 58,
+      "standingMinutes": 53.5,
+      "standingNote": "măsurat din înregistrare"
+    },
+    {
+      "signalId": "sig_45.74769_21.22549",
+      "location": [
+        21.225494,
+        45.747694
+      ],
+      "nearStop": "Bd. Mihai Viteazu",
+      "lines": [
+        "E7"
+      ],
+      "departuresInWindow": 22,
+      "standingMinutes": 33.1,
+      "standingNote": "măsurat din înregistrare"
+    },
+    {
+      "signalId": "sig_45.74796_21.22574",
+      "location": [
+        21.225743,
+        45.747961
+      ],
+      "nearStop": "Pod Mihai Viteazu (Fac. Electrotehnică)",
+      "lines": [
+        "E7"
+      ],
+      "departuresInWindow": 22,
+      "standingMinutes": 17.6,
+      "standingNote": "măsurat din înregistrare"
+    }
+  ],
+  "note": null,
+  "proposal": {
+    "ro": "Propunere pentru serviciul de trafic: verificarea fazelor sau prioritate pentru liniile deviate. Nu propunem durate de semnal.",
+    "en": "A proposal for the traffic department: check the phases or give priority to the detoured lines. We propose no signal timings."
+  },
+  "method": {
+    "ro": "Semafoarele OSM (highway=traffic_signals) la cel mult 25 m de traseul de ocolire al fiecărei linii (L2, străzile fără bară de trafic). Plecările sunt cele ale liniei din GTFS, în fereastra lucrării, la stația unde începe ocolul. Așteptarea măsurată vine din înregistrare (R9a) sau e „necunoscut”.",
+    "en": "OSM signals within 25 m of each line's detour path (L2). Departures are the line's GTFS departures in the closure's window at the stop where its detour starts. Measured waiting comes from the recording (R9a) or is „unknown”."
+  },
+  "provenance": [
+    {
+      "source": "Rețeaua Vie R9, semafoare pe ocolire / signals on the detour",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-08T12:00:00+02:00",
+      "note": "propunere pentru serviciul de trafic; OSM + L2 + GTFS"
+    }
+  ]
+}

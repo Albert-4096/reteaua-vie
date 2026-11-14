@@ -264,7 +264,15 @@ def stop_status(stop_id: str, at: datetime) -> StopStatus:
         state_ = "normal"
     near = nearest if nearest and nearest["stopId"] != sid and any_no else None
     sentence = build_sentence(stop["name"], state_, ordered, near, max(ends) if ends else None)
+    try:   # R20: what riders signalled at this stop (labelled, unconfirmed); never breaks the answer
+        from app.travellers import service as traveller_service
+        reports = traveller_service.signal_for_stop(sid, at)
+    except Exception:
+        reports = None
+    if reports:
+        sentence = I18n(ro=f"{sentence.ro} {reports.label.ro[0].upper() + reports.label.ro[1:]}: o problemă la această stație.",
+                        en=f"{sentence.en} {reports.label.en[0].upper() + reports.label.en[1:]}: a problem at this stop.")
     sources = [load_network().provenance, imp.current_timetable().provenance, *sources]
     return StopStatus(stopId=sid, name=stop["name"], location=stop["location"], at=iso(at), state=state_, lines=ordered,
-                      nearestServed=near, sentence=sentence, liveFeed=live_feed_check(any(ln.stops == "novehicle" for ln in ordered)),
+                      nearestServed=near, sentence=sentence, travellerReports=reports, liveFeed=live_feed_check(any(ln.stops == "novehicle" for ln in ordered)),
                       nextStepFree=_next_step_free(sid), provenance=sources)

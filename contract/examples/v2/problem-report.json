@@ -1,0 +1,23 @@
+{
+    "stopId": "356",
+    "stopName": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+    "category": "bus_did_not_come",
+    "label": {
+        "ro": "autobuzul nu a venit",
+        "en": "the bus did not come"
+    },
+    "counted": true,
+    "note": {
+        "ro": "Mulțumim. E un semnal de la călători, nu o sesizare oficială: nu a fost trimis Primăriei. Pentru o sesizare oficială folosește aplicația Sesizări.",
+        "en": "Thank you. This is a traveller signal, not an official report: it was not sent to the City Hall. For an official report use the Sesizări app."
+    },
+    "provenance": [
+        {
+            "source": "Rețeaua Vie, semnale de la călători (categorii fixe) / traveller signals",
+            "url": null,
+            "version": null,
+            "fetchedAt": "2026-11-14T14:12:44+02:00",
+            "note": "un semnal, nu un fapt: neconfirmat de STPT sau Primărie; fără text liber, IP, agent, cont sau nume; telefon = hash cu sare zilnică; poziția (doar la apăsare) se folosește o dată și nu se păstrează; rânduri 48 h, apoi doar numere; nu trimitem nimic către Sesizări"
+        }
+    ]
+}

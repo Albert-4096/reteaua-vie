@@ -1,0 +1,128 @@
+{
+    "recording": {
+        "from": "2026-11-13T13:47:57+02:00",
+        "to": "2026-11-14T13:59:50+02:00",
+        "hours": 24,
+        "label": {
+            "ro": "din 24 ore înregistrate (vin. 13:47 → sâm. 13:59)",
+            "en": "from 24 recorded hours (Fri 13:47 → Sat 13:59)"
+        }
+    },
+    "date": "2026-11-13",
+    "signals": [
+        {
+            "signalId": "sig_45.75860_21.23242",
+            "location": [
+                21.23242,
+                45.758601
+            ],
+            "nearStop": "Oituz (Punctele cardinale)",
+            "minutes": 193.1,
+            "minutesPerHour": 7.98,
+            "samples": 605,
+            "vehicles": 50,
+            "lines": [
+                "11",
+                "17",
+                "28",
+                "40",
+                "46",
+                "E2",
+                "E4",
+                "E4b",
+                "E6",
+                "M11",
+                "M27",
+                "M30",
+                "M35",
+                "M41",
+                "M42",
+                "M43",
+                "M44",
+                "M45",
+                "M47",
+                "M49"
+            ],
+            "departuresPerDay": 1010,
+            "cells": 1
+        },
+        {
+            "signalId": "sig_45.74706_21.21002",
+            "location": [
+                21.210021,
+                45.747056
+            ],
+            "nearStop": null,
+            "minutes": 141.3,
+            "minutesPerHour": 5.84,
+            "samples": 468,
+            "vehicles": 35,
+            "lines": [
+                "1",
+                "5b",
+                "8",
+                "9",
+                "E1",
+                "E3"
+            ],
+            "departuresPerDay": 659,
+            "cells": 1
+        },
+        {
+            "signalId": "sig_45.75308_21.23237",
+            "location": [
+                21.232373,
+                45.753083
+            ],
+            "nearStop": "Parcul Copiilor",
+            "minutes": 140.3,
+            "minutesPerHour": 5.8,
+            "samples": 467,
+            "vehicles": 28,
+            "lines": [
+                "15",
+                "16",
+                "21",
+                "5c",
+                "E2",
+                "E7",
+                "M24",
+                "M3"
+            ],
+            "departuresPerDay": 867,
+            "cells": 1
+        }
+    ],
+    "totalMinutes": 4592.6,
+    "label": {
+        "ro": "măsurat din înregistrare, eșantion la 15 s; nu e simulare. Plafon: timpul măsurat în așteptare, nu o economie promisă.",
+        "en": "measured from the recording, 15 s samples; not a simulation. Ceiling: the measured waiting time, not a promised saving."
+    },
+    "method": {
+        "ro": "Celulele L4 de 100 m cu „semafor la cel mult 50 m” sunt atribuite celui mai apropiat semafor OSM (highway=traffic_signals, la cel mult 100 m). Minutele sunt vehicul-minute adunate peste toate vehiculele care au stat acolo, deci ordinea e ponderată de traficul real; plecările pe zi sunt ale celei mai active celule. Doar vineri după-amiază și weekend; fără extrapolare.",
+        "en": "L4's 100 m cells with „signal within 50 m” are attributed to the nearest OSM signal (highway=traffic_signals, within 100 m). Minutes are vehicle-minutes summed over every vehicle that stood there, so the order is weighted by real traffic; departures per day are those of the busiest cell. Friday afternoon and weekend only; no extrapolation."
+    },
+    "provenance": [
+        {
+            "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+            "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+            "version": null,
+            "fetchedAt": "2026-11-14T13:59:50+02:00",
+            "note": "din 24 ore înregistrate (vin. 13:47 → sâm. 13:59); orar observat L0"
+        },
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        },
+        {
+            "source": "OpenStreetMap",
+            "url": "https://www.openstreetmap.org",
+            "version": null,
+            "fetchedAt": "2026-11-13T18:31:01+02:00",
+            "note": "crossing=traffic_signals; etichetă traffic_signals:sound"
+        }
+    ]
+}

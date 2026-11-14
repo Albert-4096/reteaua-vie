@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Literal
 
 from app.models.base import I18n, IsoTime, LonLat, Model, Provenance, Window
+from app.models.delay_effect import DelayEffect
 
 Classification = Literal["anuntata", "fara_anunt"]
 
@@ -46,6 +47,7 @@ class DeviationGroup(Model):
     maxDistanceM: int
     extraKm: float                 # sum over the tracks; km, never lei
     tracks: list[DeviationTrack]
+    delayEffect: DelayEffect | None = None   # v2.37 (R25): the delay the run adds, measured from L0
 
 
 class DeviationCounts(Model):

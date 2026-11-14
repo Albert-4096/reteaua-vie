@@ -184,3 +184,42 @@ class MeasuredWindows(Model):
     note: I18n | None = None   # why there is no measured order (status != ok)
     method: I18n
     provenance: list[Provenance]
+
+
+# --- A11: GET /api/transfers (CONTRACT `TransferReport`) ------------------------------------------------
+
+class TransferPair(Model):
+    fromRouteId: str
+    fromShort: str
+    toRouteId: str
+    toShort: str
+    toDirectionId: int
+    connections: int
+    missed: int
+    missedShare: Estimate      # share of connections lost (sec = share 0..1)
+    plannedWaitSec: Estimate
+    realWaitSec: Estimate
+
+
+class TransferHub(Model):
+    hubId: str
+    name: str
+    location: list[float]      # [lon, lat]
+    stopIds: list[str]
+    routes: list[str]
+    connections: int
+    missed: int
+    missedShare: Estimate
+    plannedWaitSec: Estimate
+    realWaitSec: Estimate
+    extraWaitSec: Estimate     # real - planned wait, connection by connection
+    pairs: list[TransferPair]
+
+
+class TransferReport(Model):
+    status: str                # ok | fara_inregistrare
+    label: I18n | None
+    walk: dict                 # {speedKmh, bufferSec, maxMeters}
+    hubs: list[TransferHub]
+    method: I18n
+    provenance: list[Provenance]

@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Query
 
+from app.common.errors import invalid
+from app.common.timeutil import parse_iso
 from app.live.check import compute_live_check
 from app.live.reports import report_summary
 from app.models.v1 import LiveCheck
@@ -22,5 +24,13 @@ def closure_live(closure_id: str) -> LiveCheck:
 
 @router.get("/closures/{closure_id}/reports", response_model=ReportSummary)
 def closure_reports(closure_id: str,
-                    radius: float = Query(500.0, description="metres around the closure, 1-5000")) -> ReportSummary:
-    return ReportSummary.model_validate(report_summary(closure_id, radius))
+                    radius: float = Query(500.0, description="metres around the closure, 1-5000"),
+                    since: str | None = Query(None, description="ISO time; count reports created at or after it "
+                                                   "(the board passes publishedAt)")) -> ReportSummary:
+    when = None
+    if since:
+        try:
+            when = parse_iso(since.strip().replace(" ", "+"))
+        except ValueError:
+            raise invalid("`since` must be an ISO 8601 time") from None
+    return ReportSummary.model_validate(report_summary(closure_id, radius, when))

@@ -7,6 +7,7 @@ from typing import Literal
 from pydantic import Field
 
 from app.models.service_confirmation import ServiceConfirmation
+from app.travellers.models import TravellerSignal
 from app.models.base import I18n, IsoTime, Model, Provenance, Window
 
 MissingStatus = Literal["ok", "inregistrare_incompleta"]
@@ -34,6 +35,7 @@ class MissingRoute(Model):
     firstMissedTrip: MissedTrip | None
     decision: TriageDecision | None = None   # v2.24 (R4): the latest decision of a person on this row
     repeatedDays: int | None = None          # v2.24 (R4): recorded days with the route in the same state, same hours
+    travellerReports: TravellerSignal | None = None   # v2.35 (R20): riders said the bus did not come: a signal, unconfirmed
     serviceConfirmation: ServiceConfirmation | None = None   # v2.29 (C2): ≥ 2 phones checked in on the line while no vehicle is in the recording
 
 

@@ -354,6 +354,12 @@ def with_decisions(result: dict) -> dict:
         rows = confirm.annotate(rows, win)
     except Exception:
         log.exception("C2 service confirmation failed; rows without it")
+    try:   # R20 (v2.35): „semnalat de N călători”, a labelled signal on the row, never a fact
+        from app.travellers import service as traveller_service
+        rows = [{**r, "travellerReports": (lambda t: t.model_dump() if t else None)(
+            traveller_service.signal_for_route(r["routeId"], parse_iso(win["start"]), parse_iso(win["end"])))} for r in rows]
+    except Exception:
+        log.exception("R20 traveller reports failed; rows without them")
     return {**result, "routes": rows}
 
 

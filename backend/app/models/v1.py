@@ -144,6 +144,22 @@ class ClosureInput(Model):
     locationNote: I18n | None = None  # v2.3: e.g. „locație aproximativă: anunțul nu dă punctul exact”
 
 
+class TimelineStep(Model):
+    step: str               # "anuntat" | "publicat" | "in_desfasurare" | "incheiat"
+    label: I18n
+    at: str | None          # ISO time; null = not known (no STPT post found, not published)
+    source: str | None      # where `at` comes from
+    done: bool              # `at` is at or before the app clock
+
+
+class ClosureTimeline(Model):
+    """R15 (v2.37): the lifecycle of a closure, each step timed from its source (m1_disruption.timeline)."""
+    steps: list[TimelineStep]
+    current: str | None     # the last step reached, in the order above; null before the notice
+    leadHours: float | None  # STPT post → works start; null when no post is known
+    noticeUrl: str | None
+
+
 class Closure(ClosureInput):
     id: str
     status: ClosureStatus
@@ -152,6 +168,8 @@ class Closure(ClosureInput):
     # live „Publică”); reconstructedNote says so in plain words
     reconstructed: bool | None = None
     reconstructedNote: I18n | None = None
+    # v2.37 (R15): filled by GET /api/closures/{id}, not stored
+    timeline: ClosureTimeline | None = None
 
 
 class ParseResult(Model):

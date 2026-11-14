@@ -31,12 +31,13 @@ from app.common import state
 from app.common.errors import ApiError, invalid
 from app.common.stpt_posts import StptPost, load_posts
 from app.common.timeutil import iso, local_midnight, parse_iso
+from app.m1_disruption.timeline import lead_hours
 from app.models.base import I18n, Provenance
 from app.models.v2 import HistoryEntry
 
 log = logging.getLogger("reteaua_vie.m7.history")
 
-BACKFILL_VERSION = 1   # bump when the clean-parse rule or the row content changes
+BACKFILL_VERSION = 2   # bump when the clean-parse rule or the row content changes (2: leadHours, R29/V1 parser)
 
 NOTE_BACKFILLED = I18n(ro="reconstituit din anunț STPT, nu publicat prin platformă",
                        en="reconstructed from an STPT notice, not published through the platform")
@@ -47,6 +48,7 @@ class HistoryRow(HistoryEntry):
     """HistoryEntry + optional fields (CONTRACT HistoryEntry, additive): label, source, provenance."""
     note: I18n | None = None
     sourceUrl: str | None = None
+    leadHours: float | None = None   # v2.37 (R15): STPT post → works start, in hours; null = no post known
     provenance: list[Provenance] | None = None
 
 
@@ -129,6 +131,7 @@ def _entry_for_post(post: StptPost, detail) -> HistoryRow:
         note=NOTE_BACKFILLED,
         sourceUrl=post.link or None,
         provenance=provenance,
+        leadHours=lead_hours(post.date, closure["window"]["start"]),
     )
 
 
@@ -169,6 +172,13 @@ def backfill() -> BackfillSet:
 # --- platform rows -----------------------------------------------------------------------------
 
 
+def _lead(closure: dict) -> float | None:
+    from app.m1_disruption.timeline import post_for
+
+    post = post_for(closure)
+    return lead_hours(post.date, closure["window"]["start"]) if post else None
+
+
 def platform_rows() -> list[HistoryRow]:
     out = []
     for pub in state.list_all("published"):
@@ -200,6 +210,7 @@ def platform_rows() -> list[HistoryRow]:
                   and pub.get("reconstructedNote") else NOTE_PLATFORM),
             sourceUrl=closure.get("sourceUrl"),
             provenance=(impact or {}).get("provenance") or None,
+            leadHours=_lead(closure),
         ))
     return out
 

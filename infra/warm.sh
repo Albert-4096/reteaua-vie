@@ -13,6 +13,13 @@ paths=(
   /api/layers/parking /api/live/vehicles /api/live/missing "/api/live/missing?case=case_l23" /api/live/deviations
   /api/feed/alerts.json /api/feed/alerts.ngsi.json /api/feed/datex.xml
   /api/compliance /api/history /api/indicators /api/exports
+  /api/observed/summary /api/lines/status /api/data-quality /api/registry /api/feed-diff
+  /api/reliability/lines /api/reliability/vehicles /api/standing /api/streets/critical "/api/layers/streets"
+  /api/accessibility/lines /api/accessibility/stops/6 /api/layers/accessibility
+  /api/coverage/zones /api/layers/coverage /api/corridors
+  /api/eta/backtest /api/feed/tripupdates.json /api/feed/tripupdates.pb
+  /api/feed/waze-cifs.json /api/feed/avoid-streets.geojson /api/feed/notices.json
+  /api/checkins /api/layers/road_issues /api/road-issues /api/reports/zones
 )
 for c in "$HERO" "$E3" "$MOC"; do
   paths+=(
@@ -21,6 +28,9 @@ for c in "$HERO" "$E3" "$MOC"; do
     "/api/closures/$c/bike" "/api/closures/$c/parking" "/api/closures/$c/detour-load"
     "/api/closures/$c/conflicts" "/api/closures/$c/reports" "/api/closures/$c/windows"
     "/api/closures/$c/access?dest=hospital&minutes=30" "/api/scenarios?closureId=$c"
+    "/api/closures/$c/detour-cost" "/api/closures/$c/windows/measured" "/api/closures/$c/cut-through"
+    "/api/closures/$c/balance" "/api/closures/$c/landmarks" "/api/closures/$c/paid-parking"
+    "/api/closures/$c/km" "/api/closures/$c/journal"
   )
 done
 paths+=("/api/closures/$MOC/live")
@@ -29,7 +39,7 @@ fail=0
 for p in "${paths[@]}"; do
   out=$(curl -s -m 120 -o /dev/null -w '%{http_code} %{time_total}' "$BASE$p") || out="000 -"
   printf '%s %ss %s\n' "${out% *}" "${out#* }" "$p"
-  # 202 = a job started (it finishes in the background); 404 on /validation = not published yet
-  case "${out% *}" in 200|202) ;; 404) [[ "$p" == */validation ]] || fail=1 ;; *) fail=1 ;; esac
+  # 202 = a job started (it finishes in the background); 404 on /validation or /journal = not published / no journal yet
+  case "${out% *}" in 200|202) ;; 404) [[ "$p" == */validation || "$p" == */journal ]] || fail=1 ;; *) fail=1 ;; esac
 done
 exit $fail

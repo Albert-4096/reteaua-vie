@@ -125,8 +125,13 @@ def closure_area(closure: dict, analysis: dict | None):
     return None
 
 
-def report_summary(closure_id: str, radius: float = 500.0) -> dict:
-    """ReportSummary (CONTRACT, + v2.3 optional coveredFrom/coveredTo/note)."""
+def report_summary(closure_id: str, radius: float = 500.0, since: datetime | None = None) -> dict:
+    """ReportSummary (CONTRACT, + v2.3 optional coveredFrom/coveredTo/note).
+
+    `since` (R20) counts only reports created at or after that moment, up to the
+    window end. The board passes the closure's publishedAt. Counts and categories
+    only: no report text, photo, name or point.
+    """
     if not (0 < radius <= MAX_RADIUS):
         raise invalid(f"`radius` must be between 1 and {int(MAX_RADIUS)} metres")
     try:
@@ -138,6 +143,12 @@ def report_summary(closure_id: str, radius: float = 500.0) -> dict:
     analysis = state.read("closures", closure_id, state.PART_ANALYSIS)
     start = parse_iso(closure["window"]["start"]) - timedelta(days=DAYS_BEFORE)
     end = parse_iso(closure["window"]["end"])
+    if since is not None:
+        if since.tzinfo is None:
+            raise invalid("`since` must be an ISO 8601 time with an offset")
+        if since >= end:
+            raise invalid("`since` must be before the closure window ends")
+        start = since
     cov = coverage()
     files = _poll_files()
     fetched = files[-1][1] if files else datetime.now(timezone.utc)

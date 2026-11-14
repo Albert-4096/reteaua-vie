@@ -6,6 +6,7 @@ from typing import Literal
 
 from app.models.base import I18n, IsoTime, Model, Provenance
 from app.models.v1 import NearestServed
+from app.travellers.models import TravellerSignal
 
 
 class LineReason(Model):
@@ -53,6 +54,7 @@ class StopStatus(Model):
     lines: list[StopLine]
     nearestServed: NearestServed | None      # null when the stop itself is still served or none within 1,500 m
     sentence: I18n                           # one template sentence, no LLM
+    travellerReports: TravellerSignal | None = None   # v2.35 (R20): „semnalat de N călători”, a signal, never a fact
     liveFeed: LiveCheck                       # "niciun vehicul în datele live" waits for O2
     nextStepFree: NextStepFree | None = None  # v2.21 (R6); null when the recording has no figure for the stop
     provenance: list[Provenance]

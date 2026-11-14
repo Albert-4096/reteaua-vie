@@ -28,10 +28,13 @@ Nothing is fetched; distances come from the City Hall's live data, recorded by u
 from __future__ import annotations
 
 import io
+import logging
 import zipfile
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache
+
+log = logging.getLogger("reteaua_vie.live.deviations")
 
 import numpy as np
 import pandas as pd
@@ -381,6 +384,22 @@ def detect(start: datetime, end: datetime) -> dict:
             "maxDistanceM": max(t["maxDistanceM"] for t in tracks),
             "extraKm": round(sum(t["extraKm"] for t in tracks), 2), "tracks": tracks,
         })
+    if out_groups:  # R25: measured extra delay per group, from L0 only (Fri afternoon + weekend; no weekday fill-in)
+        try:
+            from app.live.delay_effect import run_effects
+            from app.observed import store
+
+            ev, seg = store.events(), store.segments()
+        except Exception:
+            log.exception("R25 delay effect failed; groups without a measured delay")
+            ev = seg = None
+        if ev is not None:
+            for g in out_groups:
+                try:
+                    g["delayEffect"] = run_effects(g["tracks"], ev, seg)
+                except Exception:
+                    log.exception("R25 delay effect failed for %s", g.get("routeId"))
+                    g["delayEffect"] = None
     out_groups.sort(key=lambda g: (g["classification"] != "fara_anunt", -g["runs"], g["shortName"] or ""))
     counts["kept"] = len(kept)
     counts["announced"] = sum(g["runs"] for g in out_groups if g["classification"] == "anuntata")

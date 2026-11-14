@@ -16,11 +16,14 @@ from app.feedcheck.models import FeedCheck, FeedDiff
 from app.checkin.models import CheckinAck, CheckinCounts
 from app.cityapp.models import StopStatus
 from app.models.lines_status import LinesStatus
+from app.models.delay_effect import ClosureDelayEffect
 from app.models.live_deviations import Deviations
 from app.models.live_missing import MissingLines, TriageDecision
 from app.m1_disruption.notice_text import GeneratedNotice
 from app.m1_disruption.streets import StreetSearch, StreetSection
-from app.observed.models import DetourCost, MeasuredWindows, ObservedSummary
+from app.observed.models import DetourCost, MeasuredWindows, ObservedSummary, TransferReport
+from app.signals.waits import DetourSignals, SignalWaits
+from app.travellers.models import ReportAck, ReportSummary as TravellerReportSummary
 from app.analytics.models import (
     EtaBacktest, EtaDebug,
     CutThrough, WorksBalance,
@@ -80,13 +83,18 @@ MODELS: dict[str, object] = {
     "v2/timetable-check.json": dict,  # v2.13 (R27)
     "v2/checkin.json": CheckinAck,  # v2.22 (C1)
     "v2/checkins.json": CheckinCounts,  # v2.22 (C1, real response, test sticker = simulare)
-    "v2/journal.json": dict,  # v2.30 (R13)
-    "v2/registry.json": dict,  # v2.30 (R14, lines cut to 3, files cut to 2)
+    "v2/journal.json": dict,  # v2.34 (R13)
+    "v2/registry.json": dict,  # v2.34 (R14, lines cut to 3, files cut to 2)
     "v2/tools.json": dict,  # v2.9 (static declarations; the test below checks the shape)
     "v2/live-missing.json": MissingLines,  # v2.13 (O2, real response of ?case=case_l23)
     "v2/observed-summary.json": ObservedSummary,  # v2.14 (L0, real response)
     "v2/detour-cost.json": DetourCost,  # v2.22 (L1-B, real response of Mocioni)
     "v2/windows-measured.json": MeasuredWindows,  # v2.32 (L2-B, real response of a drawn section)
+    "v2/transfers.json": TransferReport,  # A11-B (real response)
+    "v2/signals-waits.json": SignalWaits,  # R9
+    "v2/detour-signals.json": DetourSignals,  # R9
+    "v2/problem-report.json": ReportAck,  # R20 draft shape, endpoint not mounted
+    "v2/problem-reports.json": TravellerReportSummary,  # R20 draft shape, endpoint not mounted
     "v2/accessibility-lines.json": AccessibilityLines,  # v2.16 (R6, real response, lines cut to 4)
     "v2/accessibility-stop.json": StopAccessibility,  # v2.16 (R6, real response)
     "v2/layer-accessibility.json": m.LayerCollection,  # v2.16 (R6, real response, features cut to 6)
@@ -107,6 +115,7 @@ MODELS: dict[str, object] = {
     "v2/lines-status.json": LinesStatus,  # v2.18 (R2, real response of ?since=: hero closure published)
     "v2/live-missing-decision.json": TriageDecision,  # v2.24 (R4, real PATCH response in a scratch state)
     "v2/live-deviations.json": Deviations,  # v2.29 (R18, real response, 14 Nov 10:00-11:00)
+    "v2/delay-effect.json": ClosureDelayEffect,  # v2.39 (R25, real response of Mocioni)
     "v2/streets.json": StreetSearch,  # v2.19 (R1-B, real response of ?q=ardealului)
     "v2/street-section.json": StreetSection,  # v2.19 (R1-B, real response: Ardealului, Rahovei -> Martir Gogu Opre)
 }
