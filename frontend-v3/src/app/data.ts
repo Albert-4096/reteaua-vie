@@ -105,7 +105,7 @@ export type DetourCost = {
   totals: { measuredVsPlanned: Sec; estimateError: Sec } | null;
 };
 export type MeasuredWindows = { status: string; label: I18n; note: I18n | null; candidates: { window: Window; rank: number }[] };
-export type Registry = { entries: { date: string; final: boolean; chainHash: string; recording: { firstAt: string; lastAt: string; healthyShare: number }; lines: { tripsScheduledInRecording: number; tripsSeen: number; kmEstimated: number | null }[] }[] };
+export type Registry = { entries: { date: string; final: boolean; chainHash: string; recording: { firstAt: string | null; lastAt: string | null; healthyShare: number | null }; lines: { routeId: string; tripsScheduledInRecording: number; tripsSeen: number; kmEstimated: number | null }[] }[] };
 
 export type LineStatus = { routeId: string; shortName: string; mode: string; state: string; label: I18n; closureId: string | null; closureTitle: I18n | null };
 export type LiveVehicle = { vehicleId: string; routeId: string; directionId: 0 | 1 | null; stopId: string | null; status: string | null; delaySec: number | null; headsign: string | null; updatedAt: string };

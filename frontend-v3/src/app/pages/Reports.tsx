@@ -71,7 +71,7 @@ export function Reports() {
                       return (
                         <tr key={e.date}>
                           <td className="px-4 py-3 font-medium">{day(e.date)}</td>
-                          <td className="px-4 py-3 text-muted-foreground">{hhmm(e.recording.firstAt)}–{hhmm(e.recording.lastAt)}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{e.recording.firstAt && e.recording.lastAt ? `${hhmm(e.recording.firstAt)}–${hhmm(e.recording.lastAt)}` : "–"}</td>
                           <td className="px-4 py-3 text-right font-semibold">{fmt.format(seen)}</td>
                           <td className="px-4 py-3 text-right">{fmt.format(sched)}</td>
                           <td className="px-4 py-3 text-right">{fmt.format(Math.round(km))}</td>

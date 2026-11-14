@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LineBadge } from "@/landing/LineBadge";
 import { FAMILIES, useNetwork, type Route as NetRoute } from "@/lib/network";
 import { cn } from "@/lib/utils";
-import { app, count, dt, fmt, hhmm, useLoad, type LineReliability } from "../data";
+import { app, count, dt, fmt, hhmm, useLoad, weekday, type LineReliability } from "../data";
 import { lineShape, type Station } from "../lines";
 import { LineStrip, type StripRow } from "../LineStrip";
 import type { MapLabel } from "../MapView";
@@ -130,6 +130,7 @@ function Line({ routeId }: { routeId: string }) {
   const overview = useLoad(app.overview);
   const vehicles = useLoad(app.vehicles, "", 15_000);
   const rel = useLoad(app.reliability);
+  const reg = useLoad(app.registry);
   const dev = useLoad(app.deviations, "", 60_000);
   const [hover, setHover] = useState<Station | null>(null);
   const [who, setWho] = useState(ROLES[0]);
@@ -144,6 +145,14 @@ function Line({ routeId }: { routeId: string }) {
   const m = rel.data?.lines.find((l) => l.routeId === routeId);
   const off = (dev.data?.groups ?? []).filter((g) => g.routeId === routeId && g.classification === "fara_anunt");
   const mine = useMemo(() => (vehicles.data?.features ?? []).filter((v) => v.properties.routeId === routeId), [vehicles.data, routeId]);
+  // the line day by day, from the daily registry: one mixed total would hide a day with no vehicle at all
+  const days = useMemo(() => (reg.data?.entries ?? []).flatMap((e) => {
+    const l = e.lines.find((x) => x.routeId === routeId);
+    if (!l || !e.recording.firstAt || !e.recording.lastAt) return [];
+    const whole = hhmm(e.recording.firstAt) <= "00:01" && hhmm(e.recording.lastAt) >= "23:58";
+    return [{ date: e.date, final: e.final, span: !e.final ? "în curs" : whole ? "toată ziua" : `${hhmm(e.recording.firstAt)}–${hhmm(e.recording.lastAt)}`, seen: Math.min(l.tripsSeen, l.tripsScheduledInRecording), scheduled: l.tripsScheduledInRecording }];
+  }), [reg.data, routeId]);
+  const empty = [...days].reverse().find((d) => d.final && d.scheduled > 0 && d.seen === 0);
 
   const rows: StripRow[] = useMemo(() => (shape?.stations ?? []).map((s) => {
     const here = mine.filter((v) => v.properties.stopId && s.ids.includes(v.properties.stopId));
@@ -255,17 +264,39 @@ function Line({ routeId }: { routeId: string }) {
 
       {m && m.trips.scheduled > 0 && rel.data && (
         <Section title="Orarul față de stradă" aside={<Kind k="measured" />}>
-          <p className="tabular text-sm leading-relaxed">
-            <span className="font-semibold">{fmt.format(m.trips.observed)} din {count(m.trips.scheduled, "cursă", "curse")}</span> din orar au fost văzute în datele live
-            {m.trips.missed > 0 ? <>; <span className="font-semibold text-closure-ink">{fmt.format(m.trips.missed)} nevăzute</span>.</> : "."}
-          </p>
-          <SeenBar t={m.trips} className="mt-2.5 h-2" />
-          {recorded && prepared && (
+          {empty ? (
+            <p className="text-sm leading-relaxed">
+              <span className="font-semibold">{weekday(empty.date)[0].toUpperCase() + weekday(empty.date).slice(1)}</span>: <span className="font-semibold text-closure-ink">niciun vehicul al liniei în datele live</span>, {empty.span}. Orarul publicat are {count(empty.scheduled, "cursă", "curse")}.
+            </p>
+          ) : (
+            <p className="tabular text-sm leading-relaxed">
+              <span className="font-semibold">{fmt.format(m.trips.observed)} din {count(m.trips.scheduled, "cursă", "curse")}</span> din orar au fost văzute în datele live
+              {m.trips.missed > 0 ? <>; <span className="font-semibold text-closure-ink">{fmt.format(m.trips.missed)} nevăzute</span>.</> : "."}
+            </p>
+          )}
+          {days.length > 0 ? (
+            <ul className="mt-3 divide-y border-y">
+              {days.map((d) => (
+                <li key={d.date} className="flex items-center gap-3 py-2 text-sm">
+                  <span className="w-[7.5rem] shrink-0"><span className="block font-medium">{new Date(d.date).toLocaleDateString("ro-RO", { weekday: "short", day: "numeric", month: "short", timeZone: "Europe/Bucharest" })}</span><span className="tabular block text-xs text-muted-foreground">{d.span}</span></span>
+                  {d.scheduled > 0 ? (
+                    <>
+                      <SeenBar t={{ scheduled: d.scheduled, observed: d.seen, missed: d.scheduled - d.seen, share: d.seen / d.scheduled }} className="h-2 flex-1" />
+                      <span className={cn("tabular w-[5.5rem] shrink-0 text-right", d.seen < d.scheduled ? "font-semibold" : "text-muted-foreground")}>{fmt.format(d.seen)} din {fmt.format(d.scheduled)}</span>
+                    </>
+                  ) : <span className="flex-1 text-right text-muted-foreground">încă necomparat</span>}
+                </li>
+              ))}
+            </ul>
+          ) : <SeenBar t={m.trips} className="mt-2.5 h-2" />}
+          {recorded && prepared && !empty && (
             <p className="tabular mt-3 text-sm leading-relaxed text-foreground/80">
               {dt(prepared.window.start)}–{hhmm(prepared.window.end)}: {recorded.tripsObserved} din {count(recorded.tripsInService, "cursă", "curse")}.
             </p>
           )}
-          <div className="mt-5"><HourBars hours={m.hours} /></div>
+          {days.length > 0 && <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Pe zile: curse din orar, în orele înregistrate, la care am văzut un vehicul. Din registrul zilnic al curselor (Rapoarte).</p>}
+          <p className="mt-5 text-xs text-muted-foreground">Pe ore, toate zilele înregistrate la un loc:</p>
+          <div className="mt-2"><HourBars hours={m.hours} /></div>
           {trusted(m.punctuality) && (
             <div className="mt-6">
               <PunctualityBar p={m.punctuality} />
