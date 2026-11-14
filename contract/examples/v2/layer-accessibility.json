@@ -1,0 +1,163 @@
+{
+ "type": "FeatureCollection",
+ "layer": "accessibility",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     21.19611,
+     45.74015
+    ]
+   },
+   "properties": {
+    "stopId": "1",
+    "name": "Dâmbovița (Ion Barac)",
+    "stepFreeWaitMin": 6.1,
+    "anyWaitMin": 5.8,
+    "stepFreeEvents": 112,
+    "allEvents": 117,
+    "crossing": {
+     "osmId": "node/10722138621",
+     "distanceMeters": 7,
+     "sound": null
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     21.19624,
+     45.74012
+    ]
+   },
+   "properties": {
+    "stopId": "2",
+    "name": "Dâmbovița (Ion Barac)",
+    "stepFreeWaitMin": 5.7,
+    "anyWaitMin": 5.5,
+    "stepFreeEvents": 118,
+    "allEvents": 122,
+    "crossing": {
+     "osmId": "node/2084174406",
+     "distanceMeters": 16,
+     "sound": null
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     21.21272,
+     45.59412
+    ]
+   },
+   "properties": {
+    "stopId": "3",
+    "name": "Service (Pădureni)",
+    "stepFreeWaitMin": null,
+    "anyWaitMin": null,
+    "stepFreeEvents": 0,
+    "allEvents": 7,
+    "crossing": null
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     21.19784,
+     45.73662
+    ]
+   },
+   "properties": {
+    "stopId": "4",
+    "name": "Banatul",
+    "stepFreeWaitMin": 6.0,
+    "anyWaitMin": 4.6,
+    "stepFreeEvents": 116,
+    "allEvents": 157,
+    "crossing": {
+     "osmId": "node/6477728405",
+     "distanceMeters": 26,
+     "sound": null
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     21.19787,
+     45.73674
+    ]
+   },
+   "properties": {
+    "stopId": "5",
+    "name": "Banatul",
+    "stepFreeWaitMin": 5.7,
+    "anyWaitMin": 5.6,
+    "stepFreeEvents": 118,
+    "allEvents": 122,
+    "crossing": {
+     "osmId": "node/6477728405",
+     "distanceMeters": 13,
+     "sound": null
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     21.20151,
+     45.73393
+    ]
+   },
+   "properties": {
+    "stopId": "6",
+    "name": "Transilvania (Aurora)",
+    "stepFreeWaitMin": 6.0,
+    "anyWaitMin": 4.4,
+    "stepFreeEvents": 118,
+    "allEvents": 163,
+    "crossing": {
+     "osmId": "node/10280197392",
+     "distanceMeters": 40,
+     "sound": null
+    }
+   }
+  }
+ ],
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T13:06:30+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 13:06)"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  },
+  {
+   "source": "OpenStreetMap",
+   "url": "https://www.openstreetmap.org",
+   "version": null,
+   "fetchedAt": "2026-11-13T18:31:01+02:00",
+   "note": "crossing=traffic_signals; etichetă traffic_signals:sound"
+  }
+ ]
+}

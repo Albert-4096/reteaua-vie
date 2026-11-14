@@ -1,0 +1,62 @@
+{
+ "stopId": "6",
+ "name": "Transilvania (Aurora)",
+ "location": [
+  21.20151,
+  45.73393
+ ],
+ "stepFreeWaitMin": 6.0,
+ "anyWaitMin": 4.4,
+ "stepFreeEvents": 118,
+ "allEvents": 163,
+ "nextStepFreeLines": [
+  "2",
+  "7",
+  "9"
+ ],
+ "crossing": {
+  "osmId": "node/10280197392",
+  "distanceMeters": 40,
+  "sound": null
+ },
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T13:07:46+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 13:07)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 13:07)"
+  }
+ },
+ "method": {
+  "ro": "Ponderea curselor înregistrate al căror vehicul are în fluxul Primăriei wheelchair=true, pe linie și oră (ora primei raportări a cursei, ora locală). O cursă = (cursă, vehicul, zi de serviciu); rapoartele repetate (același vehicul, același updatedAt) contează o dată. Cursele fără indicator sunt numărate separat și nu intră în pondere. Așteptarea la stație: din evenimentele de oprire ale orarului observat (L0) ale curselor accesibile; așteptarea tipică a unui sosit la întâmplare = Σ(pauză²) / (2 Σ pauză), pe pauze de cel mult 90 min, doar la stațiile cu cel puțin 3 evenimente.",
+  "en": "Share of recorded trips whose vehicle the City Hall feed flags wheelchair=true, per line and local hour (hour of the trip's first report). A trip = (trip, vehicle, service day); repeated reports count once. Trips without the flag are counted apart and left out of the share. Stop wait: from L0 stop events of the step-free trips; wait of a random arrival = sum(gap^2) / (2 sum gap), gaps up to 90 min, only for stops with at least 3 events."
+ },
+ "caveat": {
+  "ro": "Vehicul marcat accesibil în fluxul Primăriei; stația nu e verificată (GTFS nu are câmpuri de accesibilitate). Doar vineri după-amiază și weekend: fără extrapolare la zilele lucrătoare.",
+  "en": "Vehicle flagged step-free in the City Hall feed; the stop itself is not verified (the GTFS has no accessibility fields). Friday afternoon and weekend only: no extrapolation to weekdays."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T13:07:46+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 13:07)"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  },
+  {
+   "source": "OpenStreetMap",
+   "url": "https://www.openstreetmap.org",
+   "version": null,
+   "fetchedAt": "2026-11-13T18:31:01+02:00",
+   "note": "crossing=traffic_signals; etichetă traffic_signals:sound"
+  }
+ ]
+}

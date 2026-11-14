@@ -1,0 +1,291 @@
+{
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T13:06:30+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 13:06)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 13:06)"
+  }
+ },
+ "trips": {
+  "hour": -1,
+  "trips": 3740,
+  "stepFree": 3048,
+  "share": 0.815
+ },
+ "fleet": {
+  "vehicles": 182,
+  "stepFree": 145,
+  "share": 0.797,
+  "unknown": 1
+ },
+ "byHour": [
+  {
+   "hour": 0,
+   "trips": 1,
+   "stepFree": 1,
+   "share": 1.0
+  },
+  {
+   "hour": 4,
+   "trips": 3,
+   "stepFree": 2,
+   "share": 0.667
+  },
+  {
+   "hour": 5,
+   "trips": 86,
+   "stepFree": 66,
+   "share": 0.767
+  },
+  {
+   "hour": 6,
+   "trips": 178,
+   "stepFree": 151,
+   "share": 0.848
+  },
+  {
+   "hour": 7,
+   "trips": 169,
+   "stepFree": 143,
+   "share": 0.846
+  },
+  {
+   "hour": 8,
+   "trips": 147,
+   "stepFree": 126,
+   "share": 0.857
+  },
+  {
+   "hour": 9,
+   "trips": 130,
+   "stepFree": 111,
+   "share": 0.854
+  },
+  {
+   "hour": 10,
+   "trips": 147,
+   "stepFree": 125,
+   "share": 0.85
+  }
+ ],
+ "lines": [
+  {
+   "routeId": "R_TV_1",
+   "shortName": "1",
+   "mode": "tram",
+   "trips": 146,
+   "stepFree": 146,
+   "share": 1.0,
+   "unknown": 0,
+   "vehicles": 9,
+   "hours": [
+    {
+     "hour": 5,
+     "trips": 1,
+     "stepFree": 1,
+     "share": 1.0
+    },
+    {
+     "hour": 6,
+     "trips": 10,
+     "stepFree": 10,
+     "share": 1.0
+    },
+    {
+     "hour": 7,
+     "trips": 7,
+     "stepFree": 7,
+     "share": 1.0
+    },
+    {
+     "hour": 8,
+     "trips": 7,
+     "stepFree": 7,
+     "share": 1.0
+    },
+    {
+     "hour": 9,
+     "trips": 7,
+     "stepFree": 7,
+     "share": 1.0
+    },
+    {
+     "hour": 10,
+     "trips": 6,
+     "stepFree": 6,
+     "share": 1.0
+    }
+   ]
+  },
+  {
+   "routeId": "R_TV_2",
+   "shortName": "2",
+   "mode": "tram",
+   "trips": 162,
+   "stepFree": 161,
+   "share": 0.994,
+   "unknown": 0,
+   "vehicles": 13,
+   "hours": [
+    {
+     "hour": 5,
+     "trips": 4,
+     "stepFree": 4,
+     "share": 1.0
+    },
+    {
+     "hour": 6,
+     "trips": 12,
+     "stepFree": 12,
+     "share": 1.0
+    },
+    {
+     "hour": 7,
+     "trips": 7,
+     "stepFree": 7,
+     "share": 1.0
+    },
+    {
+     "hour": 8,
+     "trips": 7,
+     "stepFree": 7,
+     "share": 1.0
+    },
+    {
+     "hour": 9,
+     "trips": 7,
+     "stepFree": 7,
+     "share": 1.0
+    },
+    {
+     "hour": 10,
+     "trips": 7,
+     "stepFree": 7,
+     "share": 1.0
+    }
+   ]
+  },
+  {
+   "routeId": "R_TV_4",
+   "shortName": "4",
+   "mode": "tram",
+   "trips": 140,
+   "stepFree": 134,
+   "share": 0.957,
+   "unknown": 0,
+   "vehicles": 19,
+   "hours": [
+    {
+     "hour": 5,
+     "trips": 6,
+     "stepFree": 6,
+     "share": 1.0
+    },
+    {
+     "hour": 6,
+     "trips": 5,
+     "stepFree": 5,
+     "share": 1.0
+    },
+    {
+     "hour": 7,
+     "trips": 4,
+     "stepFree": 4,
+     "share": 1.0
+    },
+    {
+     "hour": 8,
+     "trips": 4,
+     "stepFree": 4,
+     "share": 1.0
+    },
+    {
+     "hour": 9,
+     "trips": 4,
+     "stepFree": 4,
+     "share": 1.0
+    },
+    {
+     "hour": 10,
+     "trips": 4,
+     "stepFree": 4,
+     "share": 1.0
+    }
+   ]
+  },
+  {
+   "routeId": "R_TV_7",
+   "shortName": "7",
+   "mode": "tram",
+   "trips": 263,
+   "stepFree": 35,
+   "share": 0.133,
+   "unknown": 0,
+   "vehicles": 24,
+   "hours": [
+    {
+     "hour": 5,
+     "trips": 5,
+     "stepFree": 1,
+     "share": 0.2
+    },
+    {
+     "hour": 6,
+     "trips": 13,
+     "stepFree": 3,
+     "share": 0.231
+    },
+    {
+     "hour": 7,
+     "trips": 11,
+     "stepFree": 2,
+     "share": 0.182
+    },
+    {
+     "hour": 8,
+     "trips": 10,
+     "stepFree": 2,
+     "share": 0.2
+    },
+    {
+     "hour": 9,
+     "trips": 7,
+     "stepFree": 1,
+     "share": 0.143
+    },
+    {
+     "hour": 10,
+     "trips": 11,
+     "stepFree": 2,
+     "share": 0.182
+    }
+   ]
+  }
+ ],
+ "method": {
+  "ro": "Ponderea curselor înregistrate al căror vehicul are în fluxul Primăriei wheelchair=true, pe linie și oră (ora primei raportări a cursei, ora locală). O cursă = (cursă, vehicul, zi de serviciu); rapoartele repetate (același vehicul, același updatedAt) contează o dată. Cursele fără indicator sunt numărate separat și nu intră în pondere. Așteptarea la stație: din evenimentele de oprire ale orarului observat (L0) ale curselor accesibile; așteptarea tipică a unui sosit la întâmplare = Σ(pauză²) / (2 Σ pauză), pe pauze de cel mult 90 min, doar la stațiile cu cel puțin 3 evenimente.",
+  "en": "Share of recorded trips whose vehicle the City Hall feed flags wheelchair=true, per line and local hour (hour of the trip's first report). A trip = (trip, vehicle, service day); repeated reports count once. Trips without the flag are counted apart and left out of the share. Stop wait: from L0 stop events of the step-free trips; wait of a random arrival = sum(gap^2) / (2 sum gap), gaps up to 90 min, only for stops with at least 3 events."
+ },
+ "caveat": {
+  "ro": "Vehicul marcat accesibil în fluxul Primăriei; stația nu e verificată (GTFS nu are câmpuri de accesibilitate). Doar vineri după-amiază și weekend: fără extrapolare la zilele lucrătoare.",
+  "en": "Vehicle flagged step-free in the City Hall feed; the stop itself is not verified (the GTFS has no accessibility fields). Friday afternoon and weekend only: no extrapolation to weekdays."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T13:06:30+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 13:06)"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}
