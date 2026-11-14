@@ -1,8 +1,13 @@
 """SMTT GTFS: the planned timetable and its departure index.
 
-Source: the newest zip in $LIVE_DIR/gtfs/ (the recorder re-downloads it), else
-$DATA_DIR/smtt-timisoara-ro_2026-11-11.zip. GTFS route_id / stop_id are the
-same ids the city network serves (R_TV_4, "61"), checked on feed 4.31.
+Source: the feed in force at a date, among the zips in $LIVE_DIR/gtfs/ (the
+recorder re-downloads the SMTT zip) and $DATA_DIR/smtt-timisoara-ro_2026-11-11.zip:
+the highest feed_version whose start (feed_info feed_start_date, else the
+earliest calendar date) is on or before the date. The date defaults to the app
+clock (DEMO_NOW, or the real time when DEMO_NOW=real). SMTT publishes a feed
+before it starts (4.32 on 14 Nov, from 16 Nov), so the newest file is not
+always the one in force. GTFS route_id / stop_id are the same ids the city
+network serves (R_TV_4, "61"), checked on feed 4.31.
 
 Service days come from calendar.txt + calendar_dates.txt (frequencies.txt is
 empty). The departure index has one row per scheduled departure for every
@@ -13,7 +18,8 @@ the next calendar day. The index is cached as Parquet in $DATA_DIR/cache,
 keyed by the feed's sha256.
 
 Public API (used by M1 and later modules):
-    feed() -> Feed                      tables + version + hash + provenance
+    feed_path(at=None) -> Path          the zip in force at `at` (default: the app clock)
+    feed(at=None) -> Feed               tables + version + hash + provenance
     service_ids_on(day) -> set[str]
     stop_order(route_id, direction_id) -> list[str]
     stop_patterns() -> dict[(route, dir), Pattern]
@@ -27,8 +33,10 @@ Public API (used by M1 and later modules):
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import io
+import re
 import zipfile
 from collections import Counter
 from dataclasses import dataclass
@@ -43,7 +51,7 @@ import pandas as pd
 from app.common import provenance as prov
 from app.common.errors import unavailable
 from app.common.timeutil import file_mtime, gtfs_service_start
-from app.config import TZ, get_settings
+from app.config import TZ, get_settings, now
 from app.models.base import Provenance
 
 FALLBACK_ZIP = "smtt-timisoara-ro_2026-11-11.zip"
@@ -55,19 +63,73 @@ Key = tuple[str, str, int]  # (stop_id, route_id, direction_id)
 # --- feed location ---------------------------------------------------------------
 
 
-def feed_path() -> Path | None:
-    """Newest GTFS zip in $LIVE_DIR/gtfs/, else the fallback zip in $DATA_DIR."""
+def _version_key(version: str | None) -> tuple[int, ...]:
+    """'4.31' -> (4, 31), '4.31.1' -> (4, 31, 1); no version sorts first."""
+    return tuple(int(n) for n in re.findall(r"\d+", version or ""))
+
+
+@lru_cache(maxsize=64)
+def _zip_meta(path_str: str, mtime: float, size: int) -> tuple[str | None, date | None]:
+    """(feed_version, first service date) from feed_info.txt, else the earliest calendar date."""
+    def rows(z: zipfile.ZipFile, name: str) -> list[dict]:
+        if name not in z.namelist():
+            return []
+        return list(csv.DictReader(io.TextIOWrapper(z.open(name), encoding="utf-8-sig")))
+
+    try:
+        with zipfile.ZipFile(path_str) as z:
+            info = rows(z, "feed_info.txt")
+            version = (info[0].get("feed_version") or None) if info else None
+            start = (info[0].get("feed_start_date") or "").strip() if info else ""
+            if not start:
+                days = [r.get("start_date", "") for r in rows(z, "calendar.txt")]
+                days += [r.get("date", "") for r in rows(z, "calendar_dates.txt")]
+                days = sorted(d for d in days if d)
+                start = days[0] if days else ""
+    except (OSError, zipfile.BadZipFile, ValueError):
+        return None, None
+    return version, (_ymd(start) if start else None)
+
+
+def _candidates() -> list[Path]:
     s = get_settings()
     live = s.live_dir / "gtfs"
-    zips = sorted(live.glob("*.zip"), key=lambda p: p.stat().st_mtime) if live.is_dir() else []
-    if zips:
-        return zips[-1]
+    zips = list(live.glob("*.zip")) if live.is_dir() else []
     fb = s.data_dir / FALLBACK_ZIP
-    return fb if fb.is_file() else None
+    if fb.is_file():
+        zips.append(fb)
+    return zips
 
 
-def feed_file_time() -> datetime | None:
-    p = feed_path()
+def _day(at: datetime | date | None) -> date:
+    if at is None:
+        at = now()
+    return at.astimezone(TZ).date() if isinstance(at, datetime) else at
+
+
+def feed_path(at: datetime | date | None = None) -> Path | None:
+    """The GTFS zip in force at `at` (default: the app clock, DEMO_NOW or real time).
+
+    Among the candidates whose first service date is on or before that day,
+    the highest feed_version (ties: the newest file). If every feed starts
+    later, the one that starts first.
+    """
+    day = _day(at)
+    metas = []
+    for p in _candidates():
+        st = p.stat()
+        version, start = _zip_meta(str(p), st.st_mtime, st.st_size)
+        metas.append((p, version, start, st.st_mtime))
+    if not metas:
+        return None
+    started = [m for m in metas if m[2] is None or m[2] <= day]
+    if started:
+        return max(started, key=lambda m: (_version_key(m[1]), m[3]))[0]
+    return min(metas, key=lambda m: (m[2], [-n for n in _version_key(m[1])]))[0]
+
+
+def feed_file_time(at: datetime | date | None = None) -> datetime | None:
+    p = feed_path(at)
     return file_mtime(p) if p else None
 
 
@@ -117,7 +179,7 @@ def _read(z: zipfile.ZipFile, name: str) -> pd.DataFrame:
     return pd.read_csv(io.StringIO(raw), dtype=str, keep_default_na=False)
 
 
-@lru_cache(maxsize=1)
+@lru_cache(maxsize=2)
 def _load_feed(path_str: str, mtime: float) -> Feed:
     path = Path(path_str)
     with zipfile.ZipFile(path) as z:
@@ -138,11 +200,18 @@ def _load_feed(path_str: str, mtime: float) -> Feed:
                 calendar=t["calendar"], calendar_dates=t["calendar_dates"])
 
 
-def feed() -> Feed:
-    p = feed_path()
+# sha256 -> Feed, so the caches keyed by sha below read the feed they were asked for
+_FEEDS: dict[str, Feed] = {}
+
+
+def feed(at: datetime | date | None = None) -> Feed:
+    """The feed in force at `at` (default: the app clock); see feed_path()."""
+    p = feed_path(at)
     if p is None:
         raise unavailable("No GTFS feed in DATA_DIR (run `make data`).")
-    return _load_feed(str(p), p.stat().st_mtime)
+    f = _load_feed(str(p), p.stat().st_mtime)
+    _FEEDS[f.sha256] = f
+    return f
 
 
 # --- service calendar ----------------------------------------------------------------
@@ -152,7 +221,7 @@ _WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
 
 @lru_cache(maxsize=4)
 def _service_dates(sha: str) -> dict[date, frozenset[str]]:
-    f = feed()
+    f = _FEEDS[sha]
     by_day: dict[date, set[str]] = {}
     for row in f.calendar.itertuples(index=False):
         d, end = _ymd(row.start_date), _ymd(row.end_date)
@@ -196,7 +265,7 @@ class Pattern:
 
 @lru_cache(maxsize=4)
 def _patterns(sha: str) -> dict[tuple[str, int], Pattern]:
-    f = feed()
+    f = _FEEDS[sha]
     st = f.stop_times.sort_values(["trip_id", "stop_sequence"])
     seqs = st.groupby("trip_id", sort=False)["stop_id"].agg(tuple)
     trips = f.trips.set_index("trip_id")
@@ -267,7 +336,7 @@ def _index(sha: str) -> pd.DataFrame:
     path = _index_path(sha)
     if path.is_file():
         return pd.read_parquet(path)
-    idx = _build_index(feed())
+    idx = _build_index(_FEEDS[sha])
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(".tmp")
     idx.to_parquet(tmp, index=False)
