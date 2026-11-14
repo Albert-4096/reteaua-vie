@@ -23,6 +23,7 @@ import { fmtDateTime, tr } from "../../lib/format";
 import { navigate, stepHref } from "../../lib/router";
 import { invalidate, setData, useResource } from "../../lib/store";
 import type { StepProps } from "../types";
+import { CityAppCheck } from "./CityAppCheck";
 import { FeedsView } from "./feeds";
 import { AppsView, NoticeView, StationView } from "./outputs";
 import { S } from "./strings";
@@ -165,6 +166,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
             <Figure value={stopAlerts.length} label={t("publish.figPosters")} provenance={outProv} />
           </div>
         )}
+        {published && <CityAppCheck closureId={closureId} />}
         <nav aria-label={t("publish.outputs")}>
           <ul className="list">
             {outs.map((o) => (

@@ -1,0 +1,23 @@
+/* R27-F: the City Hall timetable check row in step 3. Tokens only (tokens.css). */
+.tt-check {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: var(--sp-3) 0;
+}
+
+.tt-check p {
+  margin: 0;
+}
+
+.tt-check-list > li {
+  display: grid;
+  grid-template-columns: 1fr auto 11ch;
+  gap: var(--sp-2);
+  align-items: baseline;
+}
+
+.tt-check-n {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
