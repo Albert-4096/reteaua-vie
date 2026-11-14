@@ -128,3 +128,7 @@
     scroll-behavior: auto;
   }
 }
+
+/* landing map: zones and lines stay hidden until the intro timeline sets their start values */
+.rv-pre .rv-zone,
+.rv-pre .rv-line { visibility: hidden; }
