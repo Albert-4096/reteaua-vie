@@ -33,7 +33,8 @@ def test_checkin_resolves_a_trip_and_marks_simulation():
     assert ack.routeId == "R_AB_23" and ack.tripId.startswith("23.") and ack.method == "time"
     assert ack.simulated and ack.label.ro == "simulare" and ack.provenance
     row = store.raw_rows()[0]
-    assert set(row) == {"at", "receivedAt", "stickerId", "routeId", "directionId", "tripId", "stopId", "device", "simulated"}
+    assert set(row) == {"at", "receivedAt", "stickerId", "routeId", "directionId", "tripId", "stopId", "device", "simulated",
+                        "method", "tripStart", "prevStart", "nextStart"}
     assert "phone-aaaaaaaa1" not in str(row) and len(row["device"]) == 16
 
 
@@ -114,3 +115,20 @@ def test_http_post_and_counts(client):
     assert c["total"] == 1 and c["simulated"] == 1 and c["lines"][0]["trips"][0]["distinctDevices"] == 1
     assert "simulare" in c["note"]["ro"]
     assert client.post("/api/checkin", json={"stickerId": "test-l23", "deviceKey": "x"}).status_code == 422
+
+
+@needs_data
+def test_two_phones_three_minutes_apart_on_adjacent_trips_still_confirm(monkeypatch):
+    _fake_recording(monkeypatch)
+    a = service.accept(body("phone-aaaaaaaa1", "2026-11-14T08:30:00+02:00"))
+    b = service.accept(body("phone-bbbbbbbb2", "2026-11-14T08:33:00+02:00"))
+    assert a.tripId != b.tripId          # the timetable split them: the case this guards
+    c = confirm.confirmations(datetime(2026, 11, 14, 6, tzinfo=TZ), datetime(2026, 11, 14, 11, tzinfo=TZ))["R_AB_23"]
+    assert c.travelers == 2 and len(c.trips) == 2 and "confirmat de 2 călători" in c.label.ro
+
+
+def test_pinned_trips_group_only_when_neighbours():
+    a = {"tripId": "t1", "method": "position", "tripStart": 100, "prevStart": 50, "nextStart": 200}
+    assert confirm._same_group(a, {"tripId": "t2", "method": "position", "tripStart": 200})
+    assert not confirm._same_group(a, {"tripId": "t3", "method": "position", "tripStart": 300})
+    assert confirm._same_group(a, {"tripId": "t3", "method": "time", "tripStart": 300})

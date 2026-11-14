@@ -89,5 +89,10 @@ def resolve(route: str, direction: int, at: datetime, lat: float | None, lon: fl
         passed = st[base + st.dep_sec <= ts]
         stop_id = str((passed.iloc[-1] if not passed.empty else st.iloc[0]).stop_id)
     name = (load_network().stop_by_id.get(stop_id) or {}).get("name") if stop_id else None
-    return {"tripId": trip_id, "stopId": stop_id, "stopName": name, "method": method,
+    recs.sort(key=lambda r: r["start_ts"])
+    i = next(k for k, r in enumerate(recs) if r["trip_id"] == trip_id)
+    return {"tripStart": int(chosen["start_ts"]),
+            "prevStart": int(recs[i - 1]["start_ts"]) if i > 0 else None,
+            "nextStart": int(recs[i + 1]["start_ts"]) if i + 1 < len(recs) else None,
+            "tripId": trip_id, "stopId": stop_id, "stopName": name, "method": method,
             "distanceToRouteMeters": None if dist_m is None else int(round(dist_m))}

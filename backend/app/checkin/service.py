@@ -80,7 +80,8 @@ def accept(body: CheckinInput) -> CheckinAck:
     simulated = bool(sticker.get("simulated"))
     store.add_row({"at": iso(at), "receivedAt": iso(received), "stickerId": body.stickerId, "routeId": route,
                    "directionId": direction, "tripId": r["tripId"], "stopId": r["stopId"], "device": device,
-                   "simulated": simulated}, received)
+                   "simulated": simulated, "method": r["method"], "tripStart": r["tripStart"],
+                   "prevStart": r["prevStart"], "nextStart": r["nextStart"]}, received)
     short = (load_network().route_by_id.get(route) or {}).get("shortName")
     return CheckinAck(routeId=route, shortName=short, directionId=direction, tripId=r["tripId"], stopId=r["stopId"],
                       stopName=r["stopName"], method=r["method"], distanceToRouteMeters=r["distanceToRouteMeters"],
