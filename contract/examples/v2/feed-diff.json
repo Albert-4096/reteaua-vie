@@ -1,0 +1,51 @@
+{
+    "base": {
+        "version": "4.31",
+        "startDate": "2026-11-05",
+        "endDate": "2026-12-31",
+        "stops": 890,
+        "trips": 13335,
+        "routes": 58
+    },
+    "target": {
+        "version": "4.32",
+        "startDate": "2026-11-16",
+        "endDate": "2026-12-31",
+        "stops": 889,
+        "trips": 13335,
+        "routes": 58
+    },
+    "stopsAdded": [],
+    "stopsRemoved": [
+        {
+            "stopId": "232",
+            "name": "Cruce (Ghiroda)"
+        }
+    ],
+    "routesAdded": [],
+    "routesRemoved": [],
+    "tripsAdded": 0,
+    "tripsRemoved": 0,
+    "tripsByRoute": [],
+    "tripsChanged": 167,
+    "patternsAdded": 0,
+    "patternsRemoved": 1,
+    "serviceDays": [],
+    "daysCompared": 46,
+    "provenance": [
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        },
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.32",
+            "fetchedAt": "2026-11-14T04:52:54+02:00",
+            "note": "sha256 1f9cfe12ed2b"
+        }
+    ]
+}

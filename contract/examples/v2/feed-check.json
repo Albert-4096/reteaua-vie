@@ -1,0 +1,133 @@
+{
+    "closureId": "cl_20261102_mocioni",
+    "base": {
+        "version": "4.31",
+        "startDate": "2026-11-05",
+        "endDate": "2026-12-31",
+        "stops": 890,
+        "trips": 13335,
+        "routes": 58
+    },
+    "target": {
+        "version": "4.32",
+        "startDate": "2026-11-16",
+        "endDate": "2026-12-31",
+        "stops": 889,
+        "trips": 13335,
+        "routes": 58
+    },
+    "takesEffectOn": "2026-11-16",
+    "windowEnd": "2026-12-31T23:59:59+02:00",
+    "applies": true,
+    "verdict": "valid",
+    "rows": [
+        {
+            "stopId": "356",
+            "name": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+            "routeId": "R_AB_M32",
+            "directionId": 0,
+            "status": "ok",
+            "tripsBase": 0,
+            "tripsTarget": 0
+        },
+        {
+            "stopId": "356",
+            "name": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+            "routeId": "R_AB_M32",
+            "directionId": 1,
+            "status": "ok",
+            "tripsBase": 0,
+            "tripsTarget": 0
+        },
+        {
+            "stopId": "356",
+            "name": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+            "routeId": "R_AB_M36",
+            "directionId": 0,
+            "status": "ok",
+            "tripsBase": 0,
+            "tripsTarget": 0
+        },
+        {
+            "stopId": "356",
+            "name": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+            "routeId": "R_AB_M36",
+            "directionId": 1,
+            "status": "ok",
+            "tripsBase": 0,
+            "tripsTarget": 0
+        }
+    ],
+    "summary": {
+        "ro": "Orarul 4.32 intră în vigoare pe 16.11.2026: anunțul rămâne valabil.",
+        "en": "Timetable 4.32 takes effect on 16 Nov 2026: the notice stays valid."
+    },
+    "draftNotice": null,
+    "diff": {
+        "base": {
+            "version": "4.31",
+            "startDate": "2026-11-05",
+            "endDate": "2026-12-31",
+            "stops": 890,
+            "trips": 13335,
+            "routes": 58
+        },
+        "target": {
+            "version": "4.32",
+            "startDate": "2026-11-16",
+            "endDate": "2026-12-31",
+            "stops": 889,
+            "trips": 13335,
+            "routes": 58
+        },
+        "stopsAdded": [],
+        "stopsRemoved": [
+            {
+                "stopId": "232",
+                "name": "Cruce (Ghiroda)"
+            }
+        ],
+        "routesAdded": [],
+        "routesRemoved": [],
+        "tripsAdded": 0,
+        "tripsRemoved": 0,
+        "tripsByRoute": [],
+        "tripsChanged": 167,
+        "patternsAdded": 0,
+        "patternsRemoved": 1,
+        "serviceDays": [],
+        "daysCompared": 46,
+        "provenance": [
+            {
+                "source": "SMTT GTFS (orar planificat / planned timetable)",
+                "url": "https://smtt.ro",
+                "version": "4.31",
+                "fetchedAt": "2026-11-13T13:52:51+02:00",
+                "note": "sha256 8905216072b3"
+            },
+            {
+                "source": "SMTT GTFS (orar planificat / planned timetable)",
+                "url": "https://smtt.ro",
+                "version": "4.32",
+                "fetchedAt": "2026-11-14T04:52:54+02:00",
+                "note": "sha256 1f9cfe12ed2b"
+            }
+        ]
+    },
+    "provenance": [
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        },
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.32",
+            "fetchedAt": "2026-11-14T04:52:54+02:00",
+            "note": "sha256 1f9cfe12ed2b"
+        }
+    ]
+}

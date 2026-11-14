@@ -9,9 +9,11 @@ import pytest
 from pydantic import TypeAdapter
 
 from app import models as m
+from app.feedcheck.models import FeedCheck, FeedDiff
 from app.cityapp.models import StopStatus
 from app.models.live_missing import MissingLines
 from app.m1_disruption.notice_text import GeneratedNotice
+from app.observed.models import ObservedSummary
 
 EXAMPLES = Path(__file__).resolve().parents[2] / "contract" / "examples"
 
@@ -29,6 +31,8 @@ MODELS: dict[str, object] = {
     "cases.json": list[m.CaseSummary],
     "v2/health.json": m.Health,
     "v2/scans.json": m.ScanCounts,
+    "v2/feed-diff.json": FeedDiff,
+    "v2/feed-check.json": FeedCheck,
     "v2/closure-summary.json": list[m.ClosureSummary],
     "v2/overview.json": m.Overview,
     "v2/layer-bike.json": m.LayerCollection,
@@ -53,6 +57,7 @@ MODELS: dict[str, object] = {
     "v2/stop-status.json": StopStatus,  # v2.9
     "v2/tools.json": dict,  # v2.9 (static declarations; the test below checks the shape)
     "v2/live-missing.json": MissingLines,  # v2.13 (O2, real response of ?case=case_l23)
+    "v2/observed-summary.json": ObservedSummary,  # v2.14 (L0, real response)
 }
 
 
