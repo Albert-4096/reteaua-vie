@@ -17,7 +17,8 @@ export const FAMILIES = [
 /** Readable text on a line colour: GTFS text colours are not always legible (white on tram gold). */
 export function inkOn(hex: string) {
   const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.3 ? "#16201c" : "#ffffff";
+  const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return (L + 0.05) / 0.063 > 1.05 / (L + 0.05) ? "#16201c" : "#ffffff"; // whichever contrasts more (#16201c ≈ 0.013)
 }
 
 export const modeName = (r: Route) => (r.type === 0 ? "Tramvaiul" : r.type === 11 ? "Troleibuzul" : "Autobuzul");
