@@ -241,4 +241,9 @@ def test_access_key_depends_on_the_lost_rows_not_on_who_decided():
         from app.m1_disruption import impact as imp
 
         decided = {imp.row_key(r) for r in a["stops"] if imp.counts_as_lost(r)}
-        assert decided != lost and access.access_key(closure, decided, "hospital", 30) != k
+        k_decided = access.access_key(closure, decided, "hospital", 30)
+        # the stored hero may carry the same decisions (decided demo state, D-024): same rows give the same key
+        assert (k_decided == k) == (decided == lost)
+        # the hero before any decision (no unsure row counted) has other rows, so another key
+        undecided = {imp.row_key(r) for r in a["stops"] if r["state"] != "unsure" and imp.counts_as_lost(r)}
+        assert undecided != decided and access.access_key(closure, undecided, "hospital", 30) != k_decided
