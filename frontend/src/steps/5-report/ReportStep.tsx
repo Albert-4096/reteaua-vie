@@ -9,6 +9,7 @@ import { useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { AccessibleLines } from "./AccessibleLines";
 import { DataQuality } from "./DataQuality";
+import { MissingLogLink } from "../4-monitor/MissingTriage";
 import { S } from "./strings";
 
 const NAP = "/api/exports/nap-metadata.json";
@@ -87,6 +88,7 @@ export function ReportStep(_props: StepProps) {
 
       <AccessibleLines />
       <DataQuality />
+      <MissingLogLink />
 
       <details>
         <summary>{t("details")}</summary>

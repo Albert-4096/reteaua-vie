@@ -12,6 +12,7 @@ import { useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { fetchMissing, MISSING_CASE, type MissingLines as Missing, type MissingRoute } from "./missing";
 import { S } from "./strings";
+import { MissingTriage } from "./MissingTriage";
 
 const M = S.missing;
 
@@ -126,6 +127,7 @@ function Row({ r, m }: { r: MissingRoute; m: Missing }) {
         {r.lastSeenAt ? tr(M.lastSeen(fmtTime(r.lastSeenAt))) : tr(M.neverSeen)}
       </span>
       <br />
+      {r.serviceConfirmation && <p className="small">{tr(r.serviceConfirmation.label)}</p>}
       <span className="muted">
         {tr(M.firstMissed)}:{" "}
         {f ? (
@@ -136,6 +138,7 @@ function Row({ r, m }: { r: MissingRoute; m: Missing }) {
           t("unknown")
         )}
       </span>
+      <MissingTriage row={r} data={m} />
     </li>
   );
 }

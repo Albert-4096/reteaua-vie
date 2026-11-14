@@ -1,0 +1,7 @@
+.missing-triage { margin-top: var(--sp-2); display: grid; gap: var(--sp-2); min-width: 0; }
+.missing-triage-form { display: grid; gap: var(--sp-2); }
+.missing-triage-form fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: var(--sp-2); min-width: 0; }
+.missing-triage label { display: grid; gap: var(--sp-1); }
+.missing-triage input, .missing-triage select { width: 100%; max-width: 100%; min-width: 0; font-size: 1rem; }
+.missing-triage-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.missing-triage-actions .btn { flex: 1 1 auto; }

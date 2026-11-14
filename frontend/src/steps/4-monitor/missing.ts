@@ -1,9 +1,13 @@
 // O2 lines with no vehicle (CONTRACT v2.13 MissingLines, Overview.missingLines; not in the generated schema yet).
 // Step 0 shows the brief from /api/overview, step 4 the full list for the prepared case.
 import { apiGet, type I18n, type Provenance } from "../../api/client";
+import type { TriageDecision } from "./MissingTriage";
 import type { Overview } from "../../api/v2";
 
 export type MissingRoute = {
+  decision?: TriageDecision | null;
+  repeatedDays?: number | null;
+  serviceConfirmation?: { travelers: number; label: I18n } | null;
   routeId: string;
   shortName: string;
   longName: string;
