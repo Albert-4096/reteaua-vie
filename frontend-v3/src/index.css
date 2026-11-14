@@ -1,0 +1,124 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/onest";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Rețeaua Vie v3. Off-white ground with a faint dot grid, near-black ink, one green accent.
+  Amber marks closures and nothing else.
+*/
+:root {
+  --radius: 1rem;
+  --background: oklch(0.984 0.002 165);
+  --foreground: oklch(0.2 0.012 165);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.012 165);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.012 165);
+  --primary: oklch(0.5 0.095 166);
+  --primary-foreground: oklch(0.99 0.004 165);
+  --secondary: oklch(0.955 0.006 165);
+  --secondary-foreground: oklch(0.24 0.012 165);
+  --muted: oklch(0.96 0.004 165);
+  --muted-foreground: oklch(0.44 0.012 165);
+  --accent: oklch(0.95 0.025 166);
+  --accent-foreground: oklch(0.32 0.06 166);
+  --destructive: oklch(0.56 0.19 27);
+  --border: oklch(0.915 0.005 165);
+  --input: oklch(0.9 0.005 165);
+  --ring: oklch(0.6 0.1 166);
+
+  --green: oklch(0.62 0.11 166);
+  --green-soft: oklch(0.94 0.035 166);
+  --amber: oklch(0.76 0.15 68);
+  --amber-ink: oklch(0.5 0.12 60);
+  --amber-soft: oklch(0.96 0.05 80);
+  --dot: oklch(0.86 0.005 165);
+  --dot-strong: oklch(0.72 0.01 165);
+
+  --shadow-card: 0 1px 2px oklch(0.2 0.01 165 / 0.04), 0 12px 32px -12px oklch(0.2 0.01 165 / 0.12);
+  --shadow-float: 0 2px 4px oklch(0.2 0.01 165 / 0.05), 0 24px 48px -16px oklch(0.2 0.01 165 / 0.22);
+}
+
+@theme inline {
+  --font-sans: "Onest Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-green: var(--green);
+  --color-green-soft: var(--green-soft);
+  --color-amber: var(--amber);
+  --color-amber-ink: var(--amber-ink);
+  --color-amber-soft: var(--amber-soft);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 8px);
+  --shadow-card: var(--shadow-card);
+  --shadow-float: var(--shadow-float);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--green-soft);
+    color: var(--accent-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* The page ground: a faint dot grid, as on a planning sheet. */
+.dot-ground {
+  background-color: var(--background);
+  background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position: -9px -9px;
+}
+
+.display {
+  font-weight: 680;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
