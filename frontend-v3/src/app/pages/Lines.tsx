@@ -154,6 +154,8 @@ function Line({ routeId }: { routeId: string }) {
   }), [reg.data, routeId]);
   const empty = [...days].reverse().find((d) => d.final && d.scheduled > 0 && d.seen === 0);
 
+  // minutes of delay only where punctuality is trusted for the line: otherwise a mismatched trip would print "+49 min"
+  const showDelay = !!m && trusted(m.punctuality);
   const rows: StripRow[] = useMemo(() => (shape?.stations ?? []).map((s) => {
     const here = mine.filter((v) => v.properties.stopId && s.ids.includes(v.properties.stopId));
     return {
@@ -163,12 +165,12 @@ function Line({ routeId }: { routeId: string }) {
         return (
           <span key={p.vehicleId} title={`spre ${p.headsign ?? "capăt"}, raportat la ${hhmm(p.updatedAt)}`}
             className="tabular inline-flex h-6 items-center gap-1 rounded-md bg-foreground px-1.5 text-xs font-medium text-background">
-            <Arrow className="size-3" strokeWidth={2.5} />{late(p.delaySec) || "vehicul"}
+            <Arrow className="size-3" strokeWidth={2.5} />{(showDelay && late(p.delaySec)) || "vehicul"}
           </span>
         );
       }) : undefined,
     };
-  }), [shape, mine]);
+  }), [shape, mine, showDelay]);
   const placed = rows.reduce((n, x) => n + (Array.isArray(x.chips) ? x.chips.length : 0), 0);
   const track = off[0]?.tracks[0]?.coordinates;
 
@@ -249,7 +251,7 @@ function Line({ routeId }: { routeId: string }) {
               {done && <p role="alert" className="mt-2.5 text-sm text-closure-ink">{done}</p>}
             </>
           )}
-          <Method>CityApp primește semnalul doar după confirmare.</Method>
+          <Method>Semnalul intră în fluxul pe care CityApp îl poate citi doar după confirmare.</Method>
         </section>
       )}
 
@@ -322,7 +324,7 @@ function Line({ routeId }: { routeId: string }) {
       <Section title="Traseu" aside={<span className="inline-flex items-center gap-2">{mine.length > 0 && <LiveDot />}{count(mine.length, "vehicul", "vehicule")} acum</span>}>
         {!shape ? <p className="text-sm text-muted-foreground">Orarul nu dă traseul acestei linii.</p> : <LineStrip color={`#${r.color}`} rows={rows} fold={false} onHover={setHover} />}
         {mine.length > placed && <Method>{count(mine.length - placed, "vehicul e", "vehicule sunt")} între stații sau pe sensul opus; le vedeți pe hartă.</Method>}
-        <Method>Stațiile sunt în ordinea traseului tur. Săgeata arată sensul vehiculului, iar minutele abaterea față de orar, din datele live.</Method>
+        <Method>Stațiile sunt în ordinea traseului tur. Săgeata arată sensul vehiculului{showDelay ? ", iar minutele abaterea față de orar, din datele live." : ". Abaterea față de orar nu e arătată pentru această linie: potrivirea curselor cu orarul e în verificare."}</Method>
       </Section>
     </Panel>
   );

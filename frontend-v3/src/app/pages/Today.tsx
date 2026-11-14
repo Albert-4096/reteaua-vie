@@ -119,7 +119,7 @@ export function Today() {
         </p>
         {o.data?.ghostDeparturesToday != null && (
           <p className="mt-2.5 text-sm leading-relaxed text-foreground/80">
-            <span className="tabular font-semibold text-foreground">{fmt.format(o.data.ghostDeparturesToday)}</span> de plecări din orarul de azi nu au loc: stațiile lor sunt suspendate de o lucrare publicată.
+            <span className="tabular font-semibold text-foreground">{fmt.format(o.data.ghostDeparturesToday)}</span> de plecări din orarul de azi nu au loc: o lucrare publicată a scos acele stații de pe traseul liniei.
           </p>
         )}
         {reg.data && worst.length > 0 && (

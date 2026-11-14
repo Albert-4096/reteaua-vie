@@ -206,7 +206,7 @@ export function PublishBar({ id, openQuestions, published, onPublished }: { id: 
       ) : (
         <Button className="h-11 w-full rounded-xl text-base" disabled={state === "busy"} onClick={() => setState("confirm")}>{state === "busy" ? "Se publică…" : "Publică lucrarea"}</Button>
       )}
-      {state === "confirm" && <p className="mt-2 text-sm text-muted-foreground">Alerta pleacă spre toate canalele de mai sus.</p>}
+      {state === "confirm" && <p className="mt-2 text-sm text-muted-foreground">Alerta intră în toate fluxurile de mai sus.</p>}
       {state === "error" && <div className="mt-2"><Problem>Publicarea nu a reușit: {err}. Nimic nu a plecat; puteți încerca din nou.</Problem></div>}
     </div>
   );
@@ -258,9 +258,10 @@ export function Field({ id, c }: { id: string; c: ClosureSummary }) {
     <>
       <p className="text-[1.05rem] font-medium leading-snug">
         {s.stopsServedAnyway === 0
-          ? `Niciun vehicul nu a oprit în stațiile suspendate: ${count(s.stopsSkipped ?? 0, "trecere", "treceri")} fără oprire.`
-          : `${count(s.stopsServedAnyway ?? 0, "oprire", "opriri")} în stații suspendate, din ${fmt.format((s.stopsSkipped ?? 0) + (s.stopsServedAnyway ?? 0))} treceri.`}
+          ? `Liniile lucrării nu au mai oprit în stațiile scoase de pe traseu: ${count(s.stopsSkipped ?? 0, "trecere", "treceri")} fără oprire, nicio oprire.`
+          : `${count(s.stopsServedAnyway ?? 0, "oprire", "opriri")} în stații scoase de pe traseu, din ${fmt.format((s.stopsSkipped ?? 0) + (s.stopsServedAnyway ?? 0))} treceri.`}
       </p>
+      {c.stopsSuspended === 0 && <p className="mt-1.5 text-sm text-muted-foreground">Alte linii opresc în continuare în aceste stații; de aceea nicio stație nu rămâne fără serviciu.</p>}
       <dl className="mt-5 grid grid-cols-3 gap-4">
         <Stat value={fmt.format(s.stopsSkipped ?? 0)} label="treceri fără oprire" />
         <Stat value={fmt.format(s.stopsServedAnyway ?? 0)} label="opriri totuși" />

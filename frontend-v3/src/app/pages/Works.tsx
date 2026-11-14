@@ -39,7 +39,7 @@ export function Works() {
                 <span className="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
                   {c.status === "published" ? <Tag tone="green">Publicată</Tag> : <Tag tone="closure">Nepublicată</Tag>}
                   <span className="flex gap-1">{c.routeIds.slice(0, 6).map((r) => <LineBadge key={r} routeId={r} />)}</span>
-                  <span className="tabular ml-auto text-sm text-muted-foreground">{count(c.stopsSuspended, "stație", "stații")} · {fmt.format(c.departuresLost)} plecări</span>
+                  <span className="tabular ml-auto text-sm text-muted-foreground">{c.stopsSuspended > 0 ? `${count(c.stopsSuspended, "stație fără serviciu", "stații fără serviciu")} · ` : ""}{fmt.format(c.departuresLost)} plecări pierdute</span>
                 </span>
               </a>
             </li>
