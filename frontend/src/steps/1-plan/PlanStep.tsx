@@ -124,7 +124,9 @@ function Plan({ closureId, caseKey }: StepProps & { closureId: string }) {
             <Figure value={tot?.residentsLosingStop} label={t("plan.figResidents")} provenance={impact.data.provenance} method={tr(impact.data.method)} />
           </>
         ) : (
-          <LoadState {...impact} loading />
+          <div style={{ gridColumn: "1 / -1" }}>
+            <LoadState {...impact} loading />
+          </div>
         )}
       </div>
 

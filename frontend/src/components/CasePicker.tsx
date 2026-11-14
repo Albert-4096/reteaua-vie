@@ -3,8 +3,9 @@ import { navigate } from "../lib/router";
 import { useCases } from "../lib/useCase";
 import { tr } from "../lib/format";
 import { LoadState, Panel } from "./Panel";
+import { PasteNotice } from "./paste-notice/PasteNotice";
 
-/** Shown by a step that needs a closure when the URL names none. */
+/** Shown by a step that needs a closure when the URL names none. Step 1 also takes a pasted STPT notice (R1). */
 export function CasePicker({ step }: { step: number }) {
   const { t } = useTranslation();
   const cases = useCases();
@@ -30,6 +31,7 @@ export function CasePicker({ step }: { step: number }) {
           );
         })}
       </ul>
+      {step === 1 && <PasteNotice />}
     </Panel>
   );
 }

@@ -1,0 +1,68 @@
+/* R1-F (a): the paste-a-notice box in the step-1 case picker. Tokens only, no new colours. */
+.paste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.paste label {
+  font-weight: 600;
+}
+
+.paste textarea {
+  width: 100%;
+  min-height: 9em;
+  resize: vertical;
+  padding: var(--sp-2);
+  border: var(--rule-w) solid var(--c-rule);
+  background: var(--c-bg);
+  color: var(--c-text);
+  font: inherit;
+  /* 16px keeps phones from zooming into the field */
+  font-size: max(16px, var(--fs-m));
+  line-height: var(--lh);
+}
+
+.paste textarea:focus-visible {
+  outline: var(--focus-w) solid var(--c-focus);
+  outline-offset: 1px;
+}
+
+.paste-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--sp-1) var(--sp-3);
+  margin: 0;
+}
+
+.paste-facts dt {
+  color: var(--c-text-muted);
+}
+
+.paste-facts dd {
+  margin: 0;
+}
+
+.paste-unread {
+  border-left: 3px solid var(--c-unsure);
+  padding-left: var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.paste-unread ul {
+  margin: 0;
+  padding-left: var(--sp-4);
+}
+
+.paste-unread li + li {
+  margin-top: var(--sp-1);
+}
+
+.paste-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  align-items: flex-start;
+}
