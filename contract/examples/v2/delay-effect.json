@@ -1,0 +1,266 @@
+{
+  "closureId": "cl_20261102_mocioni",
+  "status": "ok",
+  "minTrips": 10,
+  "total": {
+    "n": 49,
+    "addedSec": 8.6,
+    "low": -20.6,
+    "high": 50.8,
+    "verdict": "neconcludent",
+    "text": {
+      "ro": "Neconcludent: intervalul include zero Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+      "en": "Inconclusive: the interval includes zero Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+    }
+  },
+  "stretches": [
+    {
+      "routeId": "R_AB_M32",
+      "shortName": "M32",
+      "directionId": 0,
+      "kind": "start_moved",
+      "fromStop": "C. Brâncoveanu",
+      "toStop": "Calea Șagului (Bd. Dâmbovița)",
+      "effect": {
+        "n": 19,
+        "addedSec": 68.9,
+        "low": 54.7,
+        "high": 178.0,
+        "verdict": "masurat",
+        "text": {
+          "ro": "Ocolirea adaugă 1,1 min pe cursă (interval 95%: 0,9–3,0; 19 curse) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "The diversion adds 1.1 min per trip (95 % interval 0.9 to 3.0; 19 trips) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M32",
+      "shortName": "M32",
+      "directionId": 1,
+      "kind": "end_moved",
+      "fromStop": "Piața Iuliu Maniu (16 Decembrie 1989)",
+      "toStop": "C. Brâncoveanu",
+      "effect": {
+        "n": 12,
+        "addedSec": -66.0,
+        "low": -86.8,
+        "high": -37.1,
+        "verdict": "masurat",
+        "text": {
+          "ro": "Pe ocolire, cursa câștigă 1,1 min față de orar (interval 95%: -1,4–-0,6; 12 curse) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "The diversion saves 1.1 min per trip (95 % interval -1.4 to -0.6; 12 trips) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M36",
+      "shortName": "M36",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "fromStop": "Piața Iuliu Maniu (Budai Deleanu)",
+      "toStop": "Piața Iuliu Maniu (Budai Deleanu)",
+      "effect": {
+        "n": 0,
+        "addedSec": null,
+        "low": null,
+        "high": null,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse înregistrate (avem 0) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 recorded trips (we have 0) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M36",
+      "shortName": "M36",
+      "directionId": 1,
+      "kind": "end_moved",
+      "fromStop": "Transilvania (Budai Deleanu)",
+      "toStop": "Piața Iuliu Maniu (Reșiței)",
+      "effect": {
+        "n": 6,
+        "addedSec": -65.7,
+        "low": -91.1,
+        "high": 38.3,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse (avem 6; interval 95%: -1,5–0,6 min) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 trips (we have 6; 95% interval -1.5 to 0.6 min) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M37",
+      "shortName": "M37",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "fromStop": "Piața Iuliu Maniu (Calea Șagului)",
+      "toStop": "Piața Iuliu Maniu (Calea Șagului)",
+      "effect": {
+        "n": 0,
+        "addedSec": null,
+        "low": null,
+        "high": null,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse înregistrate (avem 0) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 recorded trips (we have 0) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M37",
+      "shortName": "M37",
+      "directionId": 1,
+      "kind": "end_moved",
+      "fromStop": "Calea Șagului (Bd. L. Rebreanu)",
+      "toStop": "Piața Iuliu Maniu (Reșiței)",
+      "effect": {
+        "n": 3,
+        "addedSec": 21.5,
+        "low": 8.6,
+        "high": 57.1,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse (avem 3; interval 95%: 0,1–1,0 min) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 trips (we have 3; 95% interval 0.1 to 1.0 min) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M38",
+      "shortName": "M38",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "fromStop": "Piața Iuliu Maniu (Calea Șagului)",
+      "toStop": "Piața Iuliu Maniu (Calea Șagului)",
+      "effect": {
+        "n": 0,
+        "addedSec": null,
+        "low": null,
+        "high": null,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse înregistrate (avem 0) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 recorded trips (we have 0) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M38",
+      "shortName": "M38",
+      "directionId": 1,
+      "kind": "end_moved",
+      "fromStop": "Calea Șagului (Bd. L. Rebreanu)",
+      "toStop": "Piața Iuliu Maniu (Reșiței)",
+      "effect": {
+        "n": 2,
+        "addedSec": -76.2,
+        "low": -104.9,
+        "high": -47.5,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse (avem 2; interval 95%: -1,7–-0,8 min) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 trips (we have 2; 95% interval -1.7 to -0.8 min) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M46",
+      "shortName": "M46",
+      "directionId": 0,
+      "kind": "start_moved",
+      "fromStop": "Piața Iuliu Maniu (Calea Șagului)",
+      "toStop": "Calea Șagului (Bd. Dâmbovița)",
+      "effect": {
+        "n": 0,
+        "addedSec": null,
+        "low": null,
+        "high": null,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse înregistrate (avem 0) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 recorded trips (we have 0) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M46",
+      "shortName": "M46",
+      "directionId": 1,
+      "kind": "end_moved",
+      "fromStop": "Calea Șagului (Bd. L. Rebreanu)",
+      "toStop": "Piața Iuliu Maniu (Reșiței)",
+      "effect": {
+        "n": 1,
+        "addedSec": -115.7,
+        "low": null,
+        "high": null,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse înregistrate (avem 1) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 recorded trips (we have 1) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M51",
+      "shortName": "M51",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "fromStop": "Piața Iuliu Maniu (Calea Șagului)",
+      "toStop": "Piața Iuliu Maniu (Calea Șagului)",
+      "effect": {
+        "n": 0,
+        "addedSec": null,
+        "low": null,
+        "high": null,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse înregistrate (avem 0) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 recorded trips (we have 0) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    },
+    {
+      "routeId": "R_AB_M51",
+      "shortName": "M51",
+      "directionId": 1,
+      "kind": "end_moved",
+      "fromStop": "Calea Șagului (Bd. L. Rebreanu)",
+      "toStop": "Piața Iuliu Maniu (Reșiței)",
+      "effect": {
+        "n": 6,
+        "addedSec": -6.6,
+        "low": -18.8,
+        "high": 73.0,
+        "verdict": "neconcludent",
+        "text": {
+          "ro": "Neconcludent: sub 10 curse (avem 6; interval 95%: -0,3–1,2 min) Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+          "en": "Inconclusive: under 10 trips (we have 6; 95% interval -0.3 to 1.2 min) Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+        }
+      }
+    }
+  ],
+  "method": {
+    "ro": "Pentru fiecare cursă înregistrată: întârzierea adăugată pe porțiune (sosirea la ultima stație față de orar, minus plecarea de la prima față de orar), minus întârzierea pe care aceeași cursă o adună în restul traseului pentru același timp din orar. Mediana pe curse, interval 95% prin bootstrap pe curse întregi. Sub 10 curse, sau un interval care include zero: „neconcludent”. Ore din înregistrarea noastră (L0), nu delaySec din feed. Doar vineri după-amiază și weekend, din înregistrare; fără extrapolare la zile lucrătoare.",
+    "en": "Per recorded trip: delay added over the stretch minus the same trip's drift elsewhere for the same scheduled time. Median over trips, 95 % trip-block bootstrap. Under 10 trips, or an interval through zero: inconclusive. Hours from our recording (L0), not the feed's delaySec. Friday afternoon and the weekend only, from the recording; no extrapolation to weekdays."
+  },
+  "provenance": [
+    {
+      "source": "Rețeaua Vie L0, orarul observat / observed timetable",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-14T15:04:47+02:00",
+      "note": "din 24 ore înregistrate (vin. 13:47 → sâm. 13:59)"
+    },
+    {
+      "source": "SMTT GTFS, orarul de dinainte și cel în vigoare / before and in force",
+      "url": null,
+      "version": "4.29 → 4.30",
+      "fetchedAt": "2026-11-14T15:05:05+02:00",
+      "note": null
+    }
+  ]
+}
