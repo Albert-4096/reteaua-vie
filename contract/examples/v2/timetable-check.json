@@ -1,0 +1,26 @@
+{
+    "closureId": "cl_20261102_mocioni",
+    "date": "2026-11-14",
+    "inForce": true,
+    "label": "orar din API-ul Primăriei",
+    "state": "ok",
+    "stopsTotal": 6,
+    "stopsChecked": 6,
+    "stopsListing": 0,
+    "departuresListed": 0,
+    "items": [],
+    "capped": false,
+    "sentence": {
+        "ro": "CityApp primește alerta pentru 6 stații; orarul lor din API-ul Primăriei nu mai listează plecări în fereastră: nimic de marcat.",
+        "en": "CityApp receives the alert for 6 stops; their timetable in the City Hall API lists no departures in the window: nothing to mark."
+    },
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, orar din API-ul Primăriei / City Hall API timetable",
+            "url": "https://cont.primariatm.ro/api/mobile/transit/stops/{stopId}/timetable",
+            "version": null,
+            "fetchedAt": "2026-11-14T13:13:18+02:00",
+            "note": "un apel pe stație și zi, memorat; cel mult 30 apeluri noi pe cerere; 6 din 6 stații citite"
+        }
+    ]
+}

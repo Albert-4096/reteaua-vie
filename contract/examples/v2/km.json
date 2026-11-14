@@ -1,0 +1,119 @@
+{
+    "closureId": "cl_20261107_e3",
+    "window": {
+        "start": "2026-11-07T04:00:00+02:00",
+        "end": "2026-11-13T00:00:00+02:00"
+    },
+    "timetableVersion": "4.31",
+    "notRunByMode": [
+        {
+            "mode": "bus",
+            "kmNotRun": 483.3,
+            "trips": 252,
+            "lines": [
+                "E3"
+            ]
+        }
+    ],
+    "lines": [
+        {
+            "routeId": "R_AB_E3",
+            "shortName": "E3",
+            "mode": "bus",
+            "directionId": 0,
+            "stopsLost": 6,
+            "sectionKm": 1.95,
+            "trips": 126,
+            "kmNotRun": 245.7
+        },
+        {
+            "routeId": "R_AB_E3",
+            "shortName": "E3",
+            "mode": "bus",
+            "directionId": 1,
+            "stopsLost": 5,
+            "sectionKm": 1.89,
+            "trips": 126,
+            "kmNotRun": 237.6
+        }
+    ],
+    "temporary": [],
+    "walkBetweenEnds": [
+        {
+            "routeId": "R_AB_E3",
+            "shortName": "E3",
+            "directionId": 0,
+            "fromStop": {
+                "stopId": "334",
+                "name": "Banatul (Bd. Dâmbovița)"
+            },
+            "toStop": {
+                "stopId": "341",
+                "name": "Podgoriei"
+            },
+            "meters": 2050,
+            "minutes": 26,
+            "approximate": false,
+            "sentence": {
+                "ro": "Pe jos între Banatul (Bd. Dâmbovița) și Podgoriei: 26 min",
+                "en": "On foot between Banatul (Bd. Dâmbovița) and Podgoriei: 26 min"
+            }
+        },
+        {
+            "routeId": "R_AB_E3",
+            "shortName": "E3",
+            "directionId": 1,
+            "fromStop": {
+                "stopId": "317",
+                "name": "Podgoriei"
+            },
+            "toStop": {
+                "stopId": "323",
+                "name": "Dâmbovița (Banatul)"
+            },
+            "meters": 2080,
+            "minutes": 26,
+            "approximate": false,
+            "sentence": {
+                "ro": "Pe jos între Podgoriei și Dâmbovița (Banatul): 26 min",
+                "en": "On foot between Podgoriei and Dâmbovița (Banatul): 26 min"
+            }
+        }
+    ],
+    "totalKmNotRun": 483.3,
+    "rows": [
+        {
+            "mode": "bus",
+            "shortName": "E3",
+            "kmNotRun": 483.3,
+            "trips": 252,
+            "text": {
+                "ro": "Autobuz E3: 252 curse × 1,9 km nefăcuți (≈ 483 km) · pe jos între capete: 26 min",
+                "en": "Bus E3: 252 trips × 1.9 km not run (≈ 483 km) · on foot between the ends: 26 min"
+            }
+        }
+    ],
+    "provenance": [
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        },
+        {
+            "source": "Calcul Rețeaua Vie / our calculation",
+            "url": null,
+            "version": null,
+            "fetchedAt": "2026-11-08T12:00:00+02:00",
+            "note": "km nefăcuți = lungimea traseului GTFS între prima și ultima stație lipsă × cursele din fereastră (plecări la prima stație a traseului principal); fără costuri, doar km; mers pe jos 80 m/min (4,8 km/h)"
+        },
+        {
+            "source": "Primăria Timișoara, rețeaua de transport (SMTT GTFS) / city transit network",
+            "url": "https://cont.primariatm.ro/api/mobile/transit/network",
+            "version": "4.31-4",
+            "fetchedAt": "2026-11-13T13:29:14+02:00",
+            "note": null
+        }
+    ]
+}
