@@ -31,8 +31,8 @@ class MissingRoute(Model):
     since: IsoTime                  # fara_vehicul: first time in the window a trip was due; partial: first missed trip
     lastSeenAt: IsoTime | None      # last healthy snapshot in the window with a vehicle of the route
     firstMissedTrip: MissedTrip | None
-    decision: TriageDecision | None = None   # v2.23 (R4): the latest decision of a person on this row
-    repeatedDays: int | None = None          # v2.23 (R4): recorded days with the route in the same state, same hours
+    decision: TriageDecision | None = None   # v2.24 (R4): the latest decision of a person on this row
+    repeatedDays: int | None = None          # v2.24 (R4): recorded days with the route in the same state, same hours
 
 
 Decision = Literal["confirmat", "respins", "nu_stiu"]

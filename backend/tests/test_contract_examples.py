@@ -13,7 +13,7 @@ from app.dataquality.models import DataQuality
 from app.feedcheck.models import FeedCheck, FeedDiff
 from app.cityapp.models import StopStatus
 from app.models.lines_status import LinesStatus
-from app.models.live_missing import MissingLines
+from app.models.live_missing import MissingLines, TriageDecision
 from app.m1_disruption.notice_text import GeneratedNotice
 from app.m1_disruption.streets import StreetSearch, StreetSection
 from app.observed.models import DetourCost, ObservedSummary
@@ -73,6 +73,7 @@ MODELS: dict[str, object] = {
     "v2/layer-coverage.json": m.LayerCollection,  # v2.20 (A10, real response, features cut to 4)
     "v2/corridors.json": CorridorsResponse,  # v2.20 (A8, real response, 2 corridors, 4 hours each)
     "v2/lines-status.json": LinesStatus,  # v2.18 (R2, real response of ?since=: hero closure published)
+    "v2/live-missing-decision.json": TriageDecision,  # v2.24 (R4, real PATCH response in a scratch state)
     "v2/streets.json": StreetSearch,  # v2.19 (R1-B, real response of ?q=ardealului)
     "v2/street-section.json": StreetSection,  # v2.19 (R1-B, real response: Ardealului, Rahovei -> Martir Gogu Opre)
 }

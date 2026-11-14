@@ -1,0 +1,19 @@
+{
+  "id": "d00001_20261114T132144",
+  "routeId": "R_AB_23",
+  "shortName": "23",
+  "window": {
+    "start": "2026-11-14T06:00:00+02:00",
+    "end": "2026-11-14T10:41:00+02:00"
+  },
+  "caseId": "case_l23",
+  "decision": "confirmat",
+  "reason": null,
+  "who": "dispecer STPT",
+  "note": null,
+  "decidedAt": "2026-11-14T13:21:44+02:00",
+  "rowState": "fara_vehicul",
+  "tripsInService": 19,
+  "tripsObserved": 0,
+  "since": "2026-11-14T06:00:00+02:00"
+}
