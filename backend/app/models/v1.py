@@ -50,6 +50,15 @@ ClosureStatus = Literal["draft", "analyzed", "published"]
 # --- health / network ---------------------------------------------------------
 
 
+class HealthSource(Model):
+    """v2.4: freshness of one recorded source (from file mtimes / feed_version, never invented)."""
+
+    id: str  # gtfs | vehicles | stpt | sesizari | parking | events
+    lastOkAt: IsoTime | None
+    version: str | None = None
+    stale: bool | None = None
+
+
 class Health(Model):
     ok: bool
     feedVersion: str | None
@@ -57,6 +66,7 @@ class Health(Model):
     dataFrozenAt: IsoTime | None = None
     demoNow: IsoTime | None = None
     modulesFailed: list[str] | None = None  # v2.3: api modules that failed to import (skipped)
+    sources: list[HealthSource] | None = None  # v2.4: per-source freshness (N3)
 
 
 class NetworkRoute(Model):

@@ -17,6 +17,7 @@ from app.config import get_settings
 from app.models.v1 import CaseSummary, Health, Network, ZoneCollection
 from app.models.v2 import ClosureSummary
 from app.overview.closures import list_summaries
+from app.overview.sources import build_sources
 
 router = APIRouter(tags=["overview"])
 
@@ -27,12 +28,14 @@ STATUSES = ("draft", "analyzed", "published")
 def health() -> Health:
     s = get_settings()
     fetched: list[datetime] = []
+    parking_time: datetime | None = None
     ok = True
     try:
         net = load_network()
         fetched.append(parse_iso(net.provenance.fetchedAt))
         fetched.append(parse_iso(load_zones().provenance.fetchedAt))
-        fetched.append(parse_iso(load_parking().provenance.fetchedAt))
+        parking_time = parse_iso(load_parking().provenance.fetchedAt)
+        fetched.append(parking_time)
     except Exception:
         ok = False
     # the GTFS in force at the app clock (gtfs.feed_path), not the newest file
@@ -49,6 +52,12 @@ def health() -> Health:
         dataFrozenAt=iso(newest) if (s.data_freeze and newest) else None,
         demoNow=iso(s.demo_now) if s.demo_now else None,
         modulesFailed=_modules_failed(),
+        sources=build_sources(
+            s.live_dir,
+            gtfs_time=g,
+            gtfs_version=feed_version,
+            parking_time=parking_time,
+        ),
     )
 
 
