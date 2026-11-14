@@ -9,6 +9,7 @@ import pytest
 from pydantic import TypeAdapter
 
 from app import models as m
+from app.cityapp.models import StopStatus
 from app.m1_disruption.notice_text import GeneratedNotice
 
 EXAMPLES = Path(__file__).resolve().parents[2] / "contract" / "examples"
@@ -48,6 +49,8 @@ MODELS: dict[str, object] = {
     "v2/job.json": m.Job,
     "v2/feed-validation.json": m.FeedValidation,  # v2.3
     "v2/generated-notice.json": GeneratedNotice,  # v2.4
+    "v2/stop-status.json": StopStatus,  # v2.9
+    "v2/tools.json": dict,  # v2.9 (static declarations; the test below checks the shape)
 }
 
 
