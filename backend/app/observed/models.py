@@ -118,3 +118,69 @@ class DetourCost(Model):
     totals: DetourTotals
     method: I18n
     provenance: list[Provenance]
+
+
+# --- L2: GET /api/closures/{id}/windows/measured (CONTRACT `MeasuredWindows`) -----------------------
+
+class DetourStreet(Model):
+    name: str | None
+    meters: float
+    measured: bool             # >= 3 measured runs of other lines on it (else no number for this street)
+
+
+class DetourHourCost(Model):
+    dayType: str               # fri | sat | sun: only the day types we recorded
+    hour: int                  # Bucharest
+    normalSec: float | None    # the line's own measured runs over the cut stretch (else the street estimate)
+    detourSec: float | None    # other lines' measured pace on the detour streets
+    extraSec: float | None     # detourSec - normalSec
+    coverage: float | None     # share of the detour length with measured runs at this day type and hour
+    n: int                     # other-line trips measured on the detour streets at this day type and hour
+
+
+class DetourLine(Model):
+    routeId: str
+    shortName: str
+    directionId: int
+    mode: str                  # autobuz | troleibuz | tramvai
+    fromStopId: str
+    fromStopName: str
+    toStopId: str
+    toStopName: str
+    cutStopIds: list[str]
+    normalMeters: float | None
+    detourMeters: float | None
+    detourPath: dict | None    # GeoJSON LineString (WGS84)
+    coverage: float | None     # share of the detour length with measured runs (any recorded hour)
+    streets: list[DetourStreet]
+    byHour: list[DetourHourCost]
+    status: str                # ok | neconcludent | fara_drum
+    note: I18n | None
+
+
+class MeasuredWindow(Model):
+    window: dict               # {start, end}
+    rank: int
+    departuresLost: int        # the same count as /windows
+    trips: int                 # trips of the detoured lines in the window
+    measuredTripShare: float   # of them, at a weekday and hour we measured (>= 0.8; the rest at their mean)
+    detourMinutes: float       # vehicle-minutes added by the detours, measured
+    detourMinutesLow: float | None   # 90 % bootstrap, one trip = one block
+    detourMinutesHigh: float | None
+    conclusive: bool
+    conflicts: int
+
+
+class MeasuredWindows(Model):
+    closureId: str
+    status: str                # ok | fara_inregistrare | fara_ocolire | neconcludent
+    label: I18n | None         # „după traficul măsurat, din N ore înregistrate (…)”
+    hours: float
+    searchFrom: IsoTime
+    searchTo: IsoTime
+    lines: list[DetourLine]
+    candidates: list[MeasuredWindow]
+    unmeasuredCandidates: int  # windows with < 80 % of their detoured trips at a weekday and hour we recorded
+    note: I18n | None = None   # why there is no measured order (status != ok)
+    method: I18n
+    provenance: list[Provenance]

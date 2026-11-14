@@ -20,7 +20,7 @@ from app.models.live_deviations import Deviations
 from app.models.live_missing import MissingLines, TriageDecision
 from app.m1_disruption.notice_text import GeneratedNotice
 from app.m1_disruption.streets import StreetSearch, StreetSection
-from app.observed.models import DetourCost, ObservedSummary
+from app.observed.models import DetourCost, MeasuredWindows, ObservedSummary
 from app.analytics.models import (
     CutThrough, WorksBalance,
     AccessibilityLines, CorridorsResponse, CoverageSummary, CriticalStreetsResponse, ReliabilityResponse,
@@ -80,6 +80,7 @@ MODELS: dict[str, object] = {
     "v2/live-missing.json": MissingLines,  # v2.13 (O2, real response of ?case=case_l23)
     "v2/observed-summary.json": ObservedSummary,  # v2.14 (L0, real response)
     "v2/detour-cost.json": DetourCost,  # v2.22 (L1-B, real response of Mocioni)
+    "v2/windows-measured.json": MeasuredWindows,  # v2.32 (L2-B, real response of a drawn section)
     "v2/accessibility-lines.json": AccessibilityLines,  # v2.16 (R6, real response, lines cut to 4)
     "v2/accessibility-stop.json": StopAccessibility,  # v2.16 (R6, real response)
     "v2/layer-accessibility.json": m.LayerCollection,  # v2.16 (R6, real response, features cut to 6)

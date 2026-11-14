@@ -61,6 +61,7 @@ SLICE_M = 20.0
 AREA_M = 1500.0       # other lines' runs within this distance of the stretch form the area fallback
 NEAR_M = 300.0        # a changed stretch counts for the closure when one of its stops is this close
 DIR_COS = 0.5
+DAY_INDEX = {d: i for i, d in enumerate(("mon", "tue", "wed", "thu", "fri", "sat", "sun"))}
 
 METHOD = I18n(
     ro=("Planificat: orarul SMTT de dinainte de lucrare comparat cursă cu cursă cu cel în vigoare la începutul ei, pe "
@@ -250,7 +251,19 @@ class StreetObs:
     pace: np.ndarray    # s/m of each other-line run on the street, same direction (or a dwell, in s)
     hour: np.ndarray
     block: np.ndarray   # index of its (trip, service date)
+    day: np.ndarray | None = None   # weekday of the run (0 = Monday), for per-day-type lookups
     _sorted: dict = field(default_factory=dict, repr=False)
+
+    def sorted_day(self, day: int, hour: int) -> tuple[np.ndarray, np.ndarray]:
+        """(values, blocks) of runs on that weekday within ±1 h of `hour`, sorted by value."""
+        key = ("d", day, hour)
+        if key not in self._sorted:
+            mask = (_hour_near(self.hour, hour) & (self.day == day)) if len(self.hour) and self.day is not None \
+                else np.zeros(len(self.pace), dtype=bool)
+            v, b = self.pace[mask], self.block[mask]
+            order = np.argsort(v, kind="stable")
+            self._sorted[key] = (v[order], b[order])
+        return self._sorted[key]
 
     def sorted_near(self, hour: int) -> list[tuple[np.ndarray, np.ndarray]]:
         """[(values, blocks) near the hour, (values, blocks) of all hours], each sorted by value."""
@@ -281,103 +294,156 @@ def _hour_near(h: np.ndarray, hour: int) -> np.ndarray:
     return np.minimum(d, 24 - d) <= 1
 
 
+@dataclass
+class StreetMatch:
+    slice_len: list[float]          # the path cut into ~SLICE_M slices
+    slice_unit: list[int | None]    # OSM drive segment of each slice (None: no street within 15 m)
+    slice_len_arr: np.ndarray
+    units: dict[int, StreetObs]     # per OSM segment: the measured runs on it, same direction
+    area: StreetObs                 # every measured run near the path
+    routes_used: set[str]
+    seg: pd.DataFrame               # the runs near the path
+
+
+@dataclass
+class SegIndex:
+    """L0 runs near an area with their GTFS geometry: one line per (pattern, stop pair), its rows."""
+    seg: pd.DataFrame
+    glines: list[LineString]
+    rows_by_g: list[np.ndarray]     # positions in `seg` of the runs on each line
+    tree: STRtree | None
+    pace: np.ndarray                # s/m per run
+    hour: np.ndarray
+    day: np.ndarray
+    block: np.ndarray
+    route: np.ndarray
+
+
+def seg_index(seg: pd.DataFrame, bounds, blocks: dict[tuple[str, str], int]) -> SegIndex:
+    seg = seg[(seg["dist_m"] > 0) & (seg["run_sec"] > 0)]
+    stop_xy = timetable_day(date.fromisoformat(seg["service_date"].iloc[0])).stop_xy if len(seg) else {}
+    near = {sid for sid, (x, y) in stop_xy.items() if bounds.contains(Point(x, y))}
+    seg = seg[seg["from_stop_id"].isin(near) | seg["to_stop_id"].isin(near)].reset_index(drop=True)
+    codes, uniq = pd.factorize(pd.MultiIndex.from_arrays([seg["trip_id"], seg["service_date"], seg["from_index"]]))
+    cache: dict[tuple, int | None] = {}
+    glines: list[LineString] = []
+    g_of_code = np.full(len(uniq), -1, dtype=int)
+    for ci, (tid, sd, fi) in enumerate(uniq):
+        plan = timetable_day(date.fromisoformat(sd)).trips.get(tid)
+        if plan is None:
+            continue
+        key = (plan.pattern, int(fi))
+        if key not in cache:
+            g = tt.pattern_geometry(plan).segments[int(fi)]
+            cache[key] = None
+            if g.intersects(bounds):
+                cache[key] = len(glines)
+                glines.append(g)
+        if cache[key] is not None:
+            g_of_code[ci] = cache[key]
+    g_of_row = g_of_code[codes] if len(seg) else np.zeros(0, dtype=int)
+    order = np.argsort(g_of_row, kind="stable")
+    rows_by_g = [np.zeros(0, dtype=int)] * len(glines)
+    if len(glines):
+        sg = g_of_row[order]
+        for gi in range(len(glines)):
+            lo, hi = np.searchsorted(sg, gi, "left"), np.searchsorted(sg, gi, "right")
+            rows_by_g[gi] = order[lo:hi]
+    block = np.array([blocks.setdefault((t, s_), len(blocks)) for t, s_ in zip(seg["trip_id"], seg["service_date"])],
+                     dtype=int)
+    return SegIndex(seg=seg, glines=glines, rows_by_g=rows_by_g, tree=STRtree(glines) if glines else None,
+                    pace=(seg["run_sec"] / seg["dist_m"]).to_numpy(float), hour=seg["hour_local"].to_numpy(int),
+                    day=np.array([DAY_INDEX.get(x, -1) for x in seg["day_type"]], dtype=int), block=block,
+                    route=seg["route_id"].to_numpy(str))
+
+
+def match_streets(path: list[LineString], seg: pd.DataFrame, blocks: dict[tuple[str, str], int],
+                  index: SegIndex | None = None, exclude: frozenset[str] = frozenset()) -> StreetMatch:
+    """Slices of `path` -> OSM drive segment (app.m4_access.detour's graph, 15 m) -> the measured runs of
+    `seg` (L0 segments) on that segment in the path's direction (>= 50 m or 80 % of it within 15 m)."""
+    from app.m4_access import detour
+
+    d = detour.drive_edges()
+    tree = detour._drive_tree()
+    # slices of the path -> OSM drive segment (nearest within 15 m, along it) and travel direction
+    slice_len: list[float] = []
+    slice_unit: list[int | None] = []
+    unit_dir: dict[int, np.ndarray] = {}
+    for line in path:
+        n = max(1, int(round(line.length / SLICE_M)))
+        step = line.length / n
+        for k in range(n):
+            s = (k + 0.5) * step
+            p = line.interpolate(s)
+            q0, q1 = line.interpolate(max(0.0, s - 5)), line.interpolate(min(line.length, s + 5))
+            v = np.array([q1.x - q0.x, q1.y - q0.y])
+            v = v / (np.linalg.norm(v) or 1.0)
+            best, best_d = None, detour.ROUTE_NEAR_M
+            for i in tree.query(p.buffer(detour.ROUTE_NEAR_M)):
+                e = LineString(d.xy[int(i)])
+                dist = e.distance(p)
+                if dist > best_d:
+                    continue
+                t = e.project(p)
+                a, b = e.interpolate(max(0.0, t - 5)), e.interpolate(min(e.length, t + 5))
+                u = np.array([b.x - a.x, b.y - a.y])
+                if abs(float(np.dot(u, v))) < 0.7 * (np.linalg.norm(u) or 1.0):
+                    continue
+                best, best_d = int(i), dist
+            slice_len.append(step)
+            slice_unit.append(best)
+            if best is not None:
+                unit_dir[best] = unit_dir.get(best, 0) + v
+    slice_len_arr = np.array(slice_len)
+    if index is None:
+        bounds = LineString(np.vstack([np.asarray(g.coords) for g in path])).buffer(AREA_M)
+        index = seg_index(seg, bounds, blocks)
+    ix = index
+    keep_route = ~np.isin(ix.route, list(exclude)) if exclude else np.ones(len(ix.route), dtype=bool)
+
+    def obs_of(gs: list[int]) -> StreetObs:
+        rows = np.concatenate([ix.rows_by_g[g] for g in gs]) if gs else np.zeros(0, dtype=int)
+        rows = rows[keep_route[rows]]
+        return StreetObs(pace=ix.pace[rows], hour=ix.hour[rows], block=ix.block[rows], day=ix.day[rows]), rows
+
+    area, _ = obs_of(list(range(len(ix.glines))))
+    units: dict[int, StreetObs] = {}
+    routes_used: set[str] = set()
+    for u, vsum in unit_dir.items():
+        e = LineString(d.xy[u])
+        zone = e.buffer(detour.ROUTE_NEAR_M)
+        need = min(detour.ROUTE_MIN_M, 0.8 * e.length)
+        v = vsum / (np.linalg.norm(vsum) or 1.0)
+        mid = e.interpolate(0.5, normalized=True)
+        hits = []
+        for gi in (ix.tree.query(zone) if ix.tree is not None else []):
+            g = ix.glines[int(gi)]
+            if g.intersection(zone).length < need:
+                continue
+            t = g.project(mid)
+            a, b = g.interpolate(max(0.0, t - 5)), g.interpolate(min(g.length, t + 5))
+            w = np.array([b.x - a.x, b.y - a.y])
+            if float(np.dot(w, v)) < DIR_COS * (np.linalg.norm(w) or 1.0):
+                continue          # the other line runs the other way on this street
+            hits.append(int(gi))
+        obs, rows = obs_of(hits)
+        units[u] = obs
+        routes_used |= set(ix.route[rows].tolist())
+    seg = ix.seg
+    return StreetMatch(slice_len, slice_unit, slice_len_arr, units, area, routes_used, seg)
+
+
 class StretchModel:
     """Per-slice street paces and stop dwells of other lines around one stretch; est(hour, weights)."""
 
     def __init__(self, path: list[LineString], mid_stops: list[str], own_routes: set[str],
                  seg: pd.DataFrame, ev: pd.DataFrame, blocks: dict[tuple[str, str], int]):
-        from app.m4_access import detour
-
         self.blocks = blocks
-        d = detour.drive_edges()
-        tree = detour._drive_tree()
-        # slices of the path -> OSM drive segment (nearest within 15 m, along it) and travel direction
-        self.slice_len: list[float] = []
-        self.slice_unit: list[int | None] = []
-        unit_dir: dict[int, np.ndarray] = {}
-        for line in path:
-            n = max(1, int(round(line.length / SLICE_M)))
-            step = line.length / n
-            for k in range(n):
-                s = (k + 0.5) * step
-                p = line.interpolate(s)
-                q0, q1 = line.interpolate(max(0.0, s - 5)), line.interpolate(min(line.length, s + 5))
-                v = np.array([q1.x - q0.x, q1.y - q0.y])
-                v = v / (np.linalg.norm(v) or 1.0)
-                best, best_d = None, detour.ROUTE_NEAR_M
-                for i in tree.query(p.buffer(detour.ROUTE_NEAR_M)):
-                    e = LineString(d.xy[int(i)])
-                    dist = e.distance(p)
-                    if dist > best_d:
-                        continue
-                    t = e.project(p)
-                    a, b = e.interpolate(max(0.0, t - 5)), e.interpolate(min(e.length, t + 5))
-                    u = np.array([b.x - a.x, b.y - a.y])
-                    if abs(float(np.dot(u, v))) < 0.7 * (np.linalg.norm(u) or 1.0):
-                        continue
-                    best, best_d = int(i), dist
-                self.slice_len.append(step)
-                self.slice_unit.append(best)
-                if best is not None:
-                    unit_dir[best] = unit_dir.get(best, 0) + v
-        self.slice_len_arr = np.array(self.slice_len)
-        # other lines' runs near the path, with their GTFS geometry
-        bounds = LineString(np.vstack([np.asarray(g.coords) for g in path])).buffer(AREA_M)
         seg = seg[~seg["route_id"].isin(own_routes)]
-        stop_xy = timetable_day(date.fromisoformat(seg["service_date"].iloc[0])).stop_xy if len(seg) else {}
-        near = {sid for sid, (x, y) in stop_xy.items() if bounds.contains(Point(x, y))}
-        seg = seg[seg["from_stop_id"].isin(near) | seg["to_stop_id"].isin(near)]
-        geoms, idx_rows = [], []
-        cache: dict[tuple, LineString | None] = {}
-        for (tid, sd, fi), rows in seg.groupby(["trip_id", "service_date", "from_index"]).groups.items():
-            plan = timetable_day(date.fromisoformat(sd)).trips.get(tid)
-            if plan is None:
-                continue
-            key = (plan.pattern, int(fi))
-            if key not in cache:
-                g = tt.pattern_geometry(plan).segments[int(fi)]
-                cache[key] = g if g.intersects(bounds) else None
-            if cache[key] is not None:
-                geoms.append(key)
-                idx_rows.append(rows)
-        uniq = sorted(set(geoms), key=str)
-        gidx = {k: i for i, k in enumerate(uniq)}
-        glines = [cache[k] for k in uniq]
-        rows_by_g: dict[int, list] = {}
-        for k, rows in zip(geoms, idx_rows):
-            rows_by_g.setdefault(gidx[k], []).extend(rows)
-        self.routes_used: set[str] = set()
-
-        def obs_of(gs: list[int]) -> StreetObs:
-            r = seg.loc[[i for g in gs for i in rows_by_g.get(g, [])]]
-            r = r[(r["dist_m"] > 0) & (r["run_sec"] > 0)]
-            return StreetObs(pace=(r["run_sec"] / r["dist_m"]).to_numpy(float), hour=r["hour_local"].to_numpy(int),
-                             block=np.array([blocks.setdefault((t, s_), len(blocks))
-                                             for t, s_ in zip(r["trip_id"], r["service_date"])], dtype=int)), r
-
-        self.area, _ = obs_of(list(range(len(glines))))
-        gtree = STRtree(glines) if glines else None
-        self.units: dict[int, StreetObs] = {}
-        for u, vsum in unit_dir.items():
-            e = LineString(d.xy[u])
-            zone = e.buffer(detour.ROUTE_NEAR_M)
-            need = min(detour.ROUTE_MIN_M, 0.8 * e.length)
-            v = vsum / (np.linalg.norm(vsum) or 1.0)
-            mid = e.interpolate(0.5, normalized=True)
-            hits = []
-            for gi in (gtree.query(zone) if gtree is not None else []):
-                g = glines[int(gi)]
-                if g.intersection(zone).length < need:
-                    continue
-                t = g.project(mid)
-                a, b = g.interpolate(max(0.0, t - 5)), g.interpolate(min(g.length, t + 5))
-                w = np.array([b.x - a.x, b.y - a.y])
-                if float(np.dot(w, v)) < DIR_COS * (np.linalg.norm(w) or 1.0):
-                    continue          # the other line runs the other way on this street
-                hits.append(int(gi))
-            obs, r = obs_of(hits)
-            self.units[u] = obs
-            self.routes_used |= set(r["route_id"])
+        m = match_streets(path, seg, blocks)
+        self.slice_len, self.slice_unit, self.slice_len_arr = m.slice_len, m.slice_unit, m.slice_len_arr
+        self.units, self.area, self.routes_used = m.units, m.area, m.routes_used
+        seg = m.seg
         # dwell at the stretch's intermediate stops, measured on other lines
         other = ev[~ev["route_id"].isin(own_routes) & ev["dwell_sec"].notna()]
         self.dwell: list[StreetObs] = []
