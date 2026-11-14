@@ -1,0 +1,28 @@
+/* R21-F: the timetable switch row in step 3. Tokens only (tokens.css). */
+.feed-check {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: var(--sp-3) 0;
+}
+
+.feed-check p {
+  margin: 0;
+}
+
+.feed-check details > * + * {
+  margin-top: var(--sp-2);
+}
+
+.feed-check-h {
+  font-size: var(--fs-s);
+  font-weight: 600;
+  margin: var(--sp-3) 0 0;
+}
+
+.feed-check-list > li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--sp-2);
+  align-items: baseline;
+}

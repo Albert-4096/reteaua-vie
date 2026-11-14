@@ -24,6 +24,7 @@ import { navigate, stepHref } from "../../lib/router";
 import { invalidate, setData, useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { CityAppCheck } from "./CityAppCheck";
+import { FeedCheckRow } from "./feedCheck";
 import { FeedsView } from "./feeds";
 import { AppsView, NoticeView, StationView } from "./outputs";
 import { S } from "./strings";
@@ -167,6 +168,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
           </div>
         )}
         {published && <CityAppCheck closureId={closureId} />}
+        {published && <FeedCheckRow closureId={closureId} />}
         <nav aria-label={t("publish.outputs")}>
           <ul className="list">
             {outs.map((o) => (
