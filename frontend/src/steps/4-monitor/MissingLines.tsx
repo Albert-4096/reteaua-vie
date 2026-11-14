@@ -12,6 +12,7 @@ import { useResource } from "../../lib/store";
 import type { StepProps } from "../types";
 import { fetchMissing, MISSING_CASE, type MissingLines as Missing, type MissingRoute } from "./missing";
 import { S } from "./strings";
+import { CheckinSim } from "./CheckinSim";
 import { MissingTriage } from "./MissingTriage";
 
 const M = S.missing;
@@ -89,6 +90,8 @@ export function MissingLines({ caseKey }: StepProps) {
           </ul>
         </section>
       )}
+
+      <CheckinSim />
 
       <details>
         <summary>{t("details")}</summary>

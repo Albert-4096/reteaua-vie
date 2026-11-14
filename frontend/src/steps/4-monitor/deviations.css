@@ -1,0 +1,2 @@
+.deviations { display: grid; gap: var(--sp-2); min-width: 0; }
+.deviations h2 { margin: 0; }

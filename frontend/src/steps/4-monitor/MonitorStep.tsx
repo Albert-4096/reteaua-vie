@@ -5,16 +5,18 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { api, apiGet, type Closure, type Network, type Provenance } from "../../api/client";
+import { DEVIATIONS_KEY, deviationTracks, fetchDeviations, type Deviations as DeviationReport } from "../../api/deviations";
 import { v2, type LayerCollection, type LiveCheck } from "../../api/v2";
 import { Figure } from "../../components/Figure";
 import { DetourCost } from "../../components/DetourCost";
-import { useMapOverlay, type MapStop } from "../../components/MapView";
+import { useMapOverlay, type ExtraLayerId, type MapStop } from "../../components/MapView";
 import { LoadState, Panel } from "../../components/Panel";
 import { fmtDateTime, tr } from "../../lib/format";
 import { navigate, stepHref } from "../../lib/router";
 import { useResource } from "../../lib/store";
 import { useCases } from "../../lib/useCase";
 import type { StepProps } from "../types";
+import { Deviations } from "./Deviations";
 import { isMissingCase } from "./missing";
 import { MissingLines } from "./MissingLines";
 import { S } from "./strings";
@@ -38,7 +40,7 @@ export function MonitorStep(props: StepProps) {
 }
 
 function DiversionCheck({ caseKey, closureId }: StepProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const cases = useCases();
   const id = !caseKey && closureId ? closureId : (cases.data?.find((c) => c.id === LIVE_CASE)?.closureId ?? null);
   const closure = useResource<Closure>(id ? `closure:${id}` : null, () => api.closure(id!));
@@ -48,6 +50,7 @@ function DiversionCheck({ caseKey, closureId }: StepProps) {
   const scans = useResource<ScanCounts>(id ? `scans:${id}` : null, () =>
     apiGet<ScanCounts>(`/api/closures/${encodeURIComponent(id!)}/scans`),
   );
+  const deviations = useResource<DeviationReport>(DEVIATIONS_KEY, fetchDeviations);
 
   const c = closure.data;
   const l = live.data;
@@ -75,6 +78,24 @@ function DiversionCheck({ caseKey, closureId }: StepProps) {
       });
   }, [rows, network.data]);
 
+  const deviationLines = useMemo(() => deviationTracks(deviations.data), [deviations.data]);
+  const layers = useMemo(() => {
+    const next: { id: ExtraLayerId; data: GeoJSON.FeatureCollection; label?: string }[] = [];
+    if (ownVehicles) next.push({ id: "vehicles", data: ownVehicles });
+    // MapView has no "deviations" layer yet, so these LineStrings use the existing "detour" line layer.
+    if (deviationLines.features.length > 0) {
+      next.push({
+        id: "detour",
+        data: deviationLines,
+        label: tr({
+          ro: `trasee deviate înregistrate: ${deviationLines.features.length}`,
+          en: `recorded off-route tracks: ${deviationLines.features.length}`,
+        }),
+      });
+    }
+    return next;
+  }, [ownVehicles, deviationLines, i18n.language]);
+
   useMapOverlay(
     {
       closure: (c?.geometry as GeoJSON.Geometry | null) ?? null,
@@ -88,10 +109,10 @@ function DiversionCheck({ caseKey, closureId }: StepProps) {
           unknown: mapStops.filter((s) => s.status === "served").length,
         }),
       ),
-      layers: ownVehicles ? [{ id: "vehicles", data: ownVehicles }] : [],
+      layers,
       fitKey: c && mapStops.length ? `monitor:${id}` : undefined,
     },
-    [c, mapStops, ownVehicles, id],
+    [c, mapStops, layers, id],
   );
 
   if (!c || !l) {
@@ -159,6 +180,8 @@ function DiversionCheck({ caseKey, closureId }: StepProps) {
           </ul>
         </section>
       )}
+
+      <Deviations result={deviations} />
 
       {id && <DetourCost closureId={id} detailed />}
 
