@@ -1,8 +1,8 @@
 # Data fetch scripts
 
-`fetch_all.sh` downloads the external sources that no other tool records into
-`$DATA_DIR`, prints their versions and sha256, and writes
-`$DATA_DIR/provenance/sources.json`.
+`fetch_all.sh` downloads the external sources into `$DATA_DIR` (and the
+recordings' first files into `$LIVE_DIR`, default `$DATA_DIR/live`), prints
+their versions and sha256, and writes `$DATA_DIR/provenance/sources.json`.
 
 ```sh
 DATA_DIR=/path/to/data backend/scripts/data/fetch_all.sh      # from repo/
@@ -10,7 +10,9 @@ DATA_FREEZE=1 DATA_DIR=/path/to/data backend/scripts/data/fetch_all.sh   # no do
 ```
 
 It is idempotent: a file already present is reused, so a rerun downloads
-nothing unless Geofabrik has published a newer Romania extract. With
+nothing unless Geofabrik has published a newer Romania extract (the city
+sources below are asked again on every run; a file changes only when its
+source did). With
 `DATA_FREEZE=1` it never downloads; it only checks the local files, reruns the
 crop and the validator smoke test and rewrites `sources.json`. If a download
 fails and an older file exists, the old file is kept and its provenance note
@@ -37,10 +39,42 @@ sudo apt-get install -y openjdk-21-jre-headless osmium-tool fonts-noto-core \
 The population grid is a model: every figure built on it carries the label
 „model GHSL 2020, 100 m (nu recensământ)”.
 
-The GTFS timetable and the city-API files (network, zones, Timpark, street
-register) are fetched by other tools (the recorder and the city-API cache).
-`fetch_all.sh` never downloads them; it lists them in `sources.json` under
-`local` with size, sha256, mtime and, for the GTFS, the `feed_version`.
+## City sources and the live recording
+
+`fetch_all.sh` first runs `fetch_city.py` (alone: `make data-city`, which needs
+no osmium or Java). It writes the files the backend reads:
+
+| Source | Output |
+|---|---|
+| SMTT GTFS `https://smtt.ro/transit/gtfs/maps/smtt-timisoara-ro.zip` (conditional GET on the ETag; `feed_info.txt` checked) | `$LIVE_DIR/gtfs/smtt_<etag>.zip`, a new file only when the feed changed; the backend serves the newest |
+| GTFS 4.29 and 4.30, Mobility Database mirror (`mdb-2868`), pinned by sha256 | `$DATA_DIR/gtfs-history/`, downloaded once |
+| `cont.primariatm.ro/api/mobile/transit/network`, `/api/zones`, `/api/mobile/parking`, `servicii.primariatm.ro/api/nomenclator/strazi` | `$DATA_DIR/city-api-2026-11-13/` (`transit-network.json`, `zones.geojson`, `parking.json`, `nomenclator-strazi.json`), as served |
+| stpt.ro WordPress API, newest 20 posts | `$LIVE_DIR/stpt-posts/<id>_<modified>.json`; an edited post gets a new file |
+| `sesizari.primariatm.ro/api/sesizari`, last 2 days, without the report text | `$LIVE_DIR/sesizari/YYYYMMDD-HHMM.json` (UTC) |
+
+GET only, with a User-Agent that names the team. Every download goes to a
+staging dir and is checked (JSON shape and counts, zip CRC, the GTFS files);
+only then it replaces the real file, by an atomic rename. A failed or bad
+source keeps the last good file, and its record says „memorat, sursa
+indisponibilă”; the script exits 1 only when a source has no file at all.
+`DATA_FREEZE=1` downloads nothing. Each source gets a record in
+`provenance/parts/` (ids `smtt-gtfs`, `gtfs-history:<file>`, `city-network`,
+`city-zones`, `city-parking`, `city-streets`, `stpt-posts`, `city-sesizari`).
+`sources.json` also lists every GTFS zip and city-API file on disk under
+`local` (size, sha256, mtime, GTFS `feed_version`).
+
+`record_vehicles.py` records the CityApp live vehicles feed
+(`cont.primariatm.ro/api/mobile/transit/vehicles`, undocumented, no
+guarantee) every 15 s into `$LIVE_DIR/vehicles/YYYYMMDD-HH.jsonl.gz` (UTC hour,
+one JSON line per poll, each line its own gzip member). It never polls faster
+than every 10 s and does not start when another program is writing into the
+same directory.
+
+```sh
+make record     # tmux rv-record: window `vehicles` (every 15 s), window `city`
+                # (fetch_city.py --every 3600 --only gtfs,stpt,sesizari)
+tmux kill-session -t rv-record   # stop
+```
 
 ## What the script checks
 
@@ -80,9 +114,12 @@ It writes `<file>.results.json` next to each feed file in `DIR_WITH_PB_FILES`.
 ## Files
 
 - `fetch_all.sh`: the entry point.
+- `fetch_city.py`: the city sources (GTFS, city API, STPT notices, sesizări).
+- `record_vehicles.py`: the live vehicle recorder (`make record`).
 - `ghsl_crop.py`: crops the GHSL tile and prints the sanity numbers.
 - `provenance.py`: writes one record per fetched source and merges them into `sources.json`.
 - `gtfsrt_smoke_feed.py`: writes the header-only GTFS-RT feed for the validator smoke test.
 
 The Python helpers run in throwaway `uv run --with` environments with pinned
-versions, so they do not depend on the backend's virtual environment.
+versions (`fetch_city.py` and `record_vehicles.py` need only the standard
+library), so they do not depend on the backend's virtual environment.

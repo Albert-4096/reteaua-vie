@@ -16,10 +16,10 @@ FRONTEND := $(ROOT)/frontend
 COMPOSE := docker compose -f $(ROOT)/infra/compose.yml
 FNM := eval "$$(fnm env 2>/dev/null)"
 
-.PHONY: help setup data precompute dev dev-stop test eval eval-review web demo up down
+.PHONY: help setup data data-city record precompute dev dev-stop test eval eval-review web demo up down
 
 help:
-	@echo "make setup | data | precompute | dev | dev-stop | test | eval | eval-review | web | demo | up | down"
+	@echo "make setup | data | data-city | record | precompute | dev | dev-stop | test | eval | eval-review | web | demo | up | down"
 	@echo "DATA_DIR=$(DATA_DIR)  ENV_FILE=$(ENV_FILE)"
 
 setup:
@@ -32,6 +32,21 @@ setup:
 
 data:
 	bash $(BACKEND)/scripts/data/fetch_all.sh
+
+# City sources only (SMTT GTFS, city API copies, STPT notices, sesizări), no osmium / Java; `make data` runs it too.
+PYRUN := uv run --no-project --quiet --python 3.12 python -I
+RECORD_ENV = DATA_DIR=$(DATA_DIR) LIVE_DIR=$${LIVE_DIR:-$(DATA_DIR)/live}
+data-city:
+	cd $(BACKEND) && $(PYRUN) scripts/data/fetch_city.py
+
+# Live recording in tmux rv-record: vehicles every 15 s; GTFS, STPT notices and sesizări every hour.
+record:
+	@if tmux has-session -t rv-record 2>/dev/null; then echo "rv-record already running"; else \
+		tmux new-session -d -s rv-record -n vehicles -c $(BACKEND) \
+			"$(RECORD_ENV) $(PYRUN) scripts/data/record_vehicles.py" \; set-option -t rv-record remain-on-exit on >/dev/null && \
+		tmux new-window -d -t rv-record -n city -c $(BACKEND) \
+			"$(RECORD_ENV) $(PYRUN) scripts/data/fetch_city.py --every 3600 --only gtfs,stpt,sesizari" && \
+		echo "recording: tmux attach -t rv-record (windows vehicles, city); stop: tmux kill-session -t rv-record"; fi
 
 precompute:
 	cd $(BACKEND) && uv run python -m app.precompute

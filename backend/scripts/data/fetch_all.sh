@@ -3,8 +3,8 @@
 #   - OSM: Geofabrik romania-latest.osm.pbf, cut to the Timișoara bbox (osmium)
 #   - Population: GHSL GHS-POP epoch 2020, R2023A, 3 arcsec, EPSG:4326, cropped
 #   - Tool: MobilityData gtfs-realtime-validator (batch CLI jar)
-# The GTFS and the city-API files come from the recorder and the cache: they
-# are listed in provenance/sources.json (size, sha256) but never downloaded here.
+#   - City sources (fetch_city.py): SMTT GTFS, GTFS 4.29/4.30, the city API
+#     copies, STPT notices, sesizări. Live vehicles: record_vehicles.py (`make record`).
 #
 # Idempotent: a file already present is reused. DATA_FREEZE=1 never downloads.
 # If a download fails and an older file exists, that file is kept and its
@@ -176,6 +176,11 @@ fetch_validator() {
     --note "batch CLI: java -cp $VALIDATOR_JAR_NAME $VALIDATOR_MAIN -gtfs GTFS.zip -gtfsRealtimePath DIR"
 }
 
+fetch_city() {
+  log "City sources: SMTT GTFS, city API, STPT notices, sesizări (fetch_city.py)"
+  DATA_DIR="$DATA_DIR" "${PY[@]}" "$HERE/fetch_city.py"
+}
+
 main() {
   need curl ""; need unzip ""; need uv "Python runner"
   need osmium "sudo apt-get install osmium-tool"
@@ -186,6 +191,7 @@ main() {
   echo "  $(uv --version)"
   echo "  DATA_DIR=$DATA_DIR DATA_FREEZE=$FREEZE"
 
+  fetch_city
   fetch_osm
   fetch_ghsl
   fetch_validator
