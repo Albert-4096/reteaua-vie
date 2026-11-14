@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
-import { Clock } from "lucide-react";
+import { Clock, Info } from "lucide-react";
+import { MotionConfig, motion } from "motion/react";
 import { Logo } from "@/landing/Logo";
 import { useApi } from "@/lib/api";
-import { cn } from "@/lib/utils";
 import { app } from "./data";
 import { STEPS, go, useRoute, type StepId } from "./router";
+import { StepBar } from "./StepBar";
 import { Overview, Plan, Decide, Publish, Monitor, Report } from "./screens";
 
 const SCREENS: Record<StepId, (p: { closureId: string }) => ReactNode> = {
@@ -19,58 +20,43 @@ export function App() {
   const current = STEPS.find((s) => s.id === step)!;
 
   return (
-    <div className="flex h-dvh bg-background text-foreground">
-      <aside className="flex w-64 shrink-0 flex-col border-r bg-card">
-        <a href="/" className="flex h-16 items-center gap-2.5 px-5 font-semibold tracking-tight">
-          <Logo className="size-8" /> Rețeaua Vie
-        </a>
-        <nav className="flex-1 px-3 py-3" aria-label="Pașii lucrării">
-          <ol className="space-y-1">
-            {STEPS.map((s, i) => {
-              const on = s.id === step;
-              return (
-                <li key={s.id}>
-                  <button type="button" onClick={() => go(s.id)} aria-current={on ? "page" : undefined}
-                    className={cn("flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
-                      on ? "bg-accent text-accent-foreground" : "text-foreground/80 hover:bg-muted")}>
-                    <span className={cn("tabular grid size-6 shrink-0 place-items-center rounded-full text-xs font-semibold",
-                      on ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>{i + 1}</span>
-                    <span className="leading-tight">
-                      <span className="block text-[0.95rem] font-medium">{s.label}</span>
-                      <span className={cn("block text-xs", on ? "text-accent-foreground/80" : "text-muted-foreground")}>{s.hint}</span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-        </nav>
-        <div className="border-t px-5 py-4 text-xs leading-relaxed text-muted-foreground">
-          Date: orarul SMTT (GTFS), endpointurile Primăriei, anunțurile STPT. Populația: model GHSL 2020.
-        </div>
-      </aside>
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-16 shrink-0 items-center gap-5 border-b bg-card px-6">
-          <h1 className="text-lg font-semibold tracking-tight">{current.label}</h1>
+    <MotionConfig reducedMotion="user">
+      <div className="flex h-dvh flex-col bg-background text-foreground">
+        <header className="flex h-14 shrink-0 items-center gap-4 border-b bg-card px-5">
+          <a href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+            <Logo className="size-7" /> Rețeaua Vie
+          </a>
+          <span aria-hidden className="h-5 w-px bg-border" />
+          <h1 className="flex items-baseline gap-2 whitespace-nowrap">
+            <span className="text-[1.05rem] font-semibold tracking-tight">{current.label}</span>
+            <span className="hidden text-sm text-muted-foreground lg:inline">{current.hint}</span>
+          </h1>
           {PICKER.includes(step) && (
-            <label className="flex min-w-0 items-center gap-2 text-sm">
+            <label className="ml-2 flex min-w-0 items-center gap-2 text-sm">
               <span className="text-muted-foreground">Lucrarea</span>
               <select value={closureId} onChange={(e) => go(step, e.target.value)}
-                className="h-9 min-w-0 max-w-[34rem] truncate rounded-md border bg-background px-2.5 text-sm font-medium">
+                className="h-9 min-w-0 max-w-[30rem] truncate rounded-md border bg-background px-2.5 text-sm font-medium">
                 {(closures.data ?? []).map((c) => <option key={c.id} value={c.id}>{c.title.ro}</option>)}
               </select>
             </label>
           )}
-          <span className="ml-auto inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-sm text-muted-foreground">
-            <Clock className="size-3.5" /> Ceas simulat: duminică 8 nov 2026, 12:00
-          </span>
+          <div className="ml-auto flex shrink-0 items-center gap-2">
+            <span title="Date: orarul SMTT (GTFS), endpointurile Primăriei, anunțurile STPT. Populația: model GHSL 2020."
+              className="hidden cursor-help items-center gap-1.5 text-sm text-muted-foreground xl:inline-flex">
+              <Info className="size-3.5" /> Surse
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-sm text-muted-foreground">
+              <Clock className="size-3.5" /> Ceas simulat: duminică 8 nov 2026, 12:00
+            </span>
+          </div>
         </header>
-        <main className="min-h-0 flex-1">
-          <Screen key={`${step}-${closureId}`} closureId={closureId} />
-        </main>
+        <motion.main key={`${step}-${closureId}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.22, ease: "easeOut" }}
+          className="min-h-0 flex-1">
+          <Screen closureId={closureId} />
+        </motion.main>
+        <StepBar step={step} wide={step === "raportezi"} />
       </div>
-    </div>
+    </MotionConfig>
   );
 }
 

@@ -58,6 +58,24 @@ def test_frontend_served_with_spa_fallback(tmp_path):
     assert "no" != c.get("/../secret.txt").text
 
 
+def test_v1_routes_get_v1_html(tmp_path):
+    from fastapi import FastAPI
+    from fastapi.testclient import TestClient
+
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "index.html").write_text("<html>v3</html>")
+    (dist / "v1.html").write_text("<html>v1</html>")
+    c = TestClient(FastAPI())
+    main.mount_frontend(c.app, dist)
+    assert c.get("/").text == "<html>v3</html>"
+    assert c.get("/app/planifici", params={"c": "cl_x"}).text == "<html>v3</html>"
+    assert c.get("/a/cl_x", params={"stop": "85"}).text == "<html>v1</html>"
+    assert c.get("/step/3").text == "<html>v1</html>"
+    assert c.get("/v1").text == "<html>v1</html>"
+    assert c.get("/api/nope").status_code == 404
+
+
 def test_no_dist_no_mount(tmp_path):
     from fastapi import FastAPI
 

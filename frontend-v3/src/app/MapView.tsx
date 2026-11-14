@@ -87,7 +87,7 @@ function sync(m: maplibregl.Map, p: Required<Omit<MapProps, "onClosure" | "fitTo
     const all = [...pts, ...near];
     if (all.length) {
       const b = all.reduce((acc, [x, y]) => acc.extend([x, y]), new maplibregl.LngLatBounds(all[0] as [number, number], all[0] as [number, number]));
-      m.fitBounds(b, { padding: 70, maxZoom: 15.5, duration: first ? 0 : 900 });
+      m.fitBounds(b, { padding: { top: 60, left: 60, right: 60, bottom: 110 }, maxZoom: 15.5, duration: first ? 0 : 900 });
       lastFit = p.fitTo;
     }
   }

@@ -30,7 +30,9 @@ RUN uv sync --frozen --no-dev
 
 # The built frontend (frontend/dist, made by `make web`), when there is one.
 # The globs keep this COPY valid while frontend/ or its build does not exist.
+# frontend-v3/dist (made by the same `make web`) goes on top: v3 at / and /app/*, v1 as v1.html.
 COPY infra/Dockerfile fronten[d]/dis[t] /app/frontend/dist/
+COPY infra/Dockerfile frontend-v[3]/dis[t] /app/frontend/dist/
 RUN rm /app/frontend/dist/Dockerfile
 
 # Runs as the host user (compose `user:`), so HOME must be writable by anyone.

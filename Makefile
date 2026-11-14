@@ -13,6 +13,7 @@ export DATA_DIR ENV_FILE EVAL_REVIEW_DIR
 ROOT := $(CURDIR)
 BACKEND := $(ROOT)/backend
 FRONTEND := $(ROOT)/frontend
+FRONTEND_V3 := $(ROOT)/frontend-v3
 COMPOSE := docker compose -f $(ROOT)/infra/compose.yml
 FNM := eval "$$(fnm env 2>/dev/null)"
 
@@ -82,6 +83,10 @@ eval-review:
 web:
 	@if [ -f $(FRONTEND)/package.json ]; then $(FNM); cd $(FRONTEND) && pnpm install --frozen-lockfile && pnpm build; \
 	else echo "no frontend/package.json yet: nothing to build"; fi
+	@# frontend-v3 is the public frontend (/ and /app/*); v1 ships next to it as v1.html (/step/*, QR page /a/*)
+	@if [ -f $(FRONTEND_V3)/package.json ] && [ -f $(FRONTEND)/dist/index.html ]; then $(FNM); cd $(FRONTEND_V3) \
+		&& pnpm install --frozen-lockfile && pnpm build \
+		&& cp $(FRONTEND)/dist/index.html dist/v1.html && cp -r $(FRONTEND)/dist/assets/. dist/assets/; fi
 
 # One process on :$(API_PORT) for / (frontend/dist) and /api, no reload (SPEC §3.4).
 demo: web

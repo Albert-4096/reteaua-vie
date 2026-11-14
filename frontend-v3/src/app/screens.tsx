@@ -470,7 +470,7 @@ export function Report() {
   const hist = useApi(app.history);
   const exp = useApi(app.exports);
   return (
-    <div id="content" className="h-full overflow-y-auto">
+    <div id="content" className="h-full overflow-y-auto pb-24">
       <div className="mx-auto max-w-5xl px-8 py-8">
         <h2 className="text-2xl font-semibold tracking-tight">Obligații și ce acoperă exporturile</h2>
         <p className="mt-1 text-muted-foreground">Ce cer actele UE și naționale pentru informarea călătorilor și ce fișier al platformei răspunde.</p>
