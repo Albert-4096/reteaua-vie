@@ -163,7 +163,7 @@ Criteriile din ghidul Primăriei. ✔ doar unde codul o arată. / *City Hall gui
 Toate cifrele de aici vin din `eval/results/latest.json`, scris de `make eval` la 2026-11-14T14:02:07+02:00 (commit `3c4452c`), pe GTFS SMTT 4.31 (valabil 2026-11-05 – 2026-12-31, sha256 `8905216072b3`), copiate de `eval/readme_numbers.py`. Detalii: [`eval/README.md`](eval/README.md).  
 *Every figure here comes from `eval/results/latest.json`, written by `make eval` at the time and commit above, copied by `eval/readme_numbers.py`. Details: [`eval/README.md`](eval/README.md).*
 
-**Citirea anunțurilor STPT / Reading STPT notices** (5 anunțuri reale / real notices; cheia de răspuns / answer key: făcute cu ajutor AI din textul anunțului; verificarea de către un om nu s-a încheiat / *AI-assisted from the notice text; human review pending*)
+**Citirea anunțurilor STPT / Reading STPT notices** (5 anunțuri reale / real notices; cheia de răspuns / answer key: etichete asistate de AI, verificare umană în curs / *AI-assisted from the notice text; human review pending*)
 
 - **80 din 101** rânduri suspendate (stație, linie, sens) găsite sigur, **0** false (precizie 100,0%, recall 79,2%). Cu rândurile marcate „neclar”, pe care le decide funcționarul: 101 din 101, 0 false. Metoda: `eval/run.py` dă fiecare anunț parserului și analizei M1 și compară rândurile cu cheia de răspuns; rândurile pe care cheia le lasă nesigure nu se punctează.  
   *80 of 101 suspended (stop, line, direction) rows found as certain, 0 false (precision 100.0%, recall 79.2%). Counting the „neclar” (unsure) rows the clerk decides: 101 of 101, 0 false. Method: `eval/run.py` feeds each notice to the M1 parser and analysis and compares the rows with the answer key; rows the key leaves uncertain are not scored.*

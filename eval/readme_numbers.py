@@ -84,7 +84,7 @@ def scored(block: dict) -> tuple[int, int, int]:
 
 def labels_ro(labelled_by: list[str]) -> str:
     if any("human review pending" in s for s in labelled_by):
-        return "făcute cu ajutor AI din textul anunțului; verificarea de către un om nu s-a încheiat"
+        return "etichete asistate de AI, verificare umană în curs"
     return "; ".join(labelled_by) or UNKNOWN[0]
 
 
