@@ -1,0 +1,102 @@
+{
+  "window": {
+    "start": "2026-11-14T10:00:00+02:00",
+    "end": "2026-11-14T11:00:00+02:00"
+  },
+  "status": "ok",
+  "thresholds": {
+    "offRouteMeters": 80,
+    "minReports": 3,
+    "terminalMeters": 250,
+    "depotMeters": 300,
+    "maxReportAgeSec": 120,
+    "beforeTripMinutes": 20,
+    "afterTripMinutes": 60,
+    "standingMinutes": 5,
+    "standingMetresPerSecond": 1.0
+  },
+  "reports": 12334,
+  "counts": {
+    "runs": 25,
+    "ignoredOffSchedule": 4,
+    "ignoredStanding": 2,
+    "ignoredTerminal": 18,
+    "ignoredDepot": 0,
+    "kept": 1,
+    "announced": 0,
+    "unannounced": 1
+  },
+  "groups": [
+    {
+      "routeId": "R_TV_7",
+      "shortName": "7",
+      "mode": "tramvai",
+      "directionId": 1,
+      "street": "Bulevardul 16 Decembrie 1989",
+      "nearStop": "Piața A. Mocioni (16 Decembrie 1989 - Sinaia)",
+      "classification": "fara_anunt",
+      "label": {
+        "ro": "abatere de la traseu fără anunț găsit de noi — de verificat",
+        "en": "off route, no notice found by us — to be checked"
+      },
+      "closureId": null,
+      "notice": null,
+      "runs": 1,
+      "trips": 1,
+      "tripsSeen": 5,
+      "share": 0.2,
+      "firstAt": "2026-11-14T10:18:27+02:00",
+      "lastAt": "2026-11-14T10:18:57+02:00",
+      "maxDistanceM": 358,
+      "extraKm": 0.15,
+      "tracks": [
+        {
+          "tripId": "7.1_WESB_R_03_03",
+          "vehicleId": "3527",
+          "start": "2026-11-14T10:18:27+02:00",
+          "end": "2026-11-14T10:18:57+02:00",
+          "reports": 3,
+          "maxDistanceM": 358,
+          "extraKm": 0.15,
+          "coordinates": [
+            [
+              21.21733,
+              45.74742
+            ],
+            [
+              21.21643,
+              45.74663
+            ],
+            [
+              21.21538,
+              45.74628
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": [
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    },
+    {
+      "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+      "version": null,
+      "fetchedAt": "2026-11-14T10:59:28+02:00",
+      "note": "Fereastra / window 2026-11-14T10:00:00+02:00 – 2026-11-14T11:00:00+02:00; 12334 poziții proaspete / fresh positions; 100% din minute acoperite; fișiere / files: 20261114-08.jsonl.gz"
+    },
+    {
+      "source": "Rețeaua Vie R18, abateri de la traseu / off-route detector",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-14T13:40:32+02:00",
+      "note": "≥ 3 poziții consecutive la > 80 m de orice traseu GTFS al liniei; ignorate: în afara orei cursei (cu 20 min înainte, 60 min după), vehicul staționat (≥ 5 min sub 1 m/s), ≤ 250 m de capetele traseului (bucle, plecare spre buclă), ≤ 300 m de un garaj. Străzi: OpenStreetMap. „Anunțată” = lucrare publicată în platformă sau anunț STPT care numește linia și strada. Deducem din datele live; nu e o constatare a STPT."
+    }
+  ]
+}

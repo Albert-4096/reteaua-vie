@@ -10,7 +10,7 @@ MOC=cl_20261102_mocioni
 
 paths=(
   /api/health /api/network /api/zones /api/cases /api/closures /api/overview
-  /api/layers/parking /api/live/vehicles /api/live/missing "/api/live/missing?case=case_l23"
+  /api/layers/parking /api/live/vehicles /api/live/missing "/api/live/missing?case=case_l23" /api/live/deviations
   /api/feed/alerts.json /api/feed/alerts.ngsi.json /api/feed/datex.xml
   /api/compliance /api/history /api/indicators /api/exports
 )
