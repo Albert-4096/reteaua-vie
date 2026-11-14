@@ -4,6 +4,7 @@ import { api, type Closure, type Impact } from "../../api/client";
 import { v2, type Scenario, type ScenarioCompare, type ScenarioImpact, type WindowSuggestion } from "../../api/v2";
 import { CasePicker } from "../../components/CasePicker";
 import { Figure } from "../../components/Figure";
+import { DetourCost } from "../../components/DetourCost";
 import { useMapOverlay } from "../../components/MapView";
 import { LoadState, Panel } from "../../components/Panel";
 import i18n from "../../i18n";
@@ -128,6 +129,7 @@ function Decide({ closureId, caseKey }: StepProps & { closureId: string }) {
       </section>
 
       <KmRows closureId={closureId} />
+      <DetourCost closureId={closureId} />
 
       <details>
         <summary>{t("details")}</summary>

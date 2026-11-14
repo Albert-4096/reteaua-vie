@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { api, apiGet, type Closure, type Network, type Provenance } from "../../api/client";
 import { v2, type LayerCollection, type LiveCheck } from "../../api/v2";
 import { Figure } from "../../components/Figure";
+import { DetourCost } from "../../components/DetourCost";
 import { useMapOverlay, type MapStop } from "../../components/MapView";
 import { LoadState, Panel } from "../../components/Panel";
 import { fmtDateTime, tr } from "../../lib/format";
@@ -158,6 +159,8 @@ function DiversionCheck({ caseKey, closureId }: StepProps) {
           </ul>
         </section>
       )}
+
+      {id && <DetourCost closureId={id} detailed />}
 
       {!scans.loading && (
         <p className="small">

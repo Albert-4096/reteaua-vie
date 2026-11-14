@@ -1,0 +1,16 @@
+.detour-cost { min-width: 0; }
+.detour-cost > p { margin-top: var(--sp-2); }
+.detour-cost-values {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: var(--sp-2) var(--sp-3);
+  margin: var(--sp-2) 0;
+}
+.detour-cost-values dt, .detour-cost-values dd { margin: 0; overflow-wrap: anywhere; }
+.detour-cost-interval { display: block; margin-top: var(--sp-1); }
+.detour-cost-stretches { margin-top: var(--sp-2); }
+.detour-cost-stretches h3 { overflow-wrap: anywhere; }
+@media (max-width: 440px) {
+  .detour-cost-values { grid-template-columns: minmax(0, 1fr); gap: var(--sp-1); }
+  .detour-cost-values dd { margin-bottom: var(--sp-2); }
+}
