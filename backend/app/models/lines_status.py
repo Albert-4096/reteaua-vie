@@ -1,4 +1,4 @@
-"""CONTRACT v2.15 types of GET /api/lines/status (R2: one state per line, for CityApp and Timi)."""
+"""CONTRACT v2.18 types of GET /api/lines/status (R2: one state per line, for CityApp and Timi)."""
 
 from __future__ import annotations
 

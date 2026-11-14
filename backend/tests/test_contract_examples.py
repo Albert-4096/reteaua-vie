@@ -12,6 +12,7 @@ from app import models as m
 from app.dataquality.models import DataQuality
 from app.feedcheck.models import FeedCheck, FeedDiff
 from app.cityapp.models import StopStatus
+from app.models.lines_status import LinesStatus
 from app.models.live_missing import MissingLines
 from app.m1_disruption.notice_text import GeneratedNotice
 from app.observed.models import ObservedSummary
@@ -64,6 +65,7 @@ MODELS: dict[str, object] = {
     "v2/accessibility-lines.json": AccessibilityLines,  # v2.16 (R6, real response, lines cut to 4)
     "v2/accessibility-stop.json": StopAccessibility,  # v2.16 (R6, real response)
     "v2/layer-accessibility.json": m.LayerCollection,  # v2.16 (R6, real response, features cut to 6)
+    "v2/lines-status.json": LinesStatus,  # v2.18 (R2, real response of ?since=: hero closure published)
 }
 
 

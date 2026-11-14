@@ -1,0 +1,149 @@
+{
+  "at": "2026-11-08T12:00:00+02:00",
+  "since": "2026-11-08T09:00:00+02:00",
+  "lines": [
+    {
+      "routeId": "R_TV_2",
+      "shortName": "2",
+      "mode": "tramvai",
+      "state": "scurtata",
+      "label": {
+        "ro": "scurtată",
+        "en": "shortened"
+      },
+      "directionIds": null,
+      "since": "2026-11-08T10:00:00+02:00",
+      "until": "2026-11-08T18:00:00+02:00",
+      "closureId": "cl_20261108_16dec",
+      "closureTitle": {
+        "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
+        "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+      },
+      "notice": {
+        "postId": 11067,
+        "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+        "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989"
+      },
+      "replacedBy": [],
+      "source": "Lucrare publicată în platformă (cl_20261108_16dec), după anunțul STPT 11067 / published closure",
+      "previousState": "normala"
+    },
+    {
+      "routeId": "R_TV_4",
+      "shortName": "4",
+      "mode": "tramvai",
+      "state": "suspendata",
+      "label": {
+        "ro": "suspendată",
+        "en": "suspended"
+      },
+      "directionIds": null,
+      "since": "2026-11-08T10:00:00+02:00",
+      "until": "2026-11-08T18:00:00+02:00",
+      "closureId": "cl_20261108_16dec",
+      "closureTitle": {
+        "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
+        "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+      },
+      "notice": {
+        "postId": 11067,
+        "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+        "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989"
+      },
+      "replacedBy": [
+        "4b"
+      ],
+      "source": "Lucrare publicată în platformă (cl_20261108_16dec), după anunțul STPT 11067 / published closure",
+      "previousState": "normala"
+    },
+    {
+      "routeId": "R_TV_7",
+      "shortName": "7",
+      "mode": "tramvai",
+      "state": "scurtata",
+      "label": {
+        "ro": "scurtată",
+        "en": "shortened"
+      },
+      "directionIds": null,
+      "since": "2026-11-08T10:00:00+02:00",
+      "until": "2026-11-08T18:00:00+02:00",
+      "closureId": "cl_20261108_16dec",
+      "closureTitle": {
+        "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
+        "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+      },
+      "notice": {
+        "postId": 11067,
+        "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+        "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989"
+      },
+      "replacedBy": [],
+      "source": "Lucrare publicată în platformă (cl_20261108_16dec), după anunțul STPT 11067 / published closure",
+      "previousState": "normala"
+    },
+    {
+      "routeId": null,
+      "shortName": "4b",
+      "mode": "autobuz",
+      "state": "linie_temporara",
+      "label": {
+        "ro": "linie temporară",
+        "en": "temporary line"
+      },
+      "directionIds": null,
+      "since": "2026-11-08T10:00:00+02:00",
+      "until": "2026-11-08T18:00:00+02:00",
+      "closureId": "cl_20261108_16dec",
+      "closureTitle": {
+        "ro": "Lucrări la linia de tramvai, Bd. 16 Decembrie 1989, sens Podul Maria",
+        "en": "Tram track works, 16 Decembrie 1989 Blvd, towards Podul Maria"
+      },
+      "notice": {
+        "postId": 11067,
+        "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+        "title": "Modificări temporare în circulația mijloacelor de transport public ca urmare a lucrărilor de mentenanță la liniile de tramvai de pe Bulevardul 16 Decembrie 1989"
+      },
+      "replacedBy": [],
+      "source": "Lucrare publicată în platformă (cl_20261108_16dec), după anunțul STPT 11067 / published closure",
+      "previousState": null
+    }
+  ],
+  "provenance": [
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.31",
+      "fetchedAt": "2026-11-13T13:52:51+02:00",
+      "note": "sha256 8905216072b3"
+    },
+    {
+      "source": "Rețeaua Vie, registrul lucrărilor / closure register",
+      "url": null,
+      "version": null,
+      "fetchedAt": "2026-11-14T13:08:17+02:00",
+      "note": null
+    },
+    {
+      "source": "STPT, anunț / notice (stpt.ro)",
+      "url": "https://stpt.ro/modificari-temporare-ale-traseelor-liniilor-metropolitane-s8-m32-m36-m37-m38-m46-si-m51-incepand-cu-2-noiembrie/",
+      "version": "11060",
+      "fetchedAt": "2026-11-13T13:49:58+02:00",
+      "note": null
+    },
+    {
+      "source": "STPT, anunț / notice (stpt.ro)",
+      "url": "https://stpt.ro/inchiderea-temporara-a-circulatiei-pe-strada-ardealului-si-modificarea-traseului-liniei-e3/",
+      "version": "11065",
+      "fetchedAt": "2026-11-13T13:49:58+02:00",
+      "note": null
+    },
+    {
+      "source": "STPT, anunț / notice (stpt.ro)",
+      "url": "https://stpt.ro/modificari-temporare-in-circulatia-mijloacelor-de-transport-public-ca-urmare-a-lucrarilor-de-mentenanta-la-liniile-de-tramvai-de-pe-bulevardul-16-decembrie-1989/",
+      "version": "11067",
+      "fetchedAt": "2026-11-13T13:49:58+02:00",
+      "note": null
+    }
+  ]
+}
