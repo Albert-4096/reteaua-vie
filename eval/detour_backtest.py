@@ -7,7 +7,8 @@ Cases: every closure or timetable change whose changed stretch L0 recorded, with
 the change on disk ($DATA_DIR/gtfs-history/):
 - Mocioni (notice 11060, stored closure `cl_20261102_mocioni`; GTFS 4.29 → 4.30);
 - Podul Polonă (notice 11062; GTFS 4.30 → 4.31; line E3 with the stops the 4.31 diff removes, SPEC §8),
-  built here as a closure that is never stored.
+- Ghiroda (notice 11058; GTFS 4.29 → 4.30; M11, M29, M30 with the stops the diff removes),
+  both built here as closures that are never stored.
 Held out: the estimate uses no trip of the case's own lines (app.observed.detour_cost excludes them),
 so none of the measured trips it is compared with.
 
@@ -40,6 +41,19 @@ POLONA = {
     "routeIds": ["R_AB_E3"],
     "routeActions": [{"routeId": "R_AB_E3", "directionId": 0, "suspendedStopIds": ["344", "363", "346"]},
                      {"routeId": "R_AB_E3", "directionId": 1, "suspendedStopIds": ["346", "347", "314", "315"]}],
+}
+
+# Notice 11058 (timetable changes; GTFS 4.29 → 4.30): M11, M29 and M30 stop serving „Moldovei (Ghiroda)”
+# (526 / 234) and M30 „Girație Pod Bega” (665) moves; the stop ids are the ones the 4.29 → 4.30 diff drops.
+GHIRODA = {
+    "id": "", "title": {"ro": "Ghiroda (anunț 11058)"},
+    "window": {"start": "2026-11-02T00:00:00+02:00", "end": "2026-12-31T23:59:59+02:00"},
+    "routeIds": ["R_TB_M11", "R_AB_M29", "R_AB_M30"],
+    "routeActions": [{"routeId": "R_TB_M11", "directionId": 1, "suspendedStopIds": ["234"]},
+                     {"routeId": "R_AB_M29", "directionId": 0, "suspendedStopIds": ["526"]},
+                     {"routeId": "R_AB_M29", "directionId": 1, "suspendedStopIds": ["234"]},
+                     {"routeId": "R_AB_M30", "directionId": 0, "suspendedStopIds": ["526"]},
+                     {"routeId": "R_AB_M30", "directionId": 1, "suspendedStopIds": ["665"]}],
 }
 
 
@@ -100,7 +114,8 @@ def main(argv: list[str] | None = None) -> int:
         print("no observed timetable built (run `python -m app.observed.build` in backend/)", file=sys.stderr)
         return 1
     results = [case("Mocioni (11060), M32–M51", state.read("closures", "cl_20261102_mocioni")),
-               case("Podul Polonă (11062), E3", POLONA)]
+               case("Podul Polonă (11062), E3", POLONA),
+               case("Ghiroda (11058), M11 M29 M30", GHIRODA)]
     text = README.read_text(encoding="utf-8")
     new = block(results)
     if START in text:

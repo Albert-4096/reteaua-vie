@@ -77,7 +77,7 @@ The pipeline reads each notice against the current feed (4.31), which already ru
 
 `detour_backtest.py` checks the method the platform uses to price a detour that has not happened yet (`/api/closures/{id}/detour-cost`, `estimated`): the time over a changed stretch estimated from **other** lines' measured runs on the same OSM streets (same direction, same hour ±1 h, plus measured dwell), against the time the diverted line's own trips took, measured in the observed timetable (L0, our live-vehicle recording). It is held out: the estimate uses no trip of the case's own lines, so none of the trips it is compared with. One trip is one bootstrap block (90 % interval); under 10 trips a figure is „neconcludent”.
 
-Cases are the changes L0 recorded with the timetable before them on disk: Mocioni (11060, GTFS 4.29 → 4.30) and Podul Polonă (11062, 4.30 → 4.31, line E3). Limits: Friday afternoon and weekend only (no weekday peak); two diversions, both terminal moves, not mid-route detours; on Podul Polonă few other buses run on E3's new streets, so most of that estimate falls back to the median speed of the area around the stretch (see the coverage column). The numbers move while the recording grows: rerun the script (`results/detour_backtest.json` holds the full output).
+Cases are the changes L0 recorded with the timetable before them on disk: Mocioni (11060, GTFS 4.29 → 4.30), Podul Polonă (11062, 4.30 → 4.31, line E3) and Ghiroda (11058, 4.29 → 4.30: M11, M29 and M30 skip „Moldovei (Ghiroda)”). Limits: Friday afternoon and weekend only (no weekday peak); Mocioni and Podul Polonă are terminal moves, Ghiroda a skipped stop, none a long mid-route detour; where few other buses run on the same streets (Podul Polonă, and no other line at all in Ghiroda), the estimate falls back to the median speed of the area around the stretch, so it tests that fallback, not the street method (see the coverage column). The numbers move while the recording grows: rerun the script (`results/detour_backtest.json` holds the full output).
 
 <!-- backtest:start -->
 
@@ -85,6 +85,7 @@ Cases are the changes L0 recorded with the timetable before them on disk: Mocion
 |---|---|---|---|---|---|---|---|
 | Mocioni (11060), M32–M51 | din 23 ore înregistrate (vin. 13:47 → sâm. 12:59) | fri, sat | 49 | 94 %–100 % (trip-weighted 98 %) | −0.2 min [−0.5, +0.1] | −0.6 min (n 49) | −2.0 min (n 184) |
 | Podul Polonă (11062), E3 | din 23 ore înregistrate (vin. 13:47 → sâm. 12:59) | fri, sat | 17; mostly the area's median speed | 1 %–25 % (trip-weighted 17 %) | −0.3 min [−0.5, −0.1] | −0.5 min (n 17) | +0.0 min (n 77) |
+| Ghiroda (11058), M11 M29 M30 | din 23 ore înregistrate (vin. 13:47 → sâm. 12:59) | fri, sat | 52; mostly the area's median speed | 0 %–0 % (trip-weighted 0 %) | −0.4 min [−0.6, −0.3] | −0.6 min (n 58) | +0.0 min (n 145) |
 
 <!-- backtest:end -->
 

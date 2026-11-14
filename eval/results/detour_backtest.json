@@ -238,6 +238,133 @@
      }
     }
    ]
+  },
+  {
+   "case": "Ghiroda (11058), M11 M29 M30",
+   "status": "ok",
+   "feedBefore": "4.29",
+   "feedAfter": "4.30",
+   "recording": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "stretches": 6,
+   "stretchesMeasured": 5,
+   "days": [
+    "fri",
+    "sat"
+   ],
+   "streetCoverage": {
+    "min": 0.0,
+    "max": 0.0,
+    "tripWeighted": 0.0
+   },
+   "plannedExtra": {
+    "sec": 0.0,
+    "low": 0.0,
+    "high": 0.0,
+    "n": 145,
+    "conclusive": true
+   },
+   "measuredVsPlanned": {
+    "sec": -33.2,
+    "low": -42.5,
+    "high": -29.9,
+    "n": 58,
+    "conclusive": true
+   },
+   "estimateError": {
+    "sec": -26.0,
+    "low": -35.1,
+    "high": -17.9,
+    "n": 52,
+    "conclusive": true
+   },
+   "perStretch": [
+    {
+     "line": "M29",
+     "direction": 0,
+     "kind": "detour",
+     "after": [
+      "525",
+      "533"
+     ],
+     "coverage": 0.0,
+     "estimateError": {
+      "sec": -15.7,
+      "low": -22.1,
+      "high": -1.9,
+      "n": 10,
+      "conclusive": true
+     }
+    },
+    {
+     "line": "M29",
+     "direction": 1,
+     "kind": "detour",
+     "after": [
+      "667",
+      "235"
+     ],
+     "coverage": 0.0,
+     "estimateError": {
+      "sec": -21.8,
+      "low": -32.1,
+      "high": -14.5,
+      "n": 10,
+      "conclusive": true
+     }
+    },
+    {
+     "line": "M30",
+     "direction": 0,
+     "kind": "detour",
+     "after": [
+      "525",
+      "533"
+     ],
+     "coverage": 0.0,
+     "estimateError": {
+      "sec": -10.8,
+      "low": -22.8,
+      "high": -1.0,
+      "n": 10,
+      "conclusive": true
+     }
+    },
+    {
+     "line": "M30",
+     "direction": 1,
+     "kind": "start_moved",
+     "after": [
+      "1061",
+      "1062",
+      "690"
+     ],
+     "coverage": 0.0,
+     "estimateError": {
+      "sec": -109.7,
+      "low": -150.5,
+      "high": 97.8,
+      "n": 5,
+      "conclusive": false
+     }
+    },
+    {
+     "line": "M11",
+     "direction": 1,
+     "kind": "detour",
+     "after": [
+      "232",
+      "235"
+     ],
+     "coverage": 0.0,
+     "estimateError": {
+      "sec": -59.8,
+      "low": -65.6,
+      "high": -47.0,
+      "n": 17,
+      "conclusive": true
+     }
+    }
+   ]
   }
  ]
 }
