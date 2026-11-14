@@ -1,0 +1,377 @@
+{
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T12:59:56+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+  }
+ },
+ "thresholds": {
+  "earlySec": -60,
+  "onTimeMaxSec": 300,
+  "lateMaxSec": 600,
+  "bunchingSec": 120,
+  "minTrips": 10,
+  "minEvents": 30
+ },
+ "lines": [
+  {
+   "routeId": "R_TV_2",
+   "shortName": "2",
+   "mode": "tram",
+   "punctuality": {
+    "n": 2438,
+    "trips": 134,
+    "medianSec": 63.0,
+    "p90Sec": 382.2,
+    "early": 0.242,
+    "onTime": 0.603,
+    "late": 0.107,
+    "veryLate": 0.047,
+    "ci": [
+     0.541,
+     0.669
+    ],
+    "conclusive": true
+   },
+   "headway": {
+    "pairs": 117,
+    "refStopId": "5",
+    "medianRealMin": 15.2,
+    "medianSchedMin": 15.0,
+    "cvReal": 0.32,
+    "cvSched": 0.15,
+    "ewtMin": 0.6
+   },
+   "bunching": {
+    "events": 2438,
+    "bunched": 0,
+    "share": 0.0,
+    "thresholdSec": 120
+   },
+   "trips": {
+    "scheduled": 137,
+    "observed": 137,
+    "missed": 0,
+    "unknown": 0,
+    "share": 1.0
+   },
+   "hours": [
+    {
+     "hour": 8,
+     "punctuality": {
+      "n": 138,
+      "trips": 11,
+      "medianSec": 35.8,
+      "p90Sec": 185.9,
+      "early": 0.283,
+      "onTime": 0.717,
+      "late": 0.0,
+      "veryLate": 0.0,
+      "ci": [
+       0.471,
+       0.909
+      ],
+      "conclusive": true
+     },
+     "headway": {
+      "pairs": 7,
+      "refStopId": "6",
+      "medianRealMin": 16.4,
+      "medianSchedMin": 17.0,
+      "cvReal": 0.15,
+      "cvSched": 0.03,
+      "ewtMin": 0.2
+     },
+     "bunching": {
+      "events": 138,
+      "bunched": 0,
+      "share": 0.0,
+      "thresholdSec": 120
+     },
+     "trips": {
+      "scheduled": 7,
+      "observed": 7,
+      "missed": 0,
+      "unknown": 0,
+      "share": 1.0
+     }
+    },
+    {
+     "hour": 9,
+     "punctuality": {
+      "n": 142,
+      "trips": 11,
+      "medianSec": 45.5,
+      "p90Sec": 262.3,
+      "early": 0.275,
+      "onTime": 0.683,
+      "late": 0.042,
+      "veryLate": 0.0,
+      "ci": [
+       0.399,
+       0.898
+      ],
+      "conclusive": true
+     },
+     "headway": {
+      "pairs": 7,
+      "refStopId": "5",
+      "medianRealMin": 16.2,
+      "medianSchedMin": 17.0,
+      "cvReal": 0.3,
+      "cvSched": 0.08,
+      "ewtMin": 1.3
+     },
+     "bunching": {
+      "events": 142,
+      "bunched": 0,
+      "share": 0.0,
+      "thresholdSec": 120
+     },
+     "trips": {
+      "scheduled": 7,
+      "observed": 7,
+      "missed": 0,
+      "unknown": 0,
+      "share": 1.0
+     }
+    },
+    {
+     "hour": 10,
+     "punctuality": {
+      "n": 136,
+      "trips": 11,
+      "medianSec": 69.0,
+      "p90Sec": 325.0,
+      "early": 0.243,
+      "onTime": 0.61,
+      "late": 0.147,
+      "veryLate": 0.0,
+      "ci": [
+       0.416,
+       0.798
+      ],
+      "conclusive": true
+     },
+     "headway": {
+      "pairs": 8,
+      "refStopId": "5",
+      "medianRealMin": 17.0,
+      "medianSchedMin": 16.5,
+      "cvReal": 0.13,
+      "cvSched": 0.08,
+      "ewtMin": 0.2
+     },
+     "bunching": {
+      "events": 136,
+      "bunched": 0,
+      "share": 0.0,
+      "thresholdSec": 120
+     },
+     "trips": {
+      "scheduled": 8,
+      "observed": 8,
+      "missed": 0,
+      "unknown": 0,
+      "share": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "routeId": "R_TB_16",
+   "shortName": "16",
+   "mode": "trolleybus",
+   "punctuality": {
+    "n": 1197,
+    "trips": 130,
+    "medianSec": 97.0,
+    "p90Sec": 599.0,
+    "early": 0.203,
+    "onTime": 0.582,
+    "late": 0.117,
+    "veryLate": 0.098,
+    "ci": [
+     0.523,
+     0.642
+    ],
+    "conclusive": true
+   },
+   "headway": {
+    "pairs": 114,
+    "refStopId": "167",
+    "medianRealMin": 14.4,
+    "medianSchedMin": 14.5,
+    "cvReal": 0.73,
+    "cvSched": 0.24,
+    "ewtMin": 4.3
+   },
+   "bunching": {
+    "events": 1197,
+    "bunched": 66,
+    "share": 0.055,
+    "thresholdSec": 120
+   },
+   "trips": {
+    "scheduled": 133,
+    "observed": 133,
+    "missed": 0,
+    "unknown": 0,
+    "share": 1.0
+   },
+   "hours": [
+    {
+     "hour": 9,
+     "punctuality": {
+      "n": 55,
+      "trips": 7,
+      "medianSec": 45.0,
+      "p90Sec": 154.2,
+      "early": 0.182,
+      "onTime": 0.818,
+      "late": 0.0,
+      "veryLate": 0.0,
+      "ci": [
+       0.566,
+       0.962
+      ],
+      "conclusive": false
+     },
+     "headway": {
+      "pairs": 4,
+      "refStopId": "167",
+      "medianRealMin": 15.7,
+      "medianSchedMin": 17.0,
+      "cvReal": 0.1,
+      "cvSched": 0.0,
+      "ewtMin": -0.5
+     },
+     "bunching": {
+      "events": 55,
+      "bunched": 0,
+      "share": 0.0,
+      "thresholdSec": 120
+     },
+     "trips": {
+      "scheduled": 7,
+      "observed": 7,
+      "missed": 0,
+      "unknown": 0,
+      "share": 1.0
+     }
+    },
+    {
+     "hour": 10,
+     "punctuality": {
+      "n": 43,
+      "trips": 6,
+      "medianSec": 73.0,
+      "p90Sec": 238.0,
+      "early": 0.093,
+      "onTime": 0.86,
+      "late": 0.047,
+      "veryLate": 0.0,
+      "ci": [
+       0.643,
+       0.981
+      ],
+      "conclusive": false
+     },
+     "headway": {
+      "pairs": 4,
+      "refStopId": "167",
+      "medianRealMin": 23.2,
+      "medianSchedMin": 20.0,
+      "cvReal": 0.72,
+      "cvSched": 0.07,
+      "ewtMin": 17.6
+     },
+     "bunching": {
+      "events": 43,
+      "bunched": 0,
+      "share": 0.0,
+      "thresholdSec": 120
+     },
+     "trips": {
+      "scheduled": 6,
+      "observed": 6,
+      "missed": 0,
+      "unknown": 0,
+      "share": 1.0
+     }
+    },
+    {
+     "hour": 11,
+     "punctuality": {
+      "n": 44,
+      "trips": 7,
+      "medianSec": 301.2,
+      "p90Sec": 3847.1,
+      "early": 0.0,
+      "onTime": 0.5,
+      "late": 0.068,
+      "veryLate": 0.432,
+      "ci": [
+       0.207,
+       0.819
+      ],
+      "conclusive": false
+     },
+     "headway": {
+      "pairs": 4,
+      "refStopId": "167",
+      "medianRealMin": 40.9,
+      "medianSchedMin": 18.0,
+      "cvReal": 0.8,
+      "cvSched": 0.06,
+      "ewtMin": 23.3
+     },
+     "bunching": {
+      "events": 44,
+      "bunched": 0,
+      "share": 0.0,
+      "thresholdSec": 120
+     },
+     "trips": {
+      "scheduled": 7,
+      "observed": 7,
+      "missed": 0,
+      "unknown": 0,
+      "share": 1.0
+     }
+    }
+   ]
+  }
+ ],
+ "wording": {
+  "ro": "Estimare din datele live, nu raportul oficial.",
+  "en": "Estimate from the live data, not the official report."
+ },
+ "method": {
+  "ro": "Din orarul observat (L0), construit din rapoartele vehiculelor din fluxul Primăriei. Punctualitate: întârzierea la opriri observate (nu interpolate); clase: devansat sub -60 s, la timp până la +300 s, întârziat până la +600 s, peste. Intervalul de 95 % pentru „la timp” vine dintr-un bootstrap cu o cursă ca bloc (300 extrageri); „neconcludent” sub 10 curse sau 30 opriri. Interval: la o stație de referință pe linie și direcție, diferența reală dintre curse consecutive din orar, ambele observate, față de cea din orar; așteptare în plus = Σh²/2Σh real minus orar. Pluton: două vehicule ale aceleiași linii și direcții la aceeași stație la cel mult 120 s, dacă orarul nu le pune la fel de aproape. Curse observate față de orar: regula O2 (fără vehicul în datele live, nu „neefectuată”).",
+  "en": "From the observed timetable (L0) built from the City Hall vehicle reports. Delay classes, a trip-block bootstrap interval, headway at a reference stop against the timetable, bunching within 120 s and trips by O2's rule."
+ },
+ "caveat": {
+  "ro": "Estimare din datele live, nu raportul oficial; doar vineri după-amiază și weekend, fără extrapolare la zilele lucrătoare. Nu arată nicio vină a cuiva și nu e o clasificare a curselor: doar SMTT le încadrează.",
+  "en": "Estimate from the live data, not the official report; Friday afternoon and weekend only. It assigns no blame and does not classify trips: only SMTT does."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T12:59:56+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); orar observat L0"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}

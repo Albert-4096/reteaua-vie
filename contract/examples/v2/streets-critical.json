@@ -1,0 +1,121 @@
+{
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T12:59:56+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+  }
+ },
+ "date": "2026-11-09",
+ "minRuns": 20,
+ "sections": [
+  {
+   "id": "291>292",
+   "fromStop": {
+    "stopId": "291",
+    "name": "Piața Iuliu Maniu (Calea Șagului)"
+   },
+   "toStop": {
+    "stopId": "292",
+    "name": "Calea Șagului (Bd. Dâmbovița)"
+   },
+   "lengthMeters": 730,
+   "lines": [
+    "33",
+    "33b",
+    "E1",
+    "E8",
+    "M37",
+    "M51"
+   ],
+   "departuresPerDay": 262,
+   "runs": 158,
+   "lostMin": 176.6,
+   "lostMinPerHour": 7.61,
+   "medianGrowthSec": -2.2,
+   "conclusive": true,
+   "rank": 1
+  },
+  {
+   "id": "129>127",
+   "fromStop": {
+    "stopId": "129",
+    "name": "Pasaj Jiul"
+   },
+   "toStop": {
+    "stopId": "127",
+    "name": "Gara de Nord"
+   },
+   "lengthMeters": 660,
+   "lines": [
+    "11",
+    "14",
+    "18",
+    "M11",
+    "M14"
+   ],
+   "departuresPerDay": 250,
+   "runs": 163,
+   "lostMin": 163.7,
+   "lostMinPerHour": 7.06,
+   "medianGrowthSec": -67.0,
+   "conclusive": true,
+   "rank": 2
+  },
+  {
+   "id": "222>153",
+   "fromStop": {
+    "stopId": "222",
+    "name": "Miresei (Calea Torontalului)"
+   },
+   "toStop": {
+    "stopId": "153",
+    "name": "Piața Consiliul Europei (Poligrafie)"
+   },
+   "lengthMeters": 710,
+   "lines": [
+    "18",
+    "E6",
+    "M44",
+    "M50"
+   ],
+   "departuresPerDay": 88,
+   "runs": 61,
+   "lostMin": 145.0,
+   "lostMinPerHour": 6.25,
+   "medianGrowthSec": 118.0,
+   "conclusive": true,
+   "rank": 3
+  }
+ ],
+ "wording": {
+  "ro": "Estimare din datele live, nu raportul oficial.",
+  "en": "Estimate from the live data, not the official report."
+ },
+ "method": {
+  "ro": "Tronson = legătura dintre două stații consecutive ale tiparului unei linii (linie dreaptă pe hartă). Plecări expuse = cursele planificate GTFS peste tronson într-o zi de serviciu (zi lucrătoare de referință). Minute pierdute = creșterea întârzierii pe tronson (run observat minus run planificat, din orarul observat L0, ambele capete observate), doar creșterea pozitivă, însumată pe înregistrare; „neconcludent” sub 20 treceri. Fără trecere înregistrată: „necunoscut”, nu 0.",
+  "en": "Section = link between consecutive stops. Exposure = scheduled trips over it. Minutes lost = positive growth of the delay."
+ },
+ "caveat": {
+  "ro": "Estimare din datele live, nu raportul oficial; doar vineri după-amiază și weekend, fără extrapolare la zilele lucrătoare. Arată unde stau vehiculele, nu de ce, și nu atribuie vina nimănui.",
+  "en": "Estimate from the live data; Friday afternoon and weekend only. Shows where vehicles stand, not why."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T12:59:56+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); orar observat L0"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from app.analytics import corridors, coverage
+from app.analytics import corridors, coverage, gps_health, reliability, streets
 
 log = logging.getLogger("reteaua_vie.analytics")
 
@@ -17,3 +17,9 @@ def warm(closure_ids: list[str]) -> None:
             log.info("analytics: %s coverage and %d corridors ready", day, n)
         except Exception:  # a feed without that day type must not stop the precompute
             log.exception("analytics warm-up failed for %s", day)
+    for name, fn in (("reliability", reliability.report), ("gps health", gps_health.report),
+                     ("critical streets", streets.critical_streets), ("standing", streets.standing)):
+        try:
+            fn()
+        except Exception:  # L0 may not be built yet
+            log.exception("analytics warm-up failed for %s", name)

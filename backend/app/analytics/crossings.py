@@ -82,3 +82,23 @@ def nearest(stop_xy: np.ndarray) -> list[dict | None]:
 def provenance() -> Provenance:
     return prov.for_file("OpenStreetMap", _pbf(), "https://www.openstreetmap.org", None,
                          "crossing=traffic_signals; etichetă traffic_signals:sound")
+
+
+@lru_cache(maxsize=1)
+def signals() -> np.ndarray:
+    """Metric xy of the OSM highway=traffic_signals nodes (junction and crossing signals)."""
+    pbf = _pbf()
+    if not pbf.is_file():
+        return np.zeros((0, 2))
+    cache = get_settings().cache_dir / f"osm_signal_nodes_v1_{_cache(pbf).stem[-12:]}.json"
+    if cache.is_file():
+        pts = json.loads(cache.read_text(encoding="utf-8"))
+    else:
+        import pyrosm
+
+        g = pyrosm.OSM(str(pbf)).get_data_by_custom_criteria(
+            custom_filter={"highway": ["traffic_signals"]}, filter_type="keep",
+            keep_nodes=True, keep_ways=False, keep_relations=False)
+        pts = [] if g is None else [[float(r["lon"]), float(r["lat"])] for r in g.to_dict("records")]
+        cache.write_text(json.dumps(pts), encoding="utf-8")
+    return project_lonlats(map(tuple, pts)) if pts else np.zeros((0, 2))

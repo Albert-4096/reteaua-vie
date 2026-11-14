@@ -1,0 +1,124 @@
+{
+ "type": "FeatureCollection",
+ "layer": "streets",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.20969,
+      45.73855
+     ],
+     [
+      21.2083,
+      45.7321
+     ]
+    ]
+   },
+   "properties": {
+    "id": "291>292",
+    "lines": [
+     "33",
+     "33b",
+     "E1",
+     "E8",
+     "M37",
+     "M51"
+    ],
+    "departuresPerDay": 262,
+    "runs": 158,
+    "lostMin": 176.6,
+    "lostMinPerHour": 7.61,
+    "medianGrowthSec": -2.2,
+    "conclusive": true,
+    "rank": 1,
+    "name": "Piața Iuliu Maniu (Calea Șagului) → Calea Șagului (Bd. Dâmbovița)"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.21629,
+      45.7519
+     ],
+     [
+      21.20797,
+      45.75056
+     ]
+    ]
+   },
+   "properties": {
+    "id": "129>127",
+    "lines": [
+     "11",
+     "14",
+     "18",
+     "M11",
+     "M14"
+    ],
+    "departuresPerDay": 250,
+    "runs": 163,
+    "lostMin": 163.7,
+    "lostMinPerHour": 7.06,
+    "medianGrowthSec": -67.0,
+    "conclusive": true,
+    "rank": 2,
+    "name": "Pasaj Jiul → Gara de Nord"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.22057,
+      45.76846
+     ],
+     [
+      21.22574,
+      45.76317
+     ]
+    ]
+   },
+   "properties": {
+    "id": "222>153",
+    "lines": [
+     "18",
+     "E6",
+     "M44",
+     "M50"
+    ],
+    "departuresPerDay": 88,
+    "runs": 61,
+    "lostMin": 145.0,
+    "lostMinPerHour": 6.25,
+    "medianGrowthSec": 118.0,
+    "conclusive": true,
+    "rank": 3,
+    "name": "Miresei (Calea Torontalului) → Piața Consiliul Europei (Poligrafie)"
+   }
+  }
+ ],
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T12:59:56+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); orar observat L0"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}

@@ -1,0 +1,196 @@
+{
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T12:59:56+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+  }
+ },
+ "date": "2026-11-09",
+ "stopDistanceMeters": 30,
+ "speedMaxMps": 0.5,
+ "signalMeters": 50,
+ "points": [
+  {
+   "cellId": "5155_50631",
+   "location": [
+    21.199821,
+    45.72173
+   ],
+   "minutes": 263.9,
+   "minutesPerHour": 11.38,
+   "samples": 877,
+   "vehicles": 11,
+   "days": 2,
+   "lines": [
+    "33",
+    "E8",
+    "M51"
+   ],
+   "departuresPerDay": 334,
+   "nearestStopMeters": 30,
+   "cause": "coadă / altă cauză",
+   "hours": {
+    "5": 4.1,
+    "6": 16.2,
+    "7": 27.6,
+    "8": 15.3,
+    "9": 3.8,
+    "10": 58.2,
+    "11": 30.0,
+    "12": 1.8,
+    "14": 8.2,
+    "15": 4.6,
+    "16": 9.9,
+    "17": 27.8,
+    "18": 13.2,
+    "19": 13.9,
+    "20": 8.6,
+    "21": 1.5,
+    "22": 9.0,
+    "23": 10.2
+   }
+  },
+  {
+   "cellId": "5180_50672",
+   "location": [
+    21.232099,
+    45.758572
+   ],
+   "minutes": 189.5,
+   "minutesPerHour": 8.17,
+   "samples": 595,
+   "vehicles": 50,
+   "days": 2,
+   "lines": [
+    "28",
+    "40",
+    "46",
+    "E2",
+    "E4",
+    "E4b",
+    "E6",
+    "M27",
+    "M30",
+    "M35",
+    "M41",
+    "M42",
+    "M43",
+    "M44",
+    "M45",
+    "M47",
+    "M49",
+    "11",
+    "17",
+    "M11"
+   ],
+   "departuresPerDay": 1010,
+   "nearestStopMeters": 32,
+   "cause": "semafor la cel mult 50 m",
+   "hours": {
+    "0": 0.3,
+    "6": 3.5,
+    "7": 6.2,
+    "8": 4.0,
+    "9": 3.5,
+    "10": 2.9,
+    "11": 55.5,
+    "12": 36.7,
+    "13": 0.8,
+    "14": 8.2,
+    "15": 10.3,
+    "16": 13.1,
+    "17": 7.0,
+    "18": 9.6,
+    "19": 9.4,
+    "20": 7.2,
+    "21": 4.3,
+    "22": 2.4,
+    "23": 4.7
+   }
+  },
+  {
+   "cellId": "5180_50666",
+   "location": [
+    21.232077,
+    45.753172
+   ],
+   "minutes": 134.5,
+   "minutesPerHour": 5.8,
+   "samples": 449,
+   "vehicles": 28,
+   "days": 2,
+   "lines": [
+    "21",
+    "5c",
+    "E2",
+    "E7",
+    "M24",
+    "M3",
+    "15",
+    "16"
+   ],
+   "departuresPerDay": 867,
+   "nearestStopMeters": 80,
+   "cause": "semafor la cel mult 50 m",
+   "hours": {
+    "6": 4.0,
+    "7": 4.0,
+    "8": 5.5,
+    "9": 5.3,
+    "10": 3.2,
+    "11": 4.5,
+    "12": 4.5,
+    "13": 3.6,
+    "14": 23.6,
+    "15": 19.0,
+    "16": 19.1,
+    "17": 7.4,
+    "18": 7.0,
+    "19": 8.0,
+    "20": 4.3,
+    "21": 3.1,
+    "22": 5.0,
+    "23": 3.3
+   }
+  }
+ ],
+ "totalMinutes": 6951.9,
+ "wording": {
+  "ro": "Estimare din datele live, nu raportul oficial.",
+  "en": "Estimate from the live data, not the official report."
+ },
+ "method": {
+  "ro": "Fiecare raport al unui vehicul care stă pe loc (viteză ≤ 0.5 m/s, mutat sub 15 m față de raportul precedent), în afara stațiilor (peste 30 m de orice stație, nu STOPPED_AT), pe celule de 100 m. Durata unui raport = până la următorul, cel mult 60 s. Cauză: „semafor la cel mult 50 m” dacă un semafor OSM e în rază, altfel „coadă / altă cauză”. Ponderea: plecările pe zi ale liniilor care au stat acolo.",
+  "en": "Stationary vehicle reports away from stops (> 30 m), per 100 m cell, with the OSM signal within 50 m if any."
+ },
+ "caveat": {
+  "ro": "Estimare din datele live, nu raportul oficial; doar vineri după-amiază și weekend, fără extrapolare la zilele lucrătoare. Arată unde stau vehiculele, nu de ce, și nu atribuie vina nimănui.",
+  "en": "Estimate from the live data; Friday afternoon and weekend only. Shows where vehicles stand, not why."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T12:59:56+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); orar observat L0"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  },
+  {
+   "source": "OpenStreetMap",
+   "url": "https://www.openstreetmap.org",
+   "version": null,
+   "fetchedAt": "2026-11-13T18:31:01+02:00",
+   "note": "crossing=traffic_signals; etichetă traffic_signals:sound"
+  }
+ ]
+}

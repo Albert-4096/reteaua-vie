@@ -287,7 +287,7 @@ def warm_modules() -> list[str]:
 # After a step succeeds, its stamp of those inputs is written to $DATA_DIR/cache/precompute/; the
 # next run skips the step while the stamp is the same. --force runs everything.
 # The live and observed-timetable warm-ups always run: the vehicle recording grows every 15 s.
-ALWAYS_RUN = {"app.live.warm", "app.observed.warm"}
+ALWAYS_RUN = {"app.live.warm", "app.observed.warm", "app.analytics.warm"}
 
 
 def warm_stamp() -> str:

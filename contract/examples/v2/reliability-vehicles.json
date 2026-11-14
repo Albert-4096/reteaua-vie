@@ -1,0 +1,98 @@
+{
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T12:59:56+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+  }
+ },
+ "gapMin": 10,
+ "checkMin": 30,
+ "toleranceMin": 120,
+ "vehiclesSeen": 183,
+ "vehicles": [
+  {
+   "vehicleId": "HAA",
+   "routes": [
+    "M24",
+    "M37",
+    "M41"
+   ],
+   "reports": 2289,
+   "lastReportAt": "2026-11-14T12:59:29+02:00",
+   "silentGaps": 1,
+   "longestGapMin": 199.9,
+   "frozenEpisodes": 0,
+   "longestFrozenMin": null,
+   "longestMin": 199.9,
+   "longestAt": "2026-11-14T09:31:28+02:00",
+   "toToleranceMin": 0.0,
+   "status": "de verificat"
+  },
+  {
+   "vehicleId": "GOX",
+   "routes": [
+    "E4b",
+    "M27",
+    "M37"
+   ],
+   "reports": 2791,
+   "lastReportAt": "2026-11-14T12:59:31+02:00",
+   "silentGaps": 2,
+   "longestGapMin": 114.1,
+   "frozenEpisodes": 2,
+   "longestFrozenMin": 21.5,
+   "longestMin": 114.1,
+   "longestAt": "2026-11-13T18:07:47+02:00",
+   "toToleranceMin": 5.9,
+   "status": "de verificat"
+  },
+  {
+   "vehicleId": "1824",
+   "routes": [
+    "11",
+    "17"
+   ],
+   "reports": 2001,
+   "lastReportAt": "2026-11-14T12:34:04+02:00",
+   "silentGaps": 0,
+   "longestGapMin": null,
+   "frozenEpisodes": 3,
+   "longestFrozenMin": 88.3,
+   "longestMin": 88.3,
+   "longestAt": "2026-11-14T11:05:48+02:00",
+   "toToleranceMin": 31.7,
+   "status": "de verificat"
+  }
+ ],
+ "wording": {
+  "ro": "Estimare din datele live, nu raportul oficial.",
+  "en": "Estimate from the live data, not the official report."
+ },
+ "method": {
+  "ro": "Din rapoartele vehiculelor (fluxul Primăriei), fiecare raport o dată. Pauză: nicio raportare timp de 10 min sau mai mult în mijlocul unei curse. Pe loc: poziția s-a mișcat cel mult 15 m timp de 10 min sau mai mult, în afara unei stații. „De verificat” de la 30 min; „minute până la 120” e un numărătoare inversă față de toleranța din contract, ai cărei termeni exacți sunt de verificat.",
+  "en": "From de-duplicated vehicle reports. Silent gap: no report for 10+ min mid-trip. Frozen: moved at most 15 m for 10+ min between stops. A countdown to the 120-minute tolerance."
+ },
+ "caveat": {
+  "ro": "O pauză sau un vehicul pe loc nu înseamnă o defecțiune a aparatului: poate fi și un blocaj în trafic sau o oprire la capăt. Lista e pentru verificare; nu arată vina nimănui.",
+  "en": "A gap or a standing vehicle is not proof of a faulty device: it may be a jam or a layover. A list to check."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T12:59:56+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); orar observat L0"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}
