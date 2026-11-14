@@ -27,9 +27,37 @@ export const S = {
       ro: "CityApp, când cineva caută un drum: un traseu care ocolește stațiile suspendate (exemplu: de la stația 907 la Piața Victoriei).",
       en: "CityApp, when someone looks for a trip: a route that avoids the suspended stops (example: from stop 907 to Piața Victoriei).",
     },
+    stopStatus: {
+      ro: "Starea unei stații: CityApp, când cineva atinge o stație. De ce nu opresc liniile, stația deservită cea mai apropiată și sursa, în română și engleză (exemplu: stația 907, Calea Torontalului).",
+      en: "Stop status: CityApp, when someone taps a stop. Why the lines do not stop, the nearest served stop and the source, in Romanian and English (example: stop 907, Calea Torontalului).",
+    },
     datex: {
       ro: "Hărțile de navigație rutieră: strada închisă și perioada (DATEX II).",
       en: "Road navigation maps: the closed street and the window (DATEX II).",
+    },
+  },
+  // R3-F: the Timi row; {{n}} is filled from /api/tools.json.
+  timi: {
+    all: { ro: "Pentru Timi: tools.json ({{n}} funcții, doar citire).", en: "For Timi: tools.json ({{n}} functions, read-only)." },
+    some: {
+      ro: "Pentru Timi: tools.json ({{n}} din {{total}} funcții active, doar citire).",
+      en: "For Timi: tools.json ({{n}} of {{total}} functions live, read-only).",
+    },
+    where: {
+      ro: "Asistentul Primăriei le poate apela ca să răspundă „de ce nu vine linia 4?” din datele confirmate, la fel ca anunțul publicat.",
+      en: "The City Hall's assistant can call them to answer „why is line 4 not coming?” from confirmed data, matching the published notice.",
+    },
+  },
+  // S1-F: the stop status answer inside the CityApp mock-up.
+  stopStatus: {
+    label: { ro: "Starea stației", en: "Stop status" },
+    source: { ro: "Sursa", en: "Source" },
+    noStop: { ro: "nu oprește", en: "does not stop" },
+    unconfirmed: { ro: "de confirmat", en: "to be confirmed" },
+    action: {
+      suspended: { ro: "suspendată", en: "suspended" },
+      shortened: { ro: "scurtată", en: "shortened" },
+      rerouted: { ro: "deviată", en: "rerouted" },
     },
   },
 };

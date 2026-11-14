@@ -6,6 +6,7 @@ import { Figure } from "../../components/Figure";
 import { LoadState } from "../../components/Panel";
 import { fmtDate, fmtMeters, fmtTime, tr } from "../../lib/format";
 import type { Resource } from "../../lib/store";
+import { StopStatusTap } from "./stopStatus";
 
 /** D-013: today's STPT text next to the notice the platform generates. */
 export function NoticeView({ notice }: { notice: GeneratedNotice }) {
@@ -48,11 +49,13 @@ export function nearestFor(analysis: Analysis | undefined, stopId: string) {
   return rows[0]?.nearestServed ?? null;
 }
 
-/** T7-B: a phone-frame mock-up of the stop card in CityApp, filled from the real alert. No logos. */
+/** T7-B: a phone-frame mock-up of the stop card in CityApp, filled from the real alert. No logos.
+ *  S1-F: a tap on the stop asks the real stop status API. */
 export function AppsView({ alert, analysis, stopId }: { closureId: string; stopId: string; alert?: Alert; analysis?: Analysis }) {
   const { t } = useTranslation();
   if (!alert) return <p className="muted">{t("unknown")}</p>;
   const near = nearestFor(analysis, stopId);
+  const stopName = analysis?.stops.find((r) => r.stopId === stopId)?.name ?? stopId;
   const lines = [...new Set(alert.informedEntity.map((e) => e.routeId).filter(Boolean))].map((r) => (r as string).replace(/^R_[A-Z]+_/, ""));
   return (
     <div className="mock">
@@ -83,6 +86,7 @@ export function AppsView({ alert, analysis, stopId }: { closureId: string; stopI
             <p>{t("publish.noNearest")}</p>
           )}
         </div>
+        <StopStatusTap key={stopId} stopId={stopId} name={stopName} />
       </div>
     </div>
   );

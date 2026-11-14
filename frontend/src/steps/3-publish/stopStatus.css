@@ -1,0 +1,24 @@
+/* S1-F: the stop status answer inside the CityApp mock-up. Tokens only (tokens.css). */
+.stop-tap .row-button {
+  padding: var(--sp-2) 0;
+}
+
+.stop-answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.stop-answer p {
+  margin: 0;
+}
+
+.stop-answer-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-s);
+}
