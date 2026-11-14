@@ -1,7 +1,7 @@
 """R20: the board count is the official sesizări since a moment, not a second inbox.
 
 The link to Sesizări is frontend. Backend: `since` on GET /api/closures/{id}/reports.
-Counts and categories only. POST /api/problem-report is not mounted.
+Counts and categories only. POST /api/problem-report (our own signal, fixed categories) refuses free text.
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ def test_since_narrows_the_count_and_keeps_only_counts():
 
 @needs_data
 @needs_sesizari
-def test_since_on_the_endpoint_and_no_second_inbox(client):
+def test_since_on_the_endpoint_and_no_free_text(client):
     base = reports.report_summary(MOCIONI, 500)
     mid = parse_iso(base["coveredFrom"]) + (parse_iso(base["coveredTo"]) - parse_iso(base["coveredFrom"])) / 2
     res = client.get(f"/api/closures/{MOCIONI}/reports", params={"radius": 500, "since": iso(mid)})
@@ -50,4 +50,4 @@ def test_since_on_the_endpoint_and_no_second_inbox(client):
     assert "descriere" not in json.dumps(body)
     assert client.get(f"/api/closures/{MOCIONI}/reports", params={"since": "not-a-time"}).status_code == 422
     assert client.post("/api/problem-report", json={
-        "stopId": "356", "category": "bus_did_not_come", "deviceKey": "phone-aaaaaaaa1", "text": "the bus"}).status_code == 404
+        "stopId": "356", "category": "bus_did_not_come", "deviceKey": "phone-aaaaaaaa1", "text": "the bus"}).status_code == 422   # no free text, ever

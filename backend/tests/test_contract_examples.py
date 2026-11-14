@@ -93,8 +93,8 @@ MODELS: dict[str, object] = {
     "v2/transfers.json": TransferReport,  # A11-B (real response)
     "v2/signals-waits.json": SignalWaits,  # R9
     "v2/detour-signals.json": DetourSignals,  # R9
-    "v2/problem-report.json": ReportAck,  # R20 draft shape, endpoint not mounted
-    "v2/problem-reports.json": TravellerReportSummary,  # R20 draft shape, endpoint not mounted
+    "v2/problem-report.json": ReportAck,  # R20
+    "v2/problem-reports.json": TravellerReportSummary,  # R20
     "v2/accessibility-lines.json": AccessibilityLines,  # v2.16 (R6, real response, lines cut to 4)
     "v2/accessibility-stop.json": StopAccessibility,  # v2.16 (R6, real response)
     "v2/layer-accessibility.json": m.LayerCollection,  # v2.16 (R6, real response, features cut to 6)
