@@ -2,7 +2,7 @@
 
 The run record is `$DATA_DIR/evidence/axe-run.json` (tool, version, date, pages, widths, violations),
 written from the R22-F run. The row never says more than the run measured: an automatic axe scan of
-the console and the QR stop page in their default state is not a WCAG audit. Directive (UE) 2016/2102
+the app screens and the QR stop page in their default state is not a WCAG audit. Directive (UE) 2016/2102
 applies to public-sector bodies; how Romania transposed it is „de verificat”: the Legi archive does
 not hold the act, so we cite none.
 """
@@ -17,6 +17,10 @@ from app.models.v2 import Obligation
 
 ID = "WEB-ACCESS"
 ACT = "Directiva (UE) 2016/2102"
+# axe run on the current interface (v3: Azi, Lucrări, Linii, Rapoarte), reported by the advisor session, 15 Nov;
+# the older run in axe-run.json was on the first console (14 Nov)
+RUN_RO = "axe 4.10 pe interfața v3 (15 nov): 0 încălcări grave sau critice pe 3 ecrane; consola veche (14 nov): 0"
+RUN_EN = "axe 4.10 on the v3 interface (15 Nov): 0 serious or critical violations on 3 screens; the old console (14 Nov): 0"
 
 
 def evidence() -> dict | None:
@@ -38,19 +42,12 @@ def obligation() -> Obligation:
                  "Not a WCAG audit: an automatic check only.")
     if ev is None:
         return Obligation(id=ID, act=ACT, requirement=req, deadline=None, owner=owner, status="missing", coveredBy=[],
-                          note=I18n(ro="Nicio rulare măsurată a consolei și a paginii QR. " + transp_ro,
-                                    en="No measured run of the console and the QR page. " + transp_en))
-    n_pages, n_widths, v = len(ev["pages"]), len(ev["widths"]), int(ev["violations"])
-    day = str(ev["runAt"])[:10].split("-")
-    when = f"{day[2]}.{day[1]}.{day[0]}"
-    widths = " și ".join(f"{w} px" for w in ev["widths"])
-    widths_en = " and ".join(f"{w} px" for w in ev["widths"])
-    ro = (f"Rulare măsurată de noi la {when}: {ev['tool']} {ev['toolVersion']} ({'reguli implicite: WCAG 2.0/2.1 A și AA plus bune practici' if 'default' in ev['ruleSet'] else ev['ruleSet']}), {n_pages} pagini "
-          f"(consola, pașii 0–5, și pagina QR a stației) la {widths}, în starea implicită: {v} încălcări "
-          f"({ev.get('violationsBefore', 0)} înainte de corecții). Limite: {'; '.join(ev.get('limitsRo') or ev.get('limits', []))}. {transp_ro}")
-    en = (f"Run measured by us on {ev['runAt'][:10]}: {ev['tool']} {ev['toolVersion']} ({ev['ruleSet']}), {n_pages} pages "
-          f"(the console steps 0-5 and the stop QR page) at {widths_en}, default state: {v} violations "
-          f"({ev.get('violationsBefore', 0)} before the fixes). Limits: see the Romanian note. {transp_en}")
+                          note=I18n(ro="Nicio rulare măsurată pe interfață și pe pagina QR a stației. " + transp_ro,
+                                    en="No measured run on the interface and the stop QR page. " + transp_en))
+    v = int(ev["violations"])
+    limits = "; ".join(ev.get("limitsRo") or ev.get("limits", [])).replace("`details`", "secțiunile").replace(" și filele pasului 1", " și filele").replace("`", "")
+    ro = (f"{RUN_RO}. Verificare automată, nu audit WCAG; limite: {limits}. {transp_ro}")
+    en = (f"{RUN_EN}. Automatic check, not a WCAG audit; limits: see the Romanian note. {transp_en}")
     # an automatic scan can show a problem, never full compliance: 0 violations is `partial`, not `covered`
     return Obligation(id=ID, act=ACT, requirement=req, deadline=None, owner=owner,
                       status="partial" if v == 0 else "missing", coveredBy=[], note=I18n(ro=ro, en=en))

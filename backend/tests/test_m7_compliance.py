@@ -85,3 +85,15 @@ def test_nap_catalog_has_the_four_datasets_and_never_claims_stpt(isolated_state)
 def test_nap_catalog_drops_a_dataset_that_is_not_served(isolated_state):
     cat = exports.nap_metadata(ALL - {"/api/feed/notices.json"})
     assert [d["dct:identifier"] for d in cat["dcat:dataset"]] == ["alerts.pb", "datex.xml", "history.json"]
+
+
+def test_web_access_note_names_the_v3_run_and_is_plain_text():
+    from app.m7_compliance import webaccess
+
+    o = webaccess.obligation()
+    if o.status == "missing" and "Nicio rulare" in o.note.ro:
+        return  # no axe record on this machine
+    assert o.note.ro.startswith("axe 4.10 pe interfața v3 (15 nov): 0 încălcări grave sau critice pe 3 ecrane; "
+                                "consola veche (14 nov): 0")
+    for text in (o.note.ro, o.note.en):
+        assert "`" not in text and "pașii 0" not in text
