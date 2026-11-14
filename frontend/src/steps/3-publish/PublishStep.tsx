@@ -84,7 +84,7 @@ function Publish({ closureId, caseKey }: StepProps & { closureId: string }) {
       const res = await api.publish(closureId);
       setResult(res);
       setData(`alerts:${closureId}`, res.alerts);
-      invalidate(`closure:${closureId}`, `notice:${closureId}`, `validation:${closureId}`, "closures");
+      invalidate(`closure:${closureId}`, `notice:${closureId}`, `validation:${closureId}`, "closures", "linesStatus", "lineStatusRow:", "stopStatus:");
     } catch (e) {
       setError(e instanceof ApiError && e.code === "UNCONFIRMED" ? t("publish.blocked", { count: left }) : errorText(e, t));
     } finally {

@@ -17,6 +17,7 @@ import {
   type OverviewWithMissing,
 } from "../4-monitor/missing";
 import type { StepProps } from "../types";
+import { LinesStatus } from "./LinesStatus";
 import { S } from "./strings";
 
 type Toggle = "network" | "closures" | "bike" | "parking" | "population";
@@ -129,6 +130,8 @@ export function OverviewStep({ caseKey }: StepProps) {
           </ul>
         )}
       </section>
+
+      <LinesStatus />
 
       {o.missingLines !== undefined && <MissingSection o={o} />}
 

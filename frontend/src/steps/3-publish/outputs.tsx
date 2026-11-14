@@ -6,6 +6,7 @@ import { Figure } from "../../components/Figure";
 import { LoadState } from "../../components/Panel";
 import { fmtDate, fmtMeters, fmtTime, tr } from "../../lib/format";
 import type { Resource } from "../../lib/store";
+import { LineStatusRow } from "./LineStatusRow";
 import { StopStatusTap } from "./stopStatus";
 
 /** D-013: today's STPT text next to the notice the platform generates. */
@@ -69,7 +70,8 @@ export function AppsView({ alert, analysis, stopId }: { closureId: string; stopI
           ))}
         </p>
         <h3>{tr(alert.headerText)}</h3>
-        <p className="phone-until st-lost">{t("publish.until", { until: untilText(alert, (k) => t(k)) })}</p>
+        <p className="phone-until st-lost">{/finalizarea lucrărilor/.test(alert.descriptionText.ro) ? untilText(alert, (k) => t(k)) : t("publish.until", { until: untilText(alert, (k) => t(k)) })}</p>
+        <LineStatusRow untilEnd={/finalizarea lucrărilor/.test(alert.descriptionText.ro)} routeIds={[...new Set(alert.informedEntity.map((e) => e.routeId).filter((r): r is string => !!r))]} />
         <div className="phone-near">
           <p className="small muted">{t("publish.nearest")}</p>
           {near ? (
