@@ -45,6 +45,7 @@ class Report:
     status: str
     x: float     # metric (UTM 34N), for the distance test only
     y: float
+    sub: str = ""   # `subcategorii.nume` (e.g. „Groapă”); a label, never the report text
 
 
 def sesizari_dir() -> Path:
@@ -87,7 +88,8 @@ def _load(signature: tuple) -> dict[str, Report]:
             rid = str(r.get("id"))
             reports[rid] = Report(id=rid, created=created,
                                   category=((r.get("categorii") or {}).get("nume") or "necunoscută").strip(),
-                                  status=str(r.get("status") or ""), x=pt.x, y=pt.y)
+                                  status=str(r.get("status") or ""), x=pt.x, y=pt.y,
+                                  sub=((r.get("subcategorii") or {}).get("nume") or "").strip())
     return reports
 
 
