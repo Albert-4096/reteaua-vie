@@ -1,0 +1,1327 @@
+{
+  "closureId": "cl_20261102_mocioni",
+  "status": "ok",
+  "label": {
+    "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+    "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+  },
+  "finding": {
+    "ro": "Orarul nu adaugă minute de ocolire: mută capătul liniilor M32, M36, M37, M38, M46, M51. Pe porțiunile schimbate, cursele sunt planificate cu 2,0 min mai scurt (mediana, 184 de curse). Pe porțiunile noi, cursele înregistrate au mers cu 0,6 min mai repede decât orarul (49 de curse; interval 90 %: −1,0 … −0,0 min). Estimarea din vitezele altor linii pe aceleași străzi a fost cu 0,2 min sub timpul măsurat (49 de curse; interval 90 %: −0,5 … +0,1 min).",
+    "en": "The timetable adds no detour minutes: it moves the terminal of lines M32, M36, M37, M38, M46, M51. On the changed stretches trips are planned 2,0 min shorter (median, 184 trips). On the new stretches, recorded trips ran 0,6 min faster than the timetable (49 trips; 90 % interval: −1,0 … −0,0 min). The estimate from other lines' speeds on the same streets was 0,2 min below the measured time (49 trips; 90 % interval: −0,5 … +0,1 min)."
+  },
+  "minTrips": 10,
+  "feedBefore": "4.29",
+  "feedAfter": "4.30",
+  "stretches": [
+    {
+      "routeId": "R_AB_M32",
+      "shortName": "M32",
+      "directionId": 0,
+      "kind": "start_moved",
+      "before": {
+        "stopIds": [
+          "356",
+          "357",
+          "291",
+          "292"
+        ],
+        "stopNames": [
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața Iuliu Maniu (Calea Șagului)",
+          "Calea Șagului (Bd. Dâmbovița)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "478",
+          "479",
+          "292"
+        ],
+        "stopNames": [
+          "C. Brâncoveanu",
+          "C. Porumbescu (C. Brâncoveanu)",
+          "Calea Șagului (Bd. Dâmbovița)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 420.0,
+          "low": 420.0,
+          "high": 420.0,
+          "n": 45,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 300.0,
+          "low": 300.0,
+          "high": 300.0,
+          "n": 45,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -120.0,
+          "low": -120.0,
+          "high": -120.0,
+          "n": 45,
+          "conclusive": true
+        }
+      },
+      "measured": {
+        "sec": 319.0,
+        "low": 299.2,
+        "high": 347.5,
+        "n": 19,
+        "conclusive": true
+      },
+      "measuredVsPlanned": {
+        "sec": 19.0,
+        "low": -2.5,
+        "high": 47.5,
+        "n": 19,
+        "conclusive": true
+      },
+      "estimated": {
+        "sec": 271.5,
+        "low": 260.6,
+        "high": 385.0,
+        "n": 19,
+        "conclusive": true
+      },
+      "estimateError": {
+        "sec": -54.0,
+        "low": -112.4,
+        "high": 3.4,
+        "n": 19,
+        "conclusive": true
+      },
+      "coverage": 1.0,
+      "otherRoutes": [
+        "R_AB_32",
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E8",
+        "R_TV_9"
+      ],
+      "byHour": [
+        {
+          "hour": 6,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 283.5,
+          "estimatedSec": 249.2
+        },
+        {
+          "hour": 7,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 347.5,
+          "estimatedSec": 219.6
+        },
+        {
+          "hour": 8,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 282.1,
+          "estimatedSec": 238.0
+        },
+        {
+          "hour": 10,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 259.0,
+          "estimatedSec": 254.1
+        },
+        {
+          "hour": 11,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 348.0,
+          "estimatedSec": 266.6
+        },
+        {
+          "hour": 12,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 315.0,
+          "estimatedSec": 271.3
+        },
+        {
+          "hour": 14,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 928.0,
+          "estimatedSec": 309.2
+        },
+        {
+          "hour": 15,
+          "dayType": "fri",
+          "n": 2,
+          "measuredSec": 656.8,
+          "estimatedSec": 419.7
+        },
+        {
+          "hour": 16,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 830.5,
+          "estimatedSec": 439.8
+        },
+        {
+          "hour": 17,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 815.5,
+          "estimatedSec": 445.0
+        },
+        {
+          "hour": 18,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 267.0,
+          "estimatedSec": 419.0
+        },
+        {
+          "hour": 19,
+          "dayType": "fri",
+          "n": 2,
+          "measuredSec": 293.2,
+          "estimatedSec": 291.4
+        },
+        {
+          "hour": 20,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 319.0,
+          "estimatedSec": 265.0
+        },
+        {
+          "hour": 21,
+          "dayType": "fri",
+          "n": 2,
+          "measuredSec": 303.5,
+          "estimatedSec": 271.5
+        },
+        {
+          "hour": 22,
+          "dayType": "fri",
+          "n": 2,
+          "measuredSec": 330.5,
+          "estimatedSec": 267.3
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M32",
+      "shortName": "M32",
+      "directionId": 1,
+      "kind": "end_moved",
+      "before": {
+        "stopIds": [
+          "352",
+          "353",
+          "356"
+        ],
+        "stopNames": [
+          "Piața Iuliu Maniu (16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "352",
+          "478"
+        ],
+        "stopNames": [
+          "Piața Iuliu Maniu (16 Decembrie 1989)",
+          "C. Brâncoveanu"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 360.0,
+          "low": 360.0,
+          "high": 360.0,
+          "n": 45,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 180.0,
+          "low": 180.0,
+          "high": 180.0,
+          "n": 45,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -180.0,
+          "low": -180.0,
+          "high": -180.0,
+          "n": 45,
+          "conclusive": true
+        }
+      },
+      "measured": {
+        "sec": 64.0,
+        "low": 51.1,
+        "high": 95.0,
+        "n": 12,
+        "conclusive": true
+      },
+      "measuredVsPlanned": {
+        "sec": -116.0,
+        "low": -127.5,
+        "high": -82.0,
+        "n": 12,
+        "conclusive": true
+      },
+      "estimated": {
+        "sec": 76.8,
+        "low": 65.3,
+        "high": 83.0,
+        "n": 12,
+        "conclusive": true
+      },
+      "estimateError": {
+        "sec": 6.2,
+        "low": -21.5,
+        "high": 23.3,
+        "n": 12,
+        "conclusive": true
+      },
+      "coverage": 1.0,
+      "otherRoutes": [
+        "R_AB_32",
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_AB_E7",
+        "R_AB_E8"
+      ],
+      "byHour": [
+        {
+          "hour": 7,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 64.0,
+          "estimatedSec": 70.6
+        },
+        {
+          "hour": 10,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 93.5,
+          "estimatedSec": 71.8
+        },
+        {
+          "hour": 11,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 33.0,
+          "estimatedSec": 72.6
+        },
+        {
+          "hour": 14,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 52.5,
+          "estimatedSec": 80.9
+        },
+        {
+          "hour": 15,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 108.0,
+          "estimatedSec": 83.1
+        },
+        {
+          "hour": 16,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 61.5,
+          "estimatedSec": 82.6
+        },
+        {
+          "hour": 17,
+          "dayType": "fri",
+          "n": 2,
+          "measuredSec": 107.8,
+          "estimatedSec": 83.2
+        },
+        {
+          "hour": 18,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 102.5,
+          "estimatedSec": 81.0
+        },
+        {
+          "hour": 19,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 35.5,
+          "estimatedSec": 71.4
+        },
+        {
+          "hour": 20,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 64.0,
+          "estimatedSec": 69.9
+        },
+        {
+          "hour": 22,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 49.9,
+          "estimatedSec": 58.9
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M36",
+      "shortName": "M36",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "before": {
+        "stopIds": [
+          "356",
+          "357",
+          "332"
+        ],
+        "stopNames": [
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața Iuliu Maniu (Budai Deleanu)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "332"
+        ],
+        "stopNames": [
+          "Piața Iuliu Maniu (Budai Deleanu)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 240.0,
+          "low": 120.0,
+          "high": 240.0,
+          "n": 15,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "n": 15,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -240.0,
+          "low": -240.0,
+          "high": -120.0,
+          "n": 15,
+          "conclusive": true
+        }
+      },
+      "measured": null,
+      "measuredVsPlanned": null,
+      "estimated": null,
+      "estimateError": null,
+      "coverage": null,
+      "otherRoutes": [],
+      "byHour": []
+    },
+    {
+      "routeId": "R_AB_M36",
+      "shortName": "M36",
+      "directionId": 1,
+      "kind": "end_moved",
+      "before": {
+        "stopIds": [
+          "324",
+          "352",
+          "353",
+          "356"
+        ],
+        "stopNames": [
+          "Transilvania (Budai Deleanu)",
+          "Piața Iuliu Maniu (16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "324",
+          "270"
+        ],
+        "stopNames": [
+          "Transilvania (Budai Deleanu)",
+          "Piața Iuliu Maniu (Reșiței)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 420.0,
+          "low": 300.0,
+          "high": 420.0,
+          "n": 15,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 180.0,
+          "low": 148.5,
+          "high": 180.0,
+          "n": 15,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -240.0,
+          "low": -240.0,
+          "high": -120.0,
+          "n": 15,
+          "conclusive": true
+        }
+      },
+      "measured": {
+        "sec": 84.3,
+        "low": 76.5,
+        "high": 133.8,
+        "n": 6,
+        "conclusive": false
+      },
+      "measuredVsPlanned": {
+        "sec": -93.0,
+        "low": -111.5,
+        "high": -1.5,
+        "n": 6,
+        "conclusive": false
+      },
+      "estimated": {
+        "sec": 87.1,
+        "low": 76.2,
+        "high": 98.3,
+        "n": 6,
+        "conclusive": false
+      },
+      "estimateError": {
+        "sec": 0.3,
+        "low": -47.7,
+        "high": 19.2,
+        "n": 6,
+        "conclusive": false
+      },
+      "coverage": 0.937,
+      "otherRoutes": [
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_AB_E7",
+        "R_AB_E8"
+      ],
+      "byHour": [
+        {
+          "hour": 6,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 89.0,
+          "estimatedSec": 75.3
+        },
+        {
+          "hour": 15,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 178.5,
+          "estimatedSec": 96.0
+        },
+        {
+          "hour": 17,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 94.5,
+          "estimatedSec": 93.3
+        },
+        {
+          "hour": 19,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 76.5,
+          "estimatedSec": 91.4
+        },
+        {
+          "hour": 21,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 79.6,
+          "estimatedSec": 81.5
+        },
+        {
+          "hour": 22,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 59.5,
+          "estimatedSec": 82.7
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M37",
+      "shortName": "M37",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "before": {
+        "stopIds": [
+          "356",
+          "357",
+          "291"
+        ],
+        "stopNames": [
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața Iuliu Maniu (Calea Șagului)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "291"
+        ],
+        "stopNames": [
+          "Piața Iuliu Maniu (Calea Șagului)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 240.0,
+          "low": 180.0,
+          "high": 240.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -240.0,
+          "low": -240.0,
+          "high": -180.0,
+          "n": 13,
+          "conclusive": true
+        }
+      },
+      "measured": null,
+      "measuredVsPlanned": null,
+      "estimated": null,
+      "estimateError": null,
+      "coverage": null,
+      "otherRoutes": [],
+      "byHour": []
+    },
+    {
+      "routeId": "R_AB_M37",
+      "shortName": "M37",
+      "directionId": 1,
+      "kind": "end_moved",
+      "before": {
+        "stopIds": [
+          "269",
+          "352",
+          "353",
+          "354"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața Iuliu Maniu (16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața A. Mocioni (16 Decembrie 1989 - Sinaia)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "269",
+          "270"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața Iuliu Maniu (Reșiței)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 240.0,
+          "low": 240.0,
+          "high": 240.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 120.0,
+          "low": 60.0,
+          "high": 120.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -120.0,
+          "low": -120.0,
+          "high": -120.0,
+          "n": 13,
+          "conclusive": true
+        }
+      },
+      "measured": {
+        "sec": 71.5,
+        "low": 57.5,
+        "high": 152.0,
+        "n": 3,
+        "conclusive": false
+      },
+      "measuredVsPlanned": {
+        "sec": 11.5,
+        "low": -2.5,
+        "high": 32.0,
+        "n": 3,
+        "conclusive": false
+      },
+      "estimated": {
+        "sec": 99.7,
+        "low": 74.6,
+        "high": 132.5,
+        "n": 3,
+        "conclusive": false
+      },
+      "estimateError": {
+        "sec": 18.0,
+        "low": -41.5,
+        "high": 32.3,
+        "n": 3,
+        "conclusive": false
+      },
+      "coverage": 0.946,
+      "otherRoutes": [
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_AB_E7",
+        "R_AB_E8"
+      ],
+      "byHour": [
+        {
+          "hour": 5,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 57.5,
+          "estimatedSec": 75.5
+        },
+        {
+          "hour": 9,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 71.5,
+          "estimatedSec": 99.7
+        },
+        {
+          "hour": 16,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 152.0,
+          "estimatedSec": 127.8
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M38",
+      "shortName": "M38",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "before": {
+        "stopIds": [
+          "356",
+          "357",
+          "291"
+        ],
+        "stopNames": [
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața Iuliu Maniu (Calea Șagului)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "291"
+        ],
+        "stopNames": [
+          "Piața Iuliu Maniu (Calea Șagului)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 300.0,
+          "low": 300.0,
+          "high": 300.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "after": {
+          "sec": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "extra": {
+          "sec": -300.0,
+          "low": -300.0,
+          "high": -300.0,
+          "n": 3,
+          "conclusive": false
+        }
+      },
+      "measured": null,
+      "measuredVsPlanned": null,
+      "estimated": null,
+      "estimateError": null,
+      "coverage": null,
+      "otherRoutes": [],
+      "byHour": []
+    },
+    {
+      "routeId": "R_AB_M38",
+      "shortName": "M38",
+      "directionId": 1,
+      "kind": "end_moved",
+      "before": {
+        "stopIds": [
+          "269",
+          "352",
+          "353",
+          "356"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața Iuliu Maniu (16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "269",
+          "270"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața Iuliu Maniu (Reșiței)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 660.0,
+          "low": 540.0,
+          "high": 660.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "after": {
+          "sec": 180.0,
+          "low": 120.0,
+          "high": 180.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "extra": {
+          "sec": -480.0,
+          "low": -480.0,
+          "high": -420.0,
+          "n": 3,
+          "conclusive": false
+        }
+      },
+      "measured": {
+        "sec": 103.2,
+        "low": 89.0,
+        "high": 117.5,
+        "n": 2,
+        "conclusive": false
+      },
+      "measuredVsPlanned": {
+        "sec": -76.8,
+        "low": -91.0,
+        "high": -62.5,
+        "n": 2,
+        "conclusive": false
+      },
+      "estimated": {
+        "sec": 120.7,
+        "low": 104.5,
+        "high": 147.4,
+        "n": 2,
+        "conclusive": false
+      },
+      "estimateError": {
+        "sec": 17.4,
+        "low": -10.7,
+        "high": 55.5,
+        "n": 2,
+        "conclusive": false
+      },
+      "coverage": 0.946,
+      "otherRoutes": [
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_AB_E7",
+        "R_AB_E8"
+      ],
+      "byHour": [
+        {
+          "hour": 14,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 89.0,
+          "estimatedSec": 113.4
+        },
+        {
+          "hour": 16,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 117.5,
+          "estimatedSec": 128.0
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M46",
+      "shortName": "M46",
+      "directionId": 0,
+      "kind": "start_moved",
+      "before": {
+        "stopIds": [
+          "356",
+          "292"
+        ],
+        "stopNames": [
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+          "Calea Șagului (Bd. Dâmbovița)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "291",
+          "292"
+        ],
+        "stopNames": [
+          "Piața Iuliu Maniu (Calea Șagului)",
+          "Calea Șagului (Bd. Dâmbovița)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 300.0,
+          "low": 300.0,
+          "high": 300.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "after": {
+          "sec": 300.0,
+          "low": 300.0,
+          "high": 300.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "extra": {
+          "sec": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "n": 3,
+          "conclusive": false
+        }
+      },
+      "measured": {
+        "sec": null,
+        "low": null,
+        "high": null,
+        "n": 0,
+        "conclusive": false
+      },
+      "measuredVsPlanned": {
+        "sec": null,
+        "low": null,
+        "high": null,
+        "n": 0,
+        "conclusive": false
+      },
+      "estimated": {
+        "sec": null,
+        "low": null,
+        "high": null,
+        "n": 0,
+        "conclusive": false
+      },
+      "estimateError": {
+        "sec": null,
+        "low": null,
+        "high": null,
+        "n": 0,
+        "conclusive": false
+      },
+      "coverage": null,
+      "otherRoutes": [],
+      "byHour": []
+    },
+    {
+      "routeId": "R_AB_M46",
+      "shortName": "M46",
+      "directionId": 1,
+      "kind": "end_moved",
+      "before": {
+        "stopIds": [
+          "269",
+          "356"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "269",
+          "270"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața Iuliu Maniu (Reșiței)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 360.0,
+          "low": 240.0,
+          "high": 360.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "after": {
+          "sec": 360.0,
+          "low": 240.0,
+          "high": 360.0,
+          "n": 3,
+          "conclusive": false
+        },
+        "extra": {
+          "sec": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "n": 3,
+          "conclusive": false
+        }
+      },
+      "measured": {
+        "sec": 112.5,
+        "low": 112.5,
+        "high": 112.5,
+        "n": 1,
+        "conclusive": false
+      },
+      "measuredVsPlanned": {
+        "sec": -247.5,
+        "low": -247.5,
+        "high": -247.5,
+        "n": 1,
+        "conclusive": false
+      },
+      "estimated": {
+        "sec": 113.5,
+        "low": 104.6,
+        "high": 148.8,
+        "n": 1,
+        "conclusive": false
+      },
+      "estimateError": {
+        "sec": 1.0,
+        "low": -7.9,
+        "high": 36.3,
+        "n": 1,
+        "conclusive": false
+      },
+      "coverage": 0.946,
+      "otherRoutes": [
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_AB_E7",
+        "R_AB_E8"
+      ],
+      "byHour": [
+        {
+          "hour": 14,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 112.5,
+          "estimatedSec": 113.5
+        }
+      ]
+    },
+    {
+      "routeId": "R_AB_M51",
+      "shortName": "M51",
+      "directionId": 0,
+      "kind": "truncated_start",
+      "before": {
+        "stopIds": [
+          "356",
+          "357",
+          "291"
+        ],
+        "stopNames": [
+          "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața Iuliu Maniu (Calea Șagului)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "291"
+        ],
+        "stopNames": [
+          "Piața Iuliu Maniu (Calea Șagului)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 180.0,
+          "low": 180.0,
+          "high": 180.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 0.0,
+          "low": 0.0,
+          "high": 0.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -180.0,
+          "low": -180.0,
+          "high": -180.0,
+          "n": 13,
+          "conclusive": true
+        }
+      },
+      "measured": null,
+      "measuredVsPlanned": null,
+      "estimated": null,
+      "estimateError": null,
+      "coverage": null,
+      "otherRoutes": [],
+      "byHour": []
+    },
+    {
+      "routeId": "R_AB_M51",
+      "shortName": "M51",
+      "directionId": 1,
+      "kind": "end_moved",
+      "before": {
+        "stopIds": [
+          "269",
+          "352",
+          "353",
+          "354"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața Iuliu Maniu (16 Decembrie 1989)",
+          "C. Brâncoveanu (16 Decembrie 1989)",
+          "Piața A. Mocioni (16 Decembrie 1989 - Sinaia)"
+        ]
+      },
+      "after": {
+        "stopIds": [
+          "269",
+          "270"
+        ],
+        "stopNames": [
+          "Calea Șagului (Bd. L. Rebreanu)",
+          "Piața Iuliu Maniu (Reșiței)"
+        ]
+      },
+      "planned": {
+        "before": {
+          "sec": 240.0,
+          "low": 240.0,
+          "high": 240.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "after": {
+          "sec": 120.0,
+          "low": 120.0,
+          "high": 120.0,
+          "n": 13,
+          "conclusive": true
+        },
+        "extra": {
+          "sec": -120.0,
+          "low": -120.0,
+          "high": -120.0,
+          "n": 13,
+          "conclusive": true
+        }
+      },
+      "measured": {
+        "sec": 74.0,
+        "low": 68.0,
+        "high": 155.0,
+        "n": 6,
+        "conclusive": false
+      },
+      "measuredVsPlanned": {
+        "sec": -46.0,
+        "low": -54.0,
+        "high": 35.0,
+        "n": 6,
+        "conclusive": false
+      },
+      "estimated": {
+        "sec": 81.2,
+        "low": 74.7,
+        "high": 116.0,
+        "n": 6,
+        "conclusive": false
+      },
+      "estimateError": {
+        "sec": -1.2,
+        "low": -51.9,
+        "high": 15.9,
+        "n": 6,
+        "conclusive": false
+      },
+      "coverage": 0.946,
+      "otherRoutes": [
+        "R_AB_33",
+        "R_AB_33B",
+        "R_AB_E1",
+        "R_AB_E3",
+        "R_AB_E7",
+        "R_AB_E8"
+      ],
+      "byHour": [
+        {
+          "hour": 6,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 59.0,
+          "estimatedSec": 75.0
+        },
+        {
+          "hour": 8,
+          "dayType": "sat",
+          "n": 1,
+          "measuredSec": 73.0,
+          "estimatedSec": 78.1
+        },
+        {
+          "hour": 15,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 181.0,
+          "estimatedSec": 108.8
+        },
+        {
+          "hour": 17,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 155.0,
+          "estimatedSec": 111.3
+        },
+        {
+          "hour": 19,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 68.0,
+          "estimatedSec": 84.3
+        },
+        {
+          "hour": 22,
+          "dayType": "fri",
+          "n": 1,
+          "measuredSec": 75.0,
+          "estimatedSec": 67.4
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "plannedExtra": {
+      "sec": -120.0,
+      "low": -180.0,
+      "high": -120.0,
+      "n": 184,
+      "conclusive": true
+    },
+    "measuredVsPlanned": {
+      "sec": -33.0,
+      "low": -61.0,
+      "high": -1.5,
+      "n": 49,
+      "conclusive": true
+    },
+    "estimateError": {
+      "sec": -13.7,
+      "low": -30.8,
+      "high": 8.4,
+      "n": 49,
+      "conclusive": true
+    }
+  },
+  "method": {
+    "ro": "Planificat: orarul SMTT de dinainte de lucrare comparat cursă cu cursă cu cel în vigoare la începutul ei, pe porțiunea care s-a schimbat. Măsurat: din orarul observat (plecarea din prima stație a porțiunii → sosirea în ultima). Estimat: metoda pentru o lucrare nouă: viteza măsurată a altor linii pe aceleași străzi (OSM), la aceeași oră (±1 h), plus staționarea măsurată în stații. Mediane cu interval bootstrap 90 %, o cursă = un bloc; sub 10 curse: „neconcludent”. Doar vineri după-amiază și weekend; fără extrapolare la zile lucrătoare.",
+    "en": "Planned: SMTT's timetable before the works compared trip by trip with the one in force when they start, on the stretch that changed. Measured: from the observed timetable (departure at the stretch's first stop → arrival at its last). Estimated: the method for a new closure: other lines' measured speed on the same streets (OSM), same hour (±1 h), plus measured dwell at stops. Medians with a 90 % bootstrap interval, one trip = one block; under 10 trips: inconclusive. Friday afternoon and weekend only; no weekday extrapolation."
+  },
+  "provenance": [
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.29",
+      "fetchedAt": "2026-11-13T18:51:10+02:00",
+      "note": "orarul de dinainte de lucrare / before"
+    },
+    {
+      "source": "SMTT GTFS (orar planificat / planned timetable)",
+      "url": "https://smtt.ro",
+      "version": "4.30",
+      "fetchedAt": "2026-11-13T18:51:10+02:00",
+      "note": "orarul de la începutul lucrării / after"
+    },
+    {
+      "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+      "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+      "version": null,
+      "fetchedAt": "2026-11-14T12:59:56+02:00",
+      "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); orarul observat (L0)"
+    },
+    {
+      "source": "OpenStreetMap via Geofabrik",
+      "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+      "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+      "fetchedAt": "2026-11-13T18:30:52+02:00",
+      "note": "străzile pe care merg alte linii / streets other lines run on. osmium extract -b 21.10,45.68,21.35,45.83"
+    }
+  ]
+}
