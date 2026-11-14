@@ -1,0 +1,108 @@
+{
+    "closureId": "cl_20261102_mocioni",
+    "window": {
+        "start": "2026-11-02T00:00:00+02:00",
+        "end": "2026-12-31T23:59:59+02:00"
+    },
+    "streets": {
+        "count": 13,
+        "meters": 440,
+        "squareMeters": null,
+        "byTariff": {
+            "yellow": 440
+        }
+    },
+    "lots": {
+        "count": 0,
+        "meters": null,
+        "squareMeters": 0,
+        "byTariff": {}
+    },
+    "paidHours": 528.0,
+    "paidHoursByTariff": {
+        "yellow": 528.0
+    },
+    "uncheckedFeatures": 1,
+    "parkAndRide": [
+        {
+            "stopId": "295",
+            "name": "Pod Calea Șagului",
+            "routeIds": [
+                "R_AB_E1",
+                "R_AB_E8"
+            ],
+            "lotId": "l76",
+            "walkMeters": 256.0
+        },
+        {
+            "stopId": "266",
+            "name": "Pod Calea Șagului",
+            "routeIds": [
+                "R_AB_33",
+                "R_AB_E1"
+            ],
+            "lotId": "l76",
+            "walkMeters": 214.0
+        },
+        {
+            "stopId": "42",
+            "name": "Piața Gheorghe Domășneanu (Liviu Rebreanu - AEM)",
+            "routeIds": [
+                "R_TV_1",
+                "R_TV_9"
+            ],
+            "lotId": "l73",
+            "walkMeters": 456.0
+        },
+        {
+            "stopId": "41",
+            "name": "Piața Gheorghe Domășneanu (Liviu Rebreanu - AEM)",
+            "routeIds": [
+                "R_TV_1",
+                "R_TV_9"
+            ],
+            "lotId": "l73",
+            "walkMeters": 448.0
+        },
+        {
+            "stopId": "148",
+            "name": "Piața V. Economu (Calea Dorobanților)",
+            "routeIds": [
+                "R_AB_M29"
+            ],
+            "lotId": "l58",
+            "walkMeters": 227.0
+        }
+    ],
+    "noticeLine": {
+        "ro": "Parcare cu plată afectată: 440 m de stradă, 0 parcări · 528 ore plătite în fereastră.",
+        "en": "Paid parking affected: 440 m of street, 0 car parks · 528 paid hours in the window."
+    },
+    "note": {
+        "ro": "Metri de stradă = lungimea tronsoanelor Timpark din zona afectată; m² = suprafața întreagă a parcării care atinge zona. Orele plătite vin din programul oficial din fișierul Primăriei (L–V 08–20, sâmbătă doar verde 08–17, duminică 0); sărbătorile legale nu sunt în program și nu sunt scăzute. Fără lei (câmpul Primăriei se numește `eur`) și fără ocupare: Timpark nu le publică. Dacă se suspendă plata e decizia Timpark.",
+        "en": "Metres = length of the Timpark sections in the affected area; m² = whole area of each car park that touches it. Paid hours come from the schedule in the City Hall file (Mon-Fri 08-20, Saturday green only 08-17, Sunday 0); public holidays are not in it and are not subtracted. No currency (the City Hall field is named `eur`) and no occupancy: Timpark publishes neither. Suspending payment is Timpark's decision."
+    },
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, Timpark (/api/mobile/parking)",
+            "url": "https://cont.primariatm.ro/api/mobile/parking",
+            "version": "d014276a755c",
+            "fetchedAt": "2026-11-13T13:29:14+02:00",
+            "note": "id-urile și culorile tarifelor Timpark, neschimbate / Timpark ids and tariff colours unchanged"
+        },
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "capete de linie: prima / ultima stație a traseului cel mai frecvent / line ends: first / last stop of the most common trip pattern"
+        },
+        {
+            "source": "OpenStreetMap via Geofabrik",
+            "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+            "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+            "fetchedAt": "2026-11-13T18:30:52+02:00",
+            "note": "P&R: capăt de linie la peste 3 km de Piața Victoriei (OSM) și o parcare Timpark la cel mult 500 m în linie dreaptă; fără date de ocupare / no occupancy data"
+        }
+    ]
+}

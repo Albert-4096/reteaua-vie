@@ -1,0 +1,153 @@
+{
+    "closureId": "cl_20261102_mocioni",
+    "lanesAffected": [
+        {
+            "osmId": "way/441511690",
+            "name": null,
+            "lengthMeters": 6.4,
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        21.2155541,
+                        45.7461901
+                    ],
+                    [
+                        21.2156368,
+                        45.7461923
+                    ]
+                ]
+            }
+        }
+    ],
+    "parkingAffected": [],
+    "detourStress": [
+        {
+            "name": "Strada Constantin Noica",
+            "lts": 3,
+            "lengthMeters": 106.9,
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        21.2151306,
+                        45.7434077
+                    ],
+                    [
+                        21.2157315,
+                        45.7434201
+                    ],
+                    [
+                        21.2159348,
+                        45.7434372
+                    ],
+                    [
+                        21.2161037,
+                        45.7434702
+                    ],
+                    [
+                        21.2164723,
+                        45.7435712
+                    ]
+                ]
+            }
+        },
+        {
+            "name": "Strada Cornel Grofșoreanu",
+            "lts": 2,
+            "lengthMeters": 61.2,
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        21.2164723,
+                        45.7435712
+                    ],
+                    [
+                        21.2163046,
+                        45.7441093
+                    ]
+                ]
+            }
+        }
+    ],
+    "provenance": [
+        {
+            "source": "OpenStreetMap via Geofabrik",
+            "url": "https://download.geofabrik.de/europe/romania-latest.osm.pbf",
+            "version": "romania-261112.osm.pbf, OSM data until 2026-11-12T21:23:05Z",
+            "fetchedAt": "2026-11-13T18:30:52+02:00",
+            "note": "nivel de stres LTS din etichetele OSM (tabelul din README) / LTS from OSM tags; ocolire = cel mai scurt traseu ponderat cu LTS între capetele lucrării / LTS-weighted shortest route; suprafață și neteziment din etichetele OSM surface și smoothness; fără etichetă = necunoscut / surface and smoothness from OSM tags; untagged = unknown. osmium extract -b 21.10,45.68,21.35,45.83"
+        }
+    ],
+    "detourSummary": {
+        "lengthMeters": 1196.6,
+        "byLts": {
+            "1": 0.0,
+            "2": 68.8,
+            "3": 1127.9,
+            "4": 0.0,
+            "unknown": 0.0
+        },
+        "highStressMeters": 1127.9,
+        "roughMeters": 0.0,
+        "surfaceUnknownMeters": 303.3,
+        "tramCrossings": 6,
+        "unknownSharePct": 0,
+        "tooLittleData": false,
+        "sentence": {
+            "ro": "Ocolirea pe bicicletă: 1,2 km · 1,1 km stres mare (LTS 3–4) · 6 traversări de șine · 0% fără date",
+            "en": "Bike detour: 1.2 km · 1.1 km high stress (LTS 3–4) · 6 tram-rail crossings · 0% no data"
+        }
+    },
+    "shareAlternative": [
+        {
+            "fromStopId": "356",
+            "fromStopName": "Piața A. Mocioni (Sinaia - 16 Decembrie 1989)",
+            "toStopId": "357",
+            "toStopName": "C. Brâncoveanu (16 Decembrie 1989)",
+            "routeIds": [
+                "R_AB_M36",
+                "R_AB_M37",
+                "R_AB_M38",
+                "R_AB_M51"
+            ],
+            "stationFrom": {
+                "osmId": "node/5275324479",
+                "name": "Piața Mocioni",
+                "meters": 83
+            },
+            "stationTo": {
+                "osmId": "node/5275324478",
+                "name": "Carol 1",
+                "meters": 285
+            },
+            "routeLengthMeters": 579.8,
+            "highStressMeters": 87.6,
+            "line": {
+                "ro": "Alternativ: bicicletă publică de la Piața Mocioni la Carol 1, 0,6 km · disponibilitate necunoscută.",
+                "en": "Alternative: public bike from Piața Mocioni to Carol 1, 0.6 km · availability unknown."
+            }
+        },
+        {
+            "fromStopId": "352",
+            "fromStopName": "Piața Iuliu Maniu (16 Decembrie 1989)",
+            "toStopId": "354",
+            "toStopName": "Piața A. Mocioni (16 Decembrie 1989 - Sinaia)",
+            "routeIds": [
+                "R_AB_M37",
+                "R_AB_M51"
+            ],
+            "stationFrom": null,
+            "stationTo": {
+                "osmId": "node/5275324479",
+                "name": "Piața Mocioni",
+                "meters": 93
+            },
+            "routeLengthMeters": null,
+            "highStressMeters": null,
+            "line": null
+        }
+    ],
+    "shareNote": null
+}

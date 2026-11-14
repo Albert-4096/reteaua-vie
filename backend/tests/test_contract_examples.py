@@ -44,6 +44,9 @@ MODELS: dict[str, object] = {
     "v2/health.json": m.Health,
     "v2/scans.json": m.ScanCounts,
     "v2/data-quality.json": DataQuality,
+    "v2/landmarks.json": m.LandmarkImpact,  # v2.31 (R28)
+    "v2/paid-parking.json": m.PaidParking,  # v2.31 (R11)
+    "v2/bike-impact-r16-r17.json": m.BikeImpact,  # v2.32 (R16, R17; lists cut)
     "v2/event-conflicts.json": EventConflicts,
     "v2/reports-zones.json": AreaReports,
     "v2/reports-stops.json": AreaReports,

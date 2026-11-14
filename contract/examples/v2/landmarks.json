@@ -1,0 +1,95 @@
+{
+    "closureId": "cl_20261108_16dec",
+    "total": 20,
+    "losingNearestStop": 1,
+    "items": [
+        {
+            "id": "palatul-apelor",
+            "name": "Palatul Apelor",
+            "nameEn": "Water Palace",
+            "address": "B-dul 16 Decembrie 1989 nr. 2",
+            "nearestStop": {
+                "stopId": "61",
+                "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+                "meters": 42
+            },
+            "losesService": true,
+            "nearestServed": {
+                "stopId": "59",
+                "name": "Piața Sfânta Maria (16 Decembrie 1989)",
+                "meters": 105
+            }
+        },
+        {
+            "id": "bastionul-maria-tereza",
+            "name": "Bastionul Maria Tereza",
+            "nameEn": "Maria Theresa Bastion",
+            "address": "Str. Hector",
+            "nearestStop": {
+                "stopId": "299",
+                "name": "Hector (Bastion)",
+                "meters": 56
+            },
+            "losesService": false,
+            "nearestServed": {
+                "stopId": "299",
+                "name": "Hector (Bastion)",
+                "meters": 56
+            }
+        },
+        {
+            "id": "castelul-huniade",
+            "name": "Castelul Huniade",
+            "nameEn": "Huniade Castle",
+            "address": "Piața Iancu Huniade nr. 1",
+            "nearestStop": {
+                "stopId": "179",
+                "name": "Piața Huniade",
+                "meters": 63
+            },
+            "losesService": false,
+            "nearestServed": {
+                "stopId": "179",
+                "name": "Piața Huniade",
+                "meters": 63
+            }
+        },
+        {
+            "id": "catedrala-mitropolitana",
+            "name": "Catedrala Mitropolitană Ortodoxă",
+            "nameEn": "Orthodox Metropolitan Cathedral",
+            "address": "Bulevardul Regele Ferdinand I",
+            "nearestStop": {
+                "stopId": "326",
+                "name": "Catedrala Mitropolitană",
+                "meters": 57
+            },
+            "losesService": false,
+            "nearestServed": {
+                "stopId": "326",
+                "name": "Catedrala Mitropolitană",
+                "meters": 57
+            }
+        }
+    ],
+    "summary": {
+        "ro": "1 obiectiv din ghidul turistic al Primăriei pierde stația cea mai apropiată.",
+        "en": "1 landmark of the City Hall's tourist guide loses its nearest stop."
+    },
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, ghidul turistic (api/mobile/pois)",
+            "url": "https://cont.primariatm.ro/api/mobile/pois",
+            "version": null,
+            "fetchedAt": "2026-11-14T13:30:52+02:00",
+            "note": "api/mobile/pois, preluat 14.11.2026"
+        },
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        }
+    ]
+}
