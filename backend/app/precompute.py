@@ -15,16 +15,21 @@ not name is unticked), dated at the notice's post time. `main()` then validates 
 Mocioni's MP3s (budget-checked); `prepare_cases` alone never starts a thread or calls ElevenLabs.
 Last, every app/<package>/warm*.py that defines `warm(closure_ids: list[str]) -> None` is called
 with the prepared closure ids (module caches: access, detour, windows, …); a failing one is
-reported and the rest go on.
+reported and the rest go on. The posters and a warm-up are skipped when none of their inputs
+changed since their last successful run (stored closures, code, GTFS feed, demo clock: see
+warm_stamp); a published case is kept as is (not rebuilt) until --reset. --force runs everything.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib
+import json
 import logging
 import sys
 import time
+from pathlib import Path
 from typing import Callable
 
 from app.config import ensure_dirs, get_settings
@@ -159,6 +164,18 @@ def make_audio(closure_id: str) -> None:
               f"{s.get('charsSpent', 0)} characters", flush=True)
 
 
+def kept_info(closure_id: str) -> dict:
+    """The precompute row of a stored closure that is not rebuilt (published), from its stored parts."""
+    from app.common import state
+
+    a = state.read("closures", closure_id, state.PART_ANALYSIS) or {}
+    totals = (state.read("closures", closure_id, state.PART_IMPACT) or {}).get("totals") or {}
+    return {"id": closure_id, "status": (state.read("closures", closure_id) or {}).get("status"),
+            "rows": len(a.get("stops") or []), "unsure": a.get("unsureCount"),
+            "departuresLost": totals.get("departuresLost"), "stopsSuspended": totals.get("stopsSuspended"),
+            "unread": None}
+
+
 def prepare_cases(reset: bool = False) -> list[dict]:
     from app.cases.build import build_case
     from app.cases.catalog import CASES
@@ -175,12 +192,20 @@ def prepare_cases(reset: bool = False) -> list[dict]:
         if reset:
             reset_case(cid)
         old = state.read("closures", cid) or {}
+        if old.get("status") == "published":
+            # a published case is kept as is: closure, analysis, impact and publish record stay what
+            # was published (rebuilding it would let the analysis drift from the published alerts,
+            # and costs seconds on every warm run); --reset rebuilds it
+            rows.append(kept_info(cid))
+            if case.starts_published:
+                mark_reconstructed(case)
+            print("  ok   " + "  ".join(f"{k}={v}" for k, v in rows[-1].items())
+                  + "  (published: kept as is, --reset rebuilds it)", flush=True)
+            continue
         built = build_case(case)
         state.write("closures", cid, built.closure)
         info: dict = {"id": cid, "status": None, "rows": None, "unsure": None,
                       "departuresLost": None, "stopsSuspended": None, "unread": len(built.unread)}
-        if old.get("status") == "published":
-            print(f"  note {cid} is published (a demo ran); kept as is. Use --reset to restart the demo.")
         if analyze is None:
             print(f"  skip {cid}: app.m1_disruption.analysis is not there yet (closure stored as draft)")
         else:
@@ -255,12 +280,68 @@ def warm_modules() -> list[str]:
     return names
 
 
-def run_warms(closure_ids: list[str]) -> dict[str, str]:
-    """Call `warm(closure_ids)` of every module warm; a failing one is logged, never fatal."""
+# --- skip what nothing changed for (R2: a warm run < 20 s) ------------------------------------
+#
+# The posters and every module warm-up depend only on the stored closures (input, decisions,
+# status, publish record), the app's code and templates, the GTFS feed in force and the demo clock.
+# After a step succeeds, its stamp of those inputs is written to $DATA_DIR/cache/precompute/; the
+# next run skips the step while the stamp is the same. --force runs everything.
+# The live warm-up always runs: the vehicle recording grows every 15 s.
+ALWAYS_RUN = {"app.live.warm"}
+
+
+def warm_stamp() -> str:
+    from app.common import gtfs, state
+    from app.common.jobs import closure_fingerprint
+    from app.config import now
+
+    h = hashlib.sha256()
+    for c in sorted(state.list_all("closures"), key=lambda c: c["id"]):
+        pub = state.read("published", c["id"])
+        h.update(json.dumps([c["id"], c.get("status"), closure_fingerprint(c["id"]), pub],
+                            sort_keys=True, default=str).encode())
+    app_dir = Path(__file__).resolve().parent
+    for f in sorted(app_dir.rglob("*")):
+        if f.is_file() and "__pycache__" not in f.parts:
+            h.update(f.relative_to(app_dir).as_posix().encode())
+            h.update(f.read_bytes())
+    feed = gtfs.feed()
+    h.update(json.dumps([feed.version, feed.sha256, now().isoformat()]).encode())
+    return h.hexdigest()
+
+
+def _marker(step: str) -> Path:
+    return get_settings().cache_dir / "precompute" / f"{step}.json"
+
+
+def unchanged(step: str, stamp: str | None) -> bool:
+    try:
+        return stamp is not None and json.loads(_marker(step).read_text(encoding="utf-8"))["stamp"] == stamp
+    except (OSError, ValueError, KeyError):
+        return False
+
+
+def mark_done(step: str, stamp: str | None) -> None:
+    if stamp is None:
+        return
+    p = _marker(step)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({"stamp": stamp, "at": time.strftime("%Y-%m-%dT%H:%M:%S")}), encoding="utf-8")
+
+
+def run_warms(closure_ids: list[str], stamp: str | None = None) -> dict[str, str]:
+    """Call `warm(closure_ids)` of every module warm; a failing one is logged, never fatal.
+
+    With a `stamp` (see warm_stamp), a module whose last successful run had the same stamp is skipped.
+    """
     print("module warm-ups:", flush=True)
     out: dict[str, str] = {}
     for name in warm_modules():
         t = time.perf_counter()
+        if name not in ALWAYS_RUN and unchanged(name, stamp):
+            print(f"  skip {name}: nothing changed since its last run", flush=True)
+            out[name] = "unchanged"
+            continue
         try:
             fn = getattr(importlib.import_module(name), "warm", None)
             if fn is None:
@@ -275,6 +356,7 @@ def run_warms(closure_ids: list[str]) -> dict[str, str]:
             continue
         print(f"  ok   {name} ({time.perf_counter() - t:.1f} s)", flush=True)
         out[name] = "ok"
+        mark_done(name, stamp)
     return out
 
 
@@ -285,6 +367,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cases-only", action="store_true", help="skip the cache warm-up")
     ap.add_argument("--no-posters", action="store_true", help="skip rendering the posters")
     ap.add_argument("--no-warm", action="store_true", help="skip the module warm-ups (app/<pkg>/warm*.py)")
+    ap.add_argument("--force", action="store_true",
+                    help="run the posters and every warm-up even when nothing changed since their last run")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.WARNING)
     s = get_settings()
@@ -299,10 +383,19 @@ def main(argv: list[str] | None = None) -> int:
     for r in rows:
         if CASES_BY_CLOSURE[r["id"]].starts_published and r["status"] == "published":
             finish_published(r["id"])
+    if args.force:
+        import shutil
+
+        shutil.rmtree(_marker("x").parent, ignore_errors=True)
+    stamp = warm_stamp()
     if not args.no_posters:
-        warm_posters(rows)
+        if unchanged("posters", stamp):
+            print("posters: nothing changed since their last run (--force renders them)", flush=True)
+        else:
+            warm_posters(rows)
+            mark_done("posters", stamp)
     if not args.no_warm:
-        run_warms([r["id"] for r in rows])
+        run_warms([r["id"] for r in rows], stamp)
     from app.common import state
 
     for r in rows:  # a warm-up must never publish a prepared case (D-011)

@@ -16,6 +16,7 @@ import base64
 import hashlib
 import html
 import io
+import json
 import math
 from functools import lru_cache
 from pathlib import Path
@@ -206,11 +207,26 @@ def qr_data_uri(url: str) -> str:
 # --- poster ----------------------------------------------------------------------------
 
 
+_fresh_alerts_memo: dict[str, list[Alert]] = {}
+
+
+def _fresh_alerts(closure: dict, analysis: dict) -> list[Alert]:
+    """build_alerts once per (closure, analysis) content: every poster of an unpublished closure
+    needs the same alert list, and building it costs ~0.15 s (46 hero posters in precompute)."""
+    key = hashlib.sha256(json.dumps([closure, analysis], sort_keys=True, default=str).encode()).hexdigest()
+    hit = _fresh_alerts_memo.get(key)
+    if hit is None:
+        if len(_fresh_alerts_memo) >= 8:
+            _fresh_alerts_memo.clear()
+        hit = _fresh_alerts_memo[key] = build_alerts(closure, analysis)
+    return hit
+
+
 def _stop_alert(closure: dict, analysis: dict, stop_id: str) -> Alert | None:
     """The published alert of this stop when the closure is published, else a fresh one."""
     published = state.read("published", closure["id"])
     alerts = ([Alert.model_validate(a) for a in published.get("alerts") or []] if published
-              else build_alerts(closure, analysis))
+              else _fresh_alerts(closure, analysis))
     target = f"_stop_{stop_id}"
     return next((a for a in alerts if a.id.endswith(target)), None)
 
