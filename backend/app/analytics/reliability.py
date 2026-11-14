@@ -32,7 +32,7 @@ BUNCH_SEC = 120
 MIN_TRIPS, MIN_EVENTS = 10, 30
 BOOT_N = 300
 TTL_SEC = 300
-CACHE_VERSION = 3
+CACHE_VERSION = 4
 
 WORDING = I18n(ro="Estimare din datele live, nu raportul oficial.", en="Estimate from the live data, not the official report.")
 METHOD = I18n(
@@ -58,6 +58,7 @@ CAVEAT = I18n(
 # established: the median delay of one vehicle is not the line's punctuality.
 SOLO_REASON = "un singur vehicul în datele live; eticheta cursei poate fi decalată, întârzierea nu descrie linia"
 _memo: dict = {}
+_DAY_MEMO: dict = {}
 
 
 def _share(a, n):
@@ -177,6 +178,48 @@ def _o2_trips(cov: dict) -> pd.DataFrame:
     return out
 
 
+def _day_states() -> tuple[dict[str, int], dict[str, int]]:
+    """(route -> recorded days with scheduled trips, route -> days in state `fara_vehicul`): O2's state logic
+    (`missing.detect`) over each recorded day's own recorded hours; a day with a recording below O2's health bar
+    counts as a day with trips but never as a repeat. Label on screen: „în N din M zile înregistrate”."""
+    from datetime import timedelta, timezone
+
+    from app.common.timeutil import local_midnight
+    from app.live import missing as o2
+    from app.registry import daily
+
+    days: dict[str, int] = {}
+    repeated: dict[str, int] = {}
+    today = datetime.now(TZ).date()
+    for d in daily.recorded_days():
+        key = (d, sum(p.stat().st_size for p, _h in daily._raw_files(d)))
+        if d < today and key in _DAY_MEMO:  # a past day's recording no longer changes
+            have, rep = _DAY_MEMO[key]
+            for r in have:
+                days[r] = days.get(r, 0) + 1
+            for r in rep:
+                repeated[r] = repeated.get(r, 0) + 1
+            continue
+        have, rep = set(), set()
+        d0 = local_midnight(d)
+        snaps, _ = o2.recorded(d0, d0 + timedelta(days=1))
+        if not snaps:
+            continue
+        s = datetime.fromtimestamp(snaps[0].ts, tz=timezone.utc)
+        e = datetime.fromtimestamp(snaps[-1].ts + 1, tz=timezone.utc)
+        trips, _hw = o2.scheduled_trips(gtfs.feed(s), s, e)
+        have = set(trips["route_id"]) if len(trips) else set()
+        r = o2.detect(s, e, repeat=False)
+        if r["status"] == "ok":
+            rep = {x["routeId"] for x in r["routes"] if x["state"] == "fara_vehicul"}
+        _DAY_MEMO[key] = (have, rep)
+        for rid in have:
+            days[rid] = days.get(rid, 0) + 1
+        for rid in rep:
+            repeated[rid] = repeated.get(rid, 0) + 1
+    return days, repeated
+
+
 def report() -> dict:
     hit = _memo.get("report")
     stamp = store._stamp()
@@ -198,6 +241,7 @@ def report() -> dict:
     pairs = _headway_pairs(ev)
     trips = _o2_trips(cov)
     rng = np.random.default_rng(7)
+    days_rec, days_rep = _day_states()
     routes = sorted(set(ev["route_id"]) | set(trips["route_id"]))
     lines = []
     for rid in routes:
@@ -212,7 +256,8 @@ def report() -> dict:
                         "trips": _trips(t[t["hour"] == h])})
         short, mode = names.get(rid, (rid, "other"))
         lines.append({"routeId": rid, "shortName": short, "mode": mode, "punctuality": _punct(e, rng),
-                      "headway": _head(p), "bunching": _bunch(e), "trips": _trips(t), "hours": hrs})
+                      "headway": _head(p), "bunching": _bunch(e), "trips": _trips(t), "hours": hrs,
+                      "daysRecorded": int(days_rec.get(rid, 0)), "repeatedDays": int(days_rep.get(rid, 0))})
     lines.sort(key=lambda r: (r["shortName"].zfill(4) if r["shortName"].isdigit() else r["shortName"]))
     out = {"recording": accessibility.recording_info(cov["first"], cov["last"]), "thresholds": th, "lines": lines,
            "wording": WORDING.model_dump(), "method": METHOD.model_dump(), "caveat": CAVEAT.model_dump(),

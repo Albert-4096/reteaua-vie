@@ -70,3 +70,15 @@ def test_a_single_vehicle_is_never_a_conclusive_punctuality():
     e["vehicle_id"] = [f"V{i % 3}" for i in range(len(e))]
     q = reliability._punct(e, np.random.default_rng(1))
     assert q["conclusive"] is True and q["reason"] is None
+
+
+def test_days_recorded_and_repeated_days_per_line():
+    """L6 on the real recording: line 23 has no vehicle on Saturday (O2 whole-day state `fara_vehicul`) but ran on Friday."""
+    from app.registry import daily
+
+    if len(daily.recorded_days()) < 2:
+        import pytest
+        pytest.skip("needs two recorded days")
+    days, rep = reliability._day_states()
+    assert days and all(rep.get(r, 0) <= n for r, n in days.items())
+    assert 1 <= rep.get("R_AB_23", 0) < days["R_AB_23"]

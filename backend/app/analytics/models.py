@@ -230,6 +230,8 @@ class LineReliability(Model):
     bunching: BunchingStats
     trips: TripsVsTimetable
     hours: list[HourReliability]
+    daysRecorded: int = 0               # recorded days on which the line has scheduled trips in that day's recorded hours
+    repeatedDays: int = 0               # of those, days on which O2's whole-day state for the line is `fara_vehicul`
 
 
 class Thresholds(Model):
