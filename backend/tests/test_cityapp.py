@@ -92,3 +92,26 @@ def test_tools_json_every_live_function_answers(client):
     assert client.get("/api/stops/356/status").status_code == 200
     assert client.get("/api/feed/notices.json").status_code == 200
     assert by["plan_route"]["live"]
+
+
+def test_sentence_gives_the_time_of_a_same_day_end_and_names_the_other_platform():
+    from datetime import datetime
+
+    from app.config import TZ
+    near = {"stopId": "9", "name": "Bucla", "distanceMeters": 120.0}
+    s = status.build_sentence("Bucla", "suspended", [_line("2", "no")], near, datetime(2026, 11, 8, 18, 0, tzinfo=TZ))
+    assert "până la 18:00, 8 noiembrie" in s.ro and "cealaltă stație cu același nume" in s.ro
+    assert "until 18:00, November 8" in s.en
+    assert "până la 31 decembrie" in status.build_sentence(
+        "X", "suspended", [_line("2", "no")], None, datetime(2026, 12, 31, 23, 59, 59, tzinfo=TZ)).ro
+
+
+@needs_data
+def test_a_confirmed_gap_shows_as_novehicle_on_the_stop(monkeypatch, client):
+    monkeypatch.setattr(status, "live_gap_hook", lambda r, at: {"since": "2026-11-14T06:00:00+02:00", "note": "n"}
+                        if r == "R_AB_33" else None)
+    d = client.get("/api/stops/356/status", params={"at": AT}).json()
+    gap = [ln for ln in d["lines"] if ln["stops"] == "novehicle"]
+    assert gap and gap[0]["reason"]["kind"] == "noVehicle" and gap[0]["reason"]["closureId"] is None
+    assert "Linia 33: niciun vehicul în datele live" in d["sentence"]["ro"] and "neconfirmată de STPT" in d["sentence"]["ro"]
+    assert d["liveFeed"]["status"] == "ok"

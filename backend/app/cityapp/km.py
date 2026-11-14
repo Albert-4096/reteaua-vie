@@ -8,6 +8,7 @@ last served stop before the cut and the first one after it. Km only, never money
 from __future__ import annotations
 
 import math
+import re
 import zipfile
 from collections import Counter
 from functools import lru_cache
@@ -148,7 +149,10 @@ def km_report(closure_id: str) -> dict:
     for t in closure.get("temporaryRoutes") or []:
         g = t.get("geometry")
         km = round(length_m(LineString(g["coordinates"])) / 1000.0, 1) if g else None
-        temp.append({"shortName": t["shortName"], "mode": t["mode"], "geometryKm": km, "trips": None, "kmRun": None,
+        base_name = re.sub(r"[A-Za-z]+$", "", t["shortName"])      # 4b -> 4: the line it stands in for
+        replaces = next((a["routeId"] for a in closure.get("routeActions") or []
+                         if (net.route_by_id.get(a["routeId"]) or {}).get("shortName") == base_name), None)
+        temp.append({"shortName": t["shortName"], "mode": t["mode"], "replacesRouteId": replaces, "geometryKm": km, "trips": None, "kmRun": None,
                      "note": I18n(ro="necunoscut: anunțul nu dă frecvența, deci nu putem număra cursele",
                                   en="unknown: the notice gives no frequency, so the trips cannot be counted")})
     row_text = _rows(lines, temp, walks)
@@ -179,8 +183,9 @@ def _rows(lines: list[dict], temp: list[dict], walks: list[dict]) -> list[dict]:
         w = [x for x in walks if x["shortName"] == short]
         walk_ro = f" · pe jos între capete: {max(x['minutes'] for x in w)} min" if w else ""
         walk_en = f" · on foot between the ends: {max(x['minutes'] for x in w)} min" if w else ""
-        tmp_ro = "".join(f" · {t['shortName']}: necunoscut" for t in temp)
-        tmp_en = "".join(f" · {t['shortName']}: unknown" for t in temp)
+        mine_t = [t for t in temp if t["replacesRouteId"] in {ln["routeId"] for ln in mine}]
+        tmp_ro = "".join(f" · {t['shortName']}: necunoscut" for t in mine_t)
+        tmp_en = "".join(f" · {t['shortName']}: unknown" for t in mine_t)
         out.append({"mode": mode, "shortName": short, "kmNotRun": round(km, 1), "trips": trips,
                     "text": I18n(ro=f"{MODE_RO[mode]} {short}: {trips} curse × {sec:.1f} km nefăcuți (≈ {km:.0f} km){tmp_ro}{walk_ro}".replace(".", ","),
                                  en=f"{MODE_EN[mode]} {short}: {trips} trips × {sec:.1f} km not run (≈ {km:.0f} km){tmp_en}{walk_en}")})

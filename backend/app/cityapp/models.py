@@ -9,13 +9,14 @@ from app.models.v1 import NearestServed
 
 
 class LineReason(Model):
-    kind: Literal["works"]                   # O2 adds "noVehicle" (see status.live_gap_hook)
-    closureId: str
-    title: I18n
-    action: str | None                       # rerouted | shortened | suspended | ... from the notice
-    since: IsoTime
-    until: IsoTime
-    noticeUrl: str | None                    # the STPT notice the closure was read from
+    kind: Literal["works", "noVehicle"]      # v2.25: noVehicle = a person confirmed a no-vehicle row of O2 (R4)
+    closureId: str | None = None             # null for noVehicle
+    title: I18n | None = None                # null for noVehicle
+    action: str | None = None                # rerouted | shortened | suspended | ... from the notice
+    since: IsoTime | None = None
+    until: IsoTime | None = None             # null for noVehicle
+    noticeUrl: str | None = None             # the STPT notice the closure was read from
+    note: str | None = None                  # noVehicle: the O2 note, in words
 
 
 class StopLine(Model):
@@ -23,7 +24,7 @@ class StopLine(Model):
     shortName: str
     directionId: int
     headsign: str | None
-    stops: Literal["yes", "no", "unconfirmed"]
+    stops: Literal["yes", "no", "unconfirmed", "novehicle"]   # novehicle: v2.25, see LineReason
     reason: LineReason | None                # null when the line stops
     nextDepartureAt: IsoTime | None          # from the timetable, only for lines that stop
 

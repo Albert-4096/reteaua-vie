@@ -30,10 +30,8 @@ EN_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "Au
 
 
 def live_gap_hook(route_id: str, at: datetime) -> dict | None:
-    """Return {"since": iso, "note": str} when a PERSON-CONFIRMED no-vehicle finding exists for the
-    line at `at`, else None. Nothing produces this yet: the O2 detector is not built. When O2 is
-    [READY] it exposes `app.live.missing.confirmed_gap(route_id, at)` with that return shape and this
-    function starts using it; until then the response says the check is „în lucru”, never a fake answer."""
+    """{"since": iso, "note": str} when a PERSON confirmed a no-vehicle row of O2 (R4) for the line at `at`,
+    else None: app.live.missing.confirmed_gap. Never a guess; an error there never breaks the stop answer."""
     try:
         mod = importlib.import_module("app.live.missing")
     except ImportError:
@@ -42,17 +40,21 @@ def live_gap_hook(route_id: str, at: datetime) -> dict | None:
     return fn(route_id, at) if fn else None
 
 
-def live_feed_check() -> LiveCheck:
+def live_feed_check(found: bool = False) -> LiveCheck:
     try:
         ready = hasattr(importlib.import_module("app.live.missing"), "confirmed_gap")
     except ImportError:
         ready = False
+    if ready and not found:
+        return LiveCheck(status="ok", note=I18n(
+            ro="doar constatări confirmate de un om; niciuna pentru liniile acestei stații",
+            en="only findings confirmed by a person; none for the lines at this stop"))
     if not ready:
         return LiveCheck(status="pending", note=I18n(
             ro="în lucru: verificarea „niciun vehicul al liniei în datele live” nu e încă disponibilă",
             en="in progress: the „no vehicle of the line in the live data” check is not available yet"))
-    return LiveCheck(status="ok", note=I18n(ro="verificat în datele live înregistrate",
-                                            en="checked against the recorded live data"))
+    return LiveCheck(status="ok", note=I18n(ro="constatare confirmată de o persoană, din datele live înregistrate",
+                                            en="finding confirmed by a person, from the recorded live data"))
 
 
 # --- closures active at `at` -----------------------------------------------------------------
@@ -99,7 +101,9 @@ def _timetable_day(stop_id: str, at: datetime):
 
 
 def _date(dt: datetime, months: list[str], en: bool) -> str:
-    return f"{months[dt.month - 1]} {dt.day}" if en else f"{dt.day} {months[dt.month - 1]}"
+    """„18:00, 8 noiembrie” / „18:00, November 8”; the time is left out for an end at the end of a day."""
+    day = f"{months[dt.month - 1]} {dt.day}" if en else f"{dt.day} {months[dt.month - 1]}"
+    return day if (dt.hour, dt.minute) == (23, 59) else f"{dt:%H:%M}, {day}"
 
 
 def _names(lines: list[StopLine]) -> str:
@@ -112,6 +116,18 @@ def _names(lines: list[StopLine]) -> str:
 
 
 def build_sentence(name: str, state_: str, lines: list[StopLine], nearest: dict | None, until: datetime | None) -> I18n:
+    base = _base_sentence(name, state_, lines, nearest, until)
+    gaps = [ln for ln in lines if ln.stops == "novehicle"]
+    if not gaps:
+        return base
+    ro = " ".join(f"Linia {ln.shortName}: niciun vehicul în datele live ale Primăriei din {parse_iso(ln.reason.since):%H:%M} "
+                  "(constatare confirmată de o persoană, neconfirmată de STPT)." for ln in gaps)
+    en = " ".join(f"Line {ln.shortName}: no vehicle in the City Hall live data since {parse_iso(ln.reason.since):%H:%M} "
+                  "(finding confirmed by a person, not confirmed by STPT)." for ln in gaps)
+    return I18n(ro=f"{base.ro} {ro}", en=f"{base.en} {en}")
+
+
+def _base_sentence(name: str, state_: str, lines: list[StopLine], nearest: dict | None, until: datetime | None) -> I18n:
     no = [ln for ln in lines if ln.stops == "no"]
     yes = [ln for ln in lines if ln.stops == "yes"]
     unsure = [ln for ln in lines if ln.stops == "unconfirmed"]
@@ -137,8 +153,11 @@ def build_sentence(name: str, state_: str, lines: list[StopLine], nearest: dict 
     if nearest and nearest.get("distanceMeters") is not None:
         d = int(nearest["distanceMeters"])
         if d > 0:
-            ro += f" Cea mai apropiată stație deservită: {nearest['name']}, la aproximativ {d} m pe jos."
-            en += f" Nearest served stop: {nearest['name']}, about {d} m on foot."
+            same = nearest["name"] == name     # the other platform of the same stop: say so
+            ro += (f" Cea mai apropiată stație deservită: {'cealaltă stație cu același nume' if same else nearest['name']}, "
+                   f"la aproximativ {d} m pe jos.")
+            en += (f" Nearest served stop: {'the other stop with the same name' if same else nearest['name']}, "
+                   f"about {d} m on foot.")
     return I18n(ro=ro, en=en)
 
 
@@ -214,6 +233,19 @@ def stop_status(stop_id: str, at: datetime) -> StopStatus:
             continue
         lines[(r, d)] = StopLine(routeId=r, shortName=short(r), directionId=d, headsign=None, stops="yes", reason=None,
                                  nextDepartureAt=iso(from_unix(nxt)) if nxt else None)
+    gap_cache: dict[str, dict | None] = {}
+    for ln in lines.values():
+        if ln.stops != "yes":
+            continue
+        if ln.routeId not in gap_cache:
+            try:
+                gap_cache[ln.routeId] = live_gap_hook(ln.routeId, at)
+            except Exception:                  # O2 must never break the stop answer
+                gap_cache[ln.routeId] = None
+        gap = gap_cache[ln.routeId]
+        if gap:
+            ln.stops, ln.nextDepartureAt = "novehicle", None
+            ln.reason = LineReason(kind="noVehicle", since=gap["since"], note=gap.get("note"))
     for ln in lines.values():
         if ln.headsign is None:
             p = gtfs.stop_patterns().get((ln.routeId, ln.directionId))
@@ -221,7 +253,7 @@ def stop_status(stop_id: str, at: datetime) -> StopStatus:
 
     ordered = sorted(lines.values(), key=lambda ln: (ln.stops != "no", ln.stops != "unconfirmed", ln.shortName, ln.directionId))
     any_no = any(ln.stops == "no" for ln in ordered)
-    any_yes = any(ln.stops == "yes" for ln in ordered)
+    any_yes = any(ln.stops in ("yes", "novehicle") for ln in ordered)
     if any_no:
         state_ = "partial" if any_yes else "suspended"
         if day is None:
@@ -234,5 +266,5 @@ def stop_status(stop_id: str, at: datetime) -> StopStatus:
     sentence = build_sentence(stop["name"], state_, ordered, near, max(ends) if ends else None)
     sources = [load_network().provenance, imp.current_timetable().provenance, *sources]
     return StopStatus(stopId=sid, name=stop["name"], location=stop["location"], at=iso(at), state=state_, lines=ordered,
-                      nearestServed=near, sentence=sentence, liveFeed=live_feed_check(),
+                      nearestServed=near, sentence=sentence, liveFeed=live_feed_check(any(ln.stops == "novehicle" for ln in ordered)),
                       nextStepFree=_next_step_free(sid), provenance=sources)
