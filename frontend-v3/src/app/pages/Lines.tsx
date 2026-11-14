@@ -150,7 +150,7 @@ function Line({ routeId }: { routeId: string }) {
     const l = e.lines.find((x) => x.routeId === routeId);
     if (!l || !e.recording.firstAt || !e.recording.lastAt) return [];
     const whole = hhmm(e.recording.firstAt) <= "00:01" && hhmm(e.recording.lastAt) >= "23:58";
-    return [{ date: e.date, final: e.final, span: !e.final ? "în curs" : whole ? "toată ziua" : `${hhmm(e.recording.firstAt)}–${hhmm(e.recording.lastAt)}`, seen: Math.min(l.tripsSeen, l.tripsScheduledInRecording), scheduled: l.tripsScheduledInRecording }];
+    return [{ date: e.date, final: e.final, span: !e.final ? "în curs" : whole ? "toată ziua" : `${hhmm(e.recording.firstAt)}–${hhmm(e.recording.lastAt)}`, seen: Math.min(l.tripsSeen, l.tripsScheduledInRecording), scheduled: l.tripsScheduledInRecording, vehicles: l.vehiclesSeen ?? null }];
   }), [reg.data, routeId]);
   const empty = [...days].reverse().find((d) => d.final && d.scheduled > 0 && d.seen === 0);
 
@@ -284,7 +284,10 @@ function Line({ routeId }: { routeId: string }) {
                   {d.scheduled > 0 ? (
                     <>
                       <SeenBar t={{ scheduled: d.scheduled, observed: d.seen, missed: d.scheduled - d.seen, share: d.seen / d.scheduled }} className="h-2 flex-1" />
-                      <span className={cn("tabular w-[5.5rem] shrink-0 text-right", d.seen < d.scheduled ? "font-semibold" : "text-muted-foreground")}>{fmt.format(d.seen)} din {fmt.format(d.scheduled)}</span>
+                      <span className="tabular w-24 shrink-0 whitespace-nowrap text-right">
+                        <span className={cn("block", d.seen < d.scheduled ? "font-semibold" : "text-muted-foreground")}>{fmt.format(d.seen)} din {fmt.format(d.scheduled)}</span>
+                        {d.vehicles != null && <span className="block text-xs text-muted-foreground">{d.vehicles === 0 ? "niciun vehicul" : count(d.vehicles, "vehicul", "vehicule")}</span>}
+                      </span>
                     </>
                   ) : <span className="flex-1 text-right text-muted-foreground">încă necomparat</span>}
                 </li>
@@ -296,7 +299,7 @@ function Line({ routeId }: { routeId: string }) {
               {dt(prepared.window.start)}–{hhmm(prepared.window.end)}: {recorded.tripsObserved} din {count(recorded.tripsInService, "cursă", "curse")}.
             </p>
           )}
-          {days.length > 0 && <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Pe zile: curse din orar, în orele înregistrate, la care am văzut un vehicul. Din registrul zilnic al curselor (Rapoarte).</p>}
+          {days.length > 0 && <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Pe zile: curse din orar, în orele înregistrate, la care am văzut un vehicul{days.some((d) => d.vehicles != null) ? ", și câte vehicule diferite au apărut pe linie în datele live" : ""}. Din registrul zilnic al curselor (Rapoarte).</p>}
           <p className="mt-5 text-xs text-muted-foreground">Pe ore, toate zilele înregistrate la un loc:</p>
           <div className="mt-2"><HourBars hours={m.hours} /></div>
           {trusted(m.punctuality) && (

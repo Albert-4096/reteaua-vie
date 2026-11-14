@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Check, FileText, CalendarClock, Bus, Radio, Route, QrCode, Network, MapPinned, ListChecks, Send, Eye, FileBarChart, LayoutGrid } from "lucide-react";
+import { Check, FileText, CalendarClock, Bus, Radio, Route, QrCode, Network, Send, Inbox, Construction } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Logo } from "@/landing/Logo";
 import { LineBadge } from "@/landing/LineBadge";
@@ -82,7 +82,7 @@ function Reveal({ t }: SceneProps) {
 const WIN = { x: 100, y: 128, w: 1080, side: 260, mapW: 820, mapH: 522, bar: 38 };
 
 function StepList({ active }: { active: number }) {
-  const steps: [LucideIcon, string][] = [[LayoutGrid, "Ansamblu"], [MapPinned, "Planifici"], [ListChecks, "Decizi"], [Send, "Publici"], [Eye, "Urmărești"], [FileBarChart, "Raportezi"]];
+  const steps: [LucideIcon, string][] = [[Inbox, "Azi"], [Construction, "Lucrări"], [Route, "Linii"], [FileText, "Rapoarte"]];
   return (
     <div style={{ width: WIN.side, padding: 18, borderRight: "1px solid var(--border)", height: WIN.mapH, background: "oklch(0.99 0.002 165)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22 }}>
@@ -174,10 +174,10 @@ function Plan({ t, d, g }: SceneProps) {
       <div style={{ position: "absolute", inset: 0, transformOrigin: "1160px 196px",
         transform: `scale(${1 + 0.24 * (inOut(prog(t, 7.6, 1)) * (1 - inOut(prog(t, 13.4, 0.7))) + inOut(prog(t, 14.6, 1)) * (1 - inOut(prog(t, 19.2, 0.6))))})` }}>
       <div style={{ position: "absolute", left: WIN.x, top: WIN.y, perspective: 1800 }}>
-        <AppWindow title="Planifici · lucrare nouă" style={{ width: WIN.w, opacity: out(prog(t, 0, 0.8)),
+        <AppWindow title="Lucrări · lucrare nouă" style={{ width: WIN.w, opacity: out(prog(t, 0, 0.8)),
           transform: `rotateX(${lerp(16, 0, tilt)}deg) rotateY(${lerp(-14, 0, tilt)}deg) scale(${lerp(0.9, 1, tilt)})`, transformOrigin: "50% 0" }}>
           <div style={{ display: "flex" }}>
-            <StepList active={t < 14 ? 1 : 2} />
+            <StepList active={1} />
             <div style={{ position: "relative" }}>
               <PlanMap t={t} g={g} drawAt={3.5} />
               <div style={{ position: "absolute", left: 22, bottom: 22, padding: "8px 12px", borderRadius: 10, background: "white", border: "1px solid var(--border)",

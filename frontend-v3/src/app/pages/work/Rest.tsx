@@ -5,12 +5,18 @@ import { Button } from "@/components/ui/button";
 import { LineBadge } from "@/landing/LineBadge";
 import { useApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { app, count, day, dt, fmt, hhmm, uniq, when, type ClosureSummary, type GeneratedNotice } from "../../data";
+import { app, count, day, dt, fmt, hhmm, uniq, when, type ClosureSummary, type Conflict, type GeneratedNotice } from "../../data";
 import { QrDialog } from "../../Qr";
 import { link } from "../../router";
 import { Fold, Folds, Kind, Loading, Method, Problem, Section, Stat, Tag } from "../../ui";
 
 const MEASURED = "cl_20261102_mocioni"; // the work our vehicle recording covers
+
+/** Why two works are listed together, in the words of the rule that found them. */
+const overlapWhy = (x: Conflict) =>
+  x.kind === "same_stops" ? count(x.stopIds?.length ?? 0, "stație rămâne fără serviciu din cauza amândurora", "stații rămân fără serviciu din cauza amândurora")
+  : x.kind === "same_corridor" ? "pe același coridor, la mai puțin de 300 m"
+  : `ocolirile estimate ajung pe aceleași străzi, pe unde trec ${count(x.routeIds.length, "linie", "linii")}`;
 
 /* ---------------- Perioadă: when the works hurt least ---------------- */
 export function Period({ id, c }: { id: string; c: ClosureSummary }) {
@@ -24,7 +30,7 @@ export function Period({ id, c }: { id: string; c: ClosureSummary }) {
   const rows = w.data.candidates;
   const best = rows[0];
   const max = Math.max(base, ...rows.map((r) => r.departuresLost), 1);
-  const pairs = uniq((conflicts.data ?? []).map((x) => x.otherClosureId)).map((o) => conflicts.data!.find((x) => x.otherClosureId === o)!);
+  const pairs = uniq((conflicts.data ?? []).map((x) => x.otherClosureId)).map((o) => (conflicts.data ?? []).filter((x) => x.otherClosureId === o));
 
   const Bar = ({ label, sub, value, tone }: { label: string; sub?: string; value: number; tone: "closure" | "green" | "plain" }) => (
     <li className="py-2.5">
@@ -72,12 +78,16 @@ export function Period({ id, c }: { id: string; c: ClosureSummary }) {
       {pairs.length > 0 && (
         <Section title="Se suprapune cu alte lucrări" aside={pairs.length}>
           <ul className="space-y-3">
-            {pairs.map((x) => (
-              <li key={x.otherClosureId} className="text-sm leading-snug">
-                <a {...link({ page: "lucrare", id: x.otherClosureId, tab: "impact" })} className="font-medium underline-offset-4 hover:underline">{x.otherTitle.ro}</a>
-                <span className="tabular block text-muted-foreground">{day(x.overlap.start)} – {day(x.overlap.end)} · {count(x.routeIds.length, "linie comună", "linii comune")}</span>
-              </li>
-            ))}
+            {pairs.map(([x, ...more]) => {
+              const why = [x, ...more].map(overlapWhy).join("; ");
+              return (
+                <li key={x.otherClosureId} className="text-sm leading-snug">
+                  <a {...link({ page: "lucrare", id: x.otherClosureId, tab: "impact" })} className="font-medium underline-offset-4 hover:underline">{x.otherTitle.ro}</a>
+                  <span className="tabular mt-0.5 block text-muted-foreground">În același timp: {when(x.overlap)}.</span>
+                  <span className="block text-muted-foreground">{why[0].toUpperCase() + why.slice(1)}.</span>
+                </li>
+              );
+            })}
           </ul>
         </Section>
       )}

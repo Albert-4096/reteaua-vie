@@ -1,7 +1,7 @@
 import { ExternalLink } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useApi } from "@/lib/api";
-import { app, day, fmt, hhmm } from "../data";
+import { app, count, day, fmt, hhmm } from "../data";
 import { Loading, Method, Problem, Stat, Tag, Title } from "../ui";
 
 const OBL = { covered: ["green", "Acoperit"], partial: ["neutral", "Parțial"], missing: ["closure", "Lipsește"] } as const;
@@ -15,30 +15,32 @@ export function Reports() {
   const exp = useApi(app.exports);
   const reg = useApi(app.registry);
   const by = (s: string) => comp.data?.obligations.filter((o) => o.status === s).length ?? 0;
+  const closed = (reg.data?.entries ?? []).filter((e) => e.final);
+  const total = (k: "tripsSeen" | "tripsScheduledInRecording") => closed.reduce((n, e) => n + e.lines.reduce((m, l) => m + l[k], 0), 0);
 
   return (
     <div tabIndex={0} role="region" aria-label="Rapoarte" className="h-full overflow-y-auto outline-none">
       <div className="mx-auto w-full max-w-5xl px-6 pb-24 pt-8 md:px-10">
-        <Title sub="Obligațiile de informare a călătorilor și fișierul platformei care răspunde fiecăreia. Pentru SMTT, Primărie și Punctul Național de Acces.">Rapoarte</Title>
-        {comp.error ? <div className="mt-6"><Problem>Obligațiile nu s-au încărcat ({comp.error}).</Problem></div> : comp.data && (
-          <dl className="mt-7 flex gap-12">
-            <Stat value={fmt.format(comp.data.obligations.length)} label="obligații UE și naționale" />
-            <Stat value={fmt.format(by("covered"))} label={by("covered") === 1 ? "acoperită" : "acoperite"} tone="green" />
-            <Stat value={fmt.format(by("partial"))} label="parțial" />
-            <Stat value={fmt.format(by("missing"))} label={by("missing") === 1 ? "lipsește" : "lipsesc"} tone="closure" />
-          </dl>
-        )}
+        <Title sub="Ce pleacă din platformă ca raport: registrul zilnic al curselor, obligațiile de informare a călătorilor, lucrările încheiate și fișierele publice. Pentru SMTT, Primărie și Punctul Național de Acces.">Rapoarte</Title>
 
-        <Tabs defaultValue="obl" className="mt-9">
+        <Tabs defaultValue="reg" className="mt-8">
           <TabsList>
-            <TabsTrigger value="obl">Obligații</TabsTrigger>
             <TabsTrigger value="reg">Registrul curselor</TabsTrigger>
+            <TabsTrigger value="obl">Obligații</TabsTrigger>
             <TabsTrigger value="hist">Lucrări anterioare</TabsTrigger>
             <TabsTrigger value="ind">Indicatori</TabsTrigger>
             <TabsTrigger value="files">Fișiere publice</TabsTrigger>
           </TabsList>
           <TabsContent value="obl" className="mt-4">
-            {!comp.data ? <Loading /> : (
+            {comp.error ? <Problem>Obligațiile nu s-au încărcat ({comp.error}).</Problem> : comp.data && (
+              <dl className="mb-6 mt-2 flex flex-wrap gap-x-12 gap-y-4">
+                <Stat value={fmt.format(comp.data.obligations.length)} label="obligații UE și naționale" />
+                <Stat value={fmt.format(by("covered"))} label={by("covered") === 1 ? "acoperită" : "acoperite"} tone="green" />
+                <Stat value={fmt.format(by("partial"))} label="parțial" />
+                <Stat value={fmt.format(by("missing"))} label={by("missing") === 1 ? "lipsește" : "lipsesc"} tone="closure" />
+              </dl>
+            )}
+            {comp.error ? null : !comp.data ? <Loading /> : (
               <div tabIndex={0} role="region" aria-label="Tabel, se derulează orizontal" className="overflow-x-auto rounded-xl border outline-none focus-visible:ring-2 focus-visible:ring-ring/60">
                 <table className="w-full min-w-[40rem] text-left text-sm">
                   <thead className="bg-muted/60 text-muted-foreground"><tr><th className={TH}>Act</th><th className={TH}>Cerința</th><th className={TH}>Termen</th><th className={TH}>Stare</th></tr></thead>
@@ -60,6 +62,11 @@ export function Reports() {
             )}
           </TabsContent>
           <TabsContent value="reg" className="mt-4">
+            {closed.length > 0 && (
+              <p className="mb-5 mt-1 max-w-3xl text-[1.05rem] font-medium leading-snug">
+                {closed.length === 1 ? "Într-o zi închisă" : `În ${closed.length} zile închise`}, <span className="tabular">{fmt.format(total("tripsSeen"))} din {count(total("tripsScheduledInRecording"), "cursă", "curse")}</span> din orar au fost văzute în datele live.
+              </p>
+            )}
             {reg.error ? <Problem>Registrul nu s-a încărcat ({reg.error}).</Problem> : !reg.data ? <Loading /> : (
               <div tabIndex={0} role="region" aria-label="Tabel, se derulează orizontal" className="overflow-x-auto rounded-xl border outline-none focus-visible:ring-2 focus-visible:ring-ring/60">
                 <table className="w-full min-w-[40rem] text-left text-sm">
@@ -72,9 +79,9 @@ export function Reports() {
                         <tr key={e.date}>
                           <td className="px-4 py-3 font-medium">{day(e.date)}</td>
                           <td className="px-4 py-3 text-muted-foreground">{e.recording.firstAt && e.recording.lastAt ? `${hhmm(e.recording.firstAt)}–${hhmm(e.recording.lastAt)}` : "–"}</td>
-                          <td className="px-4 py-3 text-right font-semibold">{fmt.format(seen)}</td>
-                          <td className="px-4 py-3 text-right">{fmt.format(sched)}</td>
-                          <td className="px-4 py-3 text-right">{fmt.format(Math.round(km))}</td>
+                          <td className="px-4 py-3 text-right font-semibold">{sched === 0 && !e.final ? "–" : fmt.format(seen)}</td>
+                          <td className="px-4 py-3 text-right">{sched === 0 && !e.final ? "–" : fmt.format(sched)}</td>
+                          <td className="px-4 py-3 text-right">{sched === 0 && !e.final ? "–" : fmt.format(Math.round(km))}</td>
                           <td className="px-4 py-3">{e.final ? <Tag tone="green">Închisă</Tag> : <Tag>În curs</Tag>} <span className="ml-1 font-mono text-xs text-muted-foreground" title={`lanț: ${e.chainHash}`}>{e.chainHash.slice(0, 10)}</span></td>
                         </tr>
                       );

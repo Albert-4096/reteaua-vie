@@ -13,7 +13,7 @@ import { answerOf } from "./Work";
 const coords = (c: ClosureSummary): Position[] => (!c.geometry ? [] : c.geometry.type === "LineString" ? c.geometry.coordinates : c.geometry.coordinates.flat());
 
 /** `check`: a signal a person should look at, not yet a confirmed task (an off-route run may be a depot run). */
-type Task = { key: string; lead: React.ReactNode; title: string; detail: string; owner: string; action: string; to: Route; closureId?: string; check?: boolean };
+type Task = { key: string; lead: React.ReactNode; title: string; detail: string; numbers?: string; owner: string; action: string; to: Route; closureId?: string; check?: boolean };
 
 /**
  * The first screen of the day: what waits for a person, then the network as it is right now.
@@ -46,7 +46,7 @@ export function Today() {
       const lead = <span className="grid size-9 place-items-center rounded-md bg-closure-soft text-closure-ink"><Construction className="size-[18px]" strokeWidth={1.8} /></span>;
       return open > 0
         ? { key: c.id, lead, title: open === 1 ? "O întrebare despre stații" : `${open} întrebări despre stații`, detail: place(c.title.ro), owner: "Primărie · mobilitate", action: "Răspunde", to: { page: "lucrare", id: c.id, tab: "impact" }, closureId: c.id }
-        : { key: c.id, lead, title: "Anunț gata, nepublicat", detail: place(c.title.ro), owner: "STPT · informare călători", action: "Deschide", to: { page: "lucrare", id: c.id, tab: "anunt" }, closureId: c.id };
+        : { key: c.id, lead, title: "Lucrare analizată, nepublicată", detail: place(c.title.ro), numbers: `${c.stopsSuspended > 0 ? `${count(c.stopsSuspended, "stație fără serviciu", "stații fără serviciu")} · ` : ""}${fmt.format(c.departuresLost)} plecări pierdute`, owner: "STPT · informare călători", action: "Deschide", to: { page: "lucrare", id: c.id, tab: "impact" }, closureId: c.id };
     }),
     ...noVehicle.map((r): Task => ({
       key: r.routeId, lead: <LineBadge routeId={r.routeId} label={r.shortName} size="lg" />,
@@ -97,14 +97,22 @@ export function Today() {
             {tasks.map((t) => (
               <li key={t.key}>
                 <a {...link(t.to)} onPointerEnter={() => setHover(t.closureId ?? null)} onPointerLeave={() => setHover(null)}
-                  className="group flex items-center gap-3 rounded-lg px-2 py-2.5 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
-                  {t.lead}
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-medium leading-snug">{t.title}</span>
-                    <span className="tabular line-clamp-2 text-sm leading-snug text-muted-foreground">{t.detail}</span>
-                    <span className="block text-xs text-muted-foreground">{t.check && <span className="font-medium text-foreground/80">de verificat · </span>}{t.owner}</span>
+                  className="group block rounded-lg px-2 py-2.5 outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
+                  <span className="flex items-center gap-3">
+                    {t.lead}
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-medium leading-snug">{t.title}</span>
+                      <span className="tabular line-clamp-2 text-sm leading-snug text-muted-foreground">{t.detail}</span>
+                      {!t.numbers && <span className="block text-xs text-muted-foreground">{t.check && <span className="font-medium text-foreground/80">de verificat · </span>}{t.owner}</span>}
+                    </span>
+                    <span className="inline-flex h-8 shrink-0 items-center gap-1 rounded-md border bg-card px-2.5 text-sm font-medium transition-colors group-hover:border-foreground/30">{t.action} <ArrowRight className="size-3.5" /></span>
                   </span>
-                  <span className="inline-flex h-8 shrink-0 items-center gap-1 rounded-md border bg-card px-2.5 text-sm font-medium transition-colors group-hover:border-foreground/30">{t.action} <ArrowRight className="size-3.5" /></span>
+                  {t.numbers && (
+                    <span className="mt-1 block pl-12">
+                      <span className="tabular block text-sm leading-snug text-foreground/80">{t.numbers}</span>
+                      <span className="block text-xs text-muted-foreground">{t.owner}</span>
+                    </span>
+                  )}
                 </a>
               </li>
             ))}

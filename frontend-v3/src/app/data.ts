@@ -64,7 +64,8 @@ export type GeneratedNotice = { status: "draft" | "final" | string; unsureCount:
 
 export type WindowCandidate = { window: Window; departuresLost: number; rank: number; conflicts: number };
 export type Windows = { candidates: WindowCandidate[]; baselineDeparturesLost: number; method: I18n; searchFrom: string; searchTo: string; hours: number };
-export type Conflict = { closureId: string; otherClosureId: string; otherTitle: I18n; overlap: Window; kind: string; routeIds: string[] };
+/** `routeIds` is not "lines in common": for `same_corridor` it is the lines of both works, for `shared_detour` the lines on the shared streets. */
+export type Conflict = { closureId: string; otherClosureId: string; otherTitle: I18n; overlap: Window; kind: "same_stops" | "same_corridor" | "shared_detour" | string; stopIds?: string[]; routeIds: string[] };
 export type Notice = { id: string; zoneName: string; title: I18n; body: I18n; stopIds: string[]; routeIds: string[]; publishedAt: string | null };
 export type ExportFile = { name: string; format: string; standard: string; url: string; updatedAt: string | null };
 export type Alert = { id: string; closureId: string; effect: string; headerText: I18n; descriptionText: I18n; informedEntity: { routeId?: string; stopId?: string }[] };
@@ -105,7 +106,7 @@ export type DetourCost = {
   totals: { measuredVsPlanned: Sec; estimateError: Sec } | null;
 };
 export type MeasuredWindows = { status: string; label: I18n; note: I18n | null; candidates: { window: Window; rank: number }[] };
-export type Registry = { entries: { date: string; final: boolean; chainHash: string; recording: { firstAt: string | null; lastAt: string | null; healthyShare: number | null }; lines: { routeId: string; tripsScheduledInRecording: number; tripsSeen: number; kmEstimated: number | null }[] }[] };
+export type Registry = { entries: { date: string; final: boolean; chainHash: string; recording: { firstAt: string | null; lastAt: string | null; healthyShare: number | null }; lines: { routeId: string; tripsScheduledInRecording: number; tripsSeen: number; vehiclesSeen?: number | null; kmEstimated: number | null }[] }[] };
 
 export type LineStatus = { routeId: string; shortName: string; mode: string; state: string; label: I18n; closureId: string | null; closureTitle: I18n | null };
 export type LiveVehicle = { vehicleId: string; routeId: string; directionId: 0 | 1 | null; stopId: string | null; status: string | null; delaySec: number | null; headsign: string | null; updatedAt: string };
