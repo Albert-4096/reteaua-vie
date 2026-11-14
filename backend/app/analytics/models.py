@@ -333,3 +333,64 @@ class StandingResponse(Model):
     method: I18n
     caveat: I18n
     provenance: list[Provenance]
+
+
+# --- R23: cut-through neighbourhood streets ----------------------------------------------------
+
+
+class StandingEvidence(Model):
+    minutes: float                      # vehicle-minutes standing within 60 m (L4 cells, top 300 only)
+    cells: int
+    label: I18n                         # „din N ore înregistrate (…); date de sprijin, nu dovadă”
+
+
+class CutThroughStreet(Model):
+    rank: int
+    name: str | None
+    roadClass: str | None               # OSM highway of the way the edge runs on; null = „necunoscut”
+    neighbourhood: bool                 # residential or living_street: „stradă de cartier”
+    residentsAlong: int                 # GHSL residents in cells within 50 m (a model, not a census)
+    lines: list[str]                    # short names of the lines that run on it
+    changePct: float                    # change of the street's structural load (detour-load), not traffic
+    geometry: dict                      # GeoJSON LineString, WGS84
+    standing: StandingEvidence | None
+
+
+class CutThrough(Model):
+    closureId: str
+    streets: list[CutThroughStreet]     # same order as the detour-load edges
+    neighbourhoodStreets: int
+    residentsAlongNeighbourhood: int
+    label: I18n                         # network structure, not traffic volumes
+    commission: I18n                    # „acces riverani + semnalizarea ocolirii oficiale”: a proposal, not a decision
+    method: I18n
+    provenance: list[Provenance]
+
+
+# --- R24: works balance ------------------------------------------------------------------------
+
+
+class BalanceFigure(Model):
+    id: str
+    label: I18n
+    planned: str | None                 # what was planned, in words, with its source
+    measured: str | None                # what the recording shows; null = „necunoscut”
+    value: float | None
+    n: int | None
+    conclusive: bool | None             # false = „neconcludent”
+    window: I18n | None                 # the recording window label
+    source: str
+    detail: dict | None = None
+
+
+class WorksBalance(Model):
+    closureId: str
+    title: I18n
+    windowStart: IsoTime
+    windowEnd: IsoTime
+    windowEnded: bool                   # the row is final only after the window ends
+    recording: Recording
+    figures: list[BalanceFigure]
+    wording: I18n
+    caveat: I18n
+    provenance: list[Provenance]

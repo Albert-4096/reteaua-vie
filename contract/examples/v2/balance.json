@@ -1,0 +1,152 @@
+{
+ "closureId": "cl_20261102_mocioni",
+ "title": {
+  "ro": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+  "en": "Works at 16 Decembrie 1989 Blvd – Mocioni Sq, metropolitan lines diverted"
+ },
+ "windowStart": "2026-11-02T00:00:00+02:00",
+ "windowEnd": "2026-12-31T23:59:59+02:00",
+ "windowEnded": false,
+ "recording": {
+  "from": "2026-11-13T13:47:57+02:00",
+  "to": "2026-11-14T12:59:56+02:00",
+  "hours": 23,
+  "label": {
+   "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+   "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+  }
+ },
+ "figures": [
+  {
+   "id": "stops",
+   "label": {
+    "ro": "Stații suspendate: planificat față de măsurat",
+    "en": "Suspended stops: planned vs measured"
+   },
+   "planned": "27 stații-linie suspendate în anunț (GTFS SMTT + anunț STPT)",
+   "measured": "193 treceri au sărit stația, 0 au oprit totuși, 53 necunoscute (din 193 judecate)",
+   "value": 1.0,
+   "n": 193,
+   "conclusive": true,
+   "window": {
+    "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+    "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+   },
+   "source": "verificarea în date live (app.live.check)",
+   "detail": {
+    "skipped": 193,
+    "servedAnyway": 0,
+    "unknown": 53,
+    "vehiclesSeen": 11
+   }
+  },
+  {
+   "id": "spillover",
+   "label": {
+    "ro": "Ocolire: întârziere pe străzile ocolirii față de restul rețelei",
+    "en": "Detour streets vs the rest of the network"
+   },
+   "planned": "străzi din lista de ocolire (M4)",
+   "measured": "întârziere medie 320 s pe străzile ocolirii, 343 s în rest",
+   "value": -23.2,
+   "n": 5825,
+   "conclusive": true,
+   "window": {
+    "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+    "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+   },
+   "source": "M4 spillover (delaySec din înregistrare)",
+   "detail": {
+    "meanDelaySecOnEdges": 319.7,
+    "meanDelaySecNetwork": 342.9,
+    "onEdges": 5825,
+    "network": 288921
+   }
+  },
+  {
+   "id": "sesizari",
+   "label": {
+    "ro": "Sesizări în fereastră față de cele 7 zile dinainte",
+    "en": "Reports during the window vs the 7 days before"
+   },
+   "planned": "7 zile înainte de lucrare",
+   "measured": null,
+   "value": null,
+   "n": null,
+   "conclusive": null,
+   "window": {
+    "ro": "din 85 ore înregistrate (mie. 00:00 → sâm. 12:53)",
+    "en": "from 85 recorded hours (Wed 00:00 → Sat 12:53)"
+   },
+   "source": "sesizări, înregistrarea noastră (app.live.reports); fără acoperire pentru una din perioade",
+   "detail": {
+    "duringReports": null,
+    "beforeReports": null
+   }
+  },
+  {
+   "id": "o2",
+   "label": {
+    "ro": "Curse fără vehicul în datele live, pe liniile afectate",
+    "en": "Trips with no vehicle in the live data, on affected lines"
+   },
+   "planned": "120 curse planificate și judecate pe 6 linii",
+   "measured": "0 fără vehicul în datele live (nu „neefectuate”), 120 observate",
+   "value": 0.0,
+   "n": 120,
+   "conclusive": true,
+   "window": {
+    "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+    "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+   },
+   "source": "O2 (app.live.missing)",
+   "detail": {
+    "observed": 120,
+    "missed": 0,
+    "unknown": 0
+   }
+  },
+  {
+   "id": "l3",
+   "label": {
+    "ro": "Punctualitatea liniilor afectate",
+    "en": "Punctuality of the affected lines"
+   },
+   "planned": null,
+   "measured": "62% dintre opririle observate la timp (−60..+300 s), pe 6 linii",
+   "value": 0.617,
+   "n": 1148,
+   "conclusive": true,
+   "window": {
+    "ro": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)",
+    "en": "from 23 recorded hours (Fri 13:47 → Sat 12:59)"
+   },
+   "source": "L3 (app.analytics.reliability)",
+   "detail": null
+  }
+ ],
+ "wording": {
+  "ro": "Estimare din datele live, nu raportul oficial. Ce s-a măsurat în fereastra înregistrată, nu tot ce s-a întâmplat.",
+  "en": "Estimate from the live data, not the official report."
+ },
+ "caveat": {
+  "ro": "Cifrele acoperă doar fereastra înregistrată (vineri după-amiază și weekend), nu toată perioada lucrării. Nu atribuie vina nimănui; SMTT decide eventualele excepții.",
+  "en": "Figures cover only the recorded window, not the whole works period."
+ },
+ "provenance": [
+  {
+   "source": "CityApp vehicule live, înregistrarea noastră / live vehicles, our recording (undocumented API)",
+   "url": "https://cont.primariatm.ro/api/mobile/transit/vehicles",
+   "version": null,
+   "fetchedAt": "2026-11-14T12:59:56+02:00",
+   "note": "din 23 ore înregistrate (vin. 13:47 → sâm. 12:59); bilanț lucrare"
+  },
+  {
+   "source": "SMTT GTFS (orar planificat / planned timetable)",
+   "url": "https://smtt.ro",
+   "version": "4.31",
+   "fetchedAt": "2026-11-13T13:52:51+02:00",
+   "note": "sha256 8905216072b3"
+  }
+ ]
+}

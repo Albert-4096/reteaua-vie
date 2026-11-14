@@ -23,3 +23,18 @@ def warm(closure_ids: list[str]) -> None:
             fn()
         except Exception:  # L0 may not be built yet
             log.exception("analytics warm-up failed for %s", name)
+    from app.analytics import balance, cutthrough
+    from app.analytics.models import WorksBalance
+    from app.common import jobs
+    from app.m7_compliance.datex import published_closures
+
+    for pc in published_closures(active_only=False):
+        try:
+            cid = pc.closure["id"]
+            jobs.compute_and_cache(cutthrough.job_key(cid), lambda cid=cid: cutthrough.build(cid))
+        except Exception:
+            log.exception("analytics warm-up failed for cut-through %s", pc.closure.get("id"))
+        try:
+            jobs.compute_and_cache(balance.job_key(cid), lambda cid=cid: WorksBalance.model_validate(balance.balance(cid)))
+        except Exception:
+            log.exception("analytics warm-up failed for balance %s", pc.closure.get("id"))

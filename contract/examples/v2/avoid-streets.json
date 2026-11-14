@@ -1,0 +1,261 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.215484,
+      45.745798
+     ],
+     [
+      21.2150925,
+      45.7454055
+     ],
+     [
+      21.2149226,
+      45.7452352
+     ],
+     [
+      21.2144026,
+      45.7447138
+     ],
+     [
+      21.2143073,
+      45.7446184
+     ],
+     [
+      21.214102,
+      45.7443665
+     ],
+     [
+      21.2139978,
+      45.7442574
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "closure",
+    "closureId": "cl_20261102_mocioni",
+    "title": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+    "start": "2026-11-02T00:00:00+02:00",
+    "end": "2026-12-31T23:59:59+02:00",
+    "officialDetour": null
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.2140681,
+      45.7442068
+     ],
+     [
+      21.2142037,
+      45.7443554
+     ],
+     [
+      21.214371,
+      45.7445259
+     ],
+     [
+      21.2144677,
+      45.7446305
+     ],
+     [
+      21.2148744,
+      45.7450434
+     ],
+     [
+      21.2153563,
+      45.7455306
+     ],
+     [
+      21.2155696,
+      45.7457285
+     ],
+     [
+      21.2159936,
+      45.7461613
+     ],
+     [
+      21.2160149,
+      45.7461869
+     ],
+     [
+      21.2160615,
+      45.7462414
+     ],
+     [
+      21.216091,
+      45.7462888
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "closure",
+    "closureId": "cl_20261102_mocioni",
+    "title": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+    "start": "2026-11-02T00:00:00+02:00",
+    "end": "2026-12-31T23:59:59+02:00",
+    "officialDetour": null
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.2161947,
+      45.7464053
+     ],
+     [
+      21.2163387,
+      45.7465094
+     ],
+     [
+      21.2164709,
+      45.7466204
+     ],
+     [
+      21.2166449,
+      45.7467582
+     ],
+     [
+      21.2172903,
+      45.7474061
+     ],
+     [
+      21.2177432,
+      45.7478456
+     ],
+     [
+      21.2179003,
+      45.7479709
+     ],
+     [
+      21.2180283,
+      45.7480514
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "closure",
+    "closureId": "cl_20261102_mocioni",
+    "title": "Lucrări Bd. 16 Decembrie 1989 – Piața Mocioni, linii metropolitane deviate",
+    "start": "2026-11-02T00:00:00+02:00",
+    "end": "2026-12-31T23:59:59+02:00",
+    "officialDetour": null
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.1923964,
+      45.7389167
+     ],
+     [
+      21.192265,
+      45.7388407
+     ],
+     [
+      21.192008,
+      45.7386734
+     ],
+     [
+      21.1913091,
+      45.738214
+     ],
+     [
+      21.1908172,
+      45.7379089
+     ],
+     [
+      21.1900552,
+      45.7374276
+     ],
+     [
+      21.1898559,
+      45.7373016
+     ],
+     [
+      21.1892513,
+      45.7369048
+     ],
+     [
+      21.1886691,
+      45.736535
+     ],
+     [
+      21.1885168,
+      45.7364389
+     ],
+     [
+      21.1880041,
+      45.7361147
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "closure",
+    "closureId": "cl_20261107_e3",
+    "title": "Str. Ardealului închisă, linia E3 deviată",
+    "start": "2026-11-07T04:00:00+02:00",
+    "end": "2026-11-13T00:00:00+02:00",
+    "officialDetour": null
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      21.1897027,
+      45.7322327
+     ],
+     [
+      21.1896255,
+      45.7322935
+     ],
+     [
+      21.1895854,
+      45.732325
+     ],
+     [
+      21.1882473,
+      45.7333779
+     ],
+     [
+      21.1863448,
+      45.7348751
+     ],
+     [
+      21.1862114,
+      45.73498
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "avoid",
+    "closureId": "cl_20261107_e3",
+    "name": "Strada Corneliu Baba",
+    "roadClass": "residential",
+    "residentsAlong": 294,
+    "reason": "stradă de cartier pe lista de ocolire (structură de rețea, nu trafic măsurat)"
+   }
+  }
+ ],
+ "properties": {
+  "kind": "Feature properties: closure {closureId,title,start,end,officialDetour}; avoid {closureId,name,roadClass,residentsAlong,reason}. Coordinates [lon, lat] (RFC 7946).",
+  "label": "pot citi: format după specificația CIFS, de verificat; nu știm ca vreo aplicație să-l consume"
+ }
+}

@@ -9,6 +9,7 @@ summed over the recording. L4 = recorded reports of a vehicle standing still bet
 from __future__ import annotations
 
 import time
+from datetime import date
 from collections import defaultdict
 
 import numpy as np
@@ -64,17 +65,34 @@ def _cached(key, fn):
     return out
 
 
+def pinned_day() -> tuple[gtfs.Feed, date]:
+    """The feed and the service day the recording starts on (Fri 13 Nov, 4.31), never the app clock: neither
+    DEMO_NOW nor the switch to feed 4.32 on 16 Nov changes departures per day. Falls back to the first weekday
+    with departures in the feed in force when there is no recording."""
+    cov = store.coverage()
+    if cov is None:
+        d = reference_date("weekday")
+        return gtfs.feed(d), d
+    d = cov["first"].astimezone(TZ).date()
+    f = gtfs.feed(d)
+    return f, d
+
+
+def day_counts(f: gtfs.Feed, d) -> dict:
+    """{(stop_id, route_id, direction_id): scheduled departures on service day d} from feed f."""
+    idx = gtfs._index(f.sha256)
+    day = idx[idx["service_date"] == int(d.strftime("%Y%m%d"))]
+    g = day.groupby([day["stop_id"].astype(str), day["route_id"].astype(str), day["direction_id"].astype(int)]).size()
+    return {(s, r, int(k)): int(n) for (s, r, k), n in g.items()}
+
+
 def _sections() -> tuple[dict, dict, str]:
     """({(a, b): {lines, dep}}, stop info, reference date) from the trip patterns and one service day."""
-    from datetime import datetime, timedelta
-
-    d = reference_date("weekday")
-    f = gtfs.feed(d)
-    start = datetime(d.year, d.month, d.day, tzinfo=TZ)
-    counts = gtfs.count_by_key(start, start + timedelta(days=1))
+    f, d = pinned_day()
+    counts = day_counts(f, d)
     names = accessibility._route_names()
     out: dict[tuple[str, str], dict] = defaultdict(lambda: {"routes": set(), "dep": 0})
-    for p in gtfs.stop_patterns().values():
+    for p in gtfs._patterns(f.sha256).values():
         for a, b in zip(p.stop_ids, p.stop_ids[1:]):
             s = out[(a, b)]
             s["routes"].add(p.route_id)
@@ -168,12 +186,10 @@ def _standing() -> dict:
     cand["cy"] = (cand["y"] // CELL_M).astype(int)
     cand["hour"] = pd.to_datetime(cand["t"], unit="s", utc=True).dt.tz_convert(TZ).dt.hour
     cand["day"] = pd.to_datetime(cand["t"], unit="s", utc=True).dt.tz_convert(TZ).dt.date
-    d = reference_date("weekday")
-    from datetime import datetime, timedelta
-    start = datetime(d.year, d.month, d.day, tzinfo=TZ)
-    counts = gtfs.count_by_key(start, start + timedelta(days=1))
+    f, d = pinned_day()
+    counts = day_counts(f, d)
     dep_route: dict[str, int] = defaultdict(int)
-    for p in gtfs.stop_patterns().values():
+    for p in gtfs._patterns(f.sha256).values():
         dep_route[p.route_id] += counts.get((p.stop_ids[0], p.route_id, p.direction_id), 0)
     names = accessibility._route_names()
     sig = crossings.signals()

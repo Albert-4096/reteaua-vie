@@ -21,6 +21,7 @@ from app.m1_disruption.notice_text import GeneratedNotice
 from app.m1_disruption.streets import StreetSearch, StreetSection
 from app.observed.models import DetourCost, ObservedSummary
 from app.analytics.models import (
+    CutThrough, WorksBalance,
     AccessibilityLines, CorridorsResponse, CoverageSummary, CriticalStreetsResponse, ReliabilityResponse,
     StandingResponse, StopAccessibility, VehicleHealthResponse)
 
@@ -87,6 +88,10 @@ MODELS: dict[str, object] = {
     "v2/reliability-vehicles.json": VehicleHealthResponse,  # v2.27 (L3 / A1, real response, 3 vehicles)
     "v2/streets-critical.json": CriticalStreetsResponse,  # v2.27 (R8, real response, 3 sections)
     "v2/layer-streets.json": m.LayerCollection,  # v2.27 (R8, real response, 3 features)
+    "v2/cut-through.json": CutThrough,  # v2.30 (R23, real response of the E3 closure)
+    "v2/balance.json": WorksBalance,  # v2.30 (R24, real response of Mocioni)
+    "v2/waze-cifs.json": dict,  # v2.30 (R23, real response; checked by test_analytics_cutthrough)
+    "v2/avoid-streets.json": dict,  # v2.30 (R23, real response)
     "v2/standing.json": StandingResponse,  # v2.27 (L4, real response, 3 points)
     "v2/corridors.json": CorridorsResponse,  # v2.20 (A8, real response, 2 corridors, 4 hours each)
     "v2/lines-status.json": LinesStatus,  # v2.18 (R2, real response of ?since=: hero closure published)
