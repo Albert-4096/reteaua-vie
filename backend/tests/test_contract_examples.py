@@ -9,7 +9,9 @@ import pytest
 from pydantic import TypeAdapter
 
 from app import models as m
+from app.city_reports.models import AreaReports, RoadIssues
 from app.dataquality.models import DataQuality
+from app.m1_disruption.events import EventConflicts
 from app.feedcheck.models import FeedCheck, FeedDiff
 from app.cityapp.models import StopStatus
 from app.models.lines_status import LinesStatus
@@ -36,6 +38,11 @@ MODELS: dict[str, object] = {
     "v2/health.json": m.Health,
     "v2/scans.json": m.ScanCounts,
     "v2/data-quality.json": DataQuality,
+    "v2/event-conflicts.json": EventConflicts,
+    "v2/reports-zones.json": AreaReports,
+    "v2/reports-stops.json": AreaReports,
+    "v2/road-issues.json": RoadIssues,
+    "v2/layer-road-issues.json": m.LayerCollection,
     "v2/feed-diff.json": FeedDiff,
     "v2/feed-check.json": FeedCheck,
     "v2/closure-summary.json": list[m.ClosureSummary],

@@ -1,0 +1,77 @@
+{
+    "kind": "zones",
+    "categories": [
+        "Transport în comun",
+        "Trafic rutier și semne de circulație",
+        "Străzi și trotuare"
+    ],
+    "radiusMeters": null,
+    "departuresDay": "2026-11-11",
+    "recorded": {
+        "start": "2026-11-11T00:00:00+02:00",
+        "end": "2026-11-14T12:53:00+02:00"
+    },
+    "reportsRecorded": 111,
+    "rows": [
+        {
+            "id": "cetate",
+            "name": "Cetate",
+            "total": 7,
+            "open": 7,
+            "resolved": 0,
+            "resolvedShare": 0.0,
+            "oldestOpenAt": "2026-11-11T18:52:18+02:00",
+            "distinctProblems": 6,
+            "departuresPerDay": 6658,
+            "location": null
+        },
+        {
+            "id": "calea-sagului",
+            "name": "Calea Șagului",
+            "total": 8,
+            "open": 7,
+            "resolved": 1,
+            "resolvedShare": 0.125,
+            "oldestOpenAt": "2026-11-11T15:57:02+02:00",
+            "distinctProblems": 8,
+            "departuresPerDay": 2543,
+            "location": null
+        },
+        {
+            "id": "freidorf",
+            "name": "Freidorf",
+            "total": 8,
+            "open": 7,
+            "resolved": 1,
+            "resolvedShare": 0.125,
+            "oldestOpenAt": "2026-11-11T15:24:19+02:00",
+            "distinctProblems": 8,
+            "departuresPerDay": 1427,
+            "location": null
+        }
+    ],
+    "label": {
+        "ro": "sesizări înregistrate de noi, ultimele 2 zile",
+        "en": "reports recorded by us, last 2 days"
+    },
+    "note": {
+        "ro": "Doar numere și vârste, fără text, nume sau fotografii. Starea este cea de la ultima înregistrare a sesizării (interogăm doar ultimele 2 zile), deci „deschise” poate fi mai mare decât în realitate; vârsta cea mai mare este limitată de începutul înregistrării noastre. Nu spune ce a rezolvat sau nu Primăria.",
+        "en": "Counts and ages only, no text, names or photos. Status is as of the last poll that held the report (we ask for the last 2 days only), so „open” may overstate; the oldest age is bounded by when our recording started."
+    },
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, sesizări publice (înregistrarea noastră) / public reports, our recording",
+            "url": "https://sesizari.primariatm.ro/api/sesizari",
+            "version": null,
+            "fetchedAt": "2026-11-14T12:53:00+02:00",
+            "note": "doar numărate; fără text, nume, fotografii sau puncte"
+        },
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        }
+    ]
+}

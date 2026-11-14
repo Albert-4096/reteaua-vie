@@ -1,0 +1,141 @@
+{
+    "type": "FeatureCollection",
+    "layer": "road_issues",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        21.208098,
+                        45.750431
+                    ],
+                    [
+                        21.20853,
+                        45.750514
+                    ],
+                    [
+                        21.209917,
+                        45.750748
+                    ],
+                    [
+                        21.211843,
+                        45.751036
+                    ],
+                    [
+                        21.215928,
+                        45.751683
+                    ],
+                    [
+                        21.216469,
+                        45.751772
+                    ],
+                    [
+                        21.216836,
+                        45.751859
+                    ]
+                ]
+            },
+            "properties": {
+                "segmentId": "128-130",
+                "fromStopId": "128",
+                "fromName": "Gara de Nord",
+                "toStopId": "130",
+                "toName": "Pasaj Jiul",
+                "routeIds": [
+                    "R_AB_E3",
+                    "R_TB_11",
+                    "R_TB_14",
+                    "R_TB_18",
+                    "R_TB_M11",
+                    "R_TB_M14"
+                ],
+                "potholes": 1,
+                "departuresPerDay": 275,
+                "lengthMeters": 698
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        21.208928,
+                        45.733105
+                    ],
+                    [
+                        21.208985,
+                        45.733573
+                    ],
+                    [
+                        21.209258,
+                        45.735136
+                    ],
+                    [
+                        21.209564,
+                        45.736886
+                    ],
+                    [
+                        21.209908,
+                        45.738647
+                    ],
+                    [
+                        21.209992,
+                        45.738913
+                    ],
+                    [
+                        21.210019,
+                        45.739041
+                    ],
+                    [
+                        21.2101,
+                        45.739253
+                    ],
+                    [
+                        21.210207,
+                        45.73944
+                    ],
+                    [
+                        21.210383,
+                        45.739668
+                    ]
+                ]
+            },
+            "properties": {
+                "segmentId": "269-352",
+                "fromStopId": "269",
+                "fromName": "Calea Șagului (Bd. L. Rebreanu)",
+                "toStopId": "352",
+                "toName": "Piața Iuliu Maniu (16 Decembrie 1989)",
+                "routeIds": [
+                    "R_AB_33",
+                    "R_AB_33B",
+                    "R_AB_E1",
+                    "R_AB_E8",
+                    "R_AB_M32"
+                ],
+                "potholes": 1,
+                "departuresPerDay": 270,
+                "lengthMeters": 741
+            }
+        }
+    ],
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, sesizări publice (înregistrarea noastră) / public reports, our recording",
+            "url": "https://sesizari.primariatm.ro/api/sesizari",
+            "version": null,
+            "fetchedAt": "2026-11-14T12:53:00+02:00",
+            "note": "doar numărate; fără text, nume, fotografii sau puncte"
+        },
+        {
+            "source": "SMTT GTFS (orar planificat / planned timetable)",
+            "url": "https://smtt.ro",
+            "version": "4.31",
+            "fetchedAt": "2026-11-13T13:52:51+02:00",
+            "note": "sha256 8905216072b3"
+        }
+    ]
+}

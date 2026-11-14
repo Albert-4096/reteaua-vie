@@ -1,0 +1,146 @@
+{
+    "closureId": "cl_20261108_16dec",
+    "window": {
+        "start": "2026-11-08T10:00:00+02:00",
+        "end": "2026-11-08T18:00:00+02:00"
+    },
+    "walkMeters": 400,
+    "events": [
+        {
+            "id": "01b9e743-103e-4edf-8de9-41615e48afdb",
+            "title": ",,Miniaturi”",
+            "category": "Expoziție",
+            "venue": "Galeria Rotonda - Casa de Cultură a Municipiului Timișoara",
+            "url": "https://www.facebook.com/casadeculturaamunicipiuluitimisoara/",
+            "dateStart": "2026-11-05T00:00:00+02:00",
+            "dateEnd": "2026-11-30T23:59:59+02:00",
+            "ongoing": true,
+            "overlap": {
+                "start": "2026-11-08T10:00:00+02:00",
+                "end": "2026-11-08T18:00:00+02:00"
+            },
+            "nearest": {
+                "kind": "closure",
+                "stopId": null,
+                "stopName": null,
+                "meters": 55
+            }
+        },
+        {
+            "id": "a45b9cdf-9d4d-4d51-b4b6-669cd96d22af",
+            "title": "Design, instalații | Cornel Radulea",
+            "category": "Expoziție",
+            "venue": "Galeria Helios",
+            "url": "https://centruldeproiecte.ro/proiecte/design-instalatii-expozitie-personala-corneliu-radulea/",
+            "dateStart": "2026-11-03T00:00:00+02:00",
+            "dateEnd": "2026-11-13T23:59:59+02:00",
+            "ongoing": true,
+            "overlap": {
+                "start": "2026-11-08T10:00:00+02:00",
+                "end": "2026-11-08T18:00:00+02:00"
+            },
+            "nearest": {
+                "kind": "stop",
+                "stopId": "86",
+                "stopName": "Catedrala Mitropolitană",
+                "meters": 80
+            }
+        },
+        {
+            "id": "47942b46-f2b1-4da8-aec4-eb4bb1eb3213",
+            "title": "Biblioteca Pavilion",
+            "category": "Altele",
+            "venue": "Kunsthalle Bega",
+            "url": "https://www.facebook.com/events/2582861998827518",
+            "dateStart": "2026-09-30T18:00:00+03:00",
+            "dateEnd": "2026-11-28T23:59:59+02:00",
+            "ongoing": true,
+            "overlap": {
+                "start": "2026-11-08T10:00:00+02:00",
+                "end": "2026-11-08T18:00:00+02:00"
+            },
+            "nearest": {
+                "kind": "stop",
+                "stopId": "434",
+                "stopName": "Circumvalațiunii (Brediceanu)",
+                "meters": 130
+            }
+        },
+        {
+            "id": "fb9deaff-dbfb-48a6-9836-9cc4104b00aa",
+            "title": "Vernisaj – Eu cel adevărat sunt vocea din capul meu | Bogdan Ciocodeică",
+            "category": "Expoziție",
+            "venue": "Kunsthalle Bega",
+            "url": "https://www.facebook.com/events/1410672670886935",
+            "dateStart": "2026-10-09T00:00:00+03:00",
+            "dateEnd": "2027-01-10T23:59:59+02:00",
+            "ongoing": true,
+            "overlap": {
+                "start": "2026-11-08T10:00:00+02:00",
+                "end": "2026-11-08T18:00:00+02:00"
+            },
+            "nearest": {
+                "kind": "stop",
+                "stopId": "434",
+                "stopName": "Circumvalațiunii (Brediceanu)",
+                "meters": 130
+            }
+        },
+        {
+            "id": "9e10c41f-8025-4b74-83ed-73e8cc55df13",
+            "title": "Behind the Pavillion | Hubert Hasler",
+            "category": "Expoziție",
+            "venue": "META Spatiu",
+            "url": "https://www.facebook.com/events/2201714000397355",
+            "dateStart": "2026-10-01T18:30:00+03:00",
+            "dateEnd": "2026-11-14T23:59:59+02:00",
+            "ongoing": true,
+            "overlap": {
+                "start": "2026-11-08T10:00:00+02:00",
+                "end": "2026-11-08T18:00:00+02:00"
+            },
+            "nearest": {
+                "kind": "stop",
+                "stopId": "58",
+                "stopName": "Parcul C. Sylva (Parc Doina)",
+                "meters": 322
+            }
+        },
+        {
+            "id": "a9c1aeec-6b6b-43fc-8ee6-3fe10423a863",
+            "title": "Concerte Time to Rock",
+            "category": "Concert",
+            "venue": "FITT Timisoara",
+            "url": "https://timetorock.ro/",
+            "dateStart": "2026-09-01T00:00:00+03:00",
+            "dateEnd": "2026-11-30T23:59:59+02:00",
+            "ongoing": true,
+            "overlap": {
+                "start": "2026-11-08T10:00:00+02:00",
+                "end": "2026-11-08T18:00:00+02:00"
+            },
+            "nearest": {
+                "kind": "stop",
+                "stopId": "77",
+                "stopName": "Strada Cluj (1 Decembrie 1918)",
+                "meters": 348
+            }
+        }
+    ],
+    "inWindow": 25,
+    "nearby": 6,
+    "withoutVenue": 5,
+    "summary": {
+        "ro": "6 evenimente la mai puțin de 400 m în fereastra lucrării (0 de o zi sau scurte, 6 de lungă durată). 5 fără locație: necunoscut.",
+        "en": "6 events within 400 m during the works window (0 short, 6 long-running). 5 without a venue: unknown."
+    },
+    "provenance": [
+        {
+            "source": "Primăria Timișoara, evenimente (API CityApp), înregistrate de noi / City Hall events, our recording",
+            "url": "https://cont.primariatm.ro/api/mobile/events",
+            "version": null,
+            "fetchedAt": "2026-11-14T07:52:53+02:00",
+            "note": "înregistrare la 6 ore; distanța e în linie dreaptă"
+        }
+    ]
+}
