@@ -7,14 +7,12 @@ import { LineBadge } from "./LineBadge";
 
 const TRAM_WORKS = "cl_20261108_16dec";
 
-const dayTime = (iso: string) =>
-  new Date(iso).toLocaleString("ro-RO", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Bucharest" });
-
-function Card({ title, body, children, className }: { title: string; body: string; children: ReactNode; className?: string }) {
+/** `wide`: a full-row card, text beside the visual from md up. */
+function Card({ title, body, children, className, wide }: { title: string; body: string; children: ReactNode; className?: string; wide?: boolean }) {
   return (
-    <article className={cn("flex flex-col overflow-hidden rounded-xl border bg-card shadow-card", className)}>
-      <div className="relative flex min-h-64 flex-1 items-center justify-center px-8 pt-10">{children}</div>
-      <div className="px-8 pb-8 pt-6">
+    <article className={cn("flex flex-col overflow-hidden rounded-xl border bg-card shadow-card", wide && "md:flex-row-reverse md:items-center", className)}>
+      <div className={cn("relative flex min-h-64 flex-1 items-center justify-center px-8 pt-10", wide && "md:pb-10")}>{children}</div>
+      <div className={cn("px-8 pb-8 pt-6", wide && "md:flex-1 md:py-10 md:pl-12")}>
         <h3 className="display text-[1.65rem] leading-tight">{title}</h3>
         <p className="mt-2 max-w-[46ch] text-[0.97rem] leading-relaxed text-muted-foreground">{body}</p>
       </div>
@@ -43,37 +41,6 @@ function ImpactVisual() {
         </div>
       </dl>
       <p className="mt-3 text-xs text-muted-foreground">Estimare pe orarul planificat SMTT</p>
-    </div>
-  );
-}
-
-function WindowVisual() {
-  const w = useApi(() => api.windows(TRAM_WORKS));
-  const im = useApi(() => api.impact(TRAM_WORKS));
-  const base = w.data?.baselineDeparturesLost;
-  const best = w.data?.candidates[0];
-  const rows = [
-    { label: "Fereastra din anunț", when: im.data ? `${dayTime(im.data.window.start)} – ${hhmm(im.data.window.end)}` : "", n: base, tone: "bg-closure" },
-    { label: "Fereastra propusă", when: best ? `${dayTime(best.window.start)} – ${hhmm(best.window.end)}` : "", n: best?.departuresLost, tone: "bg-green" },
-  ];
-  return (
-    <div className="w-full max-w-lg space-y-5">
-      {rows.map((r, i) => (
-        <div key={r.label} className={cn("rounded-lg border bg-card p-4 shadow-card", i === 1 && "ring-2 ring-green/40")}>
-          <div className="flex items-baseline justify-between gap-4">
-            <span className="text-sm font-medium">{r.label}</span>
-            <span className="tabular text-sm text-muted-foreground">{r.when}</span>
-          </div>
-          <div className="mt-3 flex items-center gap-3">
-            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-muted">
-              <motion.div className={cn("h-full rounded-full", r.tone)} initial={{ width: 0 }}
-                whileInView={{ width: r.n && base ? `${(r.n / base) * 100}%` : 0 }} viewport={{ once: true }}
-                transition={{ duration: 1.1, delay: 0.2 + i * 0.25, ease: [0.16, 1, 0.3, 1] }} />
-            </div>
-            <span className="tabular w-24 text-right text-sm font-semibold">{r.n != null ? `${fmt.format(r.n)} plecări` : "–"}</span>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }
@@ -146,15 +113,11 @@ export function Bento() {
         body="Liniile, stațiile, plecările și locuitorii afectați, calculate pe orarul real al SMTT pentru strada desenată pe hartă.">
         <ImpactVisual />
       </Card>
-      <Card className="md:col-span-7" title="Și alege fereastra care face cel mai puțin rău."
-        body="Aceeași lucrare de pe Bd. 16 Decembrie, mutată în noaptea de sâmbătă: de patru ori mai puține plecări pierdute.">
-        <WindowVisual />
-      </Card>
       <Card className="md:col-span-7" title="STPT vede ce au făcut vehiculele."
         body="Stațiile suspendate, ocolirile și liniile din orar fără niciun vehicul în datele live. Un om confirmă înainte ca semnalul să ajungă în CityApp.">
         <VehiclesVisual />
       </Card>
-      <Card className="md:col-span-5" title="Călătorii află din ce folosesc deja."
+      <Card wide className="md:col-span-12" title="Călătorii află din ce folosesc deja."
         body="CityApp, Google Maps și afișul din stație, cu cod QR și versiune audio. Fără cont, fără o aplicație nouă.">
         <CitizenVisual />
       </Card>

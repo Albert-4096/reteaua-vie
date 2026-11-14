@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
-import { ArrowRight, Play, QrCode, TramFront } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api, useApi, type Closure } from "@/lib/api";
 import { Film } from "@/film/Film";
@@ -8,20 +7,12 @@ import { Bento } from "./Bento";
 import { CityMap } from "./CityMap";
 import { Integration } from "./Integration";
 import { Logo } from "./Logo";
-import { LogoMarquee } from "./LogoMarquee";
+import { LogoStrip } from "./LogoMarquee";
+import { Proof } from "./Proof";
+import { Today } from "./Today";
 
 const APP = "/app";
 const CLOSURE_IDS = ["cl_20261102_mocioni", "cl_20261107_e3", "cl_20261108_16dec"];
-
-function FloatTile({ icon: Icon, className, delay = 0 }: { icon: LucideIcon; className: string; delay?: number }) {
-  return (
-    <motion.div aria-hidden className={`absolute hidden size-24 place-items-center rounded-[1.6rem] border bg-card shadow-float lg:grid ${className}`}
-      initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: [0, -10, 0] }}
-      transition={{ opacity: { duration: 0.8, delay }, y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay } }}>
-      <Icon className="size-10 text-green" strokeWidth={1.6} />
-    </motion.div>
-  );
-}
 
 function Section({ id, title, sub, children }: { id: string; title: string; sub: string; children: React.ReactNode }) {
   return (
@@ -62,15 +53,14 @@ export function Landing() {
 
       <main>
         <section className="relative mx-auto max-w-6xl px-6 pt-24 text-center">
-          <FloatTile icon={TramFront} className="-left-4 top-36 -rotate-12" />
-          <FloatTile icon={QrCode} className="-right-4 top-64 rotate-12" delay={0.6} />
-          <motion.h1 className="display mx-auto max-w-4xl text-[clamp(2.75rem,5.6vw,4.6rem)]"
+          <motion.h1 className="display mx-auto max-w-6xl text-[clamp(2.5rem,4.6vw,4rem)]"
             initial={{ opacity: 0, y: 14, filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
-            Lucrarea închide strada. Călătorii află la timp.
+            <span className="block">Lucrarea închide strada.</span>
+            <span className="block">Transportul public pierde plecări.</span>
           </motion.h1>
           <motion.p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground"
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}>
-            Biroul de mobilitate al Primăriei Timișoara și al STPT pentru lucrările care închid o stradă cu transport public. De la plan la raport, pe datele reale ale orașului.
+            Rețeaua Vie le numără pe orarul SMTT înainte de semnătură, arată ce stații și ce locuitori rămân fără transport și găsește fereastra care face cel mai puțin rău. Pentru Primăria Timișoara, STPT și SMTT.
           </motion.p>
           <motion.div className="mt-9 flex flex-wrap items-center justify-center gap-3"
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
@@ -82,13 +72,19 @@ export function Landing() {
             </Button>
           </motion.div>
 
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            <Proof />
+          </motion.div>
+
           <motion.div id="film" className="mx-auto mt-16 max-w-5xl scroll-mt-24"
             initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}>
             <Film />
           </motion.div>
         </section>
 
-        <LogoMarquee />
+        <Today />
+
+        <LogoStrip />
 
         <Section id="pentru-cine" title="Aceeași lucrare. Trei câștiguri."
           sub="Primăria decide pe cifre, STPT publică o singură dată, iar călătorii află din aplicațiile și stațiile pe care le folosesc deja.">

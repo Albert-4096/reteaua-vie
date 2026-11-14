@@ -16,7 +16,7 @@ const ORGS: { name: string; src?: string; label?: boolean; h?: number }[] = [
 
 function Item({ o }: { o: (typeof ORGS)[number] }) {
   return (
-    <li className="flex shrink-0 items-center gap-3 px-10 text-lg font-semibold tracking-tight text-foreground/55">
+    <li className="flex items-center gap-3 text-lg font-semibold tracking-tight text-muted-foreground">
       {o.src && (
         <img src={o.src} alt={o.label ? "" : o.name} style={{ height: o.h ?? 32 }} className="w-auto opacity-60 [filter:brightness(0)]" loading="lazy" />
       )}
@@ -25,18 +25,15 @@ function Item({ o }: { o: (typeof ORGS)[number] }) {
   );
 }
 
-export function LogoMarquee() {
+export function LogoStrip() {
   return (
     <section className="mx-auto max-w-6xl px-6 pt-24" aria-label="Pentru cine este făcută platforma">
       <p className="text-center text-[0.95rem] text-muted-foreground">
         Făcut pentru cei care închid, repară și circulă pe străzile Timișoarei
       </p>
-      <div className="group relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <ul className="flex w-max animate-[marquee_48s_linear_infinite] items-center group-hover:[animation-play-state:paused] motion-reduce:animate-none">
-          {ORGS.map((o) => <Item key={o.name} o={o} />)}
-          {ORGS.map((o) => <Item key={`b-${o.name}`} o={o} />)}
-        </ul>
-      </div>
+      <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
+        {ORGS.map((o) => <Item key={o.name} o={o} />)}
+      </ul>
     </section>
   );
 }
