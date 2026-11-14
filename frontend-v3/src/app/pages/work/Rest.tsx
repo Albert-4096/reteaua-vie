@@ -6,6 +6,7 @@ import { LineBadge } from "@/landing/LineBadge";
 import { useApi } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { app, count, day, dt, fmt, hhmm, uniq, when, type ClosureSummary, type GeneratedNotice } from "../../data";
+import { QrDialog } from "../../Qr";
 import { link } from "../../router";
 import { Fold, Folds, Kind, Loading, Method, Problem, Section, Stat, Tag } from "../../ui";
 
@@ -97,7 +98,9 @@ export function Period({ id, c }: { id: string; c: ClosureSummary }) {
 export function Notice({ id, c, notice, published }: { id: string; c: ClosureSummary; notice: GeneratedNotice | null; published: boolean }) {
   const zones = useApi(() => app.notices(id), undefined, `${id}${published}`);
   const [all, setAll] = useState(false);
+  const [qr, setQr] = useState<string | null>(null); // the stop whose poster code is on screen
   const posters = uniq((notice?.stopsWithNoService ?? []).map((s) => s.stopId)).slice(0, 3);
+  const page = (stopId: string) => `${notice?.mapUrl ?? `${location.origin}/a/${id}`}?stop=${encodeURIComponent(stopId)}`;
   const name = (stopId: string) => notice?.stopsWithNoService.find((s) => s.stopId === stopId)?.name ?? stopId;
 
   const channels: { icon: LucideIcon; name: string; who: string; href?: string }[] = [
@@ -143,11 +146,13 @@ export function Notice({ id, c, notice, published }: { id: string; c: ClosureSum
               <li key={s} className="flex items-center gap-3 py-2.5 text-sm">
                 <QrCode className="size-4 shrink-0 text-muted-foreground" strokeWidth={1.8} />
                 <span className="min-w-0 flex-1">{name(s)}</span>
+                <button type="button" onClick={() => setQr(s)} className="rounded font-medium text-accent-foreground underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring">Cod QR</button>
                 <a href={app.posterUrl(id, s)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium text-accent-foreground underline-offset-4 hover:underline"><Download className="size-3.5" /> PDF</a>
               </li>
             ))}
           </ul>
-          <Method>A4, cu cod QR spre pagina stației și versiune audio.</Method>
+          <Method>A4, cu cod QR spre pagina stației și versiune audio. „Cod QR” îl arată mare pe ecran, de scanat din sală.</Method>
+          <QrDialog url={qr ? page(qr) : null} stop={qr ? name(qr) : ""} onClose={() => setQr(null)} />
         </Section>
       )}
 
