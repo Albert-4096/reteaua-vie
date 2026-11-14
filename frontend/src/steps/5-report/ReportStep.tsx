@@ -10,6 +10,8 @@ import type { StepProps } from "../types";
 import { kmCsvPath } from "../../api/km";
 import { AccessibleLines } from "./AccessibleLines";
 import { DataQuality } from "./DataQuality";
+import { ReportsBacklog } from "./ReportsBacklog";
+import { TripRegistry } from "./TripRegistry";
 import { MissingLogLink } from "../4-monitor/MissingTriage";
 import { S } from "./strings";
 
@@ -89,6 +91,8 @@ export function ReportStep(_props: StepProps) {
 
       <AccessibleLines />
       <DataQuality />
+      <ReportsBacklog />
+      <TripRegistry />
       <MissingLogLink />
       {_props.closureId && <a href={kmCsvPath(_props.closureId)}>{tr({ ro: "Km nefăcuți pe linii, pentru SMTT (CSV)", en: "Km not run per line, for SMTT (CSV)" })}</a>}
 

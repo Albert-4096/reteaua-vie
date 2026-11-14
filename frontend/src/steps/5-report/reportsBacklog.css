@@ -1,0 +1,12 @@
+.reports-backlog { min-width: 0; }
+.reports-backlog > * + * { margin-top: var(--sp-2); }
+.reports-backlog label { display: grid; gap: var(--sp-1); }
+.reports-backlog select { width: 100%; min-width: 0; font: inherit; font-size: 1rem; }
+.reports-backlog-table { table-layout: fixed; }
+.reports-backlog-table th:first-child { width: 31%; }
+.reports-backlog-table th, .reports-backlog-table td { overflow-wrap: anywhere; }
+.reports-backlog-table td.num { white-space: normal; }
+.reports-backlog-table .figure-inline { white-space: normal; }
+.reports-backlog-detail td { padding-top: 0; }
+.reports-backlog-detail summary { font-size: var(--fs-s); }
+.reports-backlog-detail p { margin-top: var(--sp-2); }

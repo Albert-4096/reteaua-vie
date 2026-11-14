@@ -1,0 +1,20 @@
+.trip-registry {
+  display: grid;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.trip-registry h2 { overflow-wrap: anywhere; }
+
+.trip-registry-hash { font-family: var(--font-mono); }
+
+.trip-registry-table { table-layout: fixed; }
+.trip-registry-table th:first-child { width: 28%; }
+.trip-registry-table th:last-child { width: 34%; }
+.trip-registry-table th,
+.trip-registry-table td { overflow-wrap: anywhere; }
+.trip-registry-table td.num { white-space: normal; }
+.trip-registry-table .figure-inline { white-space: normal; }
+.trip-registry-detail td { padding-top: 0; }
+.trip-registry-detail summary { font-size: var(--fs-s); }
+.trip-registry-detail p { margin-top: var(--sp-2); }
