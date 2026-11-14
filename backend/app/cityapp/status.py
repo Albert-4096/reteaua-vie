@@ -121,7 +121,7 @@ def build_sentence(name: str, state_: str, lines: list[StopLine], nearest: dict 
     if state_ == "unknown":
         return I18n(ro=f"Pentru stația {name} nu avem orarul zilei; nu putem spune ce linii opresc.",
                     en=f"We have no timetable for {name} on this day, so we cannot say which lines stop.")
-    ro_until = f" până pe {_date(until, RO_MONTHS, False)}" if until else ""
+    ro_until = f" până la {_date(until, RO_MONTHS, False)}" if until else ""
     en_until = f" until {_date(until, EN_MONTHS, True)}" if until else ""
     many = len({ln.shortName for ln in no}) > 1
     ro = (f"La stația {name}, " + (f"liniile {_names(no)} nu opresc" if many else f"linia {_names(no)} nu oprește")
