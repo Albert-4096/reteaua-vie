@@ -8,7 +8,8 @@ Per line and local hour, always with n:
                wait (Σh²/2Σh real minus scheduled);
   bunching     an observed stop event with another vehicle of the same line and direction within BUNCH_SEC at
                the same stop, unless the timetable itself puts them that close;
-  trips        O2's rule (`app.live.missing`): trips observed or with no vehicle in the live data, by start hour.
+  trips        the registry's rule (`app.registry.daily.day_core`): trips seen or with no vehicle in the live data, by
+               start hour; the same totals as /api/registry.
 """
 
 from __future__ import annotations
@@ -23,7 +24,6 @@ import pandas as pd
 from app.analytics import accessibility
 from app.common import gtfs
 from app.config import TZ, get_settings
-from app.live import missing as o2
 from app.models.base import I18n
 from app.observed import store
 
@@ -32,7 +32,7 @@ BUNCH_SEC = 120
 MIN_TRIPS, MIN_EVENTS = 10, 30
 BOOT_N = 300
 TTL_SEC = 300
-CACHE_VERSION = 2
+CACHE_VERSION = 3
 
 WORDING = I18n(ro="Estimare din datele live, nu raportul oficial.", en="Estimate from the live data, not the official report.")
 METHOD = I18n(
@@ -165,14 +165,14 @@ def _headway_pairs(ev: pd.DataFrame) -> pd.DataFrame:
 
 
 def _o2_trips(cov: dict) -> pd.DataFrame:
-    start, end = cov["first"], cov["last"]
-    f = gtfs.feed(start)
-    trips, _hw = o2.scheduled_trips(f, start, end)
-    snaps, _files = o2.recorded(start, end)
-    if trips.empty:
-        return trips.assign(res=[], hour=[])
-    s_ts, e_ts = start.timestamp(), end.timestamp()
-    out = trips.assign(res=o2.classify_trips(trips, snaps, s_ts, e_ts))
+    """Scheduled trips inside each recorded day's compared span, `res` observed / missed: the registry's rule
+    (app.registry.daily.day_core), so this endpoint and /api/registry give the same totals (L8a)."""
+    from app.registry import daily
+
+    t = daily.recorded_trips()
+    if t.empty:
+        return t.assign(res=[], hour=[])
+    out = t.assign(res=["observed" if x else "missed" for x in t["seen"]])
     out["hour"] = pd.to_datetime(out["start_ts"], unit="s", utc=True).dt.tz_convert(TZ).dt.hour
     return out
 

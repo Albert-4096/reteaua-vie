@@ -16,6 +16,8 @@ import tempfile
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+import pandas as pd
+
 from app.cityapp import km
 from app.common import gtfs, vehicles
 from app.common import provenance as prov
@@ -28,6 +30,7 @@ from app.m1_disruption import impact as imp
 from app.observed import store as observed
 
 GENESIS = "0" * 64
+ROLLUP_VERSION = 2   # 2: trips seen = seen ∩ scheduled in the compared recording span (L8b); tripsSeenOutside, vehiclesSeen
 MODE_LABEL = {"tram": "tramvai", "bus": "autobuz", "trolleybus": "troleibuz"}
 
 
@@ -66,10 +69,12 @@ def _previous_hash(day: date) -> str:
     return _stored(prev[-1])["chainHash"] if prev else GENESIS
 
 
-def compute(day: date) -> dict:
-    """The entry of one local day, from the raw files and L0. Pure: the same inputs give the same hashes."""
+def day_core(day: date) -> dict:
+    """What one local day's trip counts rest on: the recording span, the compared span, and the day's scheduled
+    trips inside it with a `seen` flag. The only rule for „trips seen” (registry and /api/reliability/lines):
+    a trip is counted when it is scheduled to start inside the compared recording span and L0 saw it. A trip seen
+    that started before the recording began (still running in its first snapshots) is not counted: `seenOutside`."""
     files = _raw_files(day)
-    raw_lines = [f"{p.name}:{_file_sha(p)}" for p, _ in files]
     d0 = local_midnight(day)
     d1 = d0 + timedelta(days=1)
     snaps, _ = missing.recorded(d0, d1)
@@ -80,7 +85,6 @@ def compute(day: date) -> dict:
         span = max(1, int((snaps[-1].ts - snaps[0].ts) // 60) + 1)
         healthy = round(len(missing._healthy_minutes(snaps, snaps[0].ts)) / span, 4)
 
-    net = load_network()
     f = gtfs.feed(d0)
     trips, _ = missing.scheduled_trips(f, d0, d1)
     trips = trips[trips.day == day]
@@ -93,20 +97,54 @@ def compute(day: date) -> dict:
     built_here = sorted(h for _p, h in files if f"{h.astimezone(timezone_utc()):%Y%m%d-%H}" in stems_built)
     l0_end = (built_here[-1] + timedelta(hours=1)).timestamp() if built_here else None
     compare_end = last.timestamp() if last is not None and complete else (min(last.timestamp(), l0_end) if last is not None and l0_end else None)
+    if first is not None and compare_end is not None:
+        rec = trips[(trips.start_ts >= first.timestamp()) & (trips.start_ts <= compare_end)]
+    else:
+        rec = trips.iloc[0:0]
+    seen_ids = set(seen_events["trip_id"]) if len(seen_events) else set()
+    rec = rec.assign(seen=rec.trip_id.isin(seen_ids))
+    return {"files": files, "first": first, "last": last, "healthy": healthy, "f": f, "trips": trips, "rec": rec,
+            "events": seen_events, "complete": complete, "compare_end": compare_end}
+
+
+def recorded_trips(days: list[date] | None = None) -> pd.DataFrame:
+    """Scheduled trips inside the compared recording span of every recorded day, with `seen` (day_core's rule)."""
+    parts = []
+    for d in days or recorded_days():
+        r = day_core(d)["rec"]
+        if len(r):
+            parts.append(r.assign(local_day=d))
+    return pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(
+        {"route_id": [], "direction_id": [], "trip_id": [], "start_ts": [], "seen": [], "local_day": []})
+
+
+def compute(day: date) -> dict:
+    """The entry of one local day, from the raw files and L0. Pure: the same inputs give the same hashes."""
+    core = day_core(day)
+    files, first, last, healthy, f = core["files"], core["first"], core["last"], core["healthy"], core["f"]
+    trips, rec, seen_events = core["trips"], core["rec"], core["events"]
+    complete, compare_end = core["complete"], core["compare_end"]
+    raw_lines = [f"{p.name}:{_file_sha(p)}" for p, _ in files]
+    net = load_network()
 
     tt = imp.current_timetable()
     lines: dict[str, dict] = {}
-    for r in trips.itertuples(index=False):
-        ln = lines.setdefault(r.route_id, {"scheduled": 0, "scheduledRec": 0})
-        ln["scheduled"] += 1
-        if first is not None and compare_end is not None and first.timestamp() <= r.start_ts <= compare_end:
-            ln["scheduledRec"] += 1
+    for rid, g in trips.groupby("route_id"):
+        lines[rid] = {"scheduled": int(len(g)), "scheduledRec": 0}
+    rec_ids = set(rec.trip_id)
+    for rid, g in rec.groupby("route_id"):
+        lines[rid]["scheduledRec"] = int(len(g))
     seen: dict[str, set] = {}
     seen_dir: dict[tuple[str, int], set] = {}
+    outside: dict[str, set] = {}
     for r in seen_events[["route_id", "direction_id", "trip_id"]].drop_duplicates().itertuples(index=False):
-        seen.setdefault(r.route_id, set()).add(r.trip_id)
-        seen_dir.setdefault((r.route_id, int(r.direction_id)), set()).add(r.trip_id)
+        if r.trip_id in rec_ids:
+            seen.setdefault(r.route_id, set()).add(r.trip_id)
+            seen_dir.setdefault((r.route_id, int(r.direction_id)), set()).add(r.trip_id)
+        else:
+            outside.setdefault(r.route_id, set()).add(r.trip_id)
         lines.setdefault(r.route_id, {"scheduled": 0, "scheduledRec": 0})
+    vehicles_of = seen_events.groupby('route_id')['vehicle_id'].nunique().to_dict() if len(seen_events) else {}
     out = []
     for rid, ln in sorted(lines.items()):
         route = net.route_by_id.get(rid) or {}
@@ -118,12 +156,14 @@ def compute(day: date) -> dict:
         n_seen = len(seen.get(rid, ()))
         out.append({"routeId": rid, "shortName": route.get("shortName"), "mode": MODE_LABEL.get(route_mode(rid)),
                     "tripsScheduled": ln["scheduled"], "tripsScheduledInRecording": ln["scheduledRec"], "tripsSeen": n_seen,
+                    "tripsSeenOutside": len(outside.get(rid, ())),
+                    "vehiclesSeen": int(vehicles_of.get(rid, 0)),
                     "share": round(n_seen / ln["scheduledRec"], 4) if ln["scheduledRec"] else None,
                     "kmEstimated": round(km_est, 1), "kmNote": "estimare: curse văzute × lungimea traseului GTFS"})
     recording = {"firstAt": iso(first) if first else None, "lastAt": iso(last) if last else None,
                  "healthyShare": healthy, "files": [p.name for p, _ in files], "l0Complete": complete,
                  "comparedUntil": iso(datetime.fromtimestamp(compare_end, tz=TZ)) if compare_end else None}
-    rollup = {"date": day.isoformat(), "recording": recording, "lines": out, "feedVersion": f.version}
+    rollup = {"date": day.isoformat(), "recording": recording, "lines": out, "feedVersion": f.version, "rollupVersion": ROLLUP_VERSION}
     raw_sha = sha("\n".join(sorted(raw_lines)))
     rollup_sha = sha(canon(rollup))
     return {**rollup, "rawSha256": raw_sha, "rollupSha256": rollup_sha}
@@ -136,6 +176,11 @@ def timezone_utc():
 
 def entry(day: date, verify: bool = False) -> dict:
     stored = _stored(day)
+    if stored is not None and stored.get("rollupVersion") != ROLLUP_VERSION:
+        # an older rollup counted trips by another rule: recompute it, after the days before it (the chain)
+        for d in [d for d in recorded_days() if d < day]:
+            entry(d)
+        stored = None
     if stored is not None:
         out = {**stored, "final": True}
         if verify:
