@@ -23,7 +23,7 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gtfs_small import Feed, base_name, data_dir, load_feed, norm_name  # noqa: E402
+from gtfs_small import Feed, base_name, data_dir, feed_zip, load_feed, norm_name  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 LABELLED_BY = "AI-assisted from the notice text; human review pending"
@@ -365,9 +365,14 @@ LABELLERS = {11067: label_11067, 11065: label_11065, 11060: label_11060, 11062: 
 
 
 def main() -> None:
-    feed = load_feed()
+    feeds: dict = {}
     for pid, fn in LABELLERS.items():
         lab = read_post(pid)
+        # the feed in force when the notice was posted (loaded once per zip)
+        path = feed_zip(at=lab["postDate"])
+        if path not in feeds:
+            feeds[path] = load_feed(path)
+        feed = feeds[path]
         gold = fn(feed)
         lab.update({
             "labelledBy": LABELLED_BY,

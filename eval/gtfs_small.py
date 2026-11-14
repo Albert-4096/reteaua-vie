@@ -1,7 +1,9 @@
 """A small, independent GTFS reader for the eval.
 
-It deliberately shares no code with app/ (the backend's GTFS index), so the
-numbers it gives are a cross-check of the backend, not a copy of it.
+It shares no timetable code with app/ (the backend's GTFS index), so the
+numbers it gives are a cross-check of the backend, not a copy of it. Only the
+choice of the zip in force at a date is the backend's rule
+(app.common.gtfs.choose_feed), so both read the same feed.
 """
 
 from __future__ import annotations
@@ -10,6 +12,7 @@ import hashlib
 import io
 import os
 import re
+import sys
 import unicodedata
 import zipfile
 from dataclasses import dataclass
@@ -29,16 +32,22 @@ def data_dir() -> Path:
     return Path(value)
 
 
-def newest_feed_zip(base: Path | None = None) -> Path:
-    """The newest GTFS zip in $DATA_DIR/live/gtfs/, else the dated snapshot."""
+def feed_zip(base: Path | None = None, at: datetime | date | str | None = None) -> Path:
+    """The GTFS zip in force at `at` (a notice's post date; default: the app clock).
+
+    Candidates: $DATA_DIR/live/gtfs/*.zip and the dated snapshots in $DATA_DIR.
+    """
     base = base or data_dir()
-    live = sorted((base / "live" / "gtfs").glob("*.zip"), key=lambda p: p.stat().st_mtime)
-    if live:
-        return live[-1]
-    snaps = sorted(base.glob("smtt-timisoara-ro_*.zip"))
-    if not snaps:
+    paths = list((base / "live" / "gtfs").glob("*.zip")) + sorted(base.glob("smtt-timisoara-ro_*.zip"))
+    if not paths:
         raise FileNotFoundError(f"no GTFS zip under {base}")
-    return snaps[-1]
+    backend = str(Path(__file__).resolve().parents[1] / "backend")
+    if backend not in sys.path:
+        sys.path.insert(0, backend)
+    # imported here, not at the top: the backend reads its settings (DATA_DIR) on first use
+    from app.common.gtfs import choose_feed  # noqa: PLC0415
+
+    return choose_feed(paths, datetime.fromisoformat(at) if isinstance(at, str) else at)
 
 
 def norm_name(name: str) -> str:
@@ -151,8 +160,9 @@ class Feed:
         return st
 
 
-def load_feed(path: Path | None = None) -> Feed:
-    path = Path(path) if path else newest_feed_zip()
+def load_feed(path: Path | None = None, at: datetime | date | str | None = None) -> Feed:
+    """The feed in `path`, else the one in force at `at` (see feed_zip)."""
+    path = Path(path) if path else feed_zip(at=at)
     raw = path.read_bytes()
     sha = hashlib.sha256(raw).hexdigest()
     z = zipfile.ZipFile(io.BytesIO(raw))

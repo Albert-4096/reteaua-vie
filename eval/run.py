@@ -43,7 +43,7 @@ REPO = HERE.parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(REPO / "backend"))
 
-from gtfs_small import TZ, Feed, load_feed  # noqa: E402
+from gtfs_small import TZ, Feed, feed_zip, load_feed  # noqa: E402
 import gold_gtfs_diff  # noqa: E402
 import review  # noqa: E402
 
@@ -451,13 +451,21 @@ def main() -> int:
     os.environ.setdefault("LIVE_DIR", str(real_data / "live"))
     demo_now = os.environ.get("DEMO_NOW")
 
-    feed = load_feed()
+    feeds: dict[Path, Feed] = {}
+
+    def feed_at(when: str | None) -> Feed:
+        """The feed in force at a notice's post date (None: the app clock), loaded once per zip."""
+        path = feed_zip(at=when)
+        if path not in feeds:
+            feeds[path] = load_feed(path)
+        return feeds[path]
+
     gold_diff = gold_gtfs_diff.build(real_data)
     (HERE / "results").mkdir(exist_ok=True)
     (HERE / "results" / "gold_gtfs_diff.json").write_text(json.dumps(gold_diff, ensure_ascii=False, indent=1) + "\n",
                                                          encoding="utf-8")
     import e3_departures  # noqa: PLC0415
-    e3 = e3_departures.compute(feed)
+    e3 = e3_departures.compute(feed_at(e3_departures.post_date()))
 
     labels = [json.loads(p.read_text(encoding="utf-8")) for p in sorted((HERE / "labels").glob("*.json"))]
     result = {
@@ -521,7 +529,7 @@ def main() -> int:
                 affected, unsure = rows_from_analysis(analysis)
             else:
                 day = datetime.fromisoformat(lab["window"]["start"]).date()
-                affected, unsure = rows_from_route_actions(closure, feed, day), set()
+                affected, unsure = rows_from_route_actions(closure, feed_at(lab.get("postDate")), day), set()
             n["rows"] = {"affected": len(affected), "unsure": len(unsure)}
             total_rows = len(affected | unsure)
             n["neclarShare"] = round(len(unsure) / total_rows, 4) if total_rows and analyze else None

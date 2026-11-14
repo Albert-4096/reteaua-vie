@@ -23,7 +23,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
-from gtfs_small import Feed, data_dir, load_feed, newest_feed_zip  # noqa: E402
+from gtfs_small import Feed, data_dir, feed_zip, load_feed  # noqa: E402
 
 # notice -> (transition, the routes it names, by short name)
 NOTICE_TRANSITIONS = {
@@ -34,8 +34,8 @@ NOTICE_TRANSITIONS = {
 
 
 def feeds_in_order(base: Path) -> list[Feed]:
-    """Every history zip plus the current one, oldest feed version first."""
-    paths = sorted((base / "gtfs-history").glob("*.zip")) + [newest_feed_zip(base)]
+    """Every history zip plus the one in force at the app clock, oldest feed version first."""
+    paths = sorted((base / "gtfs-history").glob("*.zip")) + [feed_zip(base)]
     feeds = [load_feed(p) for p in paths]
     return sorted(feeds, key=lambda f: tuple(int(x) for x in (f.version or "0").split(".")[:2]))
 

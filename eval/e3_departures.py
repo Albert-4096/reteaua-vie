@@ -39,8 +39,13 @@ def calendar_day_count(feed: Feed, day: date, stops: set[str], direction: int | 
     return n
 
 
+def post_date() -> str:
+    """When notice 11065 was posted: the feed in force then is the one counted."""
+    return json.loads((HERE / "labels" / "11065.json").read_text(encoding="utf-8"))["postDate"]
+
+
 def compute(feed: Feed | None = None) -> dict:
-    feed = feed or load_feed()
+    feed = feed or load_feed(at=post_date())
     stops = suspended_stops()
     lab = json.loads((HERE / "labels" / "11065.json").read_text(encoding="utf-8"))
     start = datetime.fromisoformat(lab["window"]["start"]).astimezone(TZ)
