@@ -10,6 +10,7 @@ Sources (GET only, a User-Agent that names the team; never live.stpt.ro):
                                               -> $DATA_DIR/city-api-2026-11-13/transit-network.json
   zones     cont.primariatm.ro/api/zones      -> .../zones.geojson
   parking   cont.primariatm.ro/api/mobile/parking -> .../parking.json
+  pois      cont.primariatm.ro/api/mobile/pois    -> .../pois.json
   streets   servicii.primariatm.ro/api/nomenclator/strazi -> .../nomenclator-strazi.json
   stpt      stpt.ro WordPress API, newest 20 posts -> $LIVE_DIR/stpt-posts/<id>_<modified>.json (new or edited)
   sesizari  sesizari.primariatm.ro/api/sesizari, last 2 days, without the report text
@@ -165,6 +166,13 @@ def check_parking(d: dict) -> str:
     return f"version {d.get('version')}: {len(feats)} features " + ", ".join(f"{n} {k}" for k, n in sorted(kinds.items()))
 
 
+def check_pois(d: dict) -> str:
+    items = d["pois"]
+    if not items or any(not p["id"] or not p["name"] or p["latitude"] is None or p["longitude"] is None for p in items):
+        raise ValueError("no landmarks, or one without id / name / coordinates")
+    return f"{len(items)} landmarks"
+
+
 def check_streets(d: dict) -> str:
     rows = d["strazi"]
     if not rows:
@@ -294,6 +302,7 @@ CITY_FILES = (
     CityFile("zones", "https://cont.primariatm.ro/api/zones", "zones.geojson", check_zones, lambda d: None),
     CityFile("parking", "https://cont.primariatm.ro/api/mobile/parking", "parking.json",
              check_parking, lambda d: None if d.get("version") is None else str(d["version"])),
+    CityFile("pois", "https://cont.primariatm.ro/api/mobile/pois", "pois.json", check_pois, lambda d: None),
     CityFile("streets", "https://servicii.primariatm.ro/api/nomenclator/strazi", "nomenclator-strazi.json",
              check_streets, lambda d: None),
 )

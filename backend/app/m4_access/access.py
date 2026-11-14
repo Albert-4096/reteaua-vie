@@ -66,6 +66,7 @@ DEST_NAMES = {
     "hospital": ("un spital", "a hospital"),
     "school": ("o școală", "a school"),
     "rail_station": ("o gară", "a rail station"),
+    "landmark": ("un obiectiv din ghidul turistic al Primăriei", "a landmark from the City Hall's tourist guide"),
 }
 
 
@@ -180,17 +181,19 @@ def reach_before(base_zip: Path, dest: str, minutes: int, at: datetime) -> np.nd
 
 def method_text(dest: str, minutes: int) -> I18n:
     ro_d, en_d = DEST_NAMES[dest]
+    src_ro, src_en = (("din api/mobile/pois al Primăriei", "from the City Hall api/mobile/pois") if dest == "landmark"
+                      else ("din OpenStreetMap", "from OpenStreetMap"))
     return I18n(
         ro=(f"Estimare: locuitori care ajung la {ro_d} în cel mult {minutes} de minute, pe jos și cu transportul "
             f"public, după orarul planificat (GTFS), înainte de lucrare și cu lucrarea (orarul fără plecările "
             f"suspendate în fereastră). Rutare R5 (r5py): mers pe jos 4,8 km/h, cel mult 15 minute de mers, "
             f"mediana pe 10 minute de plecare. Populația: model GHSL 2020, 100 m (nu recensământ), grupat în "
-            f"blocuri de 200 m. Destinații din OpenStreetMap."),
+            f"blocuri de 200 m. Destinații {src_ro}."),
         en=(f"Estimate: residents who reach {en_d} within {minutes} minutes by walking and public transport on "
             f"the planned timetable (GTFS), before the works and with them (timetable without the suspended "
             f"departures in the window). R5 routing (r5py): walking 4.8 km/h, at most 15 minutes of walking, "
             f"median over a 10-minute departure window. Population: GHSL 2020 100 m model (not a census), "
-            f"grouped in 200 m blocks. Destinations from OpenStreetMap."),
+            f"grouped in 200 m blocks. Destinations {src_en}."),
     )
 
 
@@ -245,6 +248,8 @@ def access_for(closure: dict, lost: set[tuple[str, str, int]], dest: str = "hosp
                           residentsLosing=sum(r.residentsLosing for r in rows))
     provenance = [tt.provenance, layers.osm_provenance(), imp.pop_provenance(), z.provenance,
                   _r5_provenance(pf, at)]
+    if dest == "landmark" and (lm := layers.load_landmarks()) is not None:
+        provenance.insert(1, lm[1])
     return AccessImpact(closureId=str(closure.get("id") or ""), dest=dest, minutes=minutes, at=iso(at),
                         totals=totals, byZone=rows, estimate=True, method=method_text(dest, minutes),
                         provenance=provenance)

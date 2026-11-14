@@ -21,6 +21,6 @@ def access_key(closure_id: str, dest: str, minutes: int) -> str:
 @router.get("/closures/{closure_id}/access", response_model=AccessImpact,
             responses={202: {"model": JobAccepted, "description": "Still computing: poll GET /api/jobs/{jobId}"}})
 def closure_access(closure_id: str,
-                   dest: Literal["hospital", "school", "rail_station"] = Query("hospital"),
+                   dest: Literal["hospital", "school", "rail_station", "landmark"] = Query("hospital"),
                    minutes: int = Query(30, ge=15, le=60)):
     return respond(access_key(closure_id, dest, minutes), lambda: access.compute_access(closure_id, dest, minutes))

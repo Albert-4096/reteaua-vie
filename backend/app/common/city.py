@@ -28,6 +28,7 @@ from app.models.base import Provenance
 NETWORK_FILE = "transit-network.json"
 ZONES_FILE = "zones.geojson"
 PARKING_FILE = "parking.json"
+POIS_FILE = "pois.json"
 
 ROUTE_MODES = {0: "tram", 3: "bus", 11: "trolleybus", 800: "trolleybus"}
 
@@ -130,6 +131,37 @@ class ZonesData:
     provenance: Provenance
 
 
+@dataclass(frozen=True)
+class Landmark:
+    id: str
+    name: str            # exactly as the City Hall gives it
+    nameEn: str | None
+    address: str | None
+    lon: float
+    lat: float
+
+
+def load_landmarks() -> tuple[tuple[Landmark, ...], Provenance] | None:
+    """The City Hall's tourist-guide landmarks (/api/mobile/pois, fetched once, read from disk).
+
+    None when the file is not on disk (R28 then leaves the landmark destinations out).
+    """
+    path = get_settings().city_dir / POIS_FILE
+    if not path.is_file():
+        return None
+    sig = (str(path), path.stat().st_mtime)
+    return _landmarks(*sig)
+
+
+@lru_cache(maxsize=2)
+def _landmarks(path_str: str, _mtime: float) -> tuple[tuple[Landmark, ...], Provenance]:
+    path = Path(path_str)
+    rows = _read_json(path).get("pois", [])
+    items = tuple(Landmark(id=str(p["id"]), name=p["name"], nameEn=p.get("nameEn") or None, address=p.get("address") or None,
+                           lon=float(p["longitude"]), lat=float(p["latitude"])) for p in rows)
+    return items, prov.pois_provenance(path)
+
+
 @lru_cache(maxsize=1)
 def load_zones() -> ZonesData:
     path = _city_file(ZONES_FILE)
@@ -224,4 +256,5 @@ def parking_layer(bbox: tuple[float, float, float, float] | None = None) -> dict
 def clear_caches() -> None:
     load_network.cache_clear()
     load_zones.cache_clear()
+    _landmarks.cache_clear()
     load_parking.cache_clear()

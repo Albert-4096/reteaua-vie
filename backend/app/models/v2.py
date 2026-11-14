@@ -72,7 +72,7 @@ class ParkingProps(Model):
 
 
 class DestinationProps(Model):
-    kind: Literal["hospital", "school", "rail_station"]
+    kind: Literal["hospital", "school", "rail_station", "landmark"]
     osmId: str
     name: str | None
 
@@ -189,7 +189,7 @@ class AccessZone(AccessTotals):
 
 class AccessImpact(Model):
     closureId: str
-    dest: Literal["hospital", "school", "rail_station"]
+    dest: Literal["hospital", "school", "rail_station", "landmark"]
     minutes: int
     at: IsoTime
     totals: AccessTotals
@@ -555,3 +555,49 @@ class ScanAck(Model):
     ok: bool = True
     closureId: str
     stopId: str
+
+
+class LandmarkStop(Model):
+    stopId: str
+    name: str
+    meters: int
+
+
+class LandmarkItem(Model):
+    id: str
+    name: str  # exactly as the City Hall gives it
+    nameEn: str | None
+    address: str | None
+    nearestStop: LandmarkStop | None
+    losesService: bool  # the nearest stop is one that loses service in this closure
+    nearestServed: LandmarkStop | None  # nearest stop that keeps its service, for the English poster line
+
+
+class LandmarkImpact(Model):
+    closureId: str
+    total: int
+    losingNearestStop: int
+    items: list[LandmarkItem]
+    summary: I18n
+    provenance: list[Provenance]
+
+
+class PaidMeasure(Model):
+    count: int
+    meters: int | None  # streets: metres of paid street inside the closure buffer
+    squareMeters: int | None  # car parks: area of each car park that touches the buffer
+    byTariff: dict[str, int]  # colour -> metres (streets) or m² (car parks)
+
+
+class PaidParking(Model):
+    closureId: str
+    window: Window
+    streets: PaidMeasure
+    lots: PaidMeasure
+    paidHours: float  # hours of the window in which at least one affected tariff colour is charged
+    paidHoursByTariff: dict[str, float]
+    uncheckedFeatures: int  # affected features the City Hall file does not mark as checked
+    parkAndRide: list[ParkAndRide]
+    noticeLine: I18n
+    note: I18n
+    provenance: list[Provenance]

@@ -15,6 +15,7 @@ from app.models.base import Provenance
 CITY_TRANSIT_URL = "https://cont.primariatm.ro/api/mobile/transit/network"
 CITY_ZONES_URL = "https://cont.primariatm.ro/api/zones"
 CITY_PARKING_URL = "https://cont.primariatm.ro/api/mobile/parking"
+CITY_POIS_URL = "https://cont.primariatm.ro/api/mobile/pois"
 CITY_VEHICLES_URL = "https://cont.primariatm.ro/api/mobile/transit/vehicles"
 SMTT_GTFS_URL = "https://smtt.ro"
 STPT_POSTS_URL = "https://stpt.ro/wp-json/wp/v2/posts"
@@ -44,6 +45,12 @@ def network_provenance(path: Path, version: str | None) -> Provenance:
 
 def zones_provenance(path: Path) -> Provenance:
     return for_file("Primăria Timișoara, cartiere / neighbourhoods (/api/zones)", path, CITY_ZONES_URL)
+
+
+def pois_provenance(path: Path) -> Provenance:
+    taken = file_mtime(path).strftime("%d.%m.%Y")
+    return for_file("Primăria Timișoara, ghidul turistic (api/mobile/pois)", path, CITY_POIS_URL, None,
+                    f"api/mobile/pois, preluat {taken}")
 
 
 def parking_provenance(path: Path, version: str | None) -> Provenance:

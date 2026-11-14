@@ -105,7 +105,7 @@ def test_destinations_layer_from_osm():
 
     lc = LayerCollection.model_validate(layers.destinations_layer())
     kinds = {f.properties["kind"] for f in lc.features}
-    assert kinds == {"hospital", "school", "rail_station"}
+    assert kinds >= {"hospital", "school", "rail_station"} and kinds <= {"hospital", "school", "rail_station", "landmark"}
     hospitals = [f.properties for f in lc.features if f.properties["kind"] == "hospital"]
     assert hospitals and all(not h["osmId"].startswith("node/") for h in hospitals)  # polygons only
     stations = {f.properties["name"] for f in lc.features if f.properties["kind"] == "rail_station"}

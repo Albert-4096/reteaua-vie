@@ -5,6 +5,8 @@ Destinations (SPEC §6.4), from $DATA_DIR/osm/timisoara.osm.pbf with pyrosm:
                  "hospitals" in this extract are clinics, labs and doctors' offices.
 - school       = amenity=school
 - rail_station = railway=station
+- landmark     = the City Hall's tourist-guide landmarks (/api/mobile/pois, fetched once into
+                 $DATA_DIR/city-api-2026-11-13/pois.json); name exactly as the City Hall gives it
 Read once and cached as JSON in $DATA_DIR/cache, keyed by the pbf size and time.
 
 Population: GHSL GHS-POP 2020, 3 arcsec (about 100 m) cells with residents > 0,
@@ -30,7 +32,7 @@ from pathlib import Path
 import numpy as np
 
 from app.common import provenance as prov
-from app.common.city import load_zones
+from app.common.city import load_landmarks, load_zones
 from app.common.errors import unavailable
 from app.config import get_settings
 from app.m1_disruption import impact as imp
@@ -38,7 +40,7 @@ from app.models.base import Provenance
 
 Bbox = tuple[float, float, float, float]
 
-DEST_KINDS = ("hospital", "school", "rail_station")
+DEST_KINDS = ("hospital", "school", "rail_station", "landmark")
 DEST_CACHE_VERSION = 2
 OSM_FILE = "osm/timisoara.osm.pbf"
 POP_FILE = "pop/ghsl_2020_100m.tif"
@@ -121,6 +123,17 @@ def _read_osm(pbf: Path) -> list[Destination]:
 
 @lru_cache(maxsize=1)
 def load_destinations() -> tuple[Destination, ...]:
+    return _load_osm_destinations() + _landmark_destinations()
+
+
+def _landmark_destinations() -> tuple[Destination, ...]:
+    got = load_landmarks()
+    if got is None:
+        return ()
+    return tuple(Destination("landmark", f"poi/{lm.id}", lm.name, lm.lon, lm.lat) for lm in got[0])
+
+
+def _load_osm_destinations() -> tuple[Destination, ...]:
     pbf = _pbf()
     if not pbf.is_file():
         raise unavailable(f"OSM extract missing: {OSM_FILE} (run `make data`).")
@@ -151,7 +164,7 @@ def _in_bbox(lon: float, lat: float, bbox: Bbox | None) -> bool:
 
 
 def destinations_layer(bbox: Bbox | None = None) -> dict:
-    """Hospitals, schools and rail stations from OSM, as points (LayerCollection `destinations`)."""
+    """Hospitals, schools and rail stations from OSM, and the City Hall landmarks, as points (LayerCollection `destinations`)."""
     feats = [{
         "type": "Feature",
         "geometry": {"type": "Point", "coordinates": [round(d.lon, 6), round(d.lat, 6)]},
@@ -160,8 +173,11 @@ def destinations_layer(bbox: Bbox | None = None) -> dict:
     p = osm_provenance()
     note = ("amenity=hospital (centroid), amenity=school, railway=station; "
             + (p.note or "")).strip("; ")
-    return {"type": "FeatureCollection", "layer": "destinations", "features": feats,
-            "provenance": [p.model_copy(update={"note": note}).model_dump()]}
+    provs = [p.model_copy(update={"note": note}).model_dump()]
+    lm = load_landmarks()
+    if lm is not None:
+        provs.append(lm[1].model_dump())
+    return {"type": "FeatureCollection", "layer": "destinations", "features": feats, "provenance": provs}
 
 
 # --- GHSL population ------------------------------------------------------------------------
