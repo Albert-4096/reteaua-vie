@@ -9,6 +9,8 @@ import type { MapProps } from "./MapView";
 /* ---------- the shared map: the open page tells it what to show ---------- */
 export type Layers = Omit<MapProps, "onClosure" | "onVehicle">;
 export const MapCtx = createContext<(l: Layers) => void>(() => {});
+/** A place over the map for a control that belongs to the open page (the replay bar). */
+export const MapSlotCtx = createContext<HTMLElement | null>(null);
 export function useMapLayers(l: Layers) {
   const set = useContext(MapCtx);
   useEffect(() => set(l), [set, l]);

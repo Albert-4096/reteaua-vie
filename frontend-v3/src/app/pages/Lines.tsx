@@ -9,6 +9,7 @@ import { lineShape, type Station } from "../lines";
 import { LineStrip, type StripRow } from "../LineStrip";
 import type { MapLabel } from "../MapView";
 import { HourBars, PunctualityBar, SeenBar } from "../Measured";
+import { ReplayBar, ReplayButton, silentLines, useReplay } from "../Replay";
 import { link } from "../router";
 import { Kind, LiveDot, Loading, Method, Panel, Section, Tag, Title, useMapLayers, type Layers } from "../ui";
 
@@ -135,6 +136,7 @@ function Line({ routeId }: { routeId: string }) {
   const [hover, setHover] = useState<Station | null>(null);
   const [who, setWho] = useState(ROLES[0]);
   const [done, setDone] = useState<string | null>(null);
+  const replay = useReplay();
 
   const r = net?.byId.get(routeId);
   const shape = net ? lineShape(net, routeId) : null;
@@ -153,6 +155,11 @@ function Line({ routeId }: { routeId: string }) {
     return [{ date: e.date, final: e.final, span: !e.final ? "în curs" : whole ? "toată ziua" : `${hhmm(e.recording.firstAt)}–${hhmm(e.recording.lastAt)}`, seen: Math.min(l.tripsSeen, l.tripsScheduledInRecording), scheduled: l.tripsScheduledInRecording, vehicles: l.vehiclesSeen ?? null }];
   }), [reg.data, routeId]);
   const empty = [...days].reverse().find((d) => d.final && d.scheduled > 0 && d.seen === 0);
+  // one total on the page: the sum of the day rows (the registry), never a second count from another endpoint
+  const total = useMemo(() => {
+    const scheduled = days.reduce((n, d) => n + d.scheduled, 0), observed = days.reduce((n, d) => n + d.seen, 0);
+    return scheduled > 0 ? { scheduled, observed, missed: scheduled - observed, share: observed / scheduled } : null;
+  }, [days]);
 
   // minutes of delay only where punctuality is trusted for the line: otherwise a mismatched trip would print "+49 min"
   const showDelay = !!m && trusted(m.punctuality);
@@ -174,7 +181,9 @@ function Line({ routeId }: { routeId: string }) {
   const placed = rows.reduce((n, x) => n + (Array.isArray(x.chips) ? x.chips.length : 0), 0);
   const track = off[0]?.tracks[0]?.coordinates;
 
-  const layers = useMemo<Layers>(() => {
+  // dashed when the live data has no vehicle of the line: right now, or, in the replay, on the whole recorded day
+  const quiet = replay.on ? silentLines(reg.data, replay.data).includes(routeId) : !!flag;
+  const still = useMemo<Layers>(() => {
     if (!shape) return {};
     const a = shape.stations[0], b = shape.stations[shape.stations.length - 1];
     const labels: MapLabel[] = [];
@@ -183,17 +192,19 @@ function Line({ routeId }: { routeId: string }) {
       labels.push({ id: "a", lon: a.lon, lat: a.lat, text: a.name, tone: "stop", place: horizontal ? (a.lon < b.lon ? "left" : "right") : (a.lat > b.lat ? "top" : "bottom") });
       labels.push({ id: "b", lon: b.lon, lat: b.lat, text: b.name, tone: "stop", place: horizontal ? (a.lon < b.lon ? "right" : "left") : (a.lat > b.lat ? "bottom" : "top") });
     }
-    if (track?.length) labels.push({ id: "off", lon: track[0][0], lat: track[0][1], text: "abatere de la traseu", tone: "ghost", place: "top" });
+    if (track?.length && !replay.on) labels.push({ id: "off", lon: track[0][0], lat: track[0][1], text: "abatere de la traseu", tone: "ghost", place: "top" });
     if (hover) labels.push({ id: "hover", lon: hover.lon, lat: hover.lat, text: hover.name, tone: "stop", place: "top" });
     return {
       fit: { key: `line:${routeId}`, points: shape.path },
-      highlight: flag ? [] : [routeId], ghost: flag ? [routeId] : [], dim: true,
-      detour: track ?? null,
+      highlight: quiet ? [] : [routeId], ghost: quiet ? [routeId] : [], dim: true,
+      detour: replay.on ? null : track ?? null,
       stops: shape.stations.map((s) => ({ id: s.ids[0], name: s.name, lon: s.lon, lat: s.lat, tone: "served" as const })),
-      vehicles: mine.map((v) => ({ id: v.properties.vehicleId, lon: v.geometry.coordinates[0], lat: v.geometry.coordinates[1], routeId })),
       labels,
     };
-  }, [shape, mine, hover, flag, routeId, track]);
+  }, [shape, hover, quiet, routeId, track, replay.on]);
+  // now: this line's vehicles; in the replay: every vehicle of that minute, so the street around the line is seen moving
+  const now = useMemo(() => mine.map((v) => ({ id: v.properties.vehicleId, lon: v.geometry.coordinates[0], lat: v.geometry.coordinates[1], routeId })), [mine, routeId]);
+  const layers = useMemo<Layers>(() => (still.fit ? { ...still, vehicles: replay.on ? replay.vehicles : now, recorded: replay.on ? { stepMs: replay.stepMs } : null } : still), [still, now, replay.on, replay.vehicles, replay.stepMs]);
   useMapLayers(layers);
 
   const triage = async (d: "confirmat" | "respins") => {
@@ -212,7 +223,8 @@ function Line({ routeId }: { routeId: string }) {
     <Panel
       head={
         <>
-          {back}
+          <div className="flex items-center justify-between gap-3">{back}<ReplayButton r={replay} /></div>
+          <ReplayBar r={replay} line={{ routeId, shortName: r.shortName }} />
           <div className="mt-2.5 flex items-start gap-3">
             <LineBadge routeId={routeId} size="lg" />
             <div className="min-w-0">
@@ -272,8 +284,8 @@ function Line({ routeId }: { routeId: string }) {
             </p>
           ) : (
             <p className="tabular text-sm leading-relaxed">
-              <span className="font-semibold">{fmt.format(m.trips.observed)} din {count(m.trips.scheduled, "cursă", "curse")}</span> din orar au fost văzute în datele live
-              {m.trips.missed > 0 ? <>; <span className="font-semibold text-closure-ink">{fmt.format(m.trips.missed)} nevăzute</span>.</> : "."}
+              <span className="font-semibold">{fmt.format((total ?? m.trips).observed)} din {count((total ?? m.trips).scheduled, "cursă", "curse")}</span> din orar au fost văzute în datele live
+              {(total ?? m.trips).missed > 0 ? <>; <span className="font-semibold text-closure-ink">{fmt.format((total ?? m.trips).missed)} nevăzute</span>.</> : "."}
             </p>
           )}
           {days.length > 0 ? (

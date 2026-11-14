@@ -66,6 +66,9 @@ export type WindowCandidate = { window: Window; departuresLost: number; rank: nu
 export type Windows = { candidates: WindowCandidate[]; baselineDeparturesLost: number; method: I18n; searchFrom: string; searchTo: string; hours: number };
 /** `routeIds` is not "lines in common": for `same_corridor` it is the lines of both works, for `shared_detour` the lines on the shared streets. */
 export type Conflict = { closureId: string; otherClosureId: string; otherTitle: I18n; overlap: Window; kind: "same_stops" | "same_corridor" | "shared_detour" | string; stopIds?: string[]; routeIds: string[] };
+/** Our recording as frames. A row is [vehicleId, routeId, lat, lon, bearing, delaySec]; a hole in the recording is a gap frame. */
+export type ReplayFrame = { t: string; gap?: boolean; vehicles?: [string, string | null, number, number, number | null, number | null][] };
+export type Replay = { window: Window; stepSec: number; frameCount: number; gapCount: number; recording: { from: string; to: string; label: I18n } | null; label: I18n; gapNote: I18n; frames: ReplayFrame[] };
 export type Notice = { id: string; zoneName: string; title: I18n; body: I18n; stopIds: string[]; routeIds: string[]; publishedAt: string | null };
 export type ExportFile = { name: string; format: string; standard: string; url: string; updatedAt: string | null };
 export type Alert = { id: string; closureId: string; effect: string; headerText: I18n; descriptionText: I18n; informedEntity: { routeId?: string; stopId?: string }[] };
@@ -183,6 +186,8 @@ export const app = {
   detourCost: (id: string) => getJob<DetourCost>(`/api/closures/${enc(id)}/detour-cost`),
   windowsMeasured: (id: string) => getJob<MeasuredWindows>(`/api/closures/${enc(id)}/windows/measured`),
   registry: () => get<Registry>("/api/registry"),
+  /** Saturday 14 Nov, 06:00–10:41, one frame a minute (the endpoint's default window). */
+  replay: () => get<Replay>("/api/live/replay?stepSec=60"),
   compliance: () => get<{ obligations: Obligation[] }>("/api/compliance"),
   indicators: () => get<{ indicators: Indicator[] }>("/api/indicators"),
   history: () => get<HistoryRow[]>("/api/history"),

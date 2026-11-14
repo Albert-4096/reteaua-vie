@@ -19,6 +19,7 @@ export type MapProps = {
   detour?: Position[] | null; // a temporary route (the replacement bus)
   stops?: MapStop[];
   vehicles?: MapVehicle[];
+  recorded?: { stepMs: number } | null; // the vehicles come from our recording, one frame every stepMs (0 = the slider was dragged)
   labels?: MapLabel[]; // names written on the map, so nobody has to know where a street is
   fit?: { key: string; points?: Position[]; maxZoom?: number }; // frame these points when the key changes; no points = the city
   onClosure?: (id: string) => void;
@@ -39,7 +40,7 @@ const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 type State = Required<Omit<MapProps, "onClosure" | "onVehicle" | "fit">> & { fit?: MapProps["fit"] };
 
 /** One map for the whole app: the city's lines in STPT's colours, works in barrier red, stops, vehicles, and names. */
-export function MapView({ closures = [], highlight = [], ghost = [], dim = false, segment = null, detour = null, stops = [], vehicles = [], labels = [], fit, onClosure, onVehicle }: MapProps) {
+export function MapView({ closures = [], highlight = [], ghost = [], dim = false, segment = null, detour = null, stops = [], vehicles = [], recorded = null, labels = [], fit, onClosure, onVehicle }: MapProps) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const net = useRef<Network | null>(null);
@@ -48,11 +49,44 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
   const markers = useRef(new Map<string, maplibregl.Marker>());
   const shown = useRef(new Map<string, [number, number]>()); // where each vehicle is drawn right now
   const glide = useRef(0);
-  const state: State = { closures, highlight, ghost, dim, segment, detour, stops, vehicles, labels, fit };
+  const state: State = { closures, highlight, ghost, dim, segment, detour, stops, vehicles, recorded, labels, fit };
   const latest = useRef(state);
   latest.current = state;
   const cb = useRef({ onClosure, onVehicle });
   cb.current = { onClosure, onVehicle };
+
+  /** Vehicles glide to their new place instead of jumping. A replay moves them at its own pace, in a straight line. */
+  const move = (first: boolean) => {
+    const m = map.current;
+    if (!m || !ready.current) return;
+    const p = latest.current;
+    const target = new Map(p.vehicles.map((v) => [v.id, v] as const));
+    for (const id of [...shown.current.keys()]) if (!target.has(id)) shown.current.delete(id);
+    const from = new Map(shown.current);
+    const draw = (t: number) => {
+      const feats: Feature[] = [];
+      for (const v of target.values()) {
+        const a = from.get(v.id) ?? [v.lon, v.lat];
+        const at: [number, number] = [a[0] + (v.lon - a[0]) * t, a[1] + (v.lat - a[1]) * t];
+        shown.current.set(v.id, at);
+        const r = net.current?.byId.get(v.routeId);
+        feats.push({ type: "Feature", geometry: { type: "Point", coordinates: at }, properties: { routeId: v.routeId, label: r?.shortName ?? "", color: `#${r?.color ?? "16201c"}`, ink: r ? inkOn(r.color) : "#ffffff" } });
+      }
+      (m.getSource("vehicles") as GeoJSONSource).setData(fc(feats));
+    };
+    const ms = p.recorded ? p.recorded.stepMs : 1400;
+    cancelAnimationFrame(glide.current);
+    if (first || calm() || from.size === 0 || ms <= 0) draw(1);
+    else {
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / ms);
+        draw(p.recorded ? k : 1 - (1 - k) ** 3);
+        if (k < 1) glide.current = requestAnimationFrame(step);
+      };
+      glide.current = requestAnimationFrame(step);
+    }
+  };
 
   const sync = (first: boolean) => {
     const m = map.current;
@@ -75,32 +109,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
     m.setPaintProperty("lines-base", "line-color", focused ? GREY : ["get", "color"]);
     m.setPaintProperty("lines-base", "line-opacity", focused ? 0.4 : 0.55);
 
-    // vehicles glide to their new place instead of jumping
-    const target = new Map(p.vehicles.map((v) => [v.id, v] as const));
-    for (const id of [...shown.current.keys()]) if (!target.has(id)) shown.current.delete(id);
-    const from = new Map(shown.current);
-    const draw = (t: number) => {
-      const feats: Feature[] = [];
-      for (const v of target.values()) {
-        const a = from.get(v.id) ?? [v.lon, v.lat];
-        const at: [number, number] = [a[0] + (v.lon - a[0]) * t, a[1] + (v.lat - a[1]) * t];
-        shown.current.set(v.id, at);
-        const r = net.current?.byId.get(v.routeId);
-        feats.push({ type: "Feature", geometry: { type: "Point", coordinates: at }, properties: { routeId: v.routeId, label: r?.shortName ?? "", color: `#${r?.color ?? "16201c"}`, ink: r ? inkOn(r.color) : "#ffffff" } });
-      }
-      src("vehicles").setData(fc(feats));
-    };
-    cancelAnimationFrame(glide.current);
-    if (first || calm() || from.size === 0) draw(1);
-    else {
-      const t0 = performance.now();
-      const step = (now: number) => {
-        const k = Math.min(1, (now - t0) / 1400);
-        draw(1 - (1 - k) ** 3);
-        if (k < 1) glide.current = requestAnimationFrame(step);
-      };
-      glide.current = requestAnimationFrame(step);
-    }
+    if (first) move(true);
 
     // names on the map
     const want = new Map(p.labels.map((l) => [l.id, l] as const));
@@ -210,7 +219,9 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
   }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => sync(false), [closures, highlight, ghost, dim, segment, detour, stops, vehicles, labels, fit]);
+  useEffect(() => sync(false), [closures, highlight, ghost, dim, segment, detour, stops, labels, fit]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => move(false), [vehicles]);
 
   return <div ref={el} className="h-full w-full" role="application" aria-label="Harta rețelei" />;
 }

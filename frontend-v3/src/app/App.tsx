@@ -13,7 +13,7 @@ import { Reports } from "./pages/Reports";
 import { Today } from "./pages/Today";
 import { Work } from "./pages/Work";
 import { Works } from "./pages/Works";
-import { MapCtx, type Layers } from "./ui";
+import { MapCtx, MapSlotCtx, type Layers } from "./ui";
 
 type Place = { id: "azi" | "lucrari" | "linii" | "rapoarte"; label: string; icon: LucideIcon; to: Route };
 const PLACES: Place[] = [
@@ -31,6 +31,7 @@ const PLACES: Place[] = [
 export function App() {
   const route = useRoute();
   const [layers, setLayers] = useState<Layers>({});
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
   const place = route.page === "lucrare" ? "lucrari" : route.page;
   const hasMap = route.page !== "rapoarte";
 
@@ -43,6 +44,7 @@ export function App() {
 
   return (
     <MapCtx.Provider value={setLayers}>
+      <MapSlotCtx.Provider value={slot}>
       <div className="flex h-dvh flex-col-reverse bg-background text-foreground md:flex-row">
         <Rail place={place} />
         <main className="flex min-h-0 min-w-0 flex-1 flex-col-reverse md:flex-row">
@@ -50,9 +52,11 @@ export function App() {
           <div className={cn("relative h-[36dvh] shrink-0 border-b md:h-auto md:flex-1 md:border-b-0", !hasMap && "hidden")}>
             <MapView {...layers} onClosure={(id) => go({ page: "lucrare", id, tab: "impact" })} onVehicle={(routeId) => go({ page: "linii", routeId })} />
             <Legend l={layers} />
+            <div ref={setSlot} />
           </div>
         </main>
       </div>
+      </MapSlotCtx.Provider>
     </MapCtx.Provider>
   );
 }
@@ -128,7 +132,7 @@ function Legend({ l }: { l: Layers }) {
   if (tones.has("served")) items.push([<span className="size-2 rounded-full border-[1.5px] border-[#5b6a64] bg-white" />, "oprește"]);
   if (l.detour?.length) items.push([<span className="h-0.5 w-5" style={{ backgroundImage: "repeating-linear-gradient(90deg, var(--foreground) 0 5px, transparent 5px 8px)" }} />, "linie temporară"]);
   if (l.ghost?.length) items.push([<span className="h-[3px] w-5" style={{ backgroundImage: "repeating-linear-gradient(90deg, #4d897f 0 3px, transparent 3px 7px)" }} />, "linie fără vehicul în datele live"]);
-  if (l.vehicles?.length) items.push([<span className="size-2.5 rounded-full bg-[#4d897f] ring-2 ring-white" />, "vehicul, date live"]);
+  if (l.vehicles?.length) items.push([<span className="size-2.5 rounded-full bg-[#4d897f] ring-2 ring-white" />, l.recorded ? "vehicul, din înregistrare" : "vehicul, date live"]);
   if (!items.length) return null;
   return (
     <ul aria-label="Legenda hărții" className="pointer-events-none absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-x-4 gap-y-1.5 rounded-lg border bg-card/95 px-3 py-2 text-xs text-foreground/80 shadow-card">

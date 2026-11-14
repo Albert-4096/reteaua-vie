@@ -7,6 +7,7 @@ import { app, count, fmt, hhmm, phase, place, registrySpan, seenByLine, spread, 
 import type { MapLabel } from "../MapView";
 import { link, type Route } from "../router";
 import { SeenBar } from "../Measured";
+import { ReplayBar, ReplayButton, silentLines, useReplay } from "../Replay";
 import { Kind, LiveDot, Loading, Panel, Problem, Section, Tag, Title, useMapLayers, type Layers } from "../ui";
 import { answerOf } from "./Work";
 
@@ -29,6 +30,7 @@ export function Today() {
   const reg = useLoad(app.registry);
   const net = useNetwork();
   const [hover, setHover] = useState<string | null>(null);
+  const replay = useReplay();
 
   const now = o.data?.at;
   const waiting = (closures.data ?? []).filter((c) => c.status !== "published");
@@ -62,13 +64,16 @@ export function Today() {
     })),
   ];
 
-  const layers = useMemo<Layers>(() => {
+  // everything but the vehicles: it keeps its identity while a replay moves them four times a second
+  const still = useMemo<Layers>(() => {
     const labels: MapLabel[] = spread(current.flatMap((c) => {
       const p = coords(c);
       const mid = p[Math.floor(p.length / 2)];
       return mid ? [{ id: c.id, lon: mid[0], lat: mid[1], text: place(c.title.ro), tone: "work" as const }] : [];
     }));
-    for (const r of noVehicle) {
+    // dashed: now, the lines with no vehicle in the live data; in the replay, the lines the recording never shows that day
+    const ghost = replay.on ? silentLines(reg.data, replay.data).map((id) => ({ routeId: id, shortName: net?.byId.get(id)?.shortName ?? id })) : noVehicle;
+    for (const r of ghost) {
       const path = net?.paths.find((p) => p.routeId === r.routeId)?.geometry.coordinates;
       const mid = path?.[Math.floor(path.length / 2)];
       if (mid) labels.push({ id: `ghost-${r.routeId}`, lon: mid[0], lat: mid[1], text: `${r.shortName} · fără vehicul`, tone: "ghost", place: "top" });
@@ -76,12 +81,13 @@ export function Today() {
     return {
       fit: { key: "city" },
       closures: current.map((c) => ({ id: c.id, geometry: c.geometry, selected: c.id === hover })),
-      ghost: noVehicle.map((r) => r.routeId),
-      vehicles: (vehicles.data?.features ?? []).map((v) => ({ id: v.properties.vehicleId, lon: v.geometry.coordinates[0], lat: v.geometry.coordinates[1], routeId: v.properties.routeId })),
+      ghost: ghost.map((r) => r.routeId),
       labels,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [closures.data, now, missing.data, vehicles.data, net, hover]);
+  }, [closures.data, now, missing.data, net, hover, replay.on, replay.data, reg.data]);
+  const live = useMemo(() => (vehicles.data?.features ?? []).map((v) => ({ id: v.properties.vehicleId, lon: v.geometry.coordinates[0], lat: v.geometry.coordinates[1], routeId: v.properties.routeId })), [vehicles.data]);
+  const layers = useMemo<Layers>(() => ({ ...still, vehicles: replay.on ? replay.vehicles : live, recorded: replay.on ? { stepMs: replay.stepMs } : null }), [still, live, replay.on, replay.vehicles, replay.stepMs]);
   useMapLayers(layers);
 
   const at = vehicles.data?.features[0]?.properties.updatedAt;
@@ -120,11 +126,19 @@ export function Today() {
         )}
       </Section>
 
-      <Section title="Orarul față de stradă">
-        <p className="flex items-center gap-2 text-sm">
-          <LiveDot />
-          <span className="tabular">{vehicles.data ? `${count(vehicles.data.features.length, "vehicul", "vehicule")} în datele live${at ? `, la ${hhmm(at)}` : ""}` : "Se citesc vehiculele…"}</span>
-        </p>
+      <Section title="Orarul față de stradă" aside={<ReplayButton r={replay} />}>
+        <ReplayBar r={replay} />
+        {replay.on && replay.frame ? (
+          <p className="flex items-center gap-2 text-sm">
+            <span className="size-2 shrink-0 rounded-full bg-foreground/50" aria-hidden />
+            <span className="tabular">{replay.frame.gap ? "Gol în înregistrare" : count(replay.vehicles.length, "vehicul", "vehicule")}, {weekday(replay.frame.t).split(",")[0]} la {hhmm(replay.frame.t)} · înregistrare</span>
+          </p>
+        ) : (
+          <p className="flex items-center gap-2 text-sm">
+            <LiveDot />
+            <span className="tabular">{vehicles.data ? `${count(vehicles.data.features.length, "vehicul", "vehicule")} în datele live${at ? `, la ${hhmm(at)}` : ""}` : "Se citesc vehiculele…"}</span>
+          </p>
+        )}
         {o.data?.ghostDeparturesToday != null && (
           <p className="mt-2.5 text-sm leading-relaxed text-foreground/80">
             <span className="tabular font-semibold text-foreground">{fmt.format(o.data.ghostDeparturesToday)}</span> de plecări din orarul de azi nu au loc: o lucrare publicată a scos acele stații de pe traseul liniei.
