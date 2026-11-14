@@ -32,3 +32,12 @@ def test_sources_from_disk(tmp_path):
 
 def test_empty_dir_leaves_sources_out(tmp_path):
     assert build_sources(tmp_path, gtfs_time=None, gtfs_version=None, parking_time=None) == []
+
+
+def test_deployed_sha_from_env(monkeypatch):
+    from app.overview.api_overview import health
+
+    monkeypatch.delenv("GIT_SHA", raising=False)
+    assert health().deployedSha is None
+    monkeypatch.setenv("GIT_SHA", "abc1234")
+    assert health().deployedSha == "abc1234"

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import os
 from datetime import datetime
 
 from fastapi import APIRouter, Query
@@ -52,6 +53,7 @@ def health() -> Health:
         dataFrozenAt=iso(newest) if (s.data_freeze and newest) else None,
         demoNow=iso(s.demo_now) if s.demo_now else None,
         modulesFailed=_modules_failed(),
+        deployedSha=os.environ.get("GIT_SHA") or None,
         sources=build_sources(
             s.live_dir,
             gtfs_time=g,

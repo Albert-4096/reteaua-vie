@@ -19,6 +19,7 @@ x-backend: &backend
   environment:
     DATA_DIR: /data
     LIVE_DIR: /data/live
+    GIT_SHA: ${GIT_SHA:-}   # the deployed commit, shown as deployedSha in /api/health
   volumes:
     - ${DATA_DIR:?set DATA_DIR to the data directory}:/data:ro
     - ${DATA_DIR}/state:/data/state

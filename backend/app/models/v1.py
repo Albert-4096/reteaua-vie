@@ -67,6 +67,7 @@ class Health(Model):
     demoNow: IsoTime | None = None
     modulesFailed: list[str] | None = None  # v2.3: api modules that failed to import (skipped)
     sources: list[HealthSource] | None = None  # v2.4: per-source freshness (N3)
+    deployedSha: str | None = None  # env GIT_SHA set by `make up`; null on a dev server
 
 
 class NetworkRoute(Model):

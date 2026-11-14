@@ -96,7 +96,7 @@ demo: web
 # The containers run as you, so state/ and cache/ stay writable for make dev.
 HOST_UID := $(shell id -u)
 HOST_GID := $(shell id -g)
-STACK_ENV := HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID)
+STACK_ENV := HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) GIT_SHA=$(shell git rev-parse HEAD 2>/dev/null)
 
 up: web
 	@if [ -z "$$RV_PORT" ] && { tmux has-session -t rv-api 2>/dev/null || tmux has-session -t rv-demo 2>/dev/null; }; then \
