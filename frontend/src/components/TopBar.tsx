@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { api, type Health } from "../api/client";
 import { fmtDateTime } from "../lib/format";
@@ -10,10 +11,15 @@ export function TopBar({ step, caseKey }: { step: number; caseKey: string | null
   const health = useResource<Health>("health", () => api.health());
   const steps = t("steps", { returnObjects: true }) as string[];
   const demoNow = health.data?.demoNow;
+  const nav = useRef<HTMLElement>(null);
+  // At phone width the step names scroll sideways: keep the current one in view.
+  useEffect(() => {
+    nav.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [step]);
   return (
     <header className="topbar">
       <span className="topbar-name">{t("product")}</span>
-      <nav aria-label={t("stepsNav")}>
+      <nav ref={nav} aria-label={t("stepsNav")}>
         {steps.map((name, i) => {
           const href = stepHref(i, caseKey);
           return (

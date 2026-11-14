@@ -736,3 +736,87 @@ details[open] > summary {
     animation: none !important;
   }
 }
+
+/* Phone width (R22): no sideways page scroll. The top bar wraps into rows, the step names scroll
+   on their own line, and the map sits above the panel; the page itself scrolls down. */
+@media (max-width: 760px) {
+  .app {
+    display: block;
+    height: auto;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: var(--sp-1) var(--sp-3);
+    padding: var(--sp-2) var(--sp-4) 0;
+  }
+
+  .topbar-lang {
+    order: 1;
+    margin-left: auto;
+  }
+
+  .topbar nav {
+    order: 2;
+    flex-basis: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .data-status {
+    order: 3;
+    margin-left: 0;
+  }
+
+  .topbar-clock {
+    order: 4;
+  }
+
+  .data-status-pop {
+    top: auto;
+    bottom: var(--sp-4);
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .workspace > .map {
+    min-height: 360px;
+  }
+
+  .workspace > .panel {
+    grid-column: 1;
+    grid-row: 2;
+    border-left: 0;
+    border-top: var(--rule-w) solid var(--c-rule);
+  }
+
+  .panel-body {
+    overflow-y: visible;
+  }
+
+  .stage {
+    padding: var(--sp-4);
+  }
+
+  .compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .compare article + article {
+    border-left: 0;
+    padding-left: 0;
+    border-top: var(--rule-w) solid var(--c-rule);
+    padding-top: var(--sp-4);
+  }
+
+  .phone {
+    width: 100%;
+    max-width: var(--phone-w);
+  }
+
+  .figure-source {
+    width: min(280px, calc(100vw - 2 * var(--sp-4)));
+  }
+}
