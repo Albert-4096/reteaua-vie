@@ -115,6 +115,33 @@ Toate ieșirile sunt listate, cu data ultimei actualizări, la `GET /api/exports
 **Endpointurile orașului pe care le citim:** doar GET și niciodată la cererea unui utilizator. Backendul citește copii locale și înregistrarea din `$LIVE_DIR`; id-urile de linie și stație din GTFS sunt aceleași cu cele din rețeaua Primăriei (`/api/mobile/transit/network`, verificat pe 4.31). **Cine le poate folosi:** CityApp poate citi `alerts.pb` sau `alerts.json` pentru alerta pe stație și `notices.json` pentru anunțul pe cartier. Google Maps și alte aplicații de rute citesc alerte GTFS-RT când cine publică GTFS-ul static adaugă `alerts.pb` ca feed în timp real. Afișajele din stații pot primi aceeași alertă standard; integrarea nu există azi. O platformă NGSI-LD (de exemplu Orion-LD) ia `alerts.ngsi.json` prin upsert, iar `nap-metadata.json` descrie toate fișierele pentru Punctul Național de Acces.
 *City endpoints we read: GET only, never on a user's request: the backend reads local copies and the recording in `$LIVE_DIR`; GTFS line and stop ids are the same as in the City Hall network endpoint (checked on 4.31). Who can use the outputs: CityApp can read `alerts.pb` or `alerts.json` for the stop alert and `notices.json` for the neighbourhood notice. Google Maps and other trip planners read GTFS-RT alerts once whoever publishes the static GTFS adds `alerts.pb` as its realtime feed. Station displays could take the same standard alert; that integration does not exist today. An NGSI-LD platform (e.g. Orion-LD) takes `alerts.ngsi.json` by upsert, and `nap-metadata.json` describes every file for the National Access Point.*
 
+## 5b. Lipirea surselor / Glue It Together
+
+Opt surse care nu se cunosc între ele ajung la **aceeași analiză a unei lucrări** și ies ca fișiere standard. Nimic nu se cheamă la cererea utilizatorului: fiecare sursă e citită o dată și ținută în cache.
+*Eight sources that do not know each other meet in **one analysis of a closure** and leave as standard files. Nothing is fetched on a user's request: each source is read once and cached.*
+
+| Sursă / Source | Ce aduce / What it brings | Unde intră / Where it goes in |
+|---|---|---|
+| GTFS SMTT 4.31 | orarul: plecări, trasee, opriri | plecări pierdute, km nefăcuți, acoperire, coridoare |
+| Rețeaua și cartierele Primăriei | linii, stații, 40 de cartiere | stațiile afectate, locuitorii pe cartier |
+| `transit/vehicles` (**nedocumentat**: un singur cititor, la 15 s, din cache) | poziția și întârzierea vehiculelor | orarul observat, verificarea la stații, fiabilitatea pe linie |
+| Anunțuri STPT | textul lucrării | parserul: ce stații și linii se suspendă |
+| OpenStreetMap | rețeaua de drumuri, semafoare, străzi | ocolirea, străzile de cartier, mersul pe jos |
+| GHSL 2020 (model) | locuitori pe celulă de 100 m | locuitori fără stație, acoperire slabă cu transport public |
+| Sesizări | doar numărul pe categorii | bilanțul lucrării |
+| Validatorul GTFS-RT, r5py, WeasyPrint | verificarea feedului, accesul pe rețea, afișul PDF | publicare și rapoarte |
+
+**Un singur drum:** anunț → rânduri suspendate → plecări pierdute și locuitori → ocolire → fereastră → publicare. **Patru familii de ieșiri:** (1) *CityApp*: `alerts.pb`, `alerts.json`, `notices.json`; (2) *textul anunțului*: `GET /api/closures/{id}/notice` și afișul de stație; (3) *SMTT*: km nefăcuți, `GET /api/closures/{id}/km?format=csv`; (4) *aplicații de navigație*: `waze-cifs.json` și `avoid-streets.geojson` („pot citi”: nu știm ca vreo aplicație să le citească).
+*One path: notice, suspended rows, lost departures and residents, detour, window, publish. Four output families: CityApp feeds; the notice text and stop poster; SMTT km and CSV; two files a navigation app could read (we do not know that any does).*
+
+**Măsurat la scrierea acestei secțiuni (14 nov 2026, ~13:50), cu fereastra fiecărei cifre / Measured when this section was written, with each figure's window:**
+
+- Înregistrarea vehiculelor, **din 23 ore înregistrate (vin. 13:47 → sâm. 12:59)**: 332.742 rapoarte de la 183 de vehicule, din care orarul observat scoate 42.423 de opriri (`GET /api/observed/summary`).
+- Aceeași înregistrare, aceeași fereastră: **81,5 %** din 3.853 de curse cu indicator au vehicul marcat accesibil în fluxul Primăriei; stația nu e verificată (`GET /api/accessibility/lines`).
+- GTFS 4.31, zi de lucru 2026-11-09 (orar planificat, nu observat), GHSL 2020: **71.598 din 366.817** de locuitori au acoperire slabă cu transport public, adică sub 2 plecări pe oră la 400 m (`GET /api/coverage/zones`); 64 de coridoare cu mai multe linii pe aceleași stații (`GET /api/corridors`).
+- Din `eval/results/latest.json` (2026-11-14T13:42:48+02:00, commit `941f384`, GTFS 4.31): validatorul MobilityData **a trecut** pe feedul publicat, la 3 rulări; lucrarea demo `cl_20261108_16dec`, 2026-11-08 10:00–18:00: 2.262 de plecări pierdute și 1.845 de locuitori fără stație la 400 m (model, nu recensământ). Restul cifrelor de evaluare: secțiunea 7.
+*Vehicle recording, from 23 recorded hours (Fri 13:47 → Sat 12:59): 332,742 reports from 183 vehicles, from which the observed timetable derives 42,423 stop events. Same window: 81.5 % of 3,853 trips with a flag ran with a vehicle the City Hall feed marks step-free; the stop is not verified. GTFS 4.31, weekday 2026-11-09 (planned, not observed), GHSL 2020: 71,598 of 366,817 residents have weak public transport coverage (under 2 departures an hour within 400 m); 64 corridors. From `eval/results/latest.json` (generated 2026-11-14T13:42:48+02:00, commit 941f384): the MobilityData validator passed on the published feed in 3 runs; the demo closure shows 2,262 departures lost and 1,845 residents losing their stop. The rest of the evaluation: section 7.*
+
 ## 6. Lista de adoptare / Adoption checklist
 
 Criteriile din ghidul Primăriei. ✔ doar unde codul o arată. / *City Hall guide criteria; ✔ only where the code shows it.*
