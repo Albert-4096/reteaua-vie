@@ -185,7 +185,7 @@ function ParkingFold({ paid, error, parking, csv }: { paid: PaidParking | null; 
                 <ul className="mt-4 divide-y">
                   {rows.map((r) => (
                     <li key={`${r.lot}|${r.name}|${r.tariff}`} className="flex items-baseline justify-between gap-3 py-2">
-                      <span className="min-w-0">{r.name}{r.lot && <span className="text-muted-foreground"> · parcare</span>}{r.n > 1 && <span className="tabular text-muted-foreground"> × {count(r.n, "tronson", "tronsoane")}</span>}</span>
+                      <span className="min-w-0">{r.name}{r.lot && <span className="text-muted-foreground"> · parcare</span>}{r.n > 1 && <span className="tabular whitespace-nowrap text-muted-foreground"> × {count(r.n, "tronson", "tronsoane")}</span>}</span>
                       <span className="shrink-0 text-muted-foreground">{TARIFF[r.tariff] ?? r.tariff}</span>
                     </li>
                   ))}
