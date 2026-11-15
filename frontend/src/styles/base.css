@@ -705,6 +705,31 @@ details[open] > summary {
   font-weight: 600;
 }
 
+.qr-stops {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: var(--rule-w) solid var(--c-rule);
+}
+
+.qr-stops a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 48px;
+  padding: var(--sp-3) 0;
+  border-bottom: var(--rule-w) solid var(--c-rule);
+  color: inherit;
+  text-decoration: none;
+}
+
+.qr-stop-name {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .qr-listen-btn {
   font-size: var(--fs-l);
   padding: var(--sp-4);

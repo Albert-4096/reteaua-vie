@@ -1,9 +1,10 @@
 // Public page behind the poster's QR code: /a/{closureId}?stop={stopId} (SPEC §7.2, T8).
+// Without ?stop= (the link printed in the notice) it lists the stops that have an alert, each with its own page.
 // Mobile first, no login, no analytics: it calls only our own /api.
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { api, type Alert, type Analysis, type Closure, type Health } from "../api/client";
-import { fmtDateTime, fmtMeters, fmtWindow } from "../lib/format";
+import { fmtDate, fmtDateTime, fmtMeters, fmtTime, fmtWindow } from "../lib/format";
 import { useResource } from "../lib/store";
 import { nearestFor } from "../steps/3-publish/outputs";
 
@@ -36,8 +37,10 @@ export function QrPage({ closureId, stopId }: Props) {
   }, []);
 
   useEffect(() => {
-    // preview=1: the phone frame in step 3 of the back office. It is not a poster scan.
-    if (stopId && !new URLSearchParams(window.location.search).has("preview")) sendScan(closureId, stopId);
+    // preview=1: the phone frame in step 3 of the back office. via=list: opened from this page's own stop list.
+    // Neither is a poster scan.
+    const q = new URLSearchParams(window.location.search);
+    if (stopId && !q.has("preview") && q.get("via") !== "list") sendScan(closureId, stopId);
   }, [closureId, stopId]);
 
   const c = closure.data;
@@ -55,16 +58,41 @@ export function QrPage({ closureId, stopId }: Props) {
   const ended = !!period && new Date(period.end) < now;
   const openEnd = !!alert && /finalizarea lucrărilor/.test(alert.descriptionText.ro);
   const near = stopId ? nearestFor(analysis.data, stopId) : null;
+  const stopList = !stopId && !alert ? stopsWithAlert(alerts.data ?? [], analysis.data) : [];
 
   return (
     <main className="qr" lang="ro">
       <p className="qr-kicker">{t("qr.kicker")}</p>
       {loading && !c && <p className="state-msg">{t("loading")}</p>}
       {closure.error && <p className="error-msg">{t("qr.noAlert")}</p>}
-      {c && !alert && !alerts.loading && (
+      {c && !alert && !alerts.loading && stopList.length > 0 && (
         <>
           <h1>{c.title.ro}</h1>
-          <p className="qr-status">{t("qr.noAlert")}</p>
+          <dl className="qr-facts">
+            <div>
+              <dt>{t("qr.window")}</dt>
+              <dd>{fmtPeriod(c.window)}</dd>
+            </div>
+          </dl>
+          <section aria-labelledby="qr-stops-title">
+            <h2 id="qr-stops-title">{t("qr.pickStop")}</h2>
+            <ul className="qr-stops">
+              {stopList.map((s) => (
+                <li key={s.stopId}>
+                  <a href={`/a/${encodeURIComponent(closureId)}?stop=${encodeURIComponent(s.stopId)}&via=list`}>
+                    <span className="qr-stop-name">{s.name}</span>
+                    {s.towards && <span className="small muted">{t("qr.towards", { headsign: s.towards })}</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
+      {c && !alert && !alerts.loading && stopList.length === 0 && (
+        <>
+          <h1>{c.title.ro}</h1>
+          <p className="qr-status">{t(stopId ? "qr.noAlert" : "qr.notPublished")}</p>
         </>
       )}
       {c && alert && (
@@ -78,7 +106,7 @@ export function QrPage({ closureId, stopId }: Props) {
               <dd>
                 {period && openEnd
                   ? `${t("qr.from")} ${fmtDateTime(period.start)}, ${t("qr.untilEnd")}`
-                  : period && fmtWindow(period)}
+                  : period && fmtPeriod(period)}
               </dd>
             </div>
             {stopId && (
@@ -113,6 +141,29 @@ export function QrPage({ closureId, stopId }: Props) {
       </footer>
     </main>
   );
+}
+
+/** A period as the alert text writes it: an end at midnight is 24:00 of the day before, so the two never disagree on one screen. */
+function fmtPeriod(w: { start: string; end: string }): string {
+  if (fmtTime(w.end) !== "00:00") return fmtWindow(w);
+  const dayBefore = new Date(new Date(w.end).getTime() - 60_000).toISOString();
+  return fmtDate(w.start) === fmtDate(dayBefore)
+    ? `${fmtDate(w.start)}, ${fmtTime(w.start)}–24:00`
+    : `${fmtDate(w.start)}, ${fmtTime(w.start)} – ${fmtDate(dayBefore)}, 24:00`;
+}
+
+/** The stops that have their own alert, by name; two stops with one name also say where the vehicle goes. */
+function stopsWithAlert(alerts: Alert[], analysis: Analysis | null | undefined) {
+  const ids = [...new Set(alerts.flatMap((a) => a.informedEntity.map((e) => e.stopId).filter((s): s is string => !!s)))];
+  const rows = ids.map((id) => {
+    const s = analysis?.stops.find((x) => x.stopId === id);
+    const header = alerts.find((a) => a.informedEntity.some((e) => e.stopId === id))?.headerText.ro ?? "";
+    return { stopId: id, name: s?.name ?? header.match(/^Stația (.+?) nu este/)?.[1] ?? id, towards: s?.headsign ?? null };
+  });
+  const shared = (name: string) => rows.filter((r) => r.name === name).length > 1;
+  return rows
+    .sort((a, b) => a.name.localeCompare(b.name, "ro") || a.stopId.localeCompare(b.stopId))
+    .map((r) => ({ ...r, towards: shared(r.name) ? r.towards : null }));
 }
 
 function shortNames(routeIds: string[] | null | undefined): string {
