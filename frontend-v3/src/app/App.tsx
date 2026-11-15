@@ -137,7 +137,7 @@ function Legend({ l }: { l: Layers }) {
   if (l.vehicles?.length) items.push([<span className="size-2.5 rounded-full bg-[#4d897f] ring-2 ring-white" />, l.recorded ? "vehicul, din înregistrare" : "vehicul, date live"]);
   if (!items.length) return null;
   return (
-    <ul aria-label="Legenda hărții" className="pointer-events-none absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-x-4 gap-y-1.5 rounded-lg border bg-card/95 px-3 py-2 text-xs text-foreground/80 shadow-card">
+    <ul aria-label="Legenda hărții" className={cn("pointer-events-none absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-wrap gap-x-4 gap-y-1.5 rounded-lg border bg-card/95 px-3 py-2 text-xs text-foreground/80 shadow-card", l.recorded && "max-md:hidden")}>
       {items.map(([swatch, word]) => <li key={word} className="flex items-center gap-2">{swatch}{word}</li>)}
     </ul>
   );

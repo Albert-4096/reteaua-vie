@@ -83,7 +83,7 @@ export function ReplayBar({ r, line }: { r: ReplayState; line?: { routeId: strin
   const mine = line && f?.vehicles ? f.vehicles.filter((v) => v[1] === line.routeId).length : 0;
 
   return createPortal(
-    <section aria-label="Redarea înregistrării" className="absolute inset-x-3 bottom-9 z-10 mx-auto max-w-xl rounded-xl border bg-card/95 px-3.5 pb-2.5 pt-3 shadow-card backdrop-blur-sm md:bottom-10">
+    <section aria-label="Redarea înregistrării" className="absolute inset-x-2 bottom-2 z-10 mx-auto max-w-xl rounded-xl border bg-card/95 px-3 pb-2 pt-2.5 shadow-card backdrop-blur-sm md:inset-x-3 md:bottom-10 md:px-3.5 md:pb-2.5 md:pt-3">
       {r.error ? (
         <p className="flex items-center justify-between gap-3 text-sm">
           <span>Înregistrarea nu s-a încărcat ({r.error}).</span>
@@ -98,7 +98,7 @@ export function ReplayBar({ r, line }: { r: ReplayState; line?: { routeId: strin
             </button>
             <p className="min-w-0 flex-1 leading-tight">
               <span className="tabular text-base font-semibold">{hhmm(f.t)}</span>
-              <span className="ml-2 text-sm text-muted-foreground">{weekday(f.t)} · înregistrare</span>
+              <span className="ml-2 text-sm text-muted-foreground"><span className="max-md:hidden">{weekday(f.t)} · </span>înregistrare<span className="md:hidden"> de {weekday(f.t).split(",")[0]}</span></span>
               <span className="tabular mt-0.5 block text-xs text-muted-foreground" aria-live="off">
                 {f.gap ? "gol în înregistrare la acest minut" : `${count(r.vehicles.length, "vehicul", "vehicule")}${line ? "" : " în datele live"}`}
                 {line && !f.gap && <> · <span className="font-medium text-foreground">linia {line.shortName}: {!ever ? "niciunul în tot intervalul" : mine === 0 ? "niciunul" : count(mine, "vehicul", "vehicule")}</span></>}
@@ -109,8 +109,8 @@ export function ReplayBar({ r, line }: { r: ReplayState; line?: { routeId: strin
             </button>
           </div>
           <input type="range" min={0} max={r.n - 1} step={1} value={r.i} onChange={(e) => r.seek(Number(e.target.value))}
-            aria-label="Momentul din înregistrare" aria-valuetext={hhmm(f.t)} className="mt-2.5 block w-full cursor-pointer accent-[var(--primary)]" />
-          <p className="tabular mt-0.5 flex justify-between gap-3 text-[0.6875rem] text-muted-foreground">
+            aria-label="Momentul din înregistrare" aria-valuetext={hhmm(f.t)} className="mt-1.5 block w-full cursor-pointer accent-[var(--primary)] md:mt-2.5" />
+          <p className="tabular mt-0.5 flex justify-between gap-3 text-[0.6875rem] text-muted-foreground max-md:hidden">
             <span>{hhmm(d.window.start)}</span>
             <span className="hidden truncate sm:inline">{d.label.ro}, un cadru pe minut</span>
             <span>{hhmm(d.window.end)}</span>
