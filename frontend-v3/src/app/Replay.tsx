@@ -8,6 +8,8 @@ import { MapSlotCtx } from "./ui";
 /** One recorded minute stays on screen this long while playing: 4 minutes of street per second. */
 const FRAME_MS = 250;
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** `?redare` opens a page with the replay running; `?redare=09:20` opens it paused at that recorded minute. */
+const asked = () => new URLSearchParams(location.search).get("redare");
 
 export type ReplayState = ReturnType<typeof useReplay>;
 
@@ -17,7 +19,7 @@ export type ReplayState = ReturnType<typeof useReplay>;
  * The recording is fetched only when somebody asks for it.
  */
 export function useReplay() {
-  const [on, setOn] = useState(() => new URLSearchParams(location.search).has("redare"));
+  const [on, setOn] = useState(() => asked() != null);
   const [data, setData] = useState<Replay | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [i, setI] = useState(0);
@@ -28,7 +30,11 @@ export function useReplay() {
     if (!on || data) return;
     let alive = true;
     app.replay()
-      .then((d) => { if (!alive) return; setData(d); setError(null); setI(0); setPlaying(!calm()); })
+      .then((d) => {
+        if (!alive) return;
+        const minute = (asked() ?? "").padStart(5, "0"), at = d.frames.findIndex((f) => hhmm(f.t) === minute);
+        setData(d); setError(null); setI(Math.max(at, 0)); setPlaying(at < 0 && !calm());
+      })
       .catch((e: Error) => alive && setError(e.message));
     return () => { alive = false; };
   }, [on, data]);
