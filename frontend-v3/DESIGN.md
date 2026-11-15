@@ -121,7 +121,7 @@ The app has **places, not steps**. A person opens one of four:
 | Place | Who stays there | What it holds |
 |---|---|---|
 | **Azi** | STPT dispatch, all day | What waits for a person, then the timetable against the street: live vehicles, lines with fewer trips seen than scheduled, works under way |
-| **Lucrări** | City Hall, per request | Every work. One work opens as a page with the only sequence in the product: Impact → Perioadă → Anunț → Pe teren |
+| **Lucrări** | City Hall, per request | Every work, and the way a new one enters (its notice, pasted). One work opens as a page with the only sequence in the product: Impact → Perioadă → Anunț → Pe teren |
 | **Linii** | Both, as reference | 58 lines ordered by trips seen against the timetable; one line shows its stations in order, its vehicles and its recorded day |
 | **Rapoarte** | SMTT, City Hall, monthly | Obligations, the daily trip registry, past works, indicators, public files. No map |
 
@@ -168,7 +168,9 @@ Radius 0.5–0.75rem on controls and rows, 1rem on the question card, full on pi
 - **Question card**: question, the line diagram with the asked stretch marked, the reason, the platform's proposal if any, two buttons. Answered questions collapse to one line with a green check and can be reopened.
 - **Work tabs**: numbered 1–4 because the order is real; a number turns into a green check when that part is done.
 - **Recorded data**: `SeenBar` (trips seen in ink, unseen in red), `HourBars` (outline = timetable, fill = seen), `PunctualityBar`. Each carries the recording span and the caveat text from the API.
-- **Map labels**: white chip for a stop, red chip for a work, dashed chip for a line without vehicle. Two labels near each other go above and below their points.
+- **Replay** (`Replay.tsx`): a quiet button ("Redă sâmbătă dimineață") on Azi and on a line's page. While it is on, a bar sits over the map: play or pause, the recorded minute, a slider over the whole window, and "Înapoi la acum". The vehicles on the map are then the ones in that recorded frame, nothing is interpolated or invented, the legend says "vehicul, din înregistrare", and a line with no vehicle that day stays dashed. On a line's page the bar also counts that line's vehicles ("linia 23: niciunul în tot intervalul"). `?redare` in the address opens a page with the replay running.
+- **New work** (`/app/lucrari/nou`): one textarea for the notice, then what the platform read (period, lines, street drawn on the map, the sentences it could not use) before anything is computed. A notice that was read and left is a draft ("Ciornă") in Lucrări and a task on Azi.
+- **Map labels**: white chip for a stop, red chip for a work, dashed chip for a line without vehicle. Two labels near each other go above and below their points. A work's chip moves to another side of its point when it would cover a stop or a stop's name.
 
 ## Do's and Don'ts
 
@@ -178,4 +180,5 @@ Radius 0.5–0.75rem on controls and rows, 1rem on the question card, full on pi
 - Don't add a fifth place to the rail; a new feature belongs to a work, a line or a report.
 - Don't show a measured number without its recording span, or an estimate without its model.
 - Don't use red for decoration, or line colours for status.
-- Don't animate to decorate: vehicles glide to their new position, the map flies to what the panel names, and nothing else moves. Reduced motion turns both into jumps.
+- Don't animate to decorate: vehicles glide to their new position, the map flies to what the panel names, and nothing else moves. Reduced motion turns both into jumps, and the replay then waits for the play button.
+- Don't show recorded vehicles without the word "înregistrare" and the recorded time beside them; live and recorded must never be mistaken for each other.
