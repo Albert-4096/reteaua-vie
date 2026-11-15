@@ -107,7 +107,7 @@ export function QrPage({ closureId, stopId }: Props) {
                     ? near.stopId === stopId || near.distanceMeters === 0
                       ? t("qr.stillServed", { lines: shortNames(near.routeIds) })
                       : `${near.name}${near.name === stopName ? ` (${t("qr.sameName")})` : ""}, ${t("qr.walk", { dist: fmtMeters(near.distanceMeters) ?? t("unknown") })}${
-                          near.routeIds?.length ? ` · ${t("qr.lines", { lines: shortNames(near.routeIds) })}` : ""
+                          near.routeIds?.length ? ` · ${t(new Set(near.routeIds).size === 1 ? "qr.line" : "qr.lines", { lines: shortNames(near.routeIds) })}` : ""
                         }`
                     : t("unknown")}
                 </dd>
