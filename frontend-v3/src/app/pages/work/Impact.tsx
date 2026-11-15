@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LineBadge } from "@/landing/LineBadge";
 import { useNetwork } from "@/lib/network";
 import { cn } from "@/lib/utils";
-import { count, fmt, type Analysis, type ClosureSummary, type DecisionGroup, type GeneratedNotice, type Impact as ImpactData } from "../../data";
+import { count, fmt, type Analysis, type ClosureSummary, type DecisionGroup, type GeneratedNotice, type Impact as ImpactData, type PaidParking, type ParkingImpact } from "../../data";
 import { lineShape, stretch, type Station } from "../../lines";
 import { LineStrip, type Mark, type StripRow } from "../../LineStrip";
 import { Fold, Folds, Kind, Loading, Problem, Section, Stat } from "../../ui";
@@ -18,6 +18,10 @@ type Props = {
   error: string | null;
   impact: ImpactData | null;
   notice: GeneratedNotice | null;
+  paid: PaidParking | null;
+  paidError: string | null;
+  parking: ParkingImpact | null;
+  csv: string;
   answers: Map<string, Answer>;
   focus: Focus;
   setFocus: (f: Focus) => void;
@@ -26,7 +30,7 @@ type Props = {
 };
 
 /** Who loses service: the answer as a sentence, what a person still has to decide, then line by line. */
-export function Impact({ c, analysis, error, impact, notice, answers, focus, setFocus, onHover, onAnswer }: Props) {
+export function Impact({ c, analysis, error, impact, notice, paid, paidError, parking, csv, answers, focus, setFocus, onHover, onAnswer }: Props) {
   const net = useNetwork();
   const groups = analysis?.decisionGroups ?? [];
   const answered = groups.filter((g) => answers.get(g.id)).length;
@@ -47,6 +51,14 @@ export function Impact({ c, analysis, error, impact, notice, answers, focus, set
     }
     return [...m.values()];
   }, [notice, analysis, c]);
+
+  // the map draws the paid streets only while their fold is open
+  const wasOpen = useRef(false);
+  const onFolds = (open: string[]) => {
+    const on = open.includes("parking");
+    if (on !== wasOpen.current) setFocus(on ? { kind: "parking" } : focus?.kind === "parking" ? null : focus);
+    wasOpen.current = on;
+  };
 
   if (error) return <Problem>Analiza lucrării nu s-a încărcat ({error}). Reîncărcați pagina.</Problem>;
   if (!analysis || !t) return <Loading rows={4} />;
@@ -120,7 +132,7 @@ export function Impact({ c, analysis, error, impact, notice, answers, focus, set
         </ul>
       </Section>
 
-      <Folds>
+      <Folds onChange={onFolds}>
         {impact.byZone.length > 0 && (
           <Fold id="zones" title="Pe cartiere" aside={impact.byZone.length}>
             <table className="w-full text-left">
@@ -133,9 +145,64 @@ export function Impact({ c, analysis, error, impact, notice, answers, focus, set
             </table>
           </Fold>
         )}
+        {(paid || paidError) && <ParkingFold paid={paid} error={paidError} parking={parking} csv={csv} />}
         <Fold id="method" title="Cum calculăm"><p className="leading-relaxed text-muted-foreground">{impact.method.ro}</p></Fold>
       </Folds>
     </>
+  );
+}
+
+const TARIFF: Record<string, string> = { green: "zona verde", red: "zona roșie", yellow: "zona galbenă", blue: "zona albastră" };
+
+/** Timpark streets and car parks the work touches: the sentence, at most three numbers, the names, the list for Timpark. */
+function ParkingFold({ paid, error, parking, csv }: { paid: PaidParking | null; error: string | null; parking: ParkingImpact | null; csv: string }) {
+  const n = paid ? paid.streets.count + paid.lots.count : 0;
+  // one row per name: a street cut into several Timpark sections is written once
+  const rows = useMemo(() => {
+    const m = new Map<string, { name: string; tariff: string; lot: boolean; n: number }>();
+    for (const [lot, xs] of [[false, parking?.streetsAffected ?? []], [true, parking?.lotsAffected ?? []]] as const)
+      for (const x of xs) {
+        const k = `${lot}|${x.name}|${x.tariff}`;
+        const r = m.get(k) ?? { name: x.name || (lot ? "Parcare fără nume" : "Stradă fără nume"), tariff: x.tariff, lot, n: 0 };
+        r.n += 1; m.set(k, r);
+      }
+    return [...m.values()];
+  }, [parking]);
+  return (
+    <Fold id="parking" title="Parcare cu plată" aside={n > 0 ? n : undefined}>
+      {error || !paid ? <Problem>Parcarea cu plată nu s-a încărcat ({error}).</Problem> : (
+        <>
+          <p className="leading-snug">{paid.noticeLine.ro}</p>
+          {n > 0 && (
+            <>
+              <dl className="mt-4 grid grid-cols-3 gap-4">
+                {(paid.streets.meters ?? 0) > 0 && <Stat value={`${fmt.format(paid.streets.meters!)} m`} label="de stradă cu plată" />}
+                {paid.lots.count > 0 && <Stat value={fmt.format(paid.lots.count)} label={paid.lots.count === 1 ? "parcare" : "parcări"} />}
+                {paid.paidHours > 0 && <Stat value={fmt.format(paid.paidHours)} label="ore plătite în fereastră" />}
+              </dl>
+              <div className="mt-3"><Kind k="estimate" detail="geometria și programul din fișierul Primăriei" /></div>
+              {rows.length > 0 && (
+                <ul className="mt-4 divide-y">
+                  {rows.map((r) => (
+                    <li key={`${r.lot}|${r.name}|${r.tariff}`} className="flex items-baseline justify-between gap-3 py-2">
+                      <span className="min-w-0">{r.name}{r.lot && <span className="text-muted-foreground"> · parcare</span>}{r.n > 1 && <span className="tabular text-muted-foreground"> × {count(r.n, "tronson", "tronsoane")}</span>}</span>
+                      <span className="shrink-0 text-muted-foreground">{TARIFF[r.tariff] ?? r.tariff}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <a href={csv} download className="mt-3 inline-block rounded-sm font-medium text-foreground underline underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-ring">Lista pentru Timpark (CSV)</a>
+              {paid.uncheckedFeatures > 0 && (
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                  {paid.uncheckedFeatures === 1 ? "Un element din listă nu e marcat „verificat” în fișierul Primăriei." : `${count(paid.uncheckedFeatures, "element din listă nu e marcat", "elemente din listă nu sunt marcate")} „verificat” în fișierul Primăriei.`}
+                </p>
+              )}
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{paid.note.ro}</p>
+            </>
+          )}
+        </>
+      )}
+    </Fold>
   );
 }
 

@@ -17,6 +17,7 @@ export type MapProps = {
   dim?: boolean; // step the rest of the network back to grey even when no line is highlighted
   segment?: Position[] | null; // the stretch a question is about
   detour?: Position[] | null; // a temporary route (the replacement bus)
+  parking?: { id: string; geometry: Feature["geometry"] }[]; // Timpark streets (lines) and car parks (polygons) a work touches, in ink
   stops?: MapStop[];
   vehicles?: MapVehicle[];
   recorded?: { stepMs: number } | null; // the vehicles come from our recording, one frame every stepMs (0 = the slider was dragged)
@@ -43,7 +44,7 @@ type Box = [number, number, number, number];
 type State = Required<Omit<MapProps, "onClosure" | "onVehicle" | "fit" | "still">> & { fit?: MapProps["fit"] };
 
 /** One map for the whole app: the city's lines in STPT's colours, works in barrier red, stops, vehicles, and names. */
-export function MapView({ closures = [], highlight = [], ghost = [], dim = false, segment = null, detour = null, stops = [], vehicles = [], recorded = null, labels = [], fit, still = false, onClosure, onVehicle }: MapProps) {
+export function MapView({ closures = [], highlight = [], ghost = [], dim = false, segment = null, detour = null, parking = [], stops = [], vehicles = [], recorded = null, labels = [], fit, still = false, onClosure, onVehicle }: MapProps) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const net = useRef<Network | null>(null);
@@ -53,7 +54,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
   const shown = useRef(new Map<string, [number, number]>()); // where each vehicle is drawn right now
   const glide = useRef(0);
   const moved = useRef(new Map<string, Side>()); // a work's name that left its side to stay off a stop's name
-  const state: State = { closures, highlight, ghost, dim, segment, detour, stops, vehicles, recorded, labels, fit };
+  const state: State = { closures, highlight, ghost, dim, segment, detour, parking, stops, vehicles, recorded, labels, fit };
   const latest = useRef(state);
   latest.current = state;
   const cb = useRef({ onClosure, onVehicle });
@@ -148,6 +149,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
     src("segment").setData(fc(line(p.segment)));
     m.setPaintProperty("segment", "line-color", `#${net.current?.byId.get(p.highlight[0])?.color ?? "ffffff"}`);
     src("detour").setData(fc(line(p.detour)));
+    src("parking").setData(fc(p.parking.filter((x) => x.geometry).map((x) => ({ type: "Feature", geometry: x.geometry, properties: { id: x.id } }))));
     // a stop that already has its name written beside it does not get a second one from the map
     const named = (s: MapStop) => p.labels.some((l) => Math.abs(l.lon - s.lon) < 1e-4 && Math.abs(l.lat - s.lat) < 1e-4);
     src("stops").setData(fc(p.stops.map((s) => ({ type: "Feature", geometry: { type: "Point", coordinates: [s.lon, s.lat] }, properties: { name: s.name, tone: s.tone, text: named(s) ? "" : s.name } }))));
@@ -209,7 +211,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
         const r = n!.byId.get(p.routeId);
         return { type: "Feature", geometry: p.geometry, properties: { routeId: p.routeId, color: `#${r?.color ?? "888888"}`, tram: r?.type === 0 } };
       }));
-      for (const id of ["closures", "segment", "detour", "stops", "vehicles"]) m.addSource(id, { type: "geojson", data: fc([]) });
+      for (const id of ["closures", "segment", "detour", "parking", "stops", "vehicles"]) m.addSource(id, { type: "geojson", data: fc([]) });
       m.addSource("lines", { type: "geojson", data: lines });
       const round = { "line-cap": "round", "line-join": "round" } as const;
       const none = ["in", ["get", "routeId"], ["literal", []]] as maplibregl.FilterSpecification;
@@ -217,6 +219,11 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
       m.addLayer({ id: "lines-ghost", type: "line", source: "lines", filter: none, paint: { "line-color": ["get", "color"], "line-width": 3.5, "line-dasharray": [0.6, 1.6] }, layout: round });
       m.addLayer({ id: "lines-hi-casing", type: "line", source: "lines", filter: none, layout: round, paint: { "line-color": "#ffffff", "line-width": ["case", ["get", "tram"], 8, 7] } });
       m.addLayer({ id: "lines-hi", type: "line", source: "lines", filter: none, layout: round, paint: { "line-color": ["get", "color"], "line-width": ["case", ["get", "tram"], 4.5, 3.5] } });
+      // paid parking: neutral ink, never a tariff colour (yellow is the tram, red is the works)
+      const area = ["==", ["geometry-type"], "Polygon"] as maplibregl.ExpressionSpecification;
+      m.addLayer({ id: "parking-fill", type: "fill", source: "parking", filter: area, paint: { "fill-color": INK, "fill-opacity": 0.06 } });
+      m.addLayer({ id: "parking-casing", type: "line", source: "parking", layout: round, paint: { "line-color": "#ffffff", "line-width": ["case", area, 3.5, 7] } });
+      m.addLayer({ id: "parking", type: "line", source: "parking", layout: round, paint: { "line-color": INK, "line-width": ["case", area, 1.5, 4] } });
       m.addLayer({ id: "detour", type: "line", source: "detour", paint: { "line-color": INK, "line-width": 2.5, "line-dasharray": [2, 1.6] } });
       m.addLayer({ id: "segment-casing", type: "line", source: "segment", layout: round, paint: { "line-color": INK, "line-width": 11 } });
       m.addLayer({ id: "segment", type: "line", source: "segment", layout: round, paint: { "line-color": "#ffffff", "line-width": 5.5 } });
@@ -272,7 +279,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
   }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => sync(false), [closures, highlight, ghost, dim, segment, detour, stops, labels, fit]);
+  useEffect(() => sync(false), [closures, highlight, ghost, dim, segment, detour, parking, stops, labels, fit]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => move(false), [vehicles]);
 

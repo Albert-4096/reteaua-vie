@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { FeatureCollection, LineString, Point } from "geojson";
+import type { FeatureCollection, Geometry, LineString, Point } from "geojson";
 import { useApi, type Closure, type MissingRoute } from "@/lib/api";
 
 export type I18n = { ro: string; en: string };
@@ -60,6 +60,17 @@ export type Impact = {
 };
 export type NoticeStop = { stopId: string; name: string; nearestServed: Nearest | null };
 export type NoticeSection = { routeId: string; shortName: string; mode: string; directionId: 0 | 1 | null; headsign: string | null; action: string; stopsNotServed: NoticeStop[] };
+/** Timpark streets and car parks a work touches (v2.31). Paid hours come from the City Hall schedule; no lei, no occupancy. */
+export type PaidParking = {
+  closureId: string; window: Window;
+  streets: { count: number; meters: number | null; byTariff: Record<string, number> };
+  lots: { count: number; squareMeters: number | null; byTariff: Record<string, number> };
+  paidHours: number; paidHoursByTariff: Record<string, number>;
+  uncheckedFeatures: number; // features the City Hall file does not mark as checked
+  noticeLine: I18n; note: I18n; provenance: Provenance[];
+};
+export type ParkingFeature = { id: string; name: string; tariff: string; geometry: Geometry };
+export type ParkingImpact = { closureId: string; streetsAffected: ParkingFeature[]; lotsAffected: ParkingFeature[]; provenance: Provenance[] };
 export type GeneratedNotice = { status: "draft" | "final" | string; unsureCount: number; text: I18n; sections: NoticeSection[]; stopsWithNoService: NoticeStop[]; sourceText: string | null; sourceUrl: string | null; mapUrl: string | null };
 
 export type WindowCandidate = { window: Window; departuresLost: number; rank: number; conflicts: number };
@@ -170,6 +181,9 @@ export const app = {
   },
   impact: (id: string) => get<Impact>(`/api/closures/${enc(id)}/impact`),
   analysis: (id: string) => get<Analysis>(`/api/closures/${enc(id)}/analysis`),
+  paidParking: (id: string) => get<PaidParking>(`/api/closures/${enc(id)}/paid-parking`),
+  parking: (id: string) => get<ParkingImpact>(`/api/closures/${enc(id)}/parking`),
+  paidParkingCsv: (id: string) => `/api/closures/${enc(id)}/paid-parking.csv`,
   notice: (id: string) => get<GeneratedNotice>(`/api/closures/${enc(id)}/notice`),
   windows: (id: string) => get<Windows>(`/api/closures/${enc(id)}/windows`),
   conflicts: (id: string) => get<Conflict[]>(`/api/closures/${enc(id)}/conflicts`),

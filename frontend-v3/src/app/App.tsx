@@ -141,6 +141,7 @@ function Legend({ l }: { l: Layers }) {
   if (tones.has("closed")) items.push([<span className="size-2.5 rounded-full bg-closure ring-2 ring-white" />, "nu oprește"]);
   if (tones.has("ask")) items.push([<span className="size-2.5 rounded-full border-2 border-foreground bg-white" />, "de hotărât"]);
   if (tones.has("served")) items.push([<span className="size-2 rounded-full border-[1.5px] border-[#5b6a64] bg-white" />, "oprește"]);
+  if (l.parking?.length) items.push([<span className="h-1 w-5 rounded-full bg-foreground ring-2 ring-white" />, "stradă cu parcare cu plată"]);
   if (l.detour?.length) items.push([<span className="h-0.5 w-5" style={{ backgroundImage: "repeating-linear-gradient(90deg, var(--foreground) 0 5px, transparent 5px 8px)" }} />, "linie temporară"]);
   if (l.ghost?.length) items.push([<span className="h-[3px] w-5" style={{ backgroundImage: "repeating-linear-gradient(90deg, #4d897f 0 3px, transparent 3px 7px)" }} />, "linie fără vehicul în datele live"]);
   if (l.vehicles?.length) items.push([<span className="size-2.5 rounded-full bg-[#4d897f] ring-2 ring-white" />, l.recorded ? "vehicul, din înregistrare" : "vehicul, date live"]);

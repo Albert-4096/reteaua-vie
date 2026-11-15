@@ -14,7 +14,7 @@ import { Impact } from "./work/Impact";
 import { Field, Notice, Period, PublishBar } from "./work/Rest";
 
 /** What the map is asked to show beyond the work itself. */
-export type Focus = { kind: "question"; id: string } | { kind: "line"; routeId: string } | { kind: "temp"; index: number } | null;
+export type Focus = { kind: "question"; id: string } | { kind: "line"; routeId: string } | { kind: "temp"; index: number } | { kind: "parking" } | null;
 export type Answer = "affected" | "served" | null;
 
 const TAB_NAME: Record<WorkTab, string> = { impact: "Impact", perioada: "Perioadă", anunt: "Anunț", teren: "Pe teren" };
@@ -30,6 +30,9 @@ export function answerOf(g: DecisionGroup, a: Analysis): Answer {
   const v = g.rows.map((r) => by.get(`${r.stopId}|${r.routeId}|${r.directionId}`));
   return v.every((x) => x === true) ? "affected" : v.every((x) => x === false) ? "served" : null;
 }
+
+/** Every position of any geometry (lines and polygons alike), to frame it. */
+const flat = (x: unknown): Position[] => (Array.isArray(x) && typeof x[0] === "number" ? [x as Position] : Array.isArray(x) ? x.flatMap(flat) : []);
 
 const coordsOf = (g: { type: string; coordinates?: unknown } | undefined): Position[] =>
   !g ? [] : g.type === "LineString" ? (g.coordinates as Position[]) : g.type === "MultiLineString" ? (g.coordinates as Position[][]).flat() : [];
@@ -49,6 +52,8 @@ export function Work({ id, tab, q }: { id: string; tab: WorkTab; q?: string }) {
   const analysis = useLoad(() => app.analysis(id), id);
   const impact = useLoad(() => app.impact(id), id);
   const notice = useLoad(() => app.notice(id), id);
+  const paid = useLoad(() => app.paidParking(id), id);
+  const parking = useLoad(() => app.parking(id), id);
   const overview = useLoad(app.overview);
   const net = useNetwork();
   const [focus, setFocus] = useState<Focus>(q ? { kind: "question", id: q } : null);
@@ -122,6 +127,16 @@ export function Work({ id, tab, q }: { id: string; tab: WorkTab; q?: string }) {
       }
     }
 
+    if (focus?.kind === "parking" && parking.data) {
+      const feats = [...parking.data.streetsAffected, ...parking.data.lotsAffected].map((f) => ({ id: f.id, geometry: f.geometry }));
+      if (feats.length) {
+        return {
+          closures, dim: true, parking: feats, labels: work,
+          fit: { key: `${id}:p`, points: [...pts, ...feats.flatMap((f) => flat((f.geometry as { coordinates?: unknown }).coordinates))], maxZoom: 16 },
+        };
+      }
+    }
+
     if (focus?.kind === "temp") {
       const t = c.temporaryRoutes?.[focus.index];
       const path = t?.geometry?.coordinates;
@@ -148,7 +163,7 @@ export function Work({ id, tab, q }: { id: string; tab: WorkTab; q?: string }) {
       closures, highlight: c.routeIds, stops, labels: work,
       fit: { key: `${id}:${stops.length ? "full" : "bare"}`, points: [...pts, ...stops.map((s) => [s.lon, s.lat])], maxZoom: 14.4 },
     };
-  }, [c, net, focus, hover, groups, answers, notice.data, id]);
+  }, [c, net, focus, hover, groups, answers, notice.data, parking.data, id]);
   useMapLayers(layers);
 
   if (closure.error) return <Panel head={<Back />}><Problem>Lucrarea nu s-a încărcat ({closure.error}). Verificați adresa sau întoarceți-vă la listă.</Problem></Panel>;
@@ -192,7 +207,7 @@ export function Work({ id, tab, q }: { id: string; tab: WorkTab; q?: string }) {
         </Button>
       )}
     >
-      {tab === "impact" && <Impact c={c} analysis={a} error={analysis.error} impact={impact.data} notice={notice.data} answers={answers} focus={focus} setFocus={setFocus} onHover={setHover} onAnswer={answer} />}
+      {tab === "impact" && <Impact c={c} analysis={a} error={analysis.error} impact={impact.data} notice={notice.data} paid={paid.data} paidError={paid.error} parking={parking.data} csv={app.paidParkingCsv(id)} answers={answers} focus={focus} setFocus={setFocus} onHover={setHover} onAnswer={answer} />}
       {tab === "perioada" && <Period id={id} c={c} />}
       {tab === "anunt" && <Notice id={id} c={c} notice={notice.data} published={isPublished} />}
       {tab === "teren" && <Field id={id} c={c} />}

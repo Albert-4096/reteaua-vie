@@ -62,8 +62,8 @@ export function Stat({ value, label, note, tone }: { value: ReactNode; label: st
 }
 
 /** Details that wait until asked for. */
-export function Folds({ children, className }: { children: ReactNode; className?: string }) {
-  return <Accordion type="multiple" className={cn("mt-8 border-t", className)}>{children}</Accordion>;
+export function Folds({ children, className, onChange }: { children: ReactNode; className?: string; onChange?: (open: string[]) => void }) {
+  return <Accordion type="multiple" onValueChange={onChange} className={cn("mt-8 border-t", className)}>{children}</Accordion>;
 }
 export function Fold({ id, title, aside, children }: { id: string; title: ReactNode; aside?: ReactNode; children: ReactNode }) {
   return (
