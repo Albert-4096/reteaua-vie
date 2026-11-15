@@ -54,7 +54,8 @@ OSM_CACHE_VERSION = 1
 # ---------------------------------------------------------------------------
 
 _ABBREV = {
-    "str": "strada", "strazii": "strada", "strazile": "strada",
+    "str": "strada", "strazii": "strada", "strazile": "strada", "strazilor": "strada",
+    "bulevardele": "bulevardul", "bulevardelor": "bulevardul",
     "bd": "bulevardul", "bdul": "bulevardul", "b-dul": "bulevardul", "bld": "bulevardul",
     "bul": "bulevardul", "blvd": "bulevardul", "bulevardului": "bulevardul",
     "cal": "calea", "caii": "calea",
@@ -66,6 +67,8 @@ _ABBREV = {
     "pasajul": "pasaj",
 }
 STREET_TYPES = ("strada", "bulevardul", "calea", "piata", "aleea", "intrarea", "splaiul", "scuarul")
+# „între străzile Calistrat Hogaș și Nicolae Tincu Velea”: one type word for every name that follows
+_PLURAL_TYPES = {"strazile", "strazilor", "bulevardele", "bulevardelor"}
 
 
 def fold(s: str) -> str:
@@ -75,14 +78,18 @@ def fold(s: str) -> str:
     return s.lower()
 
 
-def norm(s: str) -> str:
-    """Folded, dots removed („C.F.R.” = „CFR”), punctuation to spaces, abbreviations expanded."""
+def _words(s: str) -> list[str]:
+    """Folded words of a text, dots removed („C.F.R.” = „CFR”), punctuation to spaces; abbreviations as written."""
     s = fold(s)
     s = s.replace("b-dul", "bdul").replace("p-ta", "pta").replace("p-tei", "ptei")
     s = s.replace(".", " ").replace("’", "").replace("'", "")
     s = re.sub(r"(?<=\b[a-z]) (?=[a-z]\b)", "", s)          # "c f r" -> "cfr" (after dots went)
-    s = re.sub(r"[^a-z0-9]+", " ", s).strip()
-    return " ".join(_ABBREV.get(t, t) for t in s.split())
+    return re.sub(r"[^a-z0-9]+", " ", s).split()
+
+
+def norm(s: str) -> str:
+    """Folded, dots removed („C.F.R.” = „CFR”), punctuation to spaces, abbreviations expanded."""
+    return " ".join(_ABBREV.get(t, t) for t in _words(s))
 
 
 def _tokens(s: str) -> list[str]:
@@ -221,6 +228,13 @@ class WindowFound:
     timed: bool = False     # an hour was given (not a whole-day window)
 
 
+# two hours with only a dash or „și” between them: „10:00 – 18:00”, „10 00 – 18 00”, „între orele 22:00 și 05:00”
+_HOURS_OF_EACH_DAY = re.compile(r"\d{1,2}\s?[:. ]?\s?\d{2}\s*(?:[-–—]|si|pana la)\s*(?:ora\s+)?$")
+# „de mâine se închide …” = from tomorrow on, with no end given; „în cursul zilei de mâine” is one day
+_FROM_A_DAY_ON = re.compile(r"(?<!zilei )(?<!ziua )(?<!data )(?<!noaptea )(?<!seara )(?<!dimineata )"
+                            r"\bde (?:maine|azi|astazi)\b")
+
+
 def window_from(sentence: str, ref: datetime) -> WindowFound | None:
     dates = _dates_in(sentence, ref)
     if not dates:
@@ -234,6 +248,13 @@ def window_from(sentence: str, ref: datetime) -> WindowFound | None:
     f = fold(sentence)
     if len(dates) >= 2:
         a, b = dates[0], dates[1]
+        after = [(p, t) for p, t in times if p > b.pos]
+        if a.time is None and len(after) >= 2 and _HOURS_OF_EACH_DAY.match(f[after[0][0]:after[1][0]]):
+            # „în perioada 17–21 noiembrie, în intervalul orar 10:00 – 18:00”: the hours of each day,
+            # so the works start at the first hour of the first day and end at the last hour of the last
+            t1, t2 = after[0][1], after[1][1]
+            last = b.day + timedelta(days=1) if t2 <= t1 else b.day      # „între 22:00 și 05:00”: ends the next morning
+            return WindowFound(_at(a.day, t1), _at(last, t2, default_end=True), False, True)
         return WindowFound(_at(a.day, a.time), _at(b.day, b.time, default_end=True), False,
                            a.time is not None or b.time is not None)
     d = dates[0]
@@ -243,7 +264,7 @@ def window_from(sentence: str, ref: datetime) -> WindowFound | None:
         if end <= start:   # „între 20:30 și 01:00”: the end is on the next day
             end = _at(d.day + timedelta(days=1), t2, default_end=True)
         return WindowFound(start, end, False, True)
-    if re.search(r"\b(incepand|incepind|de la data|din data)\b", f) or re.search(
+    if re.search(r"\b(incepand|incepind|de la data|din data)\b", f) or _FROM_A_DAY_ON.search(f) or re.search(
             r"\b(?:de la|din)\s+\d{1,2}\s+(?:" + "|".join(MONTHS) + r")\b", f):
         return WindowFound(_at(d.day, d.time), open_end_default(), True, d.time is not None)
     return WindowFound(_at(d.day, d.time), _at(d.day, None, default_end=True), False, d.time is not None)
@@ -421,6 +442,11 @@ def register() -> tuple[list[Street], dict[str, Street], dict[str, Street]]:
             keys.append(f"{typ} {actual}")
         if " doctor " in f" {full} ":
             keys.append(full.replace("doctor ", ""))
+        # „Strada Martir Cornel Popescu (1918)”: a notice writes the name without the bracket (10872)
+        for with_bracket in (r["denumireCompleta"], f"{r.get('tipArtera') or ''} {r.get('numeActual') or ''}"):
+            bare = norm(re.sub(r"\s*\([^)]*\)", " ", with_bracket))
+            if "(" in with_bracket and len(bare.split()) >= 2 and bare not in keys:
+                keys.append(bare)
         olds = []
         prev = norm(r.get("numeAnterior") or "")
         if typ and prev and len(prev.split()) <= 4 and prev != actual:
@@ -455,9 +481,12 @@ def resolve_street(text: str) -> Street | None:
 
 
 def streets_in(sentence: str) -> list[tuple[int, Street]]:
-    """Streets named in a sentence, by position (token index): longest register key at each type word."""
+    """Streets named in a sentence, by position (token index): longest register key at each type word.
+
+    After a plural type word („străzile A și B”) the names that follow take the same type."""
     _s, cur, old = register()
-    toks = norm(sentence).split()
+    written = _words(sentence)
+    toks = [_ABBREV.get(t, t) for t in written]
     out, i = [], 0
     while i < len(toks):
         if toks[i] in STREET_TYPES:
@@ -475,7 +504,16 @@ def streets_in(sentence: str) -> list[tuple[int, Street]]:
                         break
             if hit:
                 out.append((i, hit[1]))
+                plural, typ = written[i] in _PLURAL_TYPES, toks[i]
                 i += hit[0]
+                while plural and i < len(toks):
+                    j = i + 1 if toks[i] == "si" else i
+                    more = next((n for n in range(min(6, len(toks) - j), 0, -1)
+                                 if f"{typ} {' '.join(toks[j:j + n])}" in cur), None)
+                    if more is None:
+                        break
+                    out.append((j, cur[f"{typ} {' '.join(toks[j:j + more])}"]))
+                    i = j + more
                 continue
         i += 1
     return out
@@ -790,7 +828,19 @@ _NOT_A_CLOSURE = re.compile(r"\b(prelungit\w*|programul|programele|programe|graf
 _SUSPENDED_LIST = re.compile(
     r"\b(?:vor|va)\s+fi\s+suspendat\w*(?:\s+temporar)?\s+statii\w*\s*:?\s*(?P<a>.+)$"   # Vor fi suspendate temporar stațiile[:] A, B
     r"|\bstatii\w*\s+suspendat\w*(?:\s+temporar)?\s*:\s*(?P<b>.+)$"                     # Stații suspendate temporar: A, B
-    r"|\bstati\w*\s+(?!(?:de\s+pe|amplasate|situate|aflate)\b)(?P<c>.+?)\s+(?:vor|va)\s+fi\s+suspendat\w*")  # stațiile A și B vor fi suspendate
+    r"|\bstati\w*\s+(?!(?:de\s+pe|amplasate|situate|aflate)\b)(?P<c>.+?)\s+(?:vor|va)\s+fi\s+suspendat\w*"   # stațiile A și B vor fi suspendate
+    r"|\bnu\s+(?:vor|va)\s+(?:mai\s+)?(?:opri|stationa)\s+(?:in|la)\s+stati\w*\s*:?\s*(?P<d>.+)$"            # nu vor mai opri în stațiile A și B
+    r"|\bstati\w*\s+(?!(?:de\s+pe|amplasate|situate|aflate)\b)(?P<e>.+?)\s+nu\s+(?:vor|va)\s+(?:mai\s+)?fi\s+(?:deservit\w*|utilizat\w*)")  # stațiile A și B nu vor mai fi deservite
+# a sentence about stops that are dropped, in a wording no rule above reads: the person reads it
+_STOPS_DROPPED_HINT = re.compile(
+    r"\bstati\w*\b.*\b(?:suspend\w*|anul\w*|nu\s+(?:vor|va)\s+(?:mai\s+)?(?:opri|stationa|fi\s+deservit\w*|fi\s+utilizat\w*))\b"
+    r"|\b(?:suspend\w*|anul\w*|nu\s+(?:vor|va)\s+(?:mai\s+)?(?:opri|stationa))\b.*\bstati\w*\b")
+# a second street the notice closes („În aceeași zi se închide circulația și pe Calea Bogdăneștilor”);
+# a sentence about where vehicles are sent instead is not one
+_CLOSES = re.compile(r"\b(?:se inchide|se inchid|se restrictioneaza|(?:va|vor) fi (?:inchis\w*|restrictionat\w*)|"
+                     r"(?:este|sunt) (?:inchis\w*|restrictionat\w*))\b")
+_DETOUR_TALK = re.compile(r"\b(?:deviat\w*|deviere|ocol\w*|(?:va|vor) circula|traseu\w*)\b")
+_SECTION_BETWEEN = re.compile(r"\b(?:tronson\w*|portiune\w*|sector\w*)\b.*?\bintre\b")
 # „stațiile amplasate pe strada Polonă, în zona podului, nu vor mai fi utilizate” (11062): no stop named,
 # only the street; the stops are the line's stops named after that street
 _STOPS_ON_STREET = re.compile(r"\bstatii\w*\s+(?:amplasate|situate|aflate|de)\s+pe\s+(.+?)(?:,|\s+(?:nu\s+)?(?:vor|va)\b|$)")
@@ -917,11 +967,10 @@ def _route_stop_ids(route_id: str) -> list[str]:
 
 
 def _partly_read(a: "_Action") -> bool:
-    """Some names of a stop list became stop ids and some did not (the analysis has only the found ones)."""
+    """A name of a stop list did not become a stop id (the analysis has only the found ones, or none)."""
     names = a.names or []
     found = [s for ra in _expand(a) for s in ra.suspendedStopIds or []]
-    missing = [n for n in names if not match_stop(n, found)]
-    return 0 < len(missing) < len(names)
+    return any(not match_stop(n, found) for n in names)
 
 
 @lru_cache(maxsize=1)
@@ -1153,7 +1202,7 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
         om = _STOPS_ON_STREET.search(f) if not (sm or vm or lm) and _STOPS_DROPPED.search(f) else None
         on_street = [s_ for _i, s_ in streets_in(om.group(0))] if om else []
         if lm and st.lines:
-            g = next(k for k in ("a", "b", "c") if lm.group(k))
+            g = next(k for k in ("a", "b", "c", "d", "e") if lm.group(k))
             raw = sent[lm.start(g):lm.end(g)] if len(sent) == len(f) else lm.group(g)
             names = _split_list(raw)
             sm = lm
@@ -1223,6 +1272,21 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             if found:
                 geom, closure_streets, section, tram = _closure_geometry(sent, found)
                 used = True
+                if section is None and _SECTION_BETWEEN.search(norm(sent)):
+                    partial = True   # „pe tronsonul cuprins între X și Y” with an end we did not find: the whole street is drawn
+        elif closure_streets and _CLOSES.search(f) and not _DETOUR_TALK.search(f) and not rids:
+            # a second closed street: its ways are added to the drawing
+            more = [(i, s_) for i, s_ in streets_in(sent) if s_ not in closure_streets]
+            if more:
+                g2, s2, sec2, _tram2 = _closure_geometry(sent, more)
+                if g2 is not None and not g2.is_empty:
+                    geom = g2 if geom is None else linemerge(_parts(geom) + _parts(g2))
+                    closure_streets = closure_streets + s2
+                    used = True
+                    if sec2 is None and _SECTION_BETWEEN.search(norm(sent)):
+                        partial = True
+                else:
+                    partial = True   # a closed street we could not draw
 
         if not used and (rids or streets_in(sent)) and not _NOT_A_CLOSURE.search(f):
             used = True
@@ -1230,6 +1294,8 @@ def parse_detail(text: str, reference: datetime | None = None) -> ParseDetail:
             used = False   # „Linia M30 – Traseul va fi prelungit …”: named, but nothing we can map
         if used and _TURN_BACK.search(f) and len(actions) == n_actions:
             used = False   # „vor întoarce în Piața Mocioni”: the stops it loses are not named
+        if used and _STOPS_DROPPED_HINT.search(f) and len(actions) == n_actions:
+            used = False   # stops are dropped in a wording we have no rule for
         if (partial or (not used and not _COURTESY.search(f))) and sent not in unread:
             unread.append(sent)
         if unknown:
