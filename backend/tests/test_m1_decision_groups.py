@@ -74,9 +74,15 @@ def test_api_answers_one_group_with_the_existing_patch(client, isolated_state):
     from app.common import state
     from app.models.v1 import Analysis
 
+    # the real hero is published and answered whenever someone runs the demo: start from the demo start
+    closure = {**_read(HERO), "status": "analyzed"}
     stored = _read(HERO, "analysis")
     stored.pop("decisionGroups", None)   # stored before the groups existed: GET adds them
-    state.write("closures", HERO, _read(HERO))
+    for r in stored["stops"]:
+        if r["state"] == "unsure":
+            r["confirmed"] = None
+    stored["unsureCount"] = sum(r["state"] == "unsure" for r in stored["stops"])
+    state.write("closures", HERO, closure)
     state.write("closures", HERO, Analysis.model_validate(stored), part=state.PART_ANALYSIS)
     a = client.get(f"/api/closures/{HERO}/analysis").json()
     groups = {g["id"]: g for g in a["decisionGroups"]}
