@@ -182,7 +182,8 @@ function Line({ routeId }: { routeId: string }) {
   const track = off[0]?.tracks[0]?.coordinates;
 
   // dashed when the live data has no vehicle of the line: right now, or, in the replay, on the whole recorded day
-  const quiet = replay.on ? silentLines(reg.data, replay.data).includes(routeId) : !!flag;
+  // (while a replay waits for the registry the line is drawn neither way, so it never flashes solid and then dashed)
+  const quiet = replay.on ? (reg.data ? silentLines(reg.data, replay.data).includes(routeId) : null) : !!flag;
   const still = useMemo<Layers>(() => {
     if (!shape) return {};
     const a = shape.stations[0], b = shape.stations[shape.stations.length - 1];
@@ -196,7 +197,7 @@ function Line({ routeId }: { routeId: string }) {
     if (hover) labels.push({ id: "hover", lon: hover.lon, lat: hover.lat, text: hover.name, tone: "stop", place: "top" });
     return {
       fit: { key: `line:${routeId}`, points: shape.path },
-      highlight: quiet ? [] : [routeId], ghost: quiet ? [routeId] : [], dim: true,
+      highlight: quiet === false ? [routeId] : [], ghost: quiet ? [routeId] : [], dim: true,
       detour: replay.on ? null : track ?? null,
       stops: shape.stations.map((s) => ({ id: s.ids[0], name: s.name, lon: s.lon, lat: s.lat, tone: "served" as const })),
       labels,

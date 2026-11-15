@@ -60,11 +60,17 @@ export function useReplay() {
   };
 }
 
-/** Lines the timetable ran that day and the live data never showed: none of their trips seen, and in no frame of the replay. */
+/** The day the replay shows until its data says otherwise: the endpoint's default window (Saturday 14 Nov). */
+const REPLAY_DAY = "2026-11-14";
+
+/**
+ * Lines the timetable ran that day and the live data never showed: none of their trips seen, and in no frame of the replay.
+ * The registry alone answers while the frames are still loading, so a silent line is dashed from the first moment.
+ */
 export function silentLines(reg: Registry | null, data: Replay | null): string[] {
-  if (!reg || !data) return [];
-  const entry = reg.entries.find((e) => e.date === data.window.start.slice(0, 10));
-  const seen = new Set(data.frames.flatMap((f) => (f.vehicles ?? []).map((v) => v[1])));
+  if (!reg) return [];
+  const entry = reg.entries.find((e) => e.date === (data?.window.start.slice(0, 10) ?? REPLAY_DAY));
+  const seen = new Set((data?.frames ?? []).flatMap((f) => (f.vehicles ?? []).map((v) => v[1])));
   return (entry?.lines ?? []).filter((l) => l.tripsScheduledInRecording > 0 && l.tripsSeen === 0 && !seen.has(l.routeId)).map((l) => l.routeId);
 }
 
