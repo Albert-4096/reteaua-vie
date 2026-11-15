@@ -124,10 +124,10 @@ export function Impact({ c, analysis, error, impact, notice, answers, focus, set
         {impact.byZone.length > 0 && (
           <Fold id="zones" title="Pe cartiere" aside={impact.byZone.length}>
             <table className="w-full text-left">
-              <thead className="text-xs text-muted-foreground"><tr><th className="pb-2 font-medium">Cartier</th><th className="pb-2 text-right font-medium">Stații</th><th className="pb-2 text-right font-medium">Plecări</th><th className="pb-2 text-right font-medium">Locuitori</th></tr></thead>
+              <thead className="text-xs text-muted-foreground"><tr><th className="pb-2 font-medium">Cartier</th><th className="whitespace-nowrap pb-2 pl-4 text-right font-medium">Stații</th><th className="whitespace-nowrap pb-2 pl-4 text-right font-medium">Plecări</th><th className="whitespace-nowrap pb-2 pl-4 text-right font-medium">Locuitori</th></tr></thead>
               <tbody className="tabular divide-y">
                 {impact.byZone.map((z) => (
-                  <tr key={z.slug}><td className="py-2 pr-2">{z.name}</td><td className="py-2 text-right">{z.stopsSuspended}</td><td className="py-2 text-right">{fmt.format(z.departuresLost)}</td><td className="py-2 text-right">{z.residentsLosingStop == null ? "necunoscut" : fmt.format(z.residentsLosingStop)}</td></tr>
+                  <tr key={z.slug}><td className="py-2 pr-2">{z.name}</td><td className="whitespace-nowrap py-2 pl-4 text-right">{z.stopsSuspended}</td><td className="whitespace-nowrap py-2 pl-4 text-right">{fmt.format(z.departuresLost)}</td><td className="whitespace-nowrap py-2 pl-4 text-right">{z.residentsLosingStop == null ? "necunoscut" : fmt.format(z.residentsLosingStop)}</td></tr>
                 ))}
               </tbody>
             </table>
