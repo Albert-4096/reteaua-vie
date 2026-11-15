@@ -83,7 +83,7 @@ eval-review:
 web:
 	@if [ -f $(FRONTEND)/package.json ]; then $(FNM); cd $(FRONTEND) && pnpm install --frozen-lockfile && pnpm build; \
 	else echo "no frontend/package.json yet: nothing to build"; fi
-	@# frontend-v3 is the public frontend (/ and /app/*); v1 ships next to it as v1.html (/step/*, QR page /a/*)
+	@# frontend-v3 is the public frontend (/, /app/* and the QR page /a/*); v1 ships next to it as v1.html (/step/*)
 	@if [ -f $(FRONTEND_V3)/package.json ] && [ -f $(FRONTEND)/dist/index.html ]; then $(FNM); cd $(FRONTEND_V3) \
 		&& pnpm install --frozen-lockfile && pnpm build \
 		&& cp $(FRONTEND)/dist/index.html dist/v1.html && cp -r $(FRONTEND)/dist/assets/. dist/assets/; fi

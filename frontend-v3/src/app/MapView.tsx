@@ -21,7 +21,8 @@ export type MapProps = {
   vehicles?: MapVehicle[];
   recorded?: { stepMs: number } | null; // the vehicles come from our recording, one frame every stepMs (0 = the slider was dragged)
   labels?: MapLabel[]; // names written on the map, so nobody has to know where a street is
-  fit?: { key: string; points?: Position[]; maxZoom?: number }; // frame these points when the key changes; no points = the city
+  fit?: { key: string; points?: Position[]; maxZoom?: number; padding?: number }; // frame these points when the key changes; no points = the city; padding for a small frame
+  still?: boolean; // a picture, not a tool: no pan, zoom or controls (a phone page that must keep scrolling)
   onClosure?: (id: string) => void;
   onVehicle?: (routeId: string) => void;
 };
@@ -39,10 +40,10 @@ const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 type Side = NonNullable<MapLabel["place"]>;
 type Box = [number, number, number, number];
-type State = Required<Omit<MapProps, "onClosure" | "onVehicle" | "fit">> & { fit?: MapProps["fit"] };
+type State = Required<Omit<MapProps, "onClosure" | "onVehicle" | "fit" | "still">> & { fit?: MapProps["fit"] };
 
 /** One map for the whole app: the city's lines in STPT's colours, works in barrier red, stops, vehicles, and names. */
-export function MapView({ closures = [], highlight = [], ghost = [], dim = false, segment = null, detour = null, stops = [], vehicles = [], recorded = null, labels = [], fit, onClosure, onVehicle }: MapProps) {
+export function MapView({ closures = [], highlight = [], ghost = [], dim = false, segment = null, detour = null, stops = [], vehicles = [], recorded = null, labels = [], fit, still = false, onClosure, onVehicle }: MapProps) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const net = useRef<Network | null>(null);
@@ -186,7 +187,7 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
       const duration = first || calm() ? 0 : 700;
       if (pts.length) {
         const b = pts.reduce((acc, [x, y]) => acc.extend([x, y]), new maplibregl.LngLatBounds(pts[0] as [number, number], pts[0] as [number, number]));
-        m.fitBounds(b, { padding: { top: 90, right: 80, bottom: 80, left: 80 }, maxZoom: p.fit.maxZoom ?? 15.5, duration });
+        m.fitBounds(b, { padding: p.fit.padding ?? { top: 90, right: 80, bottom: 80, left: 80 }, maxZoom: p.fit.maxZoom ?? 15.5, duration });
       } else m.fitBounds(TM, { padding: 24, duration });
       lastFit.current = p.fit.key;
     }
@@ -194,9 +195,11 @@ export function MapView({ closures = [], highlight = [], ghost = [], dim = false
   };
 
   useEffect(() => {
-    const m = new maplibregl.Map({ container: el.current!, style: STYLE, bounds: TM, attributionControl: { compact: true } });
+    const m = new maplibregl.Map({ container: el.current!, style: STYLE, bounds: TM, attributionControl: { compact: true }, interactive: !still });
     map.current = m;
-    m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+    if (!still) m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+    // a small still map opens its credits folded (the (i) unfolds them), so they do not cover the picture
+    else m.once("idle", () => el.current?.querySelectorAll(".maplibregl-ctrl-attrib").forEach((n) => { n.removeAttribute("open"); n.classList.remove("maplibregl-compact-show"); }));
     const resize = new ResizeObserver(() => m.resize());
     resize.observe(el.current!);
     m.on("load", async () => {

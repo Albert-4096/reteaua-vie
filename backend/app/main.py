@@ -140,8 +140,8 @@ def mount_frontend(target: FastAPI, dist: Path) -> bool:
     """Serve `dist` at / with an SPA fallback.
 
     When dist/v1.html exists (the first app, built next to frontend-v3 by `make web`), it
-    answers its own routes: /step/* and the QR phone page /a/{closureId}?stop=; every other
-    path gets index.html (frontend-v3: / and /app/*). Does nothing when dist/index.html is
+    answers its own routes: /step/*; every other path gets index.html (frontend-v3: /, /app/*
+    and the QR phone page /a/{closureId}?stop=). Does nothing when dist/index.html is
     missing (dev: Vite serves the frontend). Never answers under /api: those paths are
     matched by the API routes registered before it.
     """
@@ -159,7 +159,7 @@ def mount_frontend(target: FastAPI, dist: Path) -> bool:
             candidate = (root / path).resolve()
             if candidate.is_relative_to(root) and candidate.is_file():
                 return FileResponse(candidate)
-        if path in ("step", "v1") or path.startswith(("step/", "a/")):
+        if path in ("step", "v1") or path.startswith("step/"):
             if v1.is_file():
                 return FileResponse(v1)
         return FileResponse(index)

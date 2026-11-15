@@ -161,7 +161,7 @@ export function Notice({ id, c, notice, published }: { id: string; c: ClosureSum
               </li>
             ))}
           </ul>
-          <Method>A4, cu cod QR spre pagina stației și versiune audio. „Cod QR” îl arată mare pe ecran, de scanat din sală.</Method>
+          <Method>A4, cu cod QR spre pagina stației: liniile care nu opresc, unde mergi pe jos (text și hartă), anunțul de citit sau de ascultat. „Cod QR” îl arată mare pe ecran, de scanat din sală.</Method>
           <QrDialog url={qr ? page(qr) : null} stop={qr ? name(qr) : ""} onClose={() => setQr(null)} />
         </Section>
       )}

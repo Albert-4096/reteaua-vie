@@ -70,7 +70,7 @@ def test_v1_routes_get_v1_html(tmp_path):
     main.mount_frontend(c.app, dist)
     assert c.get("/").text == "<html>v3</html>"
     assert c.get("/app/planifici", params={"c": "cl_x"}).text == "<html>v3</html>"
-    assert c.get("/a/cl_x", params={"stop": "85"}).text == "<html>v1</html>"
+    assert c.get("/a/cl_x", params={"stop": "85"}).text == "<html>v3</html>"  # the QR phone page moved to v3
     assert c.get("/step/3").text == "<html>v1</html>"
     assert c.get("/v1").text == "<html>v1</html>"
     assert c.get("/api/nope").status_code == 404
