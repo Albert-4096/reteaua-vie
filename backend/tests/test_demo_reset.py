@@ -114,3 +114,63 @@ def test_reset_leaves_a_work_alone_when_its_id_overlaps_a_prepared_one(isolated_
         state.write("closures", cid, {"id": cid, "status": "draft"})
     assert remove_added_works() == []   # a glob on "<HERO>_copy" or on an odd id could reach the hero's files
     assert state.exists("closures", HERO)
+
+
+def _totals(client) -> tuple:
+    t = client.get(f"/api/closures/{HERO}/impact").json()["totals"]
+    return t["stopsSuspended"], t["departuresLost"], t["residentsLosingStop"]
+
+
+def test_reset_restores_the_hero_answers_from_the_golden_copy(client, isolated_state):
+    """One mis-tap on an answer changes the headline numbers; Publish does not undo it, the golden copy does."""
+    from app.common import state
+    from app.demo_reset import restore_golden, save_golden, unpublish
+    from app.models.v1 import Analysis
+
+    analysis = _read("analysis")
+    state.write("closures", HERO, {**_read(), "status": "analyzed"})
+    state.write("closures", HERO, Analysis.model_validate(analysis), part=state.PART_ANALYSIS)
+    assert client.patch(f"/api/closures/{HERO}/stops", json={"decisions": d012_decisions(analysis)}).status_code == 200
+    assert _totals(client) == (16, 2262, 1845)  # the demo start (D-012 answers)
+
+    assert restore_golden(HERO) is None  # no golden copy yet: nothing is touched
+    names = save_golden(HERO)
+    assert {f"{HERO}.json", f"{HERO}.analysis.json", f"{HERO}.decisions.json", f"{HERO}.impact.json"} <= set(names)
+    folder = isolated_state.state_dir / "closures"
+    start = {p.name: p.read_bytes() for p in folder.glob(f"{HERO}*.json")}
+
+    # question 1 answered the other way, then Publish on top of it
+    stored = state.read("closures", HERO, state.PART_ANALYSIS)
+    answer = {(r["stopId"], r["routeId"], r["directionId"]): r["confirmed"] for r in stored["stops"]}
+    flipped = [{"stopId": r["stopId"], "routeId": r["routeId"], "directionId": r["directionId"],
+                "confirmed": not answer[(r["stopId"], r["routeId"], r["directionId"])]}
+               for r in stored["decisionGroups"][0]["rows"]]
+    assert client.patch(f"/api/closures/{HERO}/stops", json={"decisions": flipped}).status_code == 200
+    assert _totals(client) != (16, 2262, 1845)
+    assert client.post(f"/api/closures/{HERO}/publish").status_code == 200
+
+    back = restore_golden(HERO)
+    assert f"{HERO}.analysis.json" in back["restored"] and f"{HERO}.decisions.json" in back["restored"]
+    assert unpublish(HERO)["wasPublished"] is True
+    assert {p.name: p.read_bytes() for p in folder.glob(f"{HERO}*.json")} == start  # byte for byte
+    assert _totals(client) == (16, 2262, 1845)
+    assert client.get(f"/api/closures/{HERO}").json()["status"] == "analyzed"
+    assert restore_golden(HERO) == {"restored": [], "removed": []}  # a second reset changes nothing
+
+
+def test_golden_copy_refuses_a_published_work_and_late_validation_files_go(isolated_state):
+    from app.common import state
+    from app.demo_reset import remove_orphan_publish_parts, save_golden
+
+    with pytest.raises(LookupError):
+        save_golden("cl_nope")
+    state.write("closures", "cl_x", {"id": "cl_x", "status": "published"})
+    state.write("published", "cl_x", {"closureId": "cl_x", "alerts": []})
+    with pytest.raises(PermissionError):
+        save_golden("cl_x")
+
+    state.write("published", "cl_x", {"passed": True}, part="validation")  # belongs to a publish record: stays
+    state.write("published", "cl_y", {"passed": True}, part="validation")  # the validator finished after a reset
+    assert remove_orphan_publish_parts() == ["cl_y.validation.json"]
+    assert state.exists("published", "cl_x", "validation") and state.exists("published", "cl_x")
+    assert remove_orphan_publish_parts() == []

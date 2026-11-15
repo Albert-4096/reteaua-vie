@@ -23,6 +23,20 @@ HAS_CITY_DATA = (DATA_DIR / "city-api-2026-11-13" / "transit-network.json").is_f
 needs_data = pytest.mark.skipif(not HAS_CITY_DATA, reason=f"no city data in {DATA_DIR}")
 
 
+@pytest.fixture(autouse=True)
+def _no_publish_thread_outlives_its_test(monkeypatch):
+    """Publish starts a feed validation (and audio) in a background thread. If the test ends first,
+    the temp state is un-patched and the thread writes its result into the REAL data dir
+    (seen 15 Nov: published/<hero>.validation.json appeared 80 s into every test run).
+    This fixture asks for `monkeypatch`, so it is torn down before any patched setting is restored."""
+    yield
+    import threading
+
+    for thread in threading.enumerate():
+        if thread.name.startswith(("validate-", "audio-")) and thread is not threading.current_thread():
+            thread.join(60)
+
+
 @pytest.fixture
 def isolated_state(tmp_path, monkeypatch):
     """Point the state store at a temp dir; the real data stays read-only."""
