@@ -106,7 +106,7 @@ export const STEPS: Step[] = [
   { beat: 4, url: `${HERO}/anunt`, target: { text: "Catedrala Mitropolitană" }, wait: 8000,
     say: "Al nostru numește fiecare stație, ce linii nu mai opresc acolo și cea mai apropiată stație deservită.",
     note: "Lista „Afișe pentru stații”: fiecare stație are afișul ei, cu cod QR și versiune audio." },
-  { beat: 4, url: `${HERO}/anunt`, target: { sel: "button", text: "Publică lucrarea" }, wait: 5000,
+  { beat: 4, url: `${HERO}/anunt`, target: { sel: "button", text: "Publică lucrarea" }, wait: 2500, // gone once someone published: the demo goes on
     say: "Un om confirmă o dată, și ies toate formatele: alerta GTFS-Realtime pe care o pot citi CityApp și Google, DATEX II și NGSI-LD pentru sistemele europene, și afișul din stație, cu cod QR și versiune audio.",
     note: "La masă, Erol apasă „Publică lucrarea”, apoi „Da, publică acum”. Demo-ul nu apasă: site-ul e public. Spui „pot citi”, nu „citesc”." },
   { beat: 4, url: `${HERO}/anunt`, target: { sel: "button", text: "Cod QR" }, click: true, wait: 5000, press: "Cod QR, la Catedrala Mitropolitană", hold: 4,
