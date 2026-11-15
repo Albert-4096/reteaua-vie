@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Clock, Construction, FileText, Inbox, Route as RouteIcon } from "lucide-react";
+import { Clock, Construction, FileText, Inbox, PlayCircle, Route as RouteIcon } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useApi } from "@/lib/api";
@@ -15,6 +15,7 @@ import { Today } from "./pages/Today";
 import { Work } from "./pages/Work";
 import { Works } from "./pages/Works";
 import { MapCtx, MapSlotCtx, type Layers } from "./ui";
+import { Demo } from "@/demo/Demo";
 
 type Place = { id: "azi" | "lucrari" | "linii" | "rapoarte"; label: string; icon: LucideIcon; to: Route };
 const PLACES: Place[] = [
@@ -33,6 +34,8 @@ export function App() {
   const route = useRoute();
   const [layers, setLayers] = useState<Layers>({});
   const [slot, setSlot] = useState<HTMLElement | null>(null);
+  // /app/demo plays the pitch on these screens (src/demo); it only navigates, it never writes
+  const [demo, setDemo] = useState(() => location.pathname === "/app/demo" || new URLSearchParams(location.search).has("demo"));
   const place = route.page === "lucrare" || route.page === "nou" ? "lucrari" : route.page;
   const hasMap = route.page !== "rapoarte";
 
@@ -58,6 +61,7 @@ export function App() {
           </div>
         </main>
       </div>
+      {demo && <Demo onExit={() => setDemo(false)} />}
       </MapSlotCtx.Provider>
     </MapCtx.Provider>
   );
@@ -98,6 +102,11 @@ function Rail({ place }: { place: Place["id"] }) {
         })}
       </ul>
       <ClockButton />
+      <a href="/app/demo" title="Demo ghidat: prezentarea, pe ecranele reale"
+        className="hidden flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[0.6875rem] font-medium leading-tight text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring md:mt-1 md:flex md:w-[4.25rem]">
+        <PlayCircle className="mb-0.5 size-4" strokeWidth={1.8} />
+        Demo
+      </a>
     </nav>
   );
 }
