@@ -89,6 +89,8 @@ Cases are the changes L0 recorded with the timetable before them on disk: Mocion
 
 <!-- backtest:end -->
 
+**Înghețat 15 nov, 09:30 (live, `GET /api/closures/cl_20261102_mocioni/detour-cost`), până dum. 09:30:** Mocioni, din 43 ore înregistrate (vin. 13:47 → dum. 08:59), n 69 curse: estimare − măsurat **−0,3 min [−0,5, +0,1]** (−17,2 s [−32,0; 3,2]); măsurat − orar −0,3 min (−19,5 s [−52,2; −1,5]); orar −2,0 min (n 234). Tabelul de mai sus e rularea stocată din `results/detour_backtest.json` (23 ore, n 49); nu l-am rescris, ca să rămână reproductibil. / *Frozen Sun 09:30, live endpoint, 43 recorded hours: n 69, estimate − measured −0.3 min [−0.5, +0.1]. The table above is the stored run (23 h, n 49), kept as is so it stays reproducible.*
+
 ## Output: `results/latest.json`
 
 - `notices[]`: per notice, the rows found, the precision and recall (`strict` = only `affected` rows count as suspended; `lenient` = „neclar” (`unsure`) rows count too), the share sent to „neclar”, the number of `unread` sentences, whether the window matches, and the paste-to-alert time.
