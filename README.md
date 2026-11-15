@@ -5,6 +5,20 @@ Biroul de mobilitate al Primăriei Timișoara și al STPT pentru lucrările care
 
 Demo: <https://unihack.alberyt.xyz> (ceas simulat / simulated clock: 8 nov 2026, 12:00) · API: [`/api/docs`](https://unihack.alberyt.xyz/api/docs), schema [`/api/openapi.json`](https://unihack.alberyt.xyz/api/openapi.json)
 
+### Demo în 3 minute / 3-minute demo
+
+- **Demo ghidat**, pitch-ul pe ecranele reale / *guided demo, the pitch on the real screens*: <https://unihack.alberyt.xyz/app/demo>
+- **Începutul / the opener**: <https://unihack.alberyt.xyz/app/linii/R_AB_23?redare=09:20>, sâmbătă 14 nov la 9:20 din înregistrarea noastră: linia 23, 0 din 68 de curse din orar văzute în datele live / *Saturday 9:20 from our recording: line 23, 0 of 68 scheduled trips seen in the live data.*
+- **Calea / the click path**: Linii › 23 (redare) → Azi → lucrarea Bd. 16 Decembrie: Impact (16 / 2.262 / 1.845) → Perioadă (500 în loc de 2.262) → Anunț → Publică → Cod QR → Lucrări › Piața Mocioni › Pe teren → Rapoarte.
+- **Video de rezervă / backup video** (2:55, înregistrat pe site-ul public la 15 nov, 02:20, fără clicul pe „Publică” / *recorded on the public site, without the Publish click*): [`docs/media/walkthrough.mp4`](docs/media/walkthrough.mp4) · filmul de pe pagina principală / *landing film* (48 s): [`docs/media/film.mp4`](docs/media/film.mp4)
+- **După o rulare / after a run**: publicarea se face o singură dată; resetarea scoate lucrările adăugate și readuce lucrarea demo la început / *publishing is one-shot; the reset removes added works and puts the demo work back at the start*: `cd backend && DATA_DIR=<data> uv run python -m app.demo_reset`
+
+| Linia 23, redare / replay | Impactul unei lucrări / closure impact | Anunț și cod QR / notice and QR |
+|---|---|---|
+| ![Linia 23, sâmbătă 9:20](docs/media/linii-23-replay.webp) | ![Impact: 16 stații, 2.262 plecări, 1.845 locuitori](docs/media/hero-impact.webp) | ![Afișul stației cu cod QR](docs/media/hero-anunt-qr.webp) |
+
+![Azi: ce așteaptă un om, orarul față de stradă](docs/media/azi.webp)
+
 ## 1. Ce este / What it is
 
 Orarul e rețeaua de pe hârtie. Rețeaua Vie e rețeaua de pe stradă: vede unde diferă cele două, ajută Primăria să decidă și anunță oamenii prin CityApp. O folosesc biroul de mobilitate al Primăriei, STPT (dispecerat, informarea călătorilor) și SMTT; cetățenii nu o deschid, ei văd rezultatul în CityApp, Google și pe afișul din stație. Are patru locuri: **Azi** (ce așteaptă un om; orarul față de stradă: cursele din orar care nu apar în datele live ale Primăriei), **Lucrări** (o lucrare, în patru pași: **Impact**, adică ce linii și stații pierd serviciul, câte plecări, câți locuitori; **Perioadă**, fereastra de timp care strică cel mai puțin; **Anunț**, un text care numește fiecare stație, publicat o dată pentru toate canalele; **Pe teren**, ce au făcut de fapt vehiculele, din înregistrare), **Linii** (cursele din orar văzute în datele live, linie cu linie, cu stațiile în ordine) și **Rapoarte** (ce acoperă exporturile față de obligațiile UE, registrul zilnic al curselor pentru SMTT, istoric, indicatori, fișiere). Înregistrarea se poate și reda: `/app/linii/R_AB_23?redare=09:20` arată sâmbătă dimineața pe hartă, cu fiecare vehicul văzut și cu linia 23 fără niciunul (`GET /api/live/replay`, cadre din înregistrare, niciodată interpolate). În Lucrări, „Lucrare nouă, din anunț” citește un anunț STPT lipit și calculează impactul. Prima versiune a interfeței, în șase pași, rămâne la `/step/0` … `/step/5`. La publicare produce fișierele standard: alerte GTFS-RT ServiceAlerts, DATEX II, NGSI-LD, afișul A4 pentru stație cu cod QR și versiune audio, anunțurile pe cartiere și metadatele pentru Punctul Național de Acces (NAP). Completează CityApp, nu îl concurează: nu e o aplicație pentru călători (fără cont, fără abonament), ci produce fișierele pe care CityApp și Google le pot afișa. În Azi și în Linii arată și liniile din orar care n-au niciun vehicul în datele live ale Primăriei, înregistrate de noi (sâmbătă 14 nov, linia 23: 68 de curse în orar, niciun vehicul toată ziua); o astfel de linie ajunge în CityApp doar după ce un om o confirmă.
