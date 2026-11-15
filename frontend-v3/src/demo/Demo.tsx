@@ -1,22 +1,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, NotebookText, Pause, Play, RotateCcw, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play, RotateCcw, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Cursor, out, prog, reveal } from "@/film/kit";
-import { BEATS, STEPS, type Step, type Target } from "./script";
+import { Cursor, out, prog } from "@/film/kit";
+import { BEATS, STEPS, type Target } from "./script";
 
 /**
- * Guided demo: the pitch played on the real screens, in the style of the landing film.
- * A cursor travels to what the presenter points at, the words to say light up as they would be spoken,
- * and a note says where to point. It only navigates and opens things: nothing it does writes to the server.
+ * Guided demo: the platform played on its real screens, in the style of the landing film.
+ * A cursor travels to each thing in turn, rings it and, where it is safe, clicks it.
+ * It only navigates and opens things: nothing it does writes to the server.
  */
 
 const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const RATE = 0.4; // seconds per spoken word, about 150 words a minute
 const TRAVEL = 0.9; // seconds for the cursor to reach its target
-
-const wordsOf = (s: string) => s.split(/\s+/).filter(Boolean);
-const fill = (s: string, v: Record<string, string>) => s.replace(/\{(\w+)\}/g, (_, k: string) => v[k] ?? "…");
-const durOf = (s: Step, text: string) => 0.5 + wordsOf(text).length * RATE + (s.hold ?? 1.4);
+const STARTS = STEPS.reduce<number[]>((a, s, k) => (a.push(k ? a[k - 1] + STEPS[k - 1].dur : 0), a), []);
+const TOTAL = STARTS[STARTS.length - 1] + STEPS[STEPS.length - 1].dur;
+const mmss = (x: number) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, "0")}`;
 
 function nav(url: string) {
   if (location.pathname + location.search === url) return;
@@ -38,35 +36,30 @@ export function find(tg: Target): HTMLElement | null {
 }
 
 type Phase = "intro" | "seek" | "run" | "end";
+type Pt = { x: number; y: number };
 
 declare global {
-  interface Window { __demo?: { i: number; phase: Phase; found: boolean; text: string; go: (k: number) => void; pause: () => void } }
+  interface Window { __demo?: { i: number; phase: Phase; found: boolean; go: (k: number) => void; pause: () => void } }
 }
-type Pt = { x: number; y: number };
 
 export function Demo({ onExit }: { onExit: () => void }) {
   const [phase, setPhase] = useState<Phase>("intro");
   const [i, setI] = useState(0);
   const [t, setT] = useState(0);
   const [playing, setPlaying] = useState(true);
-  const [notes, setNotes] = useState(true);
   const [el, setEl] = useState<HTMLElement | null>(null);
-  const [vals, setVals] = useState<Record<string, string>>({});
   const [top, setTop] = useState(false);
   const from = useRef<Pt>({ x: innerWidth * 0.55, y: innerHeight * 0.45 });
   const last = useRef<Pt>(from.current);
   const clicked = useRef(false);
   const entered = useRef(false);
   const flipped = useRef(-1);
-  const card = useRef<HTMLDivElement>(null);
+  const bar = useRef<HTMLDivElement>(null);
 
   const step = STEPS[i];
-  const beat = BEATS.find((b) => b.n === step.beat)!;
-  const text = fill(step.say, vals);
-  const dur = durOf(step, text);
+  const dur = step.dur;
 
-  // warm the first screen behind the intro card
-  // (deferred: this effect runs before the router's own listener is attached)
+  // warm the first screen behind the intro card (deferred: this effect runs before the router's listener is attached)
   useEffect(() => {
     const id = window.setTimeout(() => { if (STEPS[0].url) { history.replaceState(null, "", STEPS[0].url); dispatchEvent(new PopStateEvent("popstate")); } }, 0);
     return () => clearTimeout(id);
@@ -84,7 +77,7 @@ export function Demo({ onExit }: { onExit: () => void }) {
       if (delay) window.setTimeout(() => nav(s.url!), delay); else nav(s.url);
     }
     entered.current = true;
-    setEl(null); setVals(s.defaults ?? {}); setT(0);
+    setEl(null); setT(0);
     clicked.current = false;
     from.current = last.current;
     if (!s.target) { setPhase("run"); return; }
@@ -96,7 +89,7 @@ export function Demo({ onExit }: { onExit: () => void }) {
       if (e) {
         const r = e.getBoundingClientRect();
         if (r.top < 60 || r.bottom > innerHeight - 60) e.scrollIntoView({ block: "center", behavior: calm ? "auto" : "smooth" });
-        window.setTimeout(() => { if (!alive) return; setEl(e); setVals({ ...s.defaults, ...s.fill?.(e) }); setPhase("run"); }, s.settle ?? 350);
+        window.setTimeout(() => { if (!alive) return; setEl(e); setPhase("run"); }, s.settle ?? 350);
         return;
       }
       if (performance.now() - t0 > (s.wait ?? 15_000)) { setPhase("run"); return; } // go on without it rather than stall
@@ -108,7 +101,7 @@ export function Demo({ onExit }: { onExit: () => void }) {
 
   // for the screenshot and recording scripts: where the demo is, and a way to jump
   useEffect(() => {
-    window.__demo = { i, phase, found: !!el, text, go: (k: number) => { setI(Math.max(0, Math.min(STEPS.length - 1, k))); setPhase("seek"); setPlaying(true); }, pause: () => setPlaying(false) };
+    window.__demo = { i, phase, found: !!el, go: (k: number) => { setI(Math.max(0, Math.min(STEPS.length - 1, k))); setPhase("seek"); setPlaying(true); }, pause: () => setPlaying(false) };
   });
 
   // the clock of the step
@@ -158,22 +151,22 @@ export function Demo({ onExit }: { onExit: () => void }) {
   }
   const to = last.current;
 
-  // the caption moves to the top when it would cover what it points at
+  // the bar moves to the top when it would cover what the cursor points at
   useLayoutEffect(() => {
-    if (!r || !card.current || flipped.current === i) return;
-    const c = card.current.getBoundingClientRect();
+    if (!r || !bar.current || flipped.current === i) return;
+    const c = bar.current.getBoundingClientRect();
     const covers = !(r.right < c.left || r.left > c.right || r.bottom < c.top || r.top > c.bottom);
     if (covers) { flipped.current = i; setTop((x) => !x); } // at most once per step, so it never flickers
   }, [r?.top, r?.left, i]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const words = wordsOf(text);
-  const lineStyle = calm ? undefined : reveal(t, 0, Infinity, 0.5);
+  const elapsed = STARTS[i] + (phase === "run" ? Math.min(t, dur) : 0);
   const pad = 6;
+  const button = "grid place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
   return (
     <div data-demo-ui className="pointer-events-none fixed inset-0 z-[60]">
       {r && (
-        <div aria-hidden className="absolute rounded-xl transition-[opacity] duration-300"
+        <div aria-hidden className="absolute rounded-xl"
           style={{ left: r.left - pad, top: r.top - pad, width: r.width + pad * 2, height: r.height + pad * 2,
             opacity: out(prog(t, calm ? 0 : TRAVEL * 0.6, 0.4)),
             boxShadow: "0 0 0 2px var(--green), 0 0 0 7px color-mix(in oklch, var(--green) 22%, transparent), 0 0 0 100vmax oklch(0.2 0.012 165 / 0.14)" }} />
@@ -189,12 +182,11 @@ export function Demo({ onExit }: { onExit: () => void }) {
 
       {phase === "intro" && (
         <div className="pointer-events-auto absolute inset-0 grid place-items-center bg-foreground/25 p-4 backdrop-blur-[2px]">
-          <div role="dialog" aria-modal="true" aria-labelledby="demo-title" className="w-full max-w-lg rounded-2xl border bg-card p-7 shadow-float">
+          <div role="dialog" aria-modal="true" aria-labelledby="demo-title" className="w-full max-w-md rounded-2xl border bg-card p-7 shadow-float">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Demo ghidat</p>
-            <h2 id="demo-title" className="mt-2 text-2xl font-semibold tracking-tight text-balance">Prezentarea, pe ecranele reale.</h2>
+            <h2 id="demo-title" className="mt-2 text-2xl font-semibold tracking-tight text-balance">Platforma, pe ecranele ei reale.</h2>
             <p className="mt-3 leading-relaxed text-muted-foreground">
-              Trei minute, șapte pași. Jos apar cuvintele de spus, în ritmul vorbirii. Cursorul arată ce se apasă, iar nota spune unde arăți.
-              Platforma e publică, așa că demo-ul nu publică și nu răspunde la nimic.
+              Trei minute, șapte pași, de la o linie fără vehicul la rapoartele pentru SMTT. Cursorul arată fiecare lucru pe rând. Demo-ul nu publică și nu modifică nimic.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <button type="button" autoFocus onClick={() => { setPhase("seek"); setPlaying(true); }}
@@ -210,27 +202,26 @@ export function Demo({ onExit }: { onExit: () => void }) {
 
       {phase === "end" && (
         <div className="pointer-events-auto absolute inset-0 grid place-items-center bg-foreground/25 p-4 backdrop-blur-[2px]">
-          <div role="dialog" aria-modal="true" aria-labelledby="demo-end" className="w-full max-w-lg rounded-2xl border bg-card p-7 text-center shadow-float">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Gata</p>
-            <h2 id="demo-end" className="mt-2 text-3xl font-semibold tracking-tight">„Mulțumim. Întrebări?”</h2>
-            <p className="mt-3 text-muted-foreground">După fiecare juriu: resetezi demo-ul și redeschizi linia 23 la 9:20.</p>
+          <div role="dialog" aria-modal="true" aria-labelledby="demo-end" className="w-full max-w-md rounded-2xl border bg-card p-7 text-center shadow-float">
+            <h2 id="demo-end" className="text-2xl font-semibold tracking-tight">Gata.</h2>
+            <p className="mt-2 text-muted-foreground">Platforma rămâne deschisă: puteți apăsa singuri pe orice.</p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <button type="button" autoFocus onClick={() => { setI(0); setPhase("seek"); setPlaying(true); }}
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-card outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 <RotateCcw className="size-4" /> Încă o dată
               </button>
-              <button type="button" onClick={exit} className="rounded-full border px-5 py-2.5 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">Înapoi în platformă</button>
+              <button type="button" onClick={exit} className="rounded-full border px-5 py-2.5 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">Deschide platforma</button>
             </div>
           </div>
         </div>
       )}
 
       {(phase === "run" || phase === "seek") && (
-        <div ref={card} role="region" aria-label="Demo ghidat"
-          className={cn("pointer-events-auto absolute left-3 right-3 rounded-2xl border bg-card/95 p-4 shadow-float backdrop-blur md:left-auto md:right-5 md:w-[min(46rem,calc(100vw-37rem))] md:p-5",
+        <div ref={bar} role="region" aria-label="Demo ghidat"
+          className={cn("pointer-events-auto absolute left-3 right-3 flex flex-col gap-2.5 rounded-2xl border bg-card/95 p-3 shadow-float backdrop-blur md:left-auto md:right-5 md:w-[min(40rem,calc(100vw-37rem))]",
             top ? "top-3 md:top-5" : "bottom-3 md:bottom-5")}>
           <div className="flex items-center gap-1.5">
-            <ol className="flex flex-1 flex-wrap gap-1" aria-label="Pașii prezentării">
+            <ol className="flex flex-1 flex-wrap gap-1" aria-label="Pașii demo-ului">
               {BEATS.map((b) => (
                 <li key={b.n}>
                   <button type="button" onClick={() => jump(b.n)} aria-current={b.n === step.beat ? "step" : undefined} title={b.title}
@@ -241,48 +232,28 @@ export function Demo({ onExit }: { onExit: () => void }) {
                 </li>
               ))}
             </ol>
-            <button type="button" onClick={() => setNotes((x) => !x)} aria-pressed={notes} title="Notele prezentatorului"
-              className={cn("grid size-8 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring", notes ? "bg-green-soft text-foreground" : "text-muted-foreground hover:bg-muted")}>
-              <NotebookText className="size-4" /><span className="sr-only">Notele prezentatorului</span>
-            </button>
-            <button type="button" onClick={exit} className="grid size-8 place-items-center rounded-full text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
+            <button type="button" onClick={exit} className={cn(button, "size-8 text-muted-foreground hover:bg-muted hover:text-foreground")}>
               <X className="size-4" /><span className="sr-only">Ieși din demo</span>
             </button>
           </div>
-
-          <p key={i} aria-live="polite" className="mt-3 text-[1.1875rem] font-medium leading-snug tracking-[-0.01em] text-pretty md:text-[1.3125rem]" style={lineStyle}>
-            {words.map((w, k) => {
-              const x = phase === "run" ? out(prog(t, 0.35 + k * RATE, 0.3)) : 0;
-              return (
-                <span key={k} className={cn(/\d/.test(w) && "font-semibold")} style={{ opacity: 0.3 + 0.7 * x, color: x > 0.5 && /\d/.test(w) ? "var(--accent-foreground)" : undefined }}>
-                  {w}{k < words.length - 1 ? " " : ""}
-                </span>
-              );
-            })}
-          </p>
-
-          {notes && step.note && (
-            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">Arăți: </span>{step.note}</p>
-          )}
-          {notes && step.click && step.press && (
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground"><span className="font-semibold text-foreground">Erol apasă: </span>{step.press}</p>
-          )}
-
-          <div className="mt-3.5 flex items-center gap-2">
-            <button type="button" onClick={back} disabled={i === 0} className="grid size-8 place-items-center rounded-full border outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40">
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={back} disabled={i === 0} className={cn(button, "size-8 border hover:bg-muted disabled:opacity-40")}>
               <ChevronLeft className="size-4" /><span className="sr-only">Pasul anterior</span>
             </button>
-            <button type="button" onClick={() => setPlaying((p) => !p)} className="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground shadow-card outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+            <button type="button" onClick={() => setPlaying((p) => !p)} className={cn(button, "size-9 bg-primary text-primary-foreground shadow-card focus-visible:ring-offset-2")}>
               {playing ? <Pause className="size-4" /> : <Play className="size-4" />}<span className="sr-only">{playing ? "Pauză" : "Continuă"}</span>
             </button>
-            <button type="button" onClick={next} className="grid size-8 place-items-center rounded-full border outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring">
+            <button type="button" onClick={next} className={cn(button, "size-8 border hover:bg-muted")}>
               <ChevronRight className="size-4" /><span className="sr-only">Pasul următor</span>
             </button>
             <div className="relative ml-1 h-1.5 flex-1 overflow-hidden rounded-full bg-muted" aria-hidden>
-              <div className="h-full rounded-full bg-primary" style={{ width: `${phase === "run" ? Math.min(100, (t / dur) * 100) : 0}%` }} />
+              <div className="h-full rounded-full bg-primary" style={{ width: `${(elapsed / TOTAL) * 100}%` }} />
+              {STEPS.map((s, k) => k > 0 && s.beat !== STEPS[k - 1].beat && (
+                <span key={k} className="absolute top-0 h-full w-0.5 bg-card" style={{ left: `${(STARTS[k] / TOTAL) * 100}%` }} />
+              ))}
             </div>
             <span className="tabular shrink-0 whitespace-nowrap text-right text-xs text-muted-foreground">
-              {phase === "seek" ? "Se încarcă ecranul…" : `${beat.at} în pitch · ${i + 1}/${STEPS.length}`}
+              {phase === "seek" ? "Se încarcă…" : `${mmss(elapsed)} / ${mmss(TOTAL)}`}
             </span>
           </div>
         </div>
