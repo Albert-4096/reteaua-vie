@@ -184,7 +184,7 @@ export function Today() {
                     <span className="block text-sm font-medium leading-snug">{place(c.title.ro)}</span>
                     <span className="tabular block text-sm text-muted-foreground">{when(c.window)} · {count(c.routeIds.length, "linie", "linii")}</span>
                   </span>
-                  {c.status !== "published" && <Tag tone="closure">Nepublicată</Tag>}
+                  {c.status === "draft" ? <Tag>Ciornă</Tag> : c.status !== "published" && <Tag tone="closure">Nepublicată</Tag>}
                 </a>
               </li>
             ))}
