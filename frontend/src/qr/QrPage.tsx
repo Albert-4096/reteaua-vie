@@ -58,7 +58,9 @@ export function QrPage({ closureId, stopId }: Props) {
   const ended = !!period && new Date(period.end) < now;
   const openEnd = !!alert && /finalizarea lucrărilor/.test(alert.descriptionText.ro);
   const near = stopId ? nearestFor(analysis.data, stopId) : null;
-  const stopList = !stopId && !alert ? stopsWithAlert(alerts.data ?? [], analysis.data) : [];
+  const stopName = stopId ? analysis.data?.stops.find((r) => r.stopId === stopId)?.name : undefined;
+  // no stop in the address: the stops that have their own alert, under the line's alert when there is one
+  const stopList = !stopId ? stopsWithAlert(alerts.data ?? [], analysis.data) : [];
 
   return (
     <main className="qr" lang="ro">
@@ -74,19 +76,7 @@ export function QrPage({ closureId, stopId }: Props) {
               <dd>{fmtPeriod(c.window)}</dd>
             </div>
           </dl>
-          <section aria-labelledby="qr-stops-title">
-            <h2 id="qr-stops-title">{t("qr.pickStop")}</h2>
-            <ul className="qr-stops">
-              {stopList.map((s) => (
-                <li key={s.stopId}>
-                  <a href={`/a/${encodeURIComponent(closureId)}?stop=${encodeURIComponent(s.stopId)}&via=list`}>
-                    <span className="qr-stop-name">{s.name}</span>
-                    {s.towards && <span className="small muted">{t("qr.towards", { headsign: s.towards })}</span>}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <StopList closureId={closureId} stops={stopList} />
         </>
       )}
       {c && !alert && !alerts.loading && stopList.length === 0 && (
@@ -116,7 +106,9 @@ export function QrPage({ closureId, stopId }: Props) {
                   {near
                     ? near.stopId === stopId || near.distanceMeters === 0
                       ? t("qr.stillServed", { lines: shortNames(near.routeIds) })
-                      : `${near.name}, ${t("qr.walk", { dist: fmtMeters(near.distanceMeters) ?? t("unknown") })}`
+                      : `${near.name}${near.name === stopName ? ` (${t("qr.sameName")})` : ""}, ${t("qr.walk", { dist: fmtMeters(near.distanceMeters) ?? t("unknown") })}${
+                          near.routeIds?.length ? ` · ${t("qr.lines", { lines: shortNames(near.routeIds) })}` : ""
+                        }`
                     : t("unknown")}
                 </dd>
               </div>
@@ -126,6 +118,8 @@ export function QrPage({ closureId, stopId }: Props) {
           {!ended && stopId && <Listen closureId={closureId} stopId={stopId} alert={alert} />}
 
           <p className="qr-text">{alert.descriptionText.ro}</p>
+
+          {stopList.length > 0 && <StopList closureId={closureId} stops={stopList} />}
 
           {alert.headerText.en && (
             <section lang="en" className="qr-en">
@@ -140,6 +134,25 @@ export function QrPage({ closureId, stopId }: Props) {
         <p>{t("qr.source")}</p>
       </footer>
     </main>
+  );
+}
+
+function StopList({ closureId, stops }: { closureId: string; stops: ReturnType<typeof stopsWithAlert> }) {
+  const { t } = useTranslation();
+  return (
+    <section aria-labelledby="qr-stops-title">
+      <h2 id="qr-stops-title">{t("qr.pickStop")}</h2>
+      <ul className="qr-stops">
+        {stops.map((s) => (
+          <li key={s.stopId}>
+            <a href={`/a/${encodeURIComponent(closureId)}?stop=${encodeURIComponent(s.stopId)}&via=list`}>
+              <span className="qr-stop-name">{s.name}</span>
+              {s.towards && <span className="small muted">{t("qr.towards", { headsign: s.towards })}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -167,7 +180,8 @@ function stopsWithAlert(alerts: Alert[], analysis: Analysis | null | undefined) 
 }
 
 function shortNames(routeIds: string[] | null | undefined): string {
-  return [...new Set((routeIds ?? []).map((r) => r.replace(/^R_[A-Z]+_/, "")))].join(", ");
+  // "33B" in the route id is line "33b" in the notice and on the vehicles
+  return [...new Set((routeIds ?? []).map((r) => r.replace(/^R_[A-Z]+_/, "").replace(/(\d)([A-Z])$/, (_, d: string, l: string) => d + l.toLowerCase())))].join(", ");
 }
 
 /** MP3 made at publish; if there is none, the phone reads the alert text (Web Speech, ro-RO). */
