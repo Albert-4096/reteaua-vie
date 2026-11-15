@@ -54,8 +54,8 @@ export function Impact({ c, analysis, error, impact, notice, answers, focus, set
   const waiting = groups.length - answered;
   // what a person still has to decide comes first; once decided, the answer leads and the decisions rest below it
   const decide = groups.length > 0 && (
-    <Section title="De hotărât" aside={`${answered} din ${groups.length}`}>
-      <p className="-mt-1 mb-3 text-sm leading-snug text-muted-foreground">Anunțul nu spune tot. Unde nu putem ști, întrebăm un om.</p>
+    <Section title={answered === groups.length ? "Hotărât de un om" : "De hotărât"} aside={answered === groups.length ? `${answered} din ${groups.length}` : `răspuns la ${answered} din ${groups.length}`}>
+      <p className="-mt-1 mb-3 text-sm leading-snug text-muted-foreground">{answered === groups.length ? "Anunțul nu spune tot. Unde nu am putut ști, am întrebat un om." : "Anunțul nu spune tot. Unde nu putem ști, întrebăm un om."}</p>
       <ul className="space-y-2.5">
         {groups.map((g) => (
           <Question key={g.id} g={g} answer={answers.get(g.id) ?? null} open={focus?.kind === "question" && focus.id === g.id}
